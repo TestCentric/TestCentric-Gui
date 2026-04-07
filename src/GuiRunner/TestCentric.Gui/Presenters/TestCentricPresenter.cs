@@ -382,13 +382,15 @@ namespace TestCentric.Gui.Presenters
             {
                 string initialDirectory = _model.WorkDirectory;
                 string suggestedFileName = "";
-                if (_model.TestCentricProject.ProjectPath != null)
+
+                string projectPath = _model.TestCentricProject.ProjectPath;
+                if (projectPath is not null)
                 {
-                    initialDirectory = _model.TestCentricProject.ProjectPath;
-                    suggestedFileName = Path.GetFileNameWithoutExtension(_model.TestCentricProject.ProjectPath) + ".tcproj";
+                    initialDirectory = Path.GetDirectoryName(projectPath);
+                    suggestedFileName = Path.GetFileName(projectPath);
                 }
 
-                var projectPath = _view.DialogManager.GetFileSavePath(
+                projectPath = _view.DialogManager.GetFileSavePath(
                         "Save As TestCentric Project", "TestCentric Project(*.tcproj) | *.tcproj", initialDirectory, suggestedFileName);
                 if (projectPath is not null)
                 {
