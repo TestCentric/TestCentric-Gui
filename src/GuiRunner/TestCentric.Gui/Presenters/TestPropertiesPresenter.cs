@@ -124,7 +124,7 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeTestGroupPropertiesSubView(TestGroup testGroup)
         {
-            _view.TestGroupPropertiesSubView.FullName = testGroup.Name;
+            _view.TestGroupPropertiesSubView.FullName = GetTestGroupFullName(testGroup);
             _view.TestGroupPropertiesSubView.TestCount = testGroup.TestNodes.Count().ToString();
         }
 
@@ -202,6 +202,19 @@ namespace TestCentric.Gui.Presenters
                 sb.Append(item);
             }
             return sb.ToString();
+        }
+
+        private string GetTestGroupFullName(TestGroup testGroup)
+        {
+            string fullName = testGroup.Name;
+            while (testGroup.ParentGroup != null)
+            {
+                testGroup = testGroup.ParentGroup;
+                string separator = testGroup.ParentGroup != null ? "." : ": ";
+                fullName = testGroup.Name + separator + fullName;
+            }
+
+            return fullName;
         }
 
         #endregion
