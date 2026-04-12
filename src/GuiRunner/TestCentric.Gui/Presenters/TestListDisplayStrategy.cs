@@ -172,7 +172,7 @@ namespace TestCentric.Gui.Presenters
             {
                 // Remove test from the tree.
                 treeNode.Remove();
-                RemoveEmptyParentNodes(oldParent);
+                RemoveParentIfEmpty(oldParent);
 
                 // Add the test back to the tree in it's new position
                 newParent.Nodes.Add(treeNode);
@@ -227,11 +227,17 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        private void RemoveEmptyParentNodes(TreeNode parentNode)
+        private void RemoveParentIfEmpty(TreeNode parent)
         {
-            if (parentNode.Parent != null)
-                RemoveEmptyParentNodes(parentNode.Parent);
-            parentNode.Remove();
+            while (parent != null && parent.Nodes.Count == 0)
+            {
+                // NOTE: parent.Parent will be null after removal of parent
+                var grandParent = parent.Parent;
+
+                parent.Remove();
+
+                parent = grandParent;
+            }
         }
 
         private void ExpandNewParentNodes(TreeNode parentNode)
