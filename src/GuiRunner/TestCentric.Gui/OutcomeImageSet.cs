@@ -12,8 +12,10 @@ namespace TestCentric.Gui
 {
     public class OutcomeImageSet
     {
+        // A valid ImageSet directory must contain at least the following files. It may
+        // contain additional image .png files known to and used by the ImageSetManager.
         private static readonly string[] REQUIRED_FILES = new[] {
-            "Inconclusive.png", "Success.png", "Failure.png", "Ignored.png", "Skipped.png" };
+            "Inconclusive.png", "Success.png", "Failure.png", "Ignored.png", "Skipped.png", "Warning.png" };
 
         private string _imageSetDir;
 
@@ -42,6 +44,11 @@ namespace TestCentric.Gui
 
         private Dictionary<string, Image> _images = new Dictionary<string, Image>();
 
+        /// <summary>
+        /// Load a specific icon image for use, using a cache if already loaded.
+        /// </summary>
+        /// <param name="imgName">The name associated with this icon image.</param>
+        /// <returns>An Image for the specified icon.</returns>
         public Image LoadImage(string imgName)
         {
             if (_images.ContainsKey(imgName))
