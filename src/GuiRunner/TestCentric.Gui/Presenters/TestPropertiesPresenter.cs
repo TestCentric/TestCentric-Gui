@@ -207,11 +207,12 @@ namespace TestCentric.Gui.Presenters
         private string GetTestGroupFullName(TestGroup testGroup)
         {
             string fullName = testGroup.Name;
-            while (testGroup.ParentGroup != null)
+            testGroup = testGroup.ParentGroup;
+            while (testGroup != null)
             {
+                string separator = testGroup.ParentGroup == null ? ": " : ".";
+                fullName = $"{testGroup.Name}{separator}{fullName}";
                 testGroup = testGroup.ParentGroup;
-                string separator = testGroup.ParentGroup != null ? "." : ": ";
-                fullName = testGroup.Name + separator + fullName;
             }
 
             return fullName;
