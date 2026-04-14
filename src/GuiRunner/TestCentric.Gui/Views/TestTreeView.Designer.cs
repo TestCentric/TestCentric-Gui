@@ -81,11 +81,11 @@ namespace TestCentric.Gui.Views
             this.treeView.HideSelection = false;
             this.treeView.ImageIndex = 0;
             this.treeView.ImageList = this.treeImages;
-            this.treeView.Location = new System.Drawing.Point(0, 0);
+            this.treeView.Location = new System.Drawing.Point(0, 25);
             this.treeView.Name = "treeView";
             this.treeView.SelectedImageIndex = 0;
             this.treeView.ShowNodeToolTips = true;
-            this.treeView.Size = new System.Drawing.Size(191, 246);
+            this.treeView.Size = new System.Drawing.Size(191, 221);
             this.treeView.TabIndex = 1;
             // 
             // testTreeContextMenu
@@ -358,9 +358,8 @@ namespace TestCentric.Gui.Views
             // 
             // filterTextBox
             // 
-            this.filterTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.filterTextBox.Name = "filterTextBox";
-            this.filterTextBox.Size = new System.Drawing.Size(179, 25);
+            this.filterTextBox.Size = new System.Drawing.Size(179, 23);
             // 
             // TestTreeView
             // 

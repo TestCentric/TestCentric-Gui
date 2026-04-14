@@ -125,6 +125,7 @@ namespace TestCentric.Gui.Presenters
                 foreach (TreeNode treeNode in GetTreeNodesForTest(result))
                 {
                     treeNode.Text = GetTreeNodeDisplayName(result);
+                    treeNode.ToolTipText = result.Label != null ? result.Label : result.Status.ToString();
                     _view.SetImageIndex(treeNode, imageIndex, true);
                 }
             });
@@ -211,9 +212,11 @@ namespace TestCentric.Gui.Presenters
             {
                 case RunState.Ignored:
                     imageIndex = TestTreeView.IgnoredIndex;
+                    treeNode.ToolTipText = testNode.RunState.ToString();
                     break;
                 case RunState.NotRunnable:
                     imageIndex = TestTreeView.FailureIndex;
+                    treeNode.ToolTipText = testNode.RunState.ToString();
                     break;
             }
 
