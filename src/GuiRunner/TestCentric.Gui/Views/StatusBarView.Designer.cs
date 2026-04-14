@@ -54,6 +54,7 @@ namespace TestCentric.Gui.Views
             this.timePanel});
             this.statusStrip1.Location = new System.Drawing.Point(0, -1);
             this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.ShowItemToolTips = true;
             this.statusStrip1.Size = new System.Drawing.Size(579, 25);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";

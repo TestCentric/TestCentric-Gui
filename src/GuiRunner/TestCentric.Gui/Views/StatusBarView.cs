@@ -37,32 +37,32 @@ namespace TestCentric.Gui.Views
 
         public int Passed
         {
-            set { UpdateCounter(passedPanel, value); }
+            set { UpdateCounter(passedPanel, value, $"Passed: {value}"); }
         }
 
         public int Failed
         {
-            set { UpdateCounter(failedPanel, value); }
+            set { UpdateCounter(failedPanel, value, $"Failed: {value}"); }
         }
 
         public int Warnings
         {
-            set { UpdateCounter(warningsPanel, value); }
+            set { UpdateCounter(warningsPanel, value, $"Warnings: {value}"); }
         }
 
         public int Inconclusive
         {
-            set { UpdateCounter(inconclusivePanel, value); }
+            set { UpdateCounter(inconclusivePanel, value, $"Inconclusive: {value}"); }
         }
 
         public int Ignored
         {
-            set { UpdateCounter(ignoredPanel, value); }
+            set { UpdateCounter(ignoredPanel, value, $"Ignored: {value}"); }
         }
 
         public int Skipped
         {
-            set { UpdateCounter(skippedPanel, value); }
+            set { UpdateCounter(skippedPanel, value, $"Skipped: {value}"); }
         }
 
         public double Duration
@@ -77,11 +77,12 @@ namespace TestCentric.Gui.Views
             }
         }
 
-        private void UpdateCounter(ToolStripStatusLabel statusLabel, int count)
+        private void UpdateCounter(ToolStripStatusLabel statusLabel, int count, string toolTipText)
         {
             InvokeIfRequired(() =>
             {
                 statusLabel.Text = count.ToString();
+                statusLabel.ToolTipText = toolTipText;
                 statusLabel.Visible = true;
             });
         }
