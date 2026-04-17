@@ -17,13 +17,17 @@ namespace TestCentric.Gui
         private static readonly string[] REQUIRED_FILES = new[] {
             "Inconclusive.png", "Success.png", "Failure.png", "Ignored.png", "Skipped.png", "Warning.png" };
 
+        private const string NOT_LATEST_SUFFIX = "_NotLatestRun";
+
         private string _imageSetDir;
+        private string _commonImageDir;
 
         public OutcomeImageSet(string imageSetDir)
         {
             Guard.ArgumentValid(IsValidImageSetDirectory(imageSetDir), $"Directory {imageSetDir} does not contain an image set.", nameof(imageSetDir));
 
             _imageSetDir = imageSetDir;
+            _commonImageDir = Path.GetDirectoryName(imageSetDir);
             
             Name = Path.GetFileName(imageSetDir);
         }
@@ -55,8 +59,47 @@ namespace TestCentric.Gui
                 return _images[imgName];
 
             LoadCount++;
-            
-            return _images[imgName] = Image.FromFile(Path.Combine(_imageSetDir, imgName + ".png"));
+
+            string fileName = imgName + ".png";
+
+            // If an image is included in the image set itself, use it.
+            if (TryToLoadImage(_imageSetDir, imgName))
+                return _images[imgName];
+
+            // Some images may be common to all image sets and found in the common directory
+            if (TryToLoadImage(_commonImageDir, imgName))
+                return _images[imgName];
+
+            // Images for prior runs are a special case if not found
+            if (imgName.EndsWith(NOT_LATEST_SUFFIX))
+            {
+                string imgBaseName = imgName.Substring(0, imgName.Length - NOT_LATEST_SUFFIX.Length);
+
+                // TODO: Try generating from the base image here.
+
+                // Use the base image itself as a last resort. Base images are
+                // always found in the image set directory.
+                if (TryToLoadImage(_imageSetDir, imgName, imgBaseName + ".png"))
+                    return _images[imgName];
+            }
+
+            throw new System.Exception($"Could not locate image '{imgName}'");
+
+            bool TryToLoadImage(string directory, string imgName, string fileName = null)
+            {
+                if (fileName == null)
+                    fileName = imgName + ".png";
+
+                string filePath = Path.Combine(directory, fileName);
+
+                if (File.Exists(filePath))
+                {
+                    _images[imgName] = Image.FromFile(filePath);
+                    return true;
+                }
+
+                return false;
+            }
         }
     }
 }
