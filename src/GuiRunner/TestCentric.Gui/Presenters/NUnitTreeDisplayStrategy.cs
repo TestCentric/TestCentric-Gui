@@ -22,7 +22,6 @@ namespace TestCentric.Gui.Presenters
         public NUnitTreeDisplayStrategy(ITestTreeView view, ITestModel model)
             : base(view, model) 
         {
-            _view.SetTestFilterVisibility(model.Settings.Gui.TestTree.ShowFilter);
             _view.CollapseToFixturesCommand.Enabled = true;
         }
 

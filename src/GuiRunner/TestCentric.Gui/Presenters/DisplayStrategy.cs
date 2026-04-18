@@ -42,6 +42,8 @@ namespace TestCentric.Gui.Presenters
             _treeView = view.TreeView;
             _model = model;
             _settings = _model.Settings;
+
+            _view.SetTestFilterVisibility(_settings.Gui.TestTree.ShowFilter);
         }
 
         #endregion
