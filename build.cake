@@ -27,7 +27,7 @@ static readonly FilePath[] GUI_FILES = {
         "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll" };
 static readonly FilePath[] IMG_SET_ICONS_PNG = {
         "Success.png", "Failure.png", "Warning.png", "Ignored.png", "Inconclusive.png", "Success_NotLatestRun.png", "Failure_NotLatestRun.png", "Warning_NotLatestRun.png", "Ignored_NotLatestRun.png", "Inconclusive_NotLatestRun.png", "Skipped.png" };
-static readonly FilePath[] COMMMON_ICONS_PNG = { "Pending.png", "Running.png" };
+static readonly FilePath[] COMMMON_ICONS_PNG = { "Pending.png", "Running.png", "Running_Failure.png", "Running_Success.png", "Running_Warning.png", "Running_Ignored.png" };
 
 private const string GUI_DESCRIPTION =
 	"The TestCentric Runner for NUnit (**TestCentric**) is a GUI runner aimed at eventually supporting a range of .NET testing frameworks. In the 1.x release series, we are concentrating on support of NUnit tests. The user interface is based on the layout and feature set of the of the original NUnit GUI, with the internals modified so as to run NUnit 3 tests." +
@@ -56,7 +56,7 @@ var NuGetGuiPackage = new NuGetPackage(
 				"TestCentric.Metadata.dll", "NUnit.Extensibility.dll", "NUnit.Extensibility.Api.dll",
 				"nunit.common.dll", "nunit.engine.api.dll", "nunit.engine.dll"),
 			new DirectoryContent("tools/Images/Tree").WithFiles(
-				"Images/Tree/Running.png", "Images/Tree/Pending.png"),
+				"Images/Tree/Running.png", "Images/Tree/Pending.png", "Images/Tree/Running_Failure.png", "Images/Tree/Running_Success.png", "Images/Tree/Running_Warning.png", "Images/Tree/Running_Ignored.png"),
 			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
 				"Images/Tree/Circles/Success.png", "Images/Tree/Circles/Failure.png", "Images/Tree/Circles/Warning.png", "Images/Tree/Circles/Ignored.png", "Images/Tree/Circles/Inconclusive.png",
 				"Images/Tree/Circles/Success_NotLatestRun.png", "Images/Tree/Circles/Failure_NotLatestRun.png", "Images/Tree/Circles/Warning_NotLatestRun.png", "Images/Tree/Circles/Ignored_NotLatestRun.png", "Images/Tree/Circles/Inconclusive_NotLatestRun.png",
@@ -95,7 +95,7 @@ var ChocolateyGuiPackage = new ChocolateyPackage(
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "nunit.engine.api.dll", "nunit.engine.dll",
 				"TestCentric.Metadata.dll", "NUnit.Extensibility.dll", "NUnit.Extensibility.Api.dll", "NUnit.Common.dll"),
             new DirectoryContent("tools/Images/Tree").WithFiles(
-				"Images/Tree/Running.png", "Images/Tree/Pending.png"),
+				"Images/Tree/Running.png", "Images/Tree/Pending.png", "Images/Tree/Running_Failure.png", "Images/Tree/Running_Success.png", "Images/Tree/Running_Warning.png", "Images/Tree/Running_Ignored.png"),
             new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
                 "Images/Tree/Circles/Success.png", "Images/Tree/Circles/Failure.png", "Images/Tree/Circles/Warning.png", "Images/Tree/Circles/Ignored.png", "Images/Tree/Circles/Inconclusive.png", 
 				"Images/Tree/Circles/Success_NotLatestRun.png", "Images/Tree/Circles/Failure_NotLatestRun.png", "Images/Tree/Circles/Warning_NotLatestRun.png", "Images/Tree/Circles/Ignored_NotLatestRun.png", "Images/Tree/Circles/Inconclusive_NotLatestRun.png", 
