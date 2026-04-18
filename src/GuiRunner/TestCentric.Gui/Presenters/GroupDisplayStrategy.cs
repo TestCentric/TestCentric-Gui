@@ -27,7 +27,6 @@ namespace TestCentric.Gui.Presenters
             : base(view, model)
         {
             _topLevelGrouping = CreateTestGrouping(GroupBy);
-            _view.SetTestFilterVisibility(false);
         }
 
         #endregion

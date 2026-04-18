@@ -42,6 +42,8 @@ namespace TestCentric.Gui.Presenters
             _treeView = view.TreeView;
             _model = model;
             _settings = _model.Settings;
+
+            _view.SetTestFilterVisibility(_settings.Gui.TestTree.ShowFilter);
         }
 
         #endregion
@@ -91,7 +93,7 @@ namespace TestCentric.Gui.Presenters
 
         protected void AddTreeNodeToCollection(TestNode testNode, TreeNodeCollection treeNodes)
         {
-            if (ShowTreeNodeType(testNode))
+            if (ShowTreeNodeType(testNode) && testNode.IsVisible)
             {
                 var treeNode = MakeTreeNode(testNode, false);
                 treeNodes.Add(treeNode);

@@ -46,17 +46,19 @@ namespace TestCentric.Gui.Presenters
             _treeNodes = null;
         }
 
-        [Test]
-        public void OnStrategyCreated_OutcomeFilter_IsInvisible()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void OnStrategyCreated_OutcomeFilter_IsInvisible(bool isVisible)
         {
             // 1. Arrange
             _model.TreeConfiguration.TestListGroupBy = "UNGROUPED";
+            _model.Settings.Gui.TestTree.ShowFilter.Returns(isVisible);
 
             // 2. Act           
             TestListDisplayStrategy strategy = new TestListDisplayStrategy(_view, _model);
 
             // 3. Assert
-            _view.Received().SetTestFilterVisibility(false);
+            _view.Received().SetTestFilterVisibility(isVisible);
         }
 
         [TestCase("", "", "", 1, 3, 0, 0, 0)]
