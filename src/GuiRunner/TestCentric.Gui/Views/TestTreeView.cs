@@ -26,6 +26,7 @@ namespace TestCentric.Gui.Views
             "Inconclusive_NotLatestRun", "Success_NotLatestRun", "Ignored_NotLatestRun", "Warning_NotLatestRun", "Failure_NotLatestRun", 
             "Inconclusive", "Success", "Ignored", "Warning", "Failure" };
 
+        // Constants that match the above order
         public const int InitIndex = 0;
         public const int SkippedIndex = 0;
         public const int PendingIndex = 1;
