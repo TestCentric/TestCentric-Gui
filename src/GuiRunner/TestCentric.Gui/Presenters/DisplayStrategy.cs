@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
 {
+    using System;
     using Model;
     using Model.Settings;
     using Views;
@@ -116,7 +117,7 @@ namespace TestCentric.Gui.Presenters
         public virtual void OnTestStarting(TestNode testNode)
         {
             foreach (TreeNode treeNode in GetTreeNodesForTest(testNode))
-                _view.SetImageIndex(treeNode, TestTreeView.RunningIndex, true);
+                SetRunningImageIndex(treeNode);
         }
 
         public virtual void OnTestFinished(ResultNode result)
@@ -384,6 +385,49 @@ namespace TestCentric.Gui.Presenters
                 }
 
                 _view.SetImageIndex(treeNode, imageIndex);
+            }
+        }
+
+        private void SetRunningImageIndex(TreeNode treeNode)
+        {
+            // Test execution is starting for the tree node, so set the image index to "Running" 
+            // The exact type of the “running” image index is determined by the strictest image index of all child nodes
+            int imageIndex = TestTreeView.RunningIndex;
+            foreach (TreeNode childNode in treeNode.Nodes)
+                imageIndex = Math.Max(imageIndex, GetRunningImageIndex(childNode));
+
+            _view.SetImageIndex(treeNode, imageIndex, false);
+
+            // Determine image index for parent nodes as well
+            if (treeNode.Parent != null)
+                SetRunningImageIndex(treeNode.Parent);
+        }
+
+        /// <summary>
+        /// Map the image index of a tree node to the corresponding "running" image index
+        /// </summary>
+        private int GetRunningImageIndex(TreeNode treeNode)
+        {
+            switch (treeNode.ImageIndex)
+            {
+                case TestTreeView.SuccessIndex:
+                case TestTreeView.SuccessIndex_NotLatestRun:
+                case TestTreeView.RunningIndex_Success:
+                    return TestTreeView.RunningIndex_Success;
+                case TestTreeView.FailureIndex:
+                case TestTreeView.FailureIndex_NotLatestRun:
+                case TestTreeView.RunningIndex_Failure:
+                    return TestTreeView.RunningIndex_Failure;
+                case TestTreeView.WarningIndex:
+                case TestTreeView.WarningIndex_NotLatestRun:
+                case TestTreeView.RunningIndex_Warning:
+                    return TestTreeView.RunningIndex_Warning;
+                case TestTreeView.IgnoredIndex:
+                case TestTreeView.IgnoredIndex_NotLatestRun:
+                case TestTreeView.RunningIndex_Ignored:
+                    return TestTreeView.RunningIndex_Ignored;
+                default:
+                    return TestTreeView.RunningIndex;
             }
         }
 

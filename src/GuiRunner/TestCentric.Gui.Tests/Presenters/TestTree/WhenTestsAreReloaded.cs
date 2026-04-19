@@ -8,10 +8,13 @@ using NSubstitute;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
+    using System.IO;
     using Model;
 
     public class WhenTestsAreReloaded : TreeViewPresenterTestBase
     {
+        string projectName = "MyProject";
+
         [SetUp]
         public void Setup()
         {
@@ -19,13 +22,18 @@ namespace TestCentric.Gui.Presenters.TestTree
 
             _model.HasTests.Returns(true);
             _model.IsTestRunning.Returns(false);
+
+            // Delete VisualState file to prevent any unintended side effects
+            string fileName = VisualState.GetVisualStateFileName(projectName);
+            if (File.Exists(fileName))
+                File.Delete(fileName);
         }
 
         [Test]
         public void TestFilters_AreReset()
         {
             // Arrange
-            var project = new TestCentricProject(_model, "MyProject", "dummy.dll");
+            var project = new TestCentricProject(_model, projectName, "dummy.dll");
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);
             _model.TestCentricProject.Returns(project);
@@ -43,7 +51,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void CategoryFilter_IsClosed_And_Init()
         {
             // Arrange
-            var project = new TestCentricProject(_model, "MyProject", "dummy.dll");
+            var project = new TestCentricProject(_model, projectName, "dummy.dll");
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);
             _model.TestCentricProject.Returns(project);
@@ -63,7 +71,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
             _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
 
-            var project = new TestCentricProject(_model, "MyProject", "dummy.dll");
+            var project = new TestCentricProject(_model, projectName, "dummy.dll");
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);
             _model.TestCentricProject.Returns(project);
