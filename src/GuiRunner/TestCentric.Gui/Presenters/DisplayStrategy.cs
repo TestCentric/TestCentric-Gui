@@ -129,7 +129,7 @@ namespace TestCentric.Gui.Presenters
                 {
                     treeNode.Text = GetTreeNodeDisplayName(result);
                     treeNode.ToolTipText = result.Label != null ? result.Label : result.Status.ToString();
-                    _view.SetImageIndex(treeNode, imageIndex, true);
+                    _view.SetImageIndex(treeNode, imageIndex, false);
                 }
             });
         }
@@ -451,11 +451,28 @@ namespace TestCentric.Gui.Presenters
 
         protected void ResetTestRunningIcons(TreeNodeCollection treeNodes)
         {
-            // Only required for exceptional use case 'force stop test run'
+            // Update all running icons to their corresponding non-running icons (required for TestList view)
             foreach (TreeNode treeNode in treeNodes)
             {
-                if (treeNode.ImageIndex == TestTreeView.PendingIndex || treeNode.ImageIndex == TestTreeView.RunningIndex)
-                    _view.SetImageIndex(treeNode, TestTreeView.SkippedIndex);
+                switch (treeNode.ImageIndex)
+                {
+                    case TestTreeView.RunningIndex_Success:
+                        _view.SetImageIndex(treeNode, TestTreeView.SuccessIndex);
+                        break;
+                    case TestTreeView.RunningIndex_Failure:
+                        _view.SetImageIndex(treeNode, TestTreeView.FailureIndex);
+                        break;
+                    case TestTreeView.RunningIndex_Warning:
+                        _view.SetImageIndex(treeNode, TestTreeView.WarningIndex);
+                        break;
+                    case TestTreeView.RunningIndex_Ignored:
+                        _view.SetImageIndex(treeNode, TestTreeView.IgnoredIndex);
+                        break;
+                    case TestTreeView.PendingIndex:
+                    case TestTreeView.RunningIndex:
+                        _view.SetImageIndex(treeNode, TestTreeView.SkippedIndex);
+                        break;
+                }
 
                 ResetTestRunningIcons(treeNode.Nodes);
             }
