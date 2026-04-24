@@ -23,9 +23,9 @@ namespace TestCentric.Gui.Views
 
         private const int ITEM_MARGIN = 2;
 
-        int hoverIndex = -1;
-        private System.Windows.Forms.Timer hoverTimer;
-        TipWindow tipWindow;
+        private int _hoverIndex = -1;
+        private Timer _hoverTimer;
+        private TipWindow _tipWindow;
 
         #region Construction and Disposal
 
@@ -224,14 +224,14 @@ namespace TestCentric.Gui.Views
 
         private void OnMouseHover(object sender, System.EventArgs e)
         {
-            if (tipWindow != null) tipWindow.Close();
+            if (_tipWindow != null) _tipWindow.Close();
 
-            if (hoverIndex >= 0 && hoverIndex < detailList.Items.Count)
+            if (_hoverIndex >= 0 && _hoverIndex < detailList.Items.Count)
             {
                 Graphics g = Graphics.FromHwnd(detailList.Handle);
 
-                Rectangle itemRect = detailList.GetItemRectangle(hoverIndex);
-                string text = detailList.Items[hoverIndex].ToString();
+                Rectangle itemRect = detailList.GetItemRectangle(_hoverIndex);
+                string text = detailList.Items[_hoverIndex].ToString();
 
                 SizeF sizeNeeded = g.MeasureString(text, detailList.Font);
                 bool expansionNeeded =
@@ -240,29 +240,32 @@ namespace TestCentric.Gui.Views
 
                 if (expansionNeeded)
                 {
-                    tipWindow = new TipWindow(detailList, hoverIndex);
-                    tipWindow.ItemBounds = itemRect;
-                    tipWindow.TipText = text;
-                    tipWindow.Expansion = TipWindow.ExpansionStyle.Both;
-                    tipWindow.Overlay = true;
-                    tipWindow.WantClicks = true;
-                    tipWindow.MouseLeaveDelay = 500;
-                    tipWindow.Closed += new EventHandler(tipWindow_Closed);
-                    tipWindow.Show();
+                    _tipWindow = new TipWindow(detailList, _hoverIndex)
+                    {
+                        ItemBounds = itemRect,
+                        TipText = text,
+                        Expansion = TipWindow.ExpansionStyle.Both,
+                        Overlay = true,
+                        WantClicks = true,
+                        MouseLeaveDelay = 500,
+                    };
+
+                    _tipWindow.Closed += tipWindow_Closed;
+                    _tipWindow.Show();
                 }
             }
         }
 
         private void tipWindow_Closed(object sender, System.EventArgs e)
         {
-            tipWindow = null;
-            hoverIndex = -1;
+            _tipWindow = null;
+            _hoverIndex = -1;
             ClearTimer();
         }
 
         private void detailList_MouseLeave(object sender, System.EventArgs e)
         {
-            hoverIndex = -1;
+            _hoverIndex = -1;
             ClearTimer();
         }
 
@@ -270,31 +273,31 @@ namespace TestCentric.Gui.Views
         {
             ClearTimer();
 
-            hoverIndex = detailList.IndexFromPoint(e.X, e.Y);
+            _hoverIndex = detailList.IndexFromPoint(e.X, e.Y);
 
-            if (hoverIndex >= 0 && hoverIndex < detailList.Items.Count)
+            if (_hoverIndex >= 0 && _hoverIndex < detailList.Items.Count)
             {
                 // Workaround problem of IndexFromPoint returning an
                 // index when mouse is over bottom part of list.
-                Rectangle r = detailList.GetItemRectangle(hoverIndex);
+                Rectangle r = detailList.GetItemRectangle(_hoverIndex);
                 if (e.Y > r.Bottom)
-                    hoverIndex = -1;
+                    _hoverIndex = -1;
                 else
                 {
-                    hoverTimer = new System.Windows.Forms.Timer();
-                    hoverTimer.Interval = 800;
-                    hoverTimer.Tick += new EventHandler(OnMouseHover);
-                    hoverTimer.Start();
+                    _hoverTimer = new Timer();
+                    _hoverTimer.Interval = 800;
+                    _hoverTimer.Tick += new EventHandler(OnMouseHover);
+                    _hoverTimer.Start();
                 }
             }
         }
 
         private void ClearTimer()
         {
-            if (hoverTimer != null)
+            if (_hoverTimer != null)
             {
-                hoverTimer.Stop();
-                hoverTimer.Dispose();
+                _hoverTimer.Stop();
+                _hoverTimer.Dispose();
             }
         }
 

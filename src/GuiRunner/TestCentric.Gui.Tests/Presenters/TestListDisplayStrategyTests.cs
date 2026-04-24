@@ -10,6 +10,7 @@ namespace TestCentric.Gui.Presenters
     using System.Windows.Forms;
     using NSubstitute;
     using NUnit.Framework;
+    using TestCentric.Gui.Controls;
     using TestCentric.Gui.Model;
     using TestCentric.Gui.Views;
 
@@ -39,7 +40,7 @@ namespace TestCentric.Gui.Presenters
             _view = Substitute.For<ITestTreeView>();
             _model = Substitute.For<ITestModel>();
 
-            _treeView = new TreeView();
+            _treeView = new TestCentricTreeView();
             _view.TreeView.Returns(_treeView);
             _view.Nodes.Returns(_treeView.Nodes);
 

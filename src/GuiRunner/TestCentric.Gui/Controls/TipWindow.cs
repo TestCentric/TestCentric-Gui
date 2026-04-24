@@ -7,6 +7,8 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using NUnit;
+using TestCentric.Gui.Views;
 
 namespace TestCentric.Gui.Controls
 {
@@ -58,40 +60,32 @@ namespace TestCentric.Gui.Controls
 
         #region Construction and Initialization
 
-        public TipWindow(Control control)
+        public TipWindow(Label label)
         {
             InitializeComponent();
-            InitControl(control);
+            InitializeControl(label);
 
-            // Note: This causes an error if called on a listbox
-            // with no item as yet selected, therefore, it is handled
-            // differently in the constructor for a listbox.
-            TipText = control.Text;
+            ItemBounds = label.ClientRectangle;
+            TipText = label.Text;
+
+            // Handle mouse leaving the label when not overlaid by the tip window
+            if (MouseLeaveDelay > 0 && !Overlay)
+                _control.MouseLeave += (s, e) => OnMouseLeave(e);
         }
 
         public TipWindow(ListBox listbox, int index)
         {
             InitializeComponent();
-            InitControl(listbox);
+            InitializeControl(listbox);
 
             ItemBounds = listbox.GetItemRectangle(index);
             TipText = listbox.Items[index].ToString();
         }
 
-        private void InitControl(Control control)
+        public TipWindow(TestCentricTreeView treeView)
         {
-            _control = control;
-            Owner = control.FindForm();
-            ItemBounds = control.ClientRectangle;
-
-            ControlBox = false;
-            MaximizeBox = false;
-            MinimizeBox = false;
-            BackColor = Color.LightYellow;
-            FormBorderStyle = FormBorderStyle.None;
-            StartPosition = FormStartPosition.Manual;
-
-            Font = control.Font;
+            InitializeComponent();
+            InitializeControl(treeView);
         }
 
         private void InitializeComponent()
@@ -111,14 +105,39 @@ namespace TestCentric.Gui.Controls
 
         }
 
-        protected override void OnLoad(System.EventArgs e)
+        private void InitializeControl(Control control)
         {
-            // At this point, further changes to the properties
-            // of the label will have no effect on the tip.
-            Point origin = _control.Parent.PointToScreen(_control.Location);
-            origin.Offset(ItemBounds.Left, ItemBounds.Top);
-            if (!Overlay) origin.Offset(0, ItemBounds.Height);
-            Location = origin;
+            _control = control;
+            Owner = control.FindForm();
+            Font = control.Font;
+        }
+
+        #endregion
+
+        #region Public Properties and Methods
+
+        public bool Overlay { get; set; }
+        public ExpansionStyle Expansion { get; set; }
+        public int AutoCloseDelay { get; set; }
+        public int MouseLeaveDelay { get; set; }
+        public string TipText { get; set; }
+        public Rectangle ItemBounds { get; set; }
+        public bool WantClicks { get; set; }
+
+        public void Display(TreeNode treeNode, string resultText)
+        {
+            // HACK: Needed until we create a hierarchy of TipWindows with implementations for different controls
+            Guard.OperationValid(_control is TreeView, "Internal Error: 'Display(TreeNode node)' may only be called when control is a TreeView.");
+
+            Hide();
+
+            ItemBounds = treeNode.Bounds;
+            Font = treeNode.NodeFont ?? treeNode.TreeView.Font;
+            TipText = treeNode.Text;
+            if (resultText != null)
+                TipText += " " + resultText;
+
+            AdjustLocation();
 
             Graphics g = Graphics.FromHwnd(Handle);
             Screen screen = Screen.FromControl(_control);
@@ -130,22 +149,16 @@ namespace TestCentric.Gui.Controls
 
             Size sizeNeeded = Size.Ceiling(g.MeasureString(TipText, Font, layoutArea));
 
-            // If the needed width is smaller than that of the original label,
-            // it can be visually confusing, so we adjust. This can only happen
+            // When used with a label, if the needed width is smaller than that of the
+            // label, it can be visually confusing, so we adjust. This can only happen
             // with ExpansionStyle.Both, so we won't get here unless either the
             // height or the width is greater.
-            if (sizeNeeded.Width < ItemBounds.Width)
+            if (_control is Label && sizeNeeded.Width < ItemBounds.Width)
                 sizeNeeded.Width = ItemBounds.Width;
 
             ClientSize = sizeNeeded;
             Size = sizeNeeded + new Size(PADDING_LEFT + PADDING_RIGHT, PADDING_TOP + PADDING_BOTTOM);
             _textRect = new Rectangle(PADDING_LEFT, PADDING_TOP, sizeNeeded.Width, sizeNeeded.Height);
-
-            // Catch mouse leaving the control
-            _control.MouseLeave += new EventHandler(control_MouseLeave);
-
-            // Catch the form that holds the control closing
-            _control.FindForm().Closed += new EventHandler(control_FormClosed);
 
             if (Right > screen.WorkingArea.Right)
             {
@@ -170,26 +183,16 @@ namespace TestCentric.Gui.Controls
             {
                 _autoCloseTimer = new System.Windows.Forms.Timer();
                 _autoCloseTimer.Interval = AutoCloseDelay;
-                _autoCloseTimer.Tick += new EventHandler(OnAutoClose);
+                _autoCloseTimer.Tick += (s, e) => Hide();
                 _autoCloseTimer.Start();
             }
+
+            Show();
         }
 
         #endregion
 
-        #region Properties
-
-        public bool Overlay { get; set; }
-        public ExpansionStyle Expansion { get; set; }
-        public int AutoCloseDelay { get; set; }
-        public int MouseLeaveDelay { get; set; }
-        public string TipText { get; set; }
-        public Rectangle ItemBounds { get; set; }
-        public bool WantClicks { get; set; }
-
-        #endregion
-
-        #region Event Handlers
+        #region Overrides
 
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
         {
@@ -201,11 +204,6 @@ namespace TestCentric.Gui.Controls
             outlineRect.Height--;
             g.DrawRectangle(Pens.Black, outlineRect);
             g.DrawString(TipText, Font, Brushes.Black, _textRect);
-        }
-
-        private void OnAutoClose(object sender, System.EventArgs e)
-        {
-            Close();
         }
 
         protected override void OnMouseEnter(System.EventArgs e)
@@ -224,38 +222,10 @@ namespace TestCentric.Gui.Controls
             {
                 _mouseLeaveTimer = new System.Windows.Forms.Timer();
                 _mouseLeaveTimer.Interval = MouseLeaveDelay;
-                _mouseLeaveTimer.Tick += new EventHandler(OnAutoClose);
+                _mouseLeaveTimer.Tick += (s, e) => Hide();
                 _mouseLeaveTimer.Start();
-                System.Diagnostics.Debug.WriteLine("Left TipWindow - started mouseLeaveTimer");
             }
         }
-
-        /// <summary>
-        /// The form our label is on closed, so we should. 
-        /// </summary>
-        private void control_FormClosed(object sender, System.EventArgs e)
-        {
-            Close();
-        }
-
-        /// <summary>
-        /// The mouse left the label. We ignore if we are
-        /// overlaying the label but otherwise start a
-        /// delay for closing the window
-        /// </summary>
-        private void control_MouseLeave(object sender, System.EventArgs e)
-        {
-            if (MouseLeaveDelay > 0 && !Overlay)
-            {
-                _mouseLeaveTimer = new System.Windows.Forms.Timer();
-                _mouseLeaveTimer.Interval = MouseLeaveDelay;
-                _mouseLeaveTimer.Tick += new EventHandler(OnAutoClose);
-                _mouseLeaveTimer.Start();
-                System.Diagnostics.Debug.WriteLine("Left Control - started mouseLeaveTimer");
-            }
-        }
-
-        #endregion
 
         [DllImport("user32.dll")]
         static extern uint SendMessage(
@@ -271,16 +241,30 @@ namespace TestCentric.Gui.Controls
             uint WM_RBUTTONDOWN = 0x204;
             uint WM_MBUTTONDOWN = 0x207;
 
-            if (m.Msg == WM_LBUTTONDOWN || m.Msg == WM_RBUTTONDOWN || m.Msg == WM_MBUTTONDOWN)
-            {
-                if (m.Msg != WM_LBUTTONDOWN)
-                    Close();
-                SendMessage(_control.Handle, m.Msg, m.WParam, m.LParam);
-            }
-            else
-            {
-                base.WndProc(ref m);
-            }
+            if (_control is Label)
+                if (m.Msg == WM_LBUTTONDOWN || m.Msg == WM_RBUTTONDOWN || m.Msg == WM_MBUTTONDOWN)
+                {
+                    if (m.Msg != WM_LBUTTONDOWN)
+                        Hide();
+                    SendMessage(_control.Handle, m.Msg, m.WParam, m.LParam);
+                    return;
+                }
+
+            base.WndProc(ref m);
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private void AdjustLocation()
+        {
+            Point origin = _control.Parent.PointToScreen(_control.Location);
+            origin.Offset(ItemBounds.Left, ItemBounds.Top);
+            if (!Overlay) origin.Offset(0, ItemBounds.Height);
+            Location = origin;
+        }
+
+        #endregion
     }
 }

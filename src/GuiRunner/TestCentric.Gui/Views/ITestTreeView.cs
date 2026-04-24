@@ -4,14 +4,15 @@
 // ***********************************************************************
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using TestCentric.Gui.Controls;
+using TestCentric.Gui.Elements;
+
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using Elements;
-
     public delegate void TreeNodeActionHandler(TreeNode treeNode);
     public delegate void MultipleTreeNodeActionHandler(IList<TreeNode> treeNodes);
 
@@ -22,6 +23,7 @@ namespace TestCentric.Gui.Views
         event TreeNodeActionHandler SelectedNodeChanged;
         event TreeNodeActionHandler AfterCheck;
         event TreeNodeActionHandler TreeNodeDoubleClick;
+        event TreeNodeActionHandler TreeNodeMouseHover;
         event EventHandler ContextMenuOpening;
 
         // Commands
@@ -51,7 +53,8 @@ namespace TestCentric.Gui.Views
         int VisibleNodeCount { get; }
         TreeNode TopNode { get; set; }
 
-        TreeView TreeView { get; }
+        TestCentricTreeView TreeView { get; }
+        TipWindow TipWindow { get; }
         TreeNodeCollection Nodes { get; }
         TreeNode ContextNode { get; }
         TreeNode SelectedNode { get; set; }

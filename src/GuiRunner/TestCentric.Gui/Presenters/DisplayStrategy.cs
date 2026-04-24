@@ -10,6 +10,8 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
 {
+    using System;
+    using System.Drawing;
     using Model;
     using Model.Settings;
     using Views;
@@ -124,11 +126,18 @@ namespace TestCentric.Gui.Presenters
             _view.InvokeIfRequired(() =>
             {
                 int imageIndex = CalcImageIndex(result);
+
                 foreach (TreeNode treeNode in GetTreeNodesForTest(result))
                 {
                     treeNode.Text = GetTreeNodeDisplayName(result);
-                    treeNode.ToolTipText = result.Label != null ? result.Label : result.Status.ToString();
                     _view.SetImageIndex(treeNode, imageIndex, true);
+
+                    //var parentGroup = treeNode.Parent.Tag as TestGroup;
+                    //while (parentGroup != null)
+                    //{
+                    //    parentGroup.GroupResultState = this..
+                    //    parentGroup = parentGroup.ParentGroup;
+                    //}
                 }
             });
         }
@@ -167,7 +176,6 @@ namespace TestCentric.Gui.Presenters
             {
                 VisualState visualState = applyVisualState ? CreateVisualState() : null;
                 OnTestLoaded(testNode, visualState);
-                ApplyResultsToTree();
             }
         }
 
@@ -181,48 +189,12 @@ namespace TestCentric.Gui.Presenters
             _nodeIndex.Clear();
         }
 
-        protected TreeNode MakeTreeNode(TestGroup group, bool recursive)
-        {
-            TreeNode treeNode = new TreeNode(group.Name, group.ImageIndex, group.ImageIndex)
-            {
-                Name = group.Name,
-                Tag = group
-            };
-
-            if (recursive)
-            {
-                if (group.SubGroups.Count > 0)
-                    foreach (var subGroup in group.SubGroups)
-                        treeNode.Nodes.Add(MakeTreeNode(subGroup, recursive));
-                else
-                    foreach (TestNode test in group)
-                        AddTreeNodeToCollection(test, treeNode.Nodes);
-            }
-
-            return group.TreeNode = treeNode;
-        }
-
-        public TreeNode MakeTreeNode(TestNode testNode, bool recursive)
+        private TreeNode MakeTreeNode(TestNode testNode, bool recursive)
         {
             string treeNodeName = GetTreeNodeDisplayName(testNode);
             TreeNode treeNode = new TreeNode(treeNodeName);
             treeNode.Tag = testNode;
-
-            int imageIndex = TestTreeView.SkippedIndex;
-
-            switch (testNode.RunState)
-            {
-                case RunState.Ignored:
-                    imageIndex = TestTreeView.IgnoredIndex;
-                    treeNode.ToolTipText = testNode.RunState.ToString();
-                    break;
-                case RunState.NotRunnable:
-                    imageIndex = TestTreeView.FailureIndex;
-                    treeNode.ToolTipText = testNode.RunState.ToString();
-                    break;
-            }
-
-            treeNode.ImageIndex = treeNode.SelectedImageIndex = imageIndex;
+            treeNode.ImageIndex = treeNode.SelectedImageIndex = CalcImageIndex(testNode);
 
             AddTestNodeMapping(testNode, treeNode);
 
@@ -311,6 +283,19 @@ namespace TestCentric.Gui.Presenters
             _view.InvokeIfRequired(() => treeNode.Text = treeNodeName);
         }
 
+        private static int CalcImageIndex(TestNode testNode)
+        {
+            switch (testNode.RunState)
+            {
+                case RunState.Ignored:
+                    return TestTreeView.IgnoredIndex;
+                case RunState.NotRunnable:
+                    return TestTreeView.FailureIndex;
+                default:
+                    return TestTreeView.InitIndex;
+            }
+        }
+
         public static int CalcImageIndex(ResultNode resultNode)
         {
             return CalcImageIndex(resultNode, resultNode.IsLatestRun);
@@ -359,6 +344,11 @@ namespace TestCentric.Gui.Presenters
                 ResultNode resultNode = GetResultForTest(testNode);
                 if (resultNode != null)
                     treeNode.ImageIndex = treeNode.SelectedImageIndex = CalcImageIndex(resultNode);
+
+                // NOTE: the loop only executes at the point in the hierarchy where the current
+                // TreeNode represents a TestNode and the parent is a TestGroup;
+                for (var parent = treeNode.Parent; parent?.Tag is TestGroup; parent = parent.Parent)
+                    parent.ImageIndex = parent.SelectedImageIndex = Math.Max(parent.ImageIndex, treeNode.ImageIndex);
             }
 
             foreach (TreeNode childNode in treeNode.Nodes)
@@ -379,8 +369,6 @@ namespace TestCentric.Gui.Presenters
                 else
                 {
                     imageIndex = UpdateTreeIconToPreviousRun(treeNode.ImageIndex);
-                    if (treeNode.Tag is TestGroup testGroup)
-                        testGroup.ImageIndex = imageIndex;
                 }
 
                 _view.SetImageIndex(treeNode, imageIndex);

@@ -12,6 +12,7 @@ namespace TestCentric.Gui.Presenters.TestTree
     using System;
     using System.IO;
     using System.Windows.Forms;
+    using TestCentric.Gui.Controls;
     using TestCentric.Gui.Views;
 
     // TODO: FIX
@@ -37,7 +38,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model.TreeConfiguration.Returns(new TreeConfiguration());
             _model.LoadedTests.Returns(TEST_NODE);
 
-            var tv = new TreeView();
+            var tv = new TestCentricTreeView();
             _view.TreeView.Returns(tv);
             _view.Nodes.Returns(tv.Nodes);
         }
@@ -191,7 +192,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         //        TestListGroupBy = groupBy
         //    };
         //    _model.TreeConfiguration.Returns(treeConfig);
-        //    var tv = new TreeView();
+        //    var tv = new TestCentricTreeView();
         //    _view.TreeView.Returns(tv);
 
         //    // Act: Load tests

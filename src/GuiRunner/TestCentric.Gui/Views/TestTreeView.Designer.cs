@@ -33,7 +33,7 @@ namespace TestCentric.Gui.Views
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestTreeView));
-            this.treeView = new System.Windows.Forms.TreeView();
+            this.treeView = new TestCentric.Gui.Controls.TestCentricTreeView();
             this.testTreeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.runMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,11 +81,10 @@ namespace TestCentric.Gui.Views
             this.treeView.HideSelection = false;
             this.treeView.ImageIndex = 0;
             this.treeView.ImageList = this.treeImages;
-            this.treeView.Location = new System.Drawing.Point(0, 25);
+            this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
             this.treeView.SelectedImageIndex = 0;
-            this.treeView.ShowNodeToolTips = true;
-            this.treeView.Size = new System.Drawing.Size(191, 221);
+            this.treeView.Size = new System.Drawing.Size(191, 246);
             this.treeView.TabIndex = 1;
             // 
             // testTreeContextMenu
@@ -358,8 +357,9 @@ namespace TestCentric.Gui.Views
             // 
             // filterTextBox
             // 
+            this.filterTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.filterTextBox.Name = "filterTextBox";
-            this.filterTextBox.Size = new System.Drawing.Size(179, 23);
+            this.filterTextBox.Size = new System.Drawing.Size(179, 25);
             // 
             // TestTreeView
             // 
@@ -382,7 +382,7 @@ namespace TestCentric.Gui.Views
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeView;
+        private TestCentric.Gui.Controls.TestCentricTreeView treeView;
         private System.Windows.Forms.ContextMenuStrip testTreeContextMenu;
         private System.Windows.Forms.ToolStrip filterToolStrip;
         private System.Windows.Forms.ToolStripLabel filterOutcomeLabel;

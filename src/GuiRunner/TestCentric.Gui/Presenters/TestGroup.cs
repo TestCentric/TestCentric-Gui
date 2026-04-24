@@ -3,10 +3,8 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using TestCentric.Gui.Model;
 using TestCentric.Gui.Model.Filter;
 
@@ -21,29 +19,25 @@ namespace TestCentric.Gui.Presenters
     /// </summary>
     public class TestGroup : ITestItem
     {
-        private ResultState _groupResultState;
         private bool _isResultFromLatestRun;
 
         #region Constructors
 
-        public TestGroup(string name, int imageIndex = -1)
+        public TestGroup(string name)
         {
             Name = name;
-            ImageIndex = imageIndex;
         }
 
-        public TestGroup(string name, IEnumerable<TestNode> tests, int imageIndex = -1)
+        public TestGroup(string name, IEnumerable<TestNode> tests)
         {
             Name = name;
             TestNodes = new TestSelection(tests);
-            ImageIndex = imageIndex;
         }
 
-        public TestGroup(string name, IEnumerable<TestGroup> subGroups, int imageIndex = -1)
+        public TestGroup(string name, IEnumerable<TestGroup> subGroups)
         {
             Name = name;
             SubGroups = [.. subGroups];
-            ImageIndex = imageIndex;
         }
 
         #endregion
@@ -51,8 +45,6 @@ namespace TestCentric.Gui.Presenters
         #region Properties
 
         public string Name { get; }
-
-        public int ImageIndex { get; set; }
 
         public virtual double? Duration { get; set; }
 
@@ -105,14 +97,7 @@ namespace TestCentric.Gui.Presenters
 
             TestNodes.Add(testNode);
             if (resultNode != null)
-            {
-                if (_groupResultState == null || TestResultManager.GetOutcome(_groupResultState) < TestResultManager.GetOutcome(resultNode.Outcome))
-                    _groupResultState = resultNode.Outcome;
-
                 _isResultFromLatestRun = _isResultFromLatestRun || resultNode.IsLatestRun;
-
-                ImageIndex = DisplayStrategy.CalcImageIndex(_groupResultState, _isResultFromLatestRun);
-            }
         }
 
         public TestGroup GetOrAddSubGroup(string name)

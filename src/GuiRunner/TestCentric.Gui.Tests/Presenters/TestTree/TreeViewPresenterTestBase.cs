@@ -12,6 +12,7 @@ namespace TestCentric.Gui.Presenters.TestTree
     using System.Windows.Forms;
     using Elements;
     using Model;
+    using TestCentric.Gui.Controls;
     using Views;
 
     public class TreeViewPresenterTestBase : PresenterTestBase<ITestTreeView>
@@ -31,7 +32,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.Load += Raise.Event<System.EventHandler>(_view, new System.EventArgs());
             _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
 
-            TreeView treeView = new TreeView();
+            TreeView treeView = new TestCentricTreeView();
             _view.TreeView.Returns(treeView);
 
             // We can't construct a TreeNodeCollection, so we fake it

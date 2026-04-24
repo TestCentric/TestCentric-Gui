@@ -5,11 +5,10 @@
 
 using System;
 using System.Collections;
+using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
-using NUnit.Common;
-using NUnit.Engine;
+using NUnit;
 using TestCentric.Gui.Controls;
 using TestCentric.Gui.Dialogs;
 using TestCentric.Gui.Model;
@@ -23,16 +22,26 @@ namespace TestCentric.Gui.Presenters
     /// </summary>
     public class TreeViewPresenter
     {
+        static Logger log = InternalTrace.GetLogger(typeof(TreeViewPresenter));
+
         private ITestTreeView _view;
         private ITestModel _model;
         private ITreeDisplayStrategyFactory _treeDisplayStrategyFactory;
+
+        private Timer _mouseHoverDelayTimer = new Timer();
+        private const int MOUSE_HOVER_DELAY = 1500;
+        private const string PREVIOUS_RUN = " (Previous Run)";
+
+        private static string[] _groupImageDescriptions => [ "Skipped", "Pending", "Running",
+            "Inconclusive (Previous Run)", "Passed (Previous Run)", "Ignored (Previous Run)", "Warning (Previous Run)", "Failed (Previous Run)",
+            "Inconclusive", "Passed", "Ignored", "Warning", "Failed" ];
 
         // Accessed by tests
         public ITreeDisplayStrategy Strategy { get; private set; }
 
         public ITreeConfiguration TreeConfiguration { get; }
 
-        #region Constructor
+        #region Construction and Initialization
 
         public TreeViewPresenter(ITestTreeView treeView, ITestModel model, ITreeDisplayStrategyFactory factory)
         {
@@ -46,14 +55,10 @@ namespace TestCentric.Gui.Presenters
             WireUpEvents();
         }
 
-        #endregion
-
-        #region Private Members
-
         private void WireUpEvents()
         {
             #region Model Events
-            
+
             _model.Events.TestLoaded += (ea) =>
             {
                 EnsureNonRunnableFilesAreVisible(ea.Test);
@@ -247,7 +252,7 @@ namespace TestCentric.Gui.Presenters
 
                 foreach (var node in checkedNodes)
                     selection.Add(node.Tag as ITestItem);
-                
+
                 selection.AddExplicitChildTests();
                 _model.SelectedTests = selection;
             };
@@ -271,8 +276,19 @@ namespace TestCentric.Gui.Presenters
 
             _view.ResetFilterCommand.Execute += () => ResetTestFilter();
 
+            // Some of our tests don't set the TreeView. Events requiring
+            // the TreeView control should be placed after this test.
+            if (_view.TreeView == null)
+                return;
+
+            _view.TreeNodeMouseHover += OnTreeNodeMouseHover;
+
             #endregion
         }
+
+        #endregion
+
+        #region Private Methods
 
         private void OnSettingsChanged(object sender, SettingsEventArgs e)
         {
@@ -292,6 +308,25 @@ namespace TestCentric.Gui.Presenters
                     Strategy?.Reload();
                     break;
             }
+        }
+
+        private void OnTreeNodeMouseHover(TreeNode treeNode)
+        {
+            log.Debug($"OnTreeNodeMouseHover with node {treeNode.Text}");
+            //// Uncomment the following block of code to display a green rectangle
+            //// around the client area and red rectangles around each TreeNode
+            //// after hovering over it.
+            //Rectangle clientRect = treeView.ClientRectangle;
+            //Point origin = treeView.Parent.PointToScreen(treeView.Location);
+            //clientRect.Width--;
+            //clientRect.Height--;
+            //g.DrawRectangle(Pens.Green, clientRect);
+            //g.DrawRectangle(Pens.Red, e.Node.Bounds);
+
+            var resultText = GetResultText(treeNode);
+
+            if (NeedsExpansion(treeNode) || resultText != null)
+                _view.TipWindow.Display(treeNode, resultText);
         }
 
         private void OnTreeConfigurationChanged(object sender, SettingsEventArgs e)
@@ -424,7 +459,7 @@ namespace TestCentric.Gui.Presenters
             return visualState != null;
         }
 
-        public void SaveVisualState()
+        private void SaveVisualState()
         {
             VisualState visualState = Strategy.CreateVisualState();
             string projectPath = _model.TestCentricProject.ProjectPath;
@@ -484,8 +519,7 @@ namespace TestCentric.Gui.Presenters
         {
             if (_xmlDisplay == null)
             {
-                var treeView = (Control)_view;
-                var mainForm = treeView.FindForm();
+                var mainForm = _view.TreeView.FindForm();
 
                 _xmlDisplay = new XmlDisplay(_model)
                 {
@@ -532,6 +566,9 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeContextMenu()
         {
+            _mouseHoverDelayTimer.Stop();
+            _view.TipWindow?.Hide();
+
             // TODO: Config Menu is hidden until changing the config actually works
             bool displayConfigMenu = false;
             //var test = _view.ContextNode?.Tag as TestNode;
@@ -584,6 +621,40 @@ namespace TestCentric.Gui.Presenters
         private bool CanRemovePackageNode(TestNode testNode)
         {
             return _model.HasTests && !_model.IsTestRunning && testNode != null && testNode.IsAssembly && _model.TopLevelPackage.SubPackages.Count > 1;
+        }
+
+        private bool NeedsExpansion(TreeNode treeNode)
+        {
+            Graphics g = Graphics.FromHwnd(_view.TreeView.Handle);
+            int widthNeeded = (int)g.MeasureString(treeNode.Text, _view.TreeView.Font).Width - 4;
+            return treeNode.Bounds.Right > _view.TreeView.ClientRectangle.Right;
+        }
+
+        private string GetResultText(TreeNode treeNode)
+        {
+            TestNode testNode = treeNode.Tag as TestNode;
+
+            ResultNode resultNode = testNode != null
+                ? testNode as ResultNode ?? _model.TestResultManager.GetResultForTest(testNode.Id)
+                : null;
+            ResultState result = resultNode?.Outcome;
+            bool isPreviousRun = result != null && !resultNode.IsLatestRun;
+
+            var resultText = result != null
+                ? !string.IsNullOrEmpty(result.Label) ? result.Label : result.Status.ToString()
+                : testNode?.RunState == RunState.Ignored || testNode?.RunState == RunState.NotRunnable
+                    ? testNode?.RunState.ToString()
+                    : treeNode.ImageIndex > 0
+                        ? _groupImageDescriptions[treeNode.ImageIndex]
+                        : null;
+
+            if (isPreviousRun)
+            {
+                resultText.ShouldNotBeNull();
+                resultText += PREVIOUS_RUN;
+            }
+
+            return resultText;
         }
 
         #endregion

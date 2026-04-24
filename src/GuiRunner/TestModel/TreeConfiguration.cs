@@ -41,8 +41,11 @@ namespace TestCentric.Gui.Model
             get => _displayFormat;
             set
             {
-                _displayFormat = value;
-                OnPropertyChanged(nameof(DisplayFormat));
+                if (_displayFormat != value)
+                {
+                    _displayFormat = value;
+                    OnPropertyChanged(nameof(DisplayFormat));
+                }
             }
         }
 
@@ -54,8 +57,11 @@ namespace TestCentric.Gui.Model
             get => _showCheckBoxes;
             set
             {
-                _showCheckBoxes = value;
-                OnPropertyChanged(nameof(ShowCheckBoxes));
+                if (_showCheckBoxes != value)
+                {
+                    _showCheckBoxes = value;
+                    OnPropertyChanged(nameof(ShowCheckBoxes));
+                }
             }
         }
 
@@ -65,8 +71,11 @@ namespace TestCentric.Gui.Model
             get => _nunitTreeShowTestDuration;
             set
             {
-                _nunitTreeShowTestDuration = value;
-                OnPropertyChanged(nameof(NUnitTreeShowTestDuration));
+                if (_nunitTreeShowTestDuration != value)
+                {
+                    _nunitTreeShowTestDuration = value;
+                    OnPropertyChanged(nameof(NUnitTreeShowTestDuration));
+                }
             }
         }
 
@@ -78,8 +87,11 @@ namespace TestCentric.Gui.Model
             get => _nunitTreeShowAssemblies;
             set
             {
-                _nunitTreeShowAssemblies = value;
-                OnPropertyChanged(nameof(NUnitTreeShowAssemblies));
+                if (_nunitTreeShowAssemblies != value)
+                {
+                    _nunitTreeShowAssemblies = value;
+                    OnPropertyChanged(nameof(NUnitTreeShowAssemblies));
+                }
             }
         }
 
@@ -89,8 +101,11 @@ namespace TestCentric.Gui.Model
             get => _nunitTreeShowNamespaces;
             set
             {
-                _nunitTreeShowNamespaces = value;
-                OnPropertyChanged(nameof(NUnitTreeShowNamespaces));
+                if (_nunitTreeShowNamespaces != value)
+                {
+                    _nunitTreeShowNamespaces = value;
+                    OnPropertyChanged(nameof(NUnitTreeShowNamespaces));
+                }
             }
         }
 
@@ -100,8 +115,11 @@ namespace TestCentric.Gui.Model
             get => _nunitTreeShowFixtures;
             set
             {
-                _nunitTreeShowFixtures = value;
-                OnPropertyChanged(nameof(NUnitTreeShowFixtures));
+                if (_nunitTreeShowFixtures != value)
+                {
+                    _nunitTreeShowFixtures = value;
+                    OnPropertyChanged(nameof(NUnitTreeShowFixtures));
+                }
             }
         }
 
@@ -113,8 +131,11 @@ namespace TestCentric.Gui.Model
             get => _testListShowAssemblies;
             set
             {
-                _testListShowAssemblies = value;
-                OnPropertyChanged(nameof(TestListShowAssemblies));
+                if (_testListShowAssemblies != value)
+                {
+                    _testListShowAssemblies = value;
+                    OnPropertyChanged(nameof(TestListShowAssemblies));
+                }
             }
         }
 
@@ -124,8 +145,11 @@ namespace TestCentric.Gui.Model
             get => _testListShowFixtures;
             set
             {
-                _testListShowFixtures = value;
-                OnPropertyChanged(nameof(TestListShowFixtures));
+                if (_testListShowFixtures != value)
+                {
+                    _testListShowFixtures = value;
+                    OnPropertyChanged(nameof(TestListShowFixtures));
+                }
             }
         }
 
@@ -135,8 +159,11 @@ namespace TestCentric.Gui.Model
             get => _testListGroupBy;
             set
             {
-                _testListGroupBy = value;
-                OnPropertyChanged(nameof(TestListGroupBy));
+                if (_testListGroupBy != value)
+                {
+                    _testListGroupBy = value;
+                    OnPropertyChanged(nameof(TestListGroupBy));
+                }
             }
         }
 

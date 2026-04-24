@@ -3,19 +3,24 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.Eventing.Reader;
+using System.Drawing.Text;
 using System.Windows.Forms;
+using NUnit;
+using TestCentric.Gui.Controls;
+using TestCentric.Gui.Elements;
 
 namespace TestCentric.Gui.Views
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Threading.Tasks;
-    using Elements;
 
     public partial class TestTreeView : UserControl, ITestTreeView
     {
+        static Logger log = InternalTrace.GetLogger(typeof(TestTreeView));
+
         /// <summary>
         /// Image names and indices for various test states. We load the
         /// images into the image list in the specified order so that the
@@ -23,7 +28,7 @@ namespace TestCentric.Gui.Views
         /// are those that propagate upwards in the tree.
         /// </summary>
         private static readonly string[] IMAGE_NAMES = { "Skipped", "Pending", "Running",
-            "Inconclusive_NotLatestRun", "Success_NotLatestRun", "Ignored_NotLatestRun", "Warning_NotLatestRun", "Failure_NotLatestRun", 
+            "Inconclusive_NotLatestRun", "Success_NotLatestRun", "Ignored_NotLatestRun", "Warning_NotLatestRun", "Failure_NotLatestRun",
             "Inconclusive", "Success", "Ignored", "Warning", "Failure" };
 
         // Constants that match the above order
@@ -45,12 +50,24 @@ namespace TestCentric.Gui.Views
         public event TreeNodeActionHandler SelectedNodeChanged;
         public event TreeNodeActionHandler AfterCheck;
         public event TreeNodeActionHandler TreeNodeDoubleClick;
+        public event TreeNodeActionHandler TreeNodeMouseHover;
         public event EventHandler ContextMenuOpening;
 
         private bool _suppressAfterCheckEvent = false;
+        private Timer _mouseHoverDelayTimer = new Timer();
+        private TreeNode _lastNodeHovered;
+
         public TestTreeView()
         {
             InitializeComponent();
+
+            TipWindow = new TipWindow(treeView)
+            {
+                Expansion = TipWindow.ExpansionStyle.Horizontal,
+                Overlay = true,
+                WantClicks = true,
+                MouseLeaveDelay = 500
+            };
 
             RunContextCommand = new CommandMenuElement(this.runMenuItem);
             DebugContextCommand = new CommandMenuElement(this.debugMenuItem);
@@ -72,6 +89,28 @@ namespace TestCentric.Gui.Views
             CategoryFilter = new ToolStripCategoryFilterButton(filterByCategory);
             ResetFilterCommand = new ToolStripButtonElement(filterResetButton);
             TreeView = treeView;
+
+            treeView.MouseMove += (s, e) =>
+            {
+                var currentNode = treeView.GetNodeAt(e.X, e.Y);
+                if (currentNode is not null && currentNode != _lastNodeHovered && !TreeContextMenu.Visible)
+                {
+                    _lastNodeHovered = currentNode;
+
+                    _mouseHoverDelayTimer.Stop();
+                    _mouseHoverDelayTimer.Interval = MouseHoverDelay;
+                    _mouseHoverDelayTimer.Tick += (s, e) =>
+                    {
+                        _mouseHoverDelayTimer.Stop();
+                        // Possible race conditions
+                        if (_lastNodeHovered != null && !TreeContextMenu.Visible)
+                            TreeNodeMouseHover?.Invoke(_lastNodeHovered);
+                    };
+                    _mouseHoverDelayTimer.Start();
+                }
+            };
+
+            treeView.MouseLeave += (s, e) => _lastNodeHovered = null;
 
             // NOTE: We use MouseDown here rather than MouseUp because
             // the menu strip Opening event occurs before MouseUp.
@@ -124,6 +163,8 @@ namespace TestCentric.Gui.Views
 
         #region Properties
 
+        public TipWindow TipWindow { get; }
+
         private bool _checkBoxes;
         public bool CheckBoxes
         {
@@ -169,7 +210,7 @@ namespace TestCentric.Gui.Views
         public ICommand TestPropertiesCommand { get; private set; }
         public ICommand ViewAsXmlCommand { get; private set; }
 
-        public TreeView TreeView { get; private set; }
+        public TestCentricTreeView TreeView { get; private set; }
 
         public IMultiSelection OutcomeFilter { get; private set; }
         public ICategoryFilterSelection CategoryFilter { get; private set; }
@@ -178,6 +219,7 @@ namespace TestCentric.Gui.Views
         public IChanged TextFilter { get; private set; }
 
         public TreeNode ContextNode { get; private set; }
+
         public ContextMenuStrip TreeContextMenu => TreeView.ContextMenuStrip;
 
         private OutcomeImageSet _outcomeImages;
@@ -187,6 +229,8 @@ namespace TestCentric.Gui.Views
             get { return _outcomeImages; }
             set { LoadAlternateImages(_outcomeImages = value); }
         }
+
+        public int MouseHoverDelay { get; } = 1000;
 
         public TreeNodeCollection Nodes => treeView.Nodes;
 
