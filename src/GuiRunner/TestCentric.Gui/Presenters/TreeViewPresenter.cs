@@ -28,11 +28,9 @@ namespace TestCentric.Gui.Presenters
         private ITestModel _model;
         private ITreeDisplayStrategyFactory _treeDisplayStrategyFactory;
 
-        private Timer _mouseHoverDelayTimer = new Timer();
-        private const int MOUSE_HOVER_DELAY = 1500;
         private const string PREVIOUS_RUN = " (Previous Run)";
 
-        private static string[] _groupImageDescriptions => [ "Skipped", "Pending", "Running",
+        private static string[] _groupImageDescriptions => [ "Skipped", "Pending", "Running", "Running (Passing)", "Running (Ignored)", "Running (Warning)", "Running (Failing)",
             "Inconclusive (Previous Run)", "Passed (Previous Run)", "Ignored (Previous Run)", "Warning (Previous Run)", "Failed (Previous Run)",
             "Inconclusive", "Passed", "Ignored", "Warning", "Failed" ];
 
@@ -569,7 +567,6 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeContextMenu()
         {
-            _mouseHoverDelayTimer.Stop();
             _view.TipWindow?.Hide();
 
             // TODO: Config Menu is hidden until changing the config actually works
