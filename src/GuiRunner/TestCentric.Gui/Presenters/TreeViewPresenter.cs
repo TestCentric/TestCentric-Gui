@@ -246,7 +246,9 @@ namespace TestCentric.Gui.Presenters
                 var selection = new TestSelection();
 
                 foreach (var node in checkedNodes)
-                    selection.Add(node.Tag as ITestItem);
+                    if (node.Tag is TestGroup testGroup)
+                        selection.Add(testGroup.TestNodes);
+                    else selection.Add(node.Tag as ITestItem);
                 
                 selection.AddExplicitChildTests();
                 _model.SelectedTests = selection;

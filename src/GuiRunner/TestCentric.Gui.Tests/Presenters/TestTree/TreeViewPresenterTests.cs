@@ -200,7 +200,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             var subTestNode2 = new TestNode("<test-case id='3' />");
             var testGroup = new TestGroup("Category_1", [subTestNode1, subTestNode2]);
 
-            var treeNode1 = new TreeNode() { Tag = testGroup.TestNodes };
+            var treeNode1 = new TreeNode() { Tag = testGroup };
 
             IList<TreeNode> checkedNodes = new List<TreeNode>() { treeNode1 };
             _view.CheckedNodes.Returns(checkedNodes);
