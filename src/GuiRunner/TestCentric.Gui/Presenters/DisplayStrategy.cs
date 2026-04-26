@@ -11,7 +11,6 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Presenters
 {
     using System;
-    using System.Drawing;
     using Model;
     using Model.Settings;
     using Views;
@@ -118,7 +117,7 @@ namespace TestCentric.Gui.Presenters
         public virtual void OnTestStarting(TestNode testNode)
         {
             foreach (TreeNode treeNode in GetTreeNodesForTest(testNode))
-                _view.SetImageIndex(treeNode, TestTreeView.RunningIndex, true);
+                SetRunningImageIndex(treeNode);
         }
 
         public virtual void OnTestFinished(ResultNode result)
@@ -130,14 +129,7 @@ namespace TestCentric.Gui.Presenters
                 foreach (TreeNode treeNode in GetTreeNodesForTest(result))
                 {
                     treeNode.Text = GetTreeNodeDisplayName(result);
-                    _view.SetImageIndex(treeNode, imageIndex, true);
-
-                    //var parentGroup = treeNode.Parent.Tag as TestGroup;
-                    //while (parentGroup != null)
-                    //{
-                    //    parentGroup.GroupResultState = this..
-                    //    parentGroup = parentGroup.ParentGroup;
-                    //}
+                    _view.SetImageIndex(treeNode, imageIndex, false);
                 }
             });
         }
@@ -375,6 +367,49 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
+        private void SetRunningImageIndex(TreeNode treeNode)
+        {
+            // Test execution is starting for the tree node, so set the image index to "Running" 
+            // The exact type of the “running” image index is determined by the strictest image index of all child nodes
+            int imageIndex = TestTreeView.RunningIndex;
+            foreach (TreeNode childNode in treeNode.Nodes)
+                imageIndex = Math.Max(imageIndex, GetRunningImageIndex(childNode));
+
+            _view.SetImageIndex(treeNode, imageIndex, false);
+
+            // Determine image index for parent nodes as well
+            if (treeNode.Parent != null)
+                SetRunningImageIndex(treeNode.Parent);
+        }
+
+        /// <summary>
+        /// Map the image index of a tree node to the corresponding "running" image index
+        /// </summary>
+        private int GetRunningImageIndex(TreeNode treeNode)
+        {
+            switch (treeNode.ImageIndex)
+            {
+                case TestTreeView.SuccessIndex:
+                case TestTreeView.SuccessIndex_NotLatestRun:
+                case TestTreeView.RunningIndex_Success:
+                    return TestTreeView.RunningIndex_Success;
+                case TestTreeView.FailureIndex:
+                case TestTreeView.FailureIndex_NotLatestRun:
+                case TestTreeView.RunningIndex_Failure:
+                    return TestTreeView.RunningIndex_Failure;
+                case TestTreeView.WarningIndex:
+                case TestTreeView.WarningIndex_NotLatestRun:
+                case TestTreeView.RunningIndex_Warning:
+                    return TestTreeView.RunningIndex_Warning;
+                case TestTreeView.IgnoredIndex:
+                case TestTreeView.IgnoredIndex_NotLatestRun:
+                case TestTreeView.RunningIndex_Ignored:
+                    return TestTreeView.RunningIndex_Ignored;
+                default:
+                    return TestTreeView.RunningIndex;
+            }
+        }
+
         private int UpdateTreeIconToPreviousRun(int imageIndex)
         {
             switch (imageIndex)
@@ -395,11 +430,28 @@ namespace TestCentric.Gui.Presenters
 
         protected void ResetTestRunningIcons(TreeNodeCollection treeNodes)
         {
-            // Only required for exceptional use case 'force stop test run'
+            // Update all running icons to their corresponding non-running icons (required for TestList view)
             foreach (TreeNode treeNode in treeNodes)
             {
-                if (treeNode.ImageIndex == TestTreeView.PendingIndex || treeNode.ImageIndex == TestTreeView.RunningIndex)
-                    _view.SetImageIndex(treeNode, TestTreeView.SkippedIndex);
+                switch (treeNode.ImageIndex)
+                {
+                    case TestTreeView.RunningIndex_Success:
+                        _view.SetImageIndex(treeNode, TestTreeView.SuccessIndex);
+                        break;
+                    case TestTreeView.RunningIndex_Failure:
+                        _view.SetImageIndex(treeNode, TestTreeView.FailureIndex);
+                        break;
+                    case TestTreeView.RunningIndex_Warning:
+                        _view.SetImageIndex(treeNode, TestTreeView.WarningIndex);
+                        break;
+                    case TestTreeView.RunningIndex_Ignored:
+                        _view.SetImageIndex(treeNode, TestTreeView.IgnoredIndex);
+                        break;
+                    case TestTreeView.PendingIndex:
+                    case TestTreeView.RunningIndex:
+                        _view.SetImageIndex(treeNode, TestTreeView.SkippedIndex);
+                        break;
+                }
 
                 ResetTestRunningIcons(treeNode.Nodes);
             }

@@ -27,8 +27,8 @@ namespace TestCentric.Gui.Views
         /// indices are correct. These are ordered so that the higher values 
         /// are those that propagate upwards in the tree.
         /// </summary>
-        private static readonly string[] IMAGE_NAMES = { "Skipped", "Pending", "Running",
-            "Inconclusive_NotLatestRun", "Success_NotLatestRun", "Ignored_NotLatestRun", "Warning_NotLatestRun", "Failure_NotLatestRun",
+        private static readonly string[] IMAGE_NAMES = { "Skipped", "Pending", "Running", "Running_Success", "Running_Ignored", "Running_Warning", "Running_Failure",
+            "Inconclusive_NotLatestRun", "Success_NotLatestRun", "Ignored_NotLatestRun", "Warning_NotLatestRun", "Failure_NotLatestRun", 
             "Inconclusive", "Success", "Ignored", "Warning", "Failure" };
 
         // Constants that match the above order
@@ -36,16 +36,20 @@ namespace TestCentric.Gui.Views
         public const int SkippedIndex = 0;
         public const int PendingIndex = 1;
         public const int RunningIndex = 2;
-        public const int InconclusiveIndex_NotLatestRun = 3;
-        public const int SuccessIndex_NotLatestRun = 4;
-        public const int IgnoredIndex_NotLatestRun = 5;
-        public const int WarningIndex_NotLatestRun = 6;
-        public const int FailureIndex_NotLatestRun = 7;
-        public const int InconclusiveIndex = 8;
-        public const int SuccessIndex = 9;
-        public const int IgnoredIndex = 10;
-        public const int WarningIndex = 11;
-        public const int FailureIndex = 12;
+        public const int RunningIndex_Success = 3;
+        public const int RunningIndex_Ignored = 4;
+        public const int RunningIndex_Warning = 5;
+        public const int RunningIndex_Failure = 6;
+        public const int InconclusiveIndex_NotLatestRun = 7;
+        public const int SuccessIndex_NotLatestRun = 8;
+        public const int IgnoredIndex_NotLatestRun = 9;
+        public const int WarningIndex_NotLatestRun = 10;
+        public const int FailureIndex_NotLatestRun = 11;
+        public const int InconclusiveIndex = 12;
+        public const int SuccessIndex = 13;
+        public const int IgnoredIndex = 14;
+        public const int WarningIndex = 15;
+        public const int FailureIndex = 16;
 
         public event TreeNodeActionHandler SelectedNodeChanged;
         public event TreeNodeActionHandler AfterCheck;
