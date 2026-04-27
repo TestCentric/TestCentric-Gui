@@ -94,27 +94,52 @@ namespace TestCentric.Gui.Views
             ResetFilterCommand = new ToolStripButtonElement(filterResetButton);
             TreeView = treeView;
 
+            _mouseHoverDelayTimer.Tick += (s, e) =>
+            {
+                // If the timer fires, we have been hovering over the
+                // same TreeNode the entire time, so we save that node
+                // and cancel the timer.
+                var currentNode = _lastNodeHovered;
+                CancelTimer();
+
+                // Null TreeNode should not be possible but the context
+                // menu might display while the delay is underway.
+                if (currentNode is not null && !TreeContextMenu.Visible)
+                    TreeNodeMouseHover?.Invoke(currentNode);
+            };
+
             treeView.MouseMove += (s, e) =>
             {
                 var currentNode = treeView.GetNodeAt(e.X, e.Y);
-                if (currentNode is not null && currentNode != _lastNodeHovered && !TreeContextMenu.Visible)
-                {
-                    _lastNodeHovered = currentNode;
-
-                    _mouseHoverDelayTimer.Stop();
-                    _mouseHoverDelayTimer.Interval = MouseHoverDelay;
-                    _mouseHoverDelayTimer.Tick += (s, e) =>
-                    {
-                        _mouseHoverDelayTimer.Stop();
-                        // Possible race conditions
-                        if (_lastNodeHovered != null && !TreeContextMenu.Visible)
-                            TreeNodeMouseHover?.Invoke(_lastNodeHovered);
-                    };
-                    _mouseHoverDelayTimer.Start();
-                }
+                // If there is no node or if the context menu is up
+                // we stop cancel the delay entirely.
+                if (currentNode is null || TreeContextMenu.Visible)
+                    CancelTimer();
+                // If we moved to a new node, reset the timer.
+                else if (currentNode != _lastNodeHovered)
+                    ResetTimer(currentNode);
+                // Otherwise, the timer continues to run.
             };
 
-            treeView.MouseLeave += (s, e) => _lastNodeHovered = null;
+            treeView.MouseLeave += (s, e) => CancelTimer();
+
+            void CancelTimer()
+            {
+                _mouseHoverDelayTimer.Stop();
+                _lastNodeHovered = null;
+            }
+
+            void ResetTimer(TreeNode newNode)
+            {
+                // TODO: Remove guard after testing?
+                Guard.OperationValid(newNode != _lastNodeHovered,
+                    "Internal ERROR: Should not be resetting the timer for the same node.");
+
+                _mouseHoverDelayTimer.Stop();
+                _lastNodeHovered = newNode;
+                _mouseHoverDelayTimer.Interval = MouseHoverDelay;
+                _mouseHoverDelayTimer.Start();
+            }
 
             // NOTE: We use MouseDown here rather than MouseUp because
             // the menu strip Opening event occurs before MouseUp.
