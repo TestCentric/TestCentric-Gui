@@ -18,6 +18,7 @@ namespace TestCentric.Gui.Model
         public static bool IsProjectFile(string path) => Path.GetExtension(path).ToLower() == ".tcproj";
 
         public string ProjectPath { get; internal set; }
+        internal string OriginalProjectPath { get; set; }
 
         public TestPackage TopLevelPackage { get; private set; }
 
@@ -126,13 +127,18 @@ namespace TestCentric.Gui.Model
                 if (!FindTestCentricProjectElement())
                     throw new InvalidCastException("Invalid TestCentricProject XML");
 
-                // Currently, we have no attributes on the TestCentricProject element
-                // so proceed tot he next item in the reader, it will either be a TestPackage
-                // or the TestCentricProject end element.
+                OriginalProjectPath = xmlReader.GetAttribute("OriginalPath");
+
                 while (xmlReader.Read())
                 {
                     switch (xmlReader.NodeType)
                     {
+                        case XmlNodeType.Attribute:
+                            if (xmlReader.Name == "OriginalPath")
+                                OriginalProjectPath = xmlReader.Value;
+                            else
+                                throw new Exception($"Invalid attribute: `{xmlReader.Name}");
+                            break;
                         case XmlNodeType.Element:
                             if (xmlReader.Name == "TestPackage")
                                 TopLevelPackage = ReadXml(xmlReader);
@@ -147,10 +153,25 @@ namespace TestCentric.Gui.Model
                     }
                 }
 
-                // Update the list of test files
+                // Update the list of test files if necessary
                 TestFiles.Clear();
                 foreach (TestPackage subPackage in TopLevelPackage.SubPackages)
+                {
+                    if (ProjectPath != OriginalProjectPath && !File.Exists(subPackage.FullName))
+                    {
+                        // Test file may have been moved as well
+                        var relPath = PathUtils.RelativePath(OriginalProjectPath, subPackage.FullName);
+                        if (relPath is not null)
+                        {
+                            var newFile = Path.Combine(ProjectPath, relPath);
+                            if (File.Exists(newFile))
+                                subPackage.FullName = newFile;
+                        }
+                    }
+
+                    // Add to TestFiles whether it exists or not
                     TestFiles.Add(subPackage.FullName);
+                }
 
                 bool FindTestCentricProjectElement()
                 {
@@ -182,6 +203,7 @@ namespace TestCentric.Gui.Model
             {
                 xmlWriter.WriteStartDocument();
                 xmlWriter.WriteStartElement("TestCentricProject");
+                xmlWriter.WriteAttributeString("OriginalPath", ProjectPath);
                 if (TopLevelPackage is not null)
                    xmlWriter.WriteRaw(TopLevelPackage.ToXml());
                 xmlWriter.WriteEndElement();

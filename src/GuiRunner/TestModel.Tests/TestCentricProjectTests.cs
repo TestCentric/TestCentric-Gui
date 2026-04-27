@@ -49,6 +49,7 @@ namespace TestCentric.Gui.Model
             // 2. Assert
             Assert.That(project, Is.Not.Null);
             Assert.That(project.ProjectPath, Is.Null);
+            Assert.That(project.OriginalProjectPath, Is.Null);
             Assert.That(project.TestFiles, Is.Not.Null);
             Assert.That(project.TestFiles.Count, Is.EqualTo(0));
         }
@@ -59,6 +60,7 @@ namespace TestCentric.Gui.Model
             TestCentricProject project = new TestCentricProject(_model, "MyProject.tcproj");
 
             Assert.That(project.ProjectPath, Is.EqualTo(Path.GetFullPath("MyProject.tcproj")));
+            Assert.That(project.OriginalProjectPath, Is.Null);
             Assert.That(project.TestFiles, Is.Not.Null);
             Assert.That(project.TestFiles.Count, Is.EqualTo(0));
         }
@@ -71,6 +73,7 @@ namespace TestCentric.Gui.Model
 
             // 2. Assert
             Assert.That(project.ProjectPath, Is.EqualTo(Path.GetFullPath("MyProject.tcproj")));
+            Assert.That(project.OriginalProjectPath, Is.Null);
             Assert.That(project.TestFiles.Count, Is.EqualTo(1));
             Assert.That(project.TestFiles[0], Is.EqualTo("TestAssembly.dll"));
         }
@@ -86,6 +89,7 @@ namespace TestCentric.Gui.Model
 
             // 3. Assert
             Assert.That(project.ProjectPath, Is.EqualTo(Path.GetFullPath("MyProject.tcproj")));
+            Assert.That(project.OriginalProjectPath, Is.Null);
             Assert.That(project.TestFiles.Count, Is.EqualTo(3));
             Assert.That(project.TestFiles, Is.EquivalentTo(filenames));
         }
