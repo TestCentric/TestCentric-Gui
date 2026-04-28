@@ -50,11 +50,6 @@ namespace TestCentric.Gui.Presenters
             foreach (TestNode testNode in tests)
                 foreach (var group in SelectGroups(testNode))
                     group.Add(testNode);
-
-            // If there are test results, show the result for the group
-            if (_displayStrategy.HasResults)
-                foreach (var group in Groups)
-                    group.ImageIndex = _displayStrategy.CalcImageIndexForGroup(group);
         }
 
         /// <summary>
@@ -64,18 +59,6 @@ namespace TestCentric.Gui.Presenters
         public virtual void OnTestFinished(ResultNode result)
         {
             // Override to take any necessary action
-        }
-
-        public void OnTestRunFinished()
-        {
-            // Update tree node icon for all group nodes at the end of a test run
-            // The icon state can be finally determined for duration and outcome grouping only at this point in time
-            // For category grouping, the status can already be partially determined in OnTestFinished event; But finally only at the end of a test run
-            foreach (TestGroup group in Groups)
-            {
-                int imageIndex = _displayStrategy.CalcImageIndexForGroup(group);
-                group.TreeNode.ImageIndex = group.TreeNode.SelectedImageIndex = group.ImageIndex = imageIndex;
-            }
         }
 
         /// <summary>

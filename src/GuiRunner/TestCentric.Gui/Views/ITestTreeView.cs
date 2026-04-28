@@ -4,20 +4,26 @@
 // ***********************************************************************
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using TestCentric.Gui.Controls;
+using TestCentric.Gui.Elements;
+
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using Elements;
-
     public delegate void TreeNodeActionHandler(TreeNode treeNode);
     public delegate void MultipleTreeNodeActionHandler(IList<TreeNode> treeNodes);
 
     // Interface used for testing
     public interface ITestTreeView : IView
     {
+#if USE_TIPWINDOW
+        event TreeNodeActionHandler TreeNodeMouseHover;
+        TipWindow TipWindow { get; }
+#endif
+
         // Events
         event TreeNodeActionHandler SelectedNodeChanged;
         event TreeNodeActionHandler AfterCheck;
@@ -51,7 +57,7 @@ namespace TestCentric.Gui.Views
         int VisibleNodeCount { get; }
         TreeNode TopNode { get; set; }
 
-        TreeView TreeView { get; }
+        TestCentricTreeView TreeView { get; }
         TreeNodeCollection Nodes { get; }
         TreeNode ContextNode { get; }
         TreeNode SelectedNode { get; set; }

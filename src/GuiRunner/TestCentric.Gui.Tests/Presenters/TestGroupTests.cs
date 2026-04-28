@@ -21,7 +21,7 @@ namespace TestCentric.Gui.Presenters
         [SetUp]
         public void CreateTestGroup()
         {
-            _group = new TestGroup("NAME", 7);
+            _group = new TestGroup("NAME");
             _group.Add(MakeTestNode("1", "Tom", "Runnable"));
             _group.Add(MakeTestNode("2", "Dick", "Explicit"));
             _group.Add(MakeTestNode("3", "Harry", "Runnable"));
@@ -31,12 +31,6 @@ namespace TestCentric.Gui.Presenters
         public void GroupName()
         {
             Assert.That(_group.Name, Is.EqualTo("NAME"));
-        }
-
-        [Test]
-        public void ImageIndex()
-        {
-            Assert.That(_group.ImageIndex, Is.EqualTo(7));
         }
 
         [Test]
@@ -55,30 +49,6 @@ namespace TestCentric.Gui.Presenters
             foreach (XmlNode child in filter.ChildNodes)
                 ids.Add(child.InnerText);
             Assert.That(ids, Is.EqualTo(new string[] { "1", "3" }));
-        }
-
-        [TestCase("Skipped", "Ignored", "Warning", TestTreeView.WarningIndex)]
-        [TestCase("Passed", "Ignored", "Failed", TestTreeView.FailureIndex)]
-        [TestCase("Passed", "Ignored", "Warning", TestTreeView.WarningIndex)]
-        [TestCase("Warning", "Ignored", "Failed", TestTreeView.FailureIndex)]
-        [TestCase("Inconclusive", "Ignored", "Passed", TestTreeView.SuccessIndex)]
-        [TestCase("Skipped", "Ignored", "Passed", TestTreeView.IgnoredIndex)]
-        [TestCase("Failed", "Ignored", "Passed", TestTreeView.FailureIndex)]
-        public void AddTestsWithResults_CheckImageIndex(string outcome1, string label1, string outcome2, int expectedImageIndex)
-        {
-            // Arrange
-            var group = new TestGroup("TestGroup");
-            var testNode = MakeTestNode("1", "Tom", "Runnable");
-            var resultNode1 = new ResultNode($"<test-case id='1' result='{outcome1}' label='{label1}'/>");
-            var resultNode2 = new ResultNode($"<test-case id='1' result='{outcome2}'/>");
-
-            // Act
-            group.Add(testNode, resultNode1);
-            group.Add(testNode, resultNode2);
-
-            // Assert
-            Assert.That(group.ImageIndex, Is.EqualTo(expectedImageIndex));
-
         }
 
         private TestNode MakeTestNode(string id, string name, string runState)

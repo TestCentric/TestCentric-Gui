@@ -4,7 +4,8 @@
 // ***********************************************************************
 
 using System;
-using System.Windows.Forms; 
+using System.Windows.Forms;
+using TestCentric.Gui.Controls;
 
 namespace TestCentric.Gui
 {
@@ -214,7 +215,7 @@ namespace TestCentric.Gui
 
         private static TreeView CreateTreeView(bool checkBoxes, params TreeNode[] treeNodes)
         {
-            var tv = new TreeView() { CheckBoxes = checkBoxes };
+            var tv = new TestCentricTreeView() { CheckBoxes = checkBoxes };
             tv.Nodes.AddRange(treeNodes);
             return tv;
         }

@@ -11,6 +11,7 @@ namespace TestCentric.Gui.Presenters.TestTree
 {
     using System.Linq;
     using Model;
+    using TestCentric.Gui.Controls;
     using Views;
 
     public class WhenTestCaseCompletes : PresenterTestBase<ITestTreeView>
@@ -52,7 +53,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             // Make it look like the view loaded
             _view.Load += Raise.Event<System.EventHandler>(_view, new System.EventArgs());
 
-            TreeView treeView = new TreeView();
+            TreeView treeView = new TestCentricTreeView();
             _view.TreeView.Returns(treeView);
 
             var nodes = new TreeNode().Nodes; // Hack to construct a TreeNode collection
@@ -62,7 +63,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model.Events.TestLoaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
             _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(resultNode));
 
-            _view.Received().SetImageIndex(Arg.Compat.Any<TreeNode>(), expectedIndex, false);
+            _view.Received().SetImageIndex(Arg.Compat.Any<TreeNode>(), expectedIndex, true);
         }
     }
 }
