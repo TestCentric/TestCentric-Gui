@@ -19,11 +19,15 @@ namespace TestCentric.Gui.Views
     // Interface used for testing
     public interface ITestTreeView : IView
     {
+#if USE_TIPWINDOW
+        event TreeNodeActionHandler TreeNodeMouseHover;
+        TipWindow TipWindow { get; }
+#endif
+
         // Events
         event TreeNodeActionHandler SelectedNodeChanged;
         event TreeNodeActionHandler AfterCheck;
         event TreeNodeActionHandler TreeNodeDoubleClick;
-        event TreeNodeActionHandler TreeNodeMouseHover;
         event EventHandler ContextMenuOpening;
 
         // Commands
@@ -54,7 +58,6 @@ namespace TestCentric.Gui.Views
         TreeNode TopNode { get; set; }
 
         TestCentricTreeView TreeView { get; }
-        TipWindow TipWindow { get; }
         TreeNodeCollection Nodes { get; }
         TreeNode ContextNode { get; }
         TreeNode SelectedNode { get; set; }

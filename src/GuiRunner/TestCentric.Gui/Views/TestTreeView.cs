@@ -17,7 +17,6 @@ using TestCentric.Gui.Elements;
 
 namespace TestCentric.Gui.Views
 {
-
     public partial class TestTreeView : UserControl, ITestTreeView
     {
         static Logger log = InternalTrace.GetLogger(typeof(TestTreeView));
@@ -55,17 +54,23 @@ namespace TestCentric.Gui.Views
         public event TreeNodeActionHandler SelectedNodeChanged;
         public event TreeNodeActionHandler AfterCheck;
         public event TreeNodeActionHandler TreeNodeDoubleClick;
-        public event TreeNodeActionHandler TreeNodeMouseHover;
         public event EventHandler ContextMenuOpening;
 
         private bool _suppressAfterCheckEvent = false;
+
+#if USE_TIPWINDOW
+        public event TreeNodeActionHandler TreeNodeMouseHover;
         private Timer _mouseHoverDelayTimer = new Timer();
         private TreeNode _lastNodeHovered;
+
+        public TipWindow TipWindow { get; }
+#endif
 
         public TestTreeView()
         {
             InitializeComponent();
 
+#if USE_TIPWINDOW
             TipWindow = new TipWindow(treeView)
             {
                 Expansion = TipWindow.ExpansionStyle.Horizontal,
@@ -73,6 +78,7 @@ namespace TestCentric.Gui.Views
                 WantClicks = true,
                 MouseLeaveDelay = 500
             };
+#endif
 
             RunContextCommand = new CommandMenuElement(this.runMenuItem);
             DebugContextCommand = new CommandMenuElement(this.debugMenuItem);
@@ -95,6 +101,7 @@ namespace TestCentric.Gui.Views
             ResetFilterCommand = new ToolStripButtonElement(filterResetButton);
             TreeView = treeView;
 
+#if USE_TIPWINDOW
             _mouseHoverDelayTimer.Tick += (s, e) =>
             {
                 // If the timer fires, we have been hovering over the
@@ -118,7 +125,7 @@ namespace TestCentric.Gui.Views
                     CancelTimer();
                 // If we moved to a new node, reset the timer, but only
                 // if we are within the text area of the node.
-                else if (currentNode != _lastNodeHovered && e.X >= currentNode.Bounds.Left)
+                else if (currentNode != _lastNodeHovered && currentNode.Bounds.Contains(e.X, e.Y))
                 {
                     ResetTimer(currentNode);
 
@@ -155,6 +162,7 @@ namespace TestCentric.Gui.Views
                 _mouseHoverDelayTimer.Interval = MouseHoverDelay;
                 _mouseHoverDelayTimer.Start();
             }
+#endif
 
             // NOTE: We use MouseDown here rather than MouseUp because
             // the menu strip Opening event occurs before MouseUp.
@@ -206,8 +214,6 @@ namespace TestCentric.Gui.Views
         }
 
         #region Properties
-
-        public TipWindow TipWindow { get; }
 
         private bool _checkBoxes;
         public bool CheckBoxes
