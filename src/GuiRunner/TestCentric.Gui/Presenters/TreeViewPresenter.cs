@@ -314,20 +314,16 @@ namespace TestCentric.Gui.Presenters
         private void OnTreeNodeMouseHover(TreeNode treeNode)
         {
             log.Debug($"OnTreeNodeMouseHover with node {treeNode.Text}");
-            //// Uncomment the following block of code to display a green rectangle
-            //// around the client area and red rectangles around each TreeNode
-            //// after hovering over it.
-            //Rectangle clientRect = treeView.ClientRectangle;
-            //Point origin = treeView.Parent.PointToScreen(treeView.Location);
-            //clientRect.Width--;
-            //clientRect.Height--;
-            //g.DrawRectangle(Pens.Green, clientRect);
-            //g.DrawRectangle(Pens.Red, e.Node.Bounds);
 
             var resultText = GetResultText(treeNode);
 
             if (NeedsExpansion(treeNode) || resultText != null)
                 _view.TipWindow.Display(treeNode, resultText);
+        }
+
+        private void TipWindow_DoubleClick(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void OnTreeConfigurationChanged(object sender, SettingsEventArgs e)

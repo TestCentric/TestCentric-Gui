@@ -112,6 +112,75 @@ namespace TestCentric.Gui.Controls
             Font = control.Font;
         }
 
+        protected override void OnLoad(System.EventArgs e)
+        {
+            // HACK: Needed until we create a hierarchy of TipWindows with implementations for different controls
+            if (_control is TreeView)
+                return;
+
+            // At this point, further changes to the properties
+            // of the label will have no effect on the tip.
+            Point origin = _control.Parent.PointToScreen(_control.Location);
+            origin.Offset(ItemBounds.Left, ItemBounds.Top);
+            if (!Overlay) origin.Offset(0, ItemBounds.Height);
+            Location = origin;
+
+            Graphics g = Graphics.FromHwnd(Handle);
+            Screen screen = Screen.FromControl(_control);
+            SizeF layoutArea = new SizeF(screen.WorkingArea.Width - SCREEN_MARGIN, screen.WorkingArea.Height - SCREEN_MARGIN);
+            if (Expansion == ExpansionStyle.Vertical)
+                layoutArea.Width = ItemBounds.Width;
+            else if (Expansion == ExpansionStyle.Horizontal)
+                layoutArea.Height = ItemBounds.Height;
+
+            Size sizeNeeded = Size.Ceiling(g.MeasureString(TipText, Font, layoutArea));
+
+            // If the needed width is smaller than that of the original label,
+            // it can be visually confusing, so we adjust. This can only happen
+            // with ExpansionStyle.Both, so we won't get here unless either the
+            // height or the width is greater.
+            if (sizeNeeded.Width < ItemBounds.Width)
+                sizeNeeded.Width = ItemBounds.Width;
+
+            ClientSize = sizeNeeded;
+            Size = sizeNeeded + new Size(PADDING_LEFT + PADDING_RIGHT, PADDING_TOP + PADDING_BOTTOM);
+            _textRect = new Rectangle(PADDING_LEFT, PADDING_TOP, sizeNeeded.Width, sizeNeeded.Height);
+
+            // Catch mouse leaving the control
+            if (!Overlay)
+                _control.MouseLeave += (s, e) => Close();
+
+            // Catch the form that holds the control closing
+            _control.FindForm().Closing += (s, e) => Close();
+
+            if (Right > screen.WorkingArea.Right)
+            {
+                Left = Math.Max(
+                    screen.WorkingArea.Right - Width - SCREEN_EDGE,
+                    screen.WorkingArea.Left + SCREEN_EDGE);
+            }
+
+            if (Bottom > screen.WorkingArea.Bottom - SCREEN_EDGE)
+            {
+                if (Overlay)
+                    Top = Math.Max(
+                        screen.WorkingArea.Bottom - Height - SCREEN_EDGE,
+                        screen.WorkingArea.Top + SCREEN_EDGE);
+
+                if (Bottom > screen.WorkingArea.Bottom - SCREEN_EDGE)
+                    Height = screen.WorkingArea.Bottom - SCREEN_EDGE - Top;
+
+            }
+
+            if (AutoCloseDelay > 0)
+            {
+                _autoCloseTimer = new System.Windows.Forms.Timer();
+                _autoCloseTimer.Interval = AutoCloseDelay;
+                _autoCloseTimer.Tick += (s, e) => Close();
+                _autoCloseTimer.Start();
+            }
+        }
+
         #endregion
 
         #region Public Properties and Methods
@@ -235,14 +304,22 @@ namespace TestCentric.Gui.Controls
             IntPtr lparam
             );
 
+        const uint WM_LBUTTONDOWN   = 0x201;
+        const uint WM_LBUTTONUP     = 0x202;
+        const uint WM_LBUTTONDBLCLK = 0x203;
+        const uint WM_RBUTTONDOWN   = 0x204;
+        const uint WM_RBUTTONUP     = 0x205;
+        const uint WM_RBUTTONDBLCLK = 0x206;
+        const uint WM_MBUTTONDOWN   = 0x207;
+        const uint WM_MBUTTONUP     = 0x208;
+        const uint WM_MBUTTONDBLCLK = 0x209;
+
         protected override void WndProc(ref Message m)
         {
-            uint WM_LBUTTONDOWN = 0x201;
-            uint WM_RBUTTONDOWN = 0x204;
-            uint WM_MBUTTONDOWN = 0x207;
-
             if (_control is Label)
-                if (m.Msg == WM_LBUTTONDOWN || m.Msg == WM_RBUTTONDOWN || m.Msg == WM_MBUTTONDOWN)
+                if (m.Msg == WM_LBUTTONDOWN ||
+                    m.Msg == WM_RBUTTONDOWN ||
+                    m.Msg == WM_MBUTTONDOWN)
                 {
                     if (m.Msg != WM_LBUTTONDOWN)
                         Hide();

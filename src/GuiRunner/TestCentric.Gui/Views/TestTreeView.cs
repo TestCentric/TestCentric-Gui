@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.Eventing.Reader;
+using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
 using NUnit;
@@ -115,9 +116,23 @@ namespace TestCentric.Gui.Views
                 // we stop cancel the delay entirely.
                 if (currentNode is null || TreeContextMenu.Visible)
                     CancelTimer();
-                // If we moved to a new node, reset the timer.
-                else if (currentNode != _lastNodeHovered)
+                // If we moved to a new node, reset the timer, but only
+                // if we are within the text area of the node.
+                else if (currentNode != _lastNodeHovered && e.X >= currentNode.Bounds.Left)
+                {
                     ResetTimer(currentNode);
+
+                    //// Uncomment the following block of code to display a green rectangle
+                    //// around the client area and red rectangles around each TreeNode
+                    //// after hovering over it.
+                    //Rectangle clientRect = treeView.ClientRectangle;
+                    //Point origin = treeView.Parent.PointToScreen(treeView.Location);
+                    //clientRect.Width--;
+                    //clientRect.Height--;
+                    //var g = Graphics.FromHwnd(treeView.Handle);
+                    //g.DrawRectangle(Pens.Green, clientRect);
+                    //g.DrawRectangle(Pens.Red, currentNode.Bounds);
+                }
                 // Otherwise, the timer continues to run.
             };
 
