@@ -129,7 +129,7 @@ namespace TestCentric.Gui.Presenters
                 foreach (TreeNode treeNode in GetTreeNodesForTest(result))
                 {
                     treeNode.Text = GetTreeNodeDisplayName(result);
-                    _view.SetImageIndex(treeNode, imageIndex, false);
+                    _view.SetImageIndex(treeNode, imageIndex, true);
                 }
             });
         }

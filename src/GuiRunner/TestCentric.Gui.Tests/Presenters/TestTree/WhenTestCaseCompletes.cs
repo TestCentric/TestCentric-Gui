@@ -63,7 +63,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model.Events.TestLoaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
             _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(resultNode));
 
-            _view.Received().SetImageIndex(Arg.Compat.Any<TreeNode>(), expectedIndex, false);
+            _view.Received().SetImageIndex(Arg.Compat.Any<TreeNode>(), expectedIndex, true);
         }
     }
 }
