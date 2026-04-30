@@ -11,15 +11,7 @@
     </PropertyGroup>
 
 	<PropertyGroup>
-		<DefineConstants>$(DefineConstants);DISABLE_MINI_GUI</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <DefineConstants>$(DefineConstants);DISABLE_MINI_GUI</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <DefineConstants>$(DefineConstants);DISABLE_MINI_GUI;USE_TIPWINDOW</DefineConstants>
+		<DefineConstants>$(DefineConstants);DISABLE_MINI_GUI;USE_TIPWINDOW</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
