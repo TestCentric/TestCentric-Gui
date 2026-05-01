@@ -133,12 +133,6 @@ namespace TestCentric.Gui.Model
                 {
                     switch (xmlReader.NodeType)
                     {
-                        case XmlNodeType.Attribute:
-                            if (xmlReader.Name == "OriginalPath")
-                                OriginalProjectPath = xmlReader.Value;
-                            else
-                                throw new Exception($"Invalid attribute: `{xmlReader.Name}");
-                            break;
                         case XmlNodeType.Element:
                             if (xmlReader.Name == "TestPackage")
                                 TopLevelPackage = ReadXml(xmlReader);
