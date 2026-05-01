@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Controls
@@ -21,6 +21,20 @@ namespace TestCentric.Gui.Controls
                 CreateParams parms = base.CreateParams;
                 parms.Style |= TVS_NOTOOLTIPS;
                 return parms;
+            }
+        }
+
+        protected override void OnDrawNode(DrawTreeNodeEventArgs e)
+        {
+            if (e.Node.IsSelected)
+            {
+                e.Graphics.FillRectangle(Brushes.LightGray, e.Bounds);
+                TextRenderer.DrawText(e.Graphics, e.Node.Text, e.Node.NodeFont ?? Font,
+                    e.Bounds, Color.Black, TextFormatFlags.Default);
+            }
+            else
+            {
+                e.DrawDefault = true;
             }
         }
     }
