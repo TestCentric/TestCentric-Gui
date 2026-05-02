@@ -18,8 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		GitReleaseManager.yaml = GitReleaseManager.yaml
 		GitVersion.yml = GitVersion.yml
 		INSTALL.md = INSTALL.md
-		LICENSE.txt = LICENSE.txt
 		KnownExtensions.cake = KnownExtensions.cake
+		LICENSE.txt = LICENSE.txt
 		NOTICES.txt = NOTICES.txt
 		NuGet.config = NuGet.config
 		NUnitGuiDifferences.md = NUnitGuiDifferences.md
@@ -67,7 +67,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{A841
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{8F99EF67-A6E4-4F47-85B6-3B3E683B6A14}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\testcentric-gui-ci.yml = .github\workflows\testcentric-gui-ci.yml
+		.github\workflows\TestCentric.Gui.CI.yml = .github\workflows\TestCentric.Gui.CI.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui", "src\GuiRunner\TestCentric.Gui\TestCentric.Gui.csproj", "{CF675B47-65A1-72E2-1F4F-5AF40AB293A0}"
