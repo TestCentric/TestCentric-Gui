@@ -10,6 +10,7 @@ using NSubstitute;
 namespace TestCentric.Gui.Presenters.TestTree
 {
     using Model;
+    using TestCentric.Gui.Controls;
     using Views;
 
     public abstract class DisplayStrategyTests
@@ -34,7 +35,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             nodes.Add(new TreeNode("test.dll"));
             _view.Nodes.Returns(nodes);
 
-            var treeView = new TreeView();
+            var treeView = new TestCentricTreeView();
             _view.TreeView.Returns(treeView);
 
             var project = new TestCentricProject(_model, "MyProject", "dummy.dll");
@@ -341,7 +342,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void CollapseToFixtures_AllFixtureNodes_AreShown()
         {
             // Arrange
-            var treeView = new TreeView();
+            var treeView = new TestCentricTreeView();
             _view.TreeView.Returns(treeView);
 
             var rootNode = _view.Nodes[0];

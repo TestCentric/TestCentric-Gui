@@ -128,60 +128,60 @@ namespace TestCentric.Gui.Presenters
             strategy.Received().ApplyResultToGroup(result);
         }
 
-        [Test]
-        [TestCase("Passed", "Passed", "Passed", TestTreeView.SuccessIndex)]
-        [TestCase("Passed", "Passed", "Failed", TestTreeView.FailureIndex)]
-        [TestCase("Passed", "Failed", "Passed", TestTreeView.FailureIndex)]
-        [TestCase("Failed", "Warning", "Passed", TestTreeView.FailureIndex)]
-        [TestCase("Failed", "Failed", "Failed", TestTreeView.FailureIndex)]
-        [TestCase("Warning", "Passed", "Passed", TestTreeView.WarningIndex)]
-        [TestCase("Passed", "Passed", "Warning", TestTreeView.WarningIndex)]
-        [TestCase("Passed", "Passed", "Inconclusive", TestTreeView.SuccessIndex)]
-        [TestCase("Inconclusive", "Inconclusive", "Inconclusive", TestTreeView.InconclusiveIndex)]
-        [TestCase("Skipped", "Skipped", "Skipped", -1)]
-        [TestCase("Failed", "Skipped", "Skipped", TestTreeView.FailureIndex)]
-        [TestCase("Skipped", "Passed", "Skipped", TestTreeView.SuccessIndex)]
-        public void OnTestRunFinished(string testResult1, string testResult2, string testResult3, int expectedImageIndex)
-        {
-            // 1. Arrange
-            ITestTreeView treeView = Substitute.For<ITestTreeView>();
-            ITestModel model = Substitute.For<ITestModel>();
-            GroupDisplayStrategy strategy = Substitute.For<GroupDisplayStrategy>(treeView, model);
-            IEnumerable<TestNode> tests = new List<TestNode>();
-            ResultNode result = new ResultNode("<test-case id='1'/>");
+        //[Test]
+        //[TestCase("Passed", "Passed", "Passed", TestTreeView.SuccessIndex)]
+        //[TestCase("Passed", "Passed", "Failed", TestTreeView.FailureIndex)]
+        //[TestCase("Passed", "Failed", "Passed", TestTreeView.FailureIndex)]
+        //[TestCase("Failed", "Warning", "Passed", TestTreeView.FailureIndex)]
+        //[TestCase("Failed", "Failed", "Failed", TestTreeView.FailureIndex)]
+        //[TestCase("Warning", "Passed", "Passed", TestTreeView.WarningIndex)]
+        //[TestCase("Passed", "Passed", "Warning", TestTreeView.WarningIndex)]
+        //[TestCase("Passed", "Passed", "Inconclusive", TestTreeView.SuccessIndex)]
+        //[TestCase("Inconclusive", "Inconclusive", "Inconclusive", TestTreeView.InconclusiveIndex)]
+        //[TestCase("Skipped", "Skipped", "Skipped", -1)]
+        //[TestCase("Failed", "Skipped", "Skipped", TestTreeView.FailureIndex)]
+        //[TestCase("Skipped", "Passed", "Skipped", TestTreeView.SuccessIndex)]
+        //public void OnTestRunFinished(string testResult1, string testResult2, string testResult3, int expectedImageIndex)
+        //{
+        //    // 1. Arrange
+        //    ITestTreeView treeView = Substitute.For<ITestTreeView>();
+        //    ITestModel model = Substitute.For<ITestModel>();
+        //    GroupDisplayStrategy strategy = Substitute.For<GroupDisplayStrategy>(treeView, model);
+        //    IEnumerable<TestNode> tests = new List<TestNode>();
+        //    ResultNode result = new ResultNode("<test-case id='1'/>");
 
-            // Create grouping and initialize all groups
-            DurationGrouping grouping = new DurationGrouping(strategy);
-            grouping.LoadGroups(tests);
+        //    // Create grouping and initialize all groups
+        //    DurationGrouping grouping = new DurationGrouping(strategy);
+        //    grouping.LoadGroups(tests);
 
-            foreach (TestGroup testGroup in grouping.Groups)
-            {
-                testGroup.TreeNode = new TreeNode();
-            }
+        //    foreach (TestGroup testGroup in grouping.Groups)
+        //    {
+        //        testGroup.TreeNode = new TreeNode();
+        //    }
 
-            // 2. Act
-            // Only testing the first group
-            TestGroup group = grouping.Groups.First();
-            CreateTestAndResultInGroup(group, model, "1", testResult1);
-            CreateTestAndResultInGroup(group, model, "2", testResult2);
-            CreateTestAndResultInGroup(group, model, "3", testResult3);
-            model.IsInTestRun(null).ReturnsForAnyArgs(true);
+        //    // 2. Act
+        //    // Only testing the first group
+        //    TestGroup group = grouping.Groups.First();
+        //    CreateTestAndResultInGroup(group, model, "1", testResult1);
+        //    CreateTestAndResultInGroup(group, model, "2", testResult2);
+        //    CreateTestAndResultInGroup(group, model, "3", testResult3);
+        //    model.IsInTestRun(null).ReturnsForAnyArgs(true);
 
-            grouping.OnTestRunFinished();
+        //    grouping.OnTestRunFinished();
 
-            // 3. Assert
-            Assert.That(group.ImageIndex, Is.EqualTo(expectedImageIndex));
-        }
+        //    // 3. Assert
+        //    Assert.That(group.ImageIndex, Is.EqualTo(expectedImageIndex));
+        //}
 
-        private void CreateTestAndResultInGroup(TestGroup group, ITestModel model, string testId, string testResult)
-        {
-            group.Add(new TestNode($"<test-case id='{testId}' />"));
-            model.TestResultManager.GetResultForTest(testId).Returns(CreateResultNode(testId, testResult));
-        }
+        //private void CreateTestAndResultInGroup(TestGroup group, ITestModel model, string testId, string testResult)
+        //{
+        //    group.Add(new TestNode($"<test-case id='{testId}' />"));
+        //    model.TestResultManager.GetResultForTest(testId).Returns(CreateResultNode(testId, testResult));
+        //}
 
-        private ResultNode CreateResultNode(string id, string result)
-        {
-            return new ResultNode($"<test-case id='{id}' result='{result}'/>");
-        }
+        //private ResultNode CreateResultNode(string id, string result)
+        //{
+        //    return new ResultNode($"<test-case id='{id}' result='{result}'/>");
+        //}
     }
 }

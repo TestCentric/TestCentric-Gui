@@ -3,19 +3,24 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.Eventing.Reader;
+using System.Drawing;
+using System.Drawing.Text;
 using System.Windows.Forms;
+using NUnit;
+using TestCentric.Gui.Controls;
+using TestCentric.Gui.Elements;
 
 namespace TestCentric.Gui.Views
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Threading.Tasks;
-    using Elements;
-
     public partial class TestTreeView : UserControl, ITestTreeView
     {
+        static Logger log = InternalTrace.GetLogger(typeof(TestTreeView));
+
         /// <summary>
         /// Image names and indices for various test states. We load the
         /// images into the image list in the specified order so that the
@@ -52,9 +57,28 @@ namespace TestCentric.Gui.Views
         public event EventHandler ContextMenuOpening;
 
         private bool _suppressAfterCheckEvent = false;
+
+#if USE_TIPWINDOW
+        public event TreeNodeActionHandler TreeNodeMouseHover;
+        private Timer _mouseHoverDelayTimer = new Timer();
+        private TreeNode _lastNodeHovered;
+
+        public TipWindow TipWindow { get; }
+#endif
+
         public TestTreeView()
         {
             InitializeComponent();
+
+#if USE_TIPWINDOW
+            TipWindow = new TipWindow(treeView)
+            {
+                Expansion = TipWindow.ExpansionStyle.Horizontal,
+                Overlay = true,
+                WantClicks = true,
+                MouseLeaveDelay = 500
+            };
+#endif
 
             RunContextCommand = new CommandMenuElement(this.runMenuItem);
             DebugContextCommand = new CommandMenuElement(this.debugMenuItem);
@@ -76,6 +100,69 @@ namespace TestCentric.Gui.Views
             CategoryFilter = new ToolStripCategoryFilterButton(filterByCategory);
             ResetFilterCommand = new ToolStripButtonElement(filterResetButton);
             TreeView = treeView;
+
+#if USE_TIPWINDOW
+            _mouseHoverDelayTimer.Tick += (s, e) =>
+            {
+                // If the timer fires, we have been hovering over the
+                // same TreeNode the entire time, so we save that node
+                // and cancel the timer.
+                var currentNode = _lastNodeHovered;
+                CancelTimer();
+
+                // Null TreeNode should not be possible but the context
+                // menu might display while the delay is underway.
+                if (currentNode is not null && !TreeContextMenu.Visible)
+                    TreeNodeMouseHover?.Invoke(currentNode);
+            };
+
+            treeView.MouseMove += (s, e) =>
+            {
+                var currentNode = treeView.GetNodeAt(e.X, e.Y);
+                // If there is no node or if the context menu is up
+                // we stop cancel the delay entirely.
+                if (currentNode is null || TreeContextMenu.Visible)
+                    CancelTimer();
+                // If we moved to a new node, reset the timer, but only
+                // if we are within the text area of the node.
+                else if (currentNode != _lastNodeHovered && currentNode.Bounds.Contains(e.X, e.Y))
+                {
+                    ResetTimer(currentNode);
+
+                    //// Uncomment the following block of code to display a green rectangle
+                    //// around the client area and red rectangles around each TreeNode
+                    //// after hovering over it.
+                    //Rectangle clientRect = treeView.ClientRectangle;
+                    //Point origin = treeView.Parent.PointToScreen(treeView.Location);
+                    //clientRect.Width--;
+                    //clientRect.Height--;
+                    //var g = Graphics.FromHwnd(treeView.Handle);
+                    //g.DrawRectangle(Pens.Green, clientRect);
+                    //g.DrawRectangle(Pens.Red, currentNode.Bounds);
+                }
+                // Otherwise, the timer continues to run.
+            };
+
+            treeView.MouseLeave += (s, e) => CancelTimer();
+
+            void CancelTimer()
+            {
+                _mouseHoverDelayTimer.Stop();
+                _lastNodeHovered = null;
+            }
+
+            void ResetTimer(TreeNode newNode)
+            {
+                // TODO: Remove guard after testing?
+                Guard.OperationValid(newNode != _lastNodeHovered,
+                    "Internal ERROR: Should not be resetting the timer for the same node.");
+
+                _mouseHoverDelayTimer.Stop();
+                _lastNodeHovered = newNode;
+                _mouseHoverDelayTimer.Interval = MouseHoverDelay;
+                _mouseHoverDelayTimer.Start();
+            }
+#endif
 
             // NOTE: We use MouseDown here rather than MouseUp because
             // the menu strip Opening event occurs before MouseUp.
@@ -173,7 +260,7 @@ namespace TestCentric.Gui.Views
         public ICommand TestPropertiesCommand { get; private set; }
         public ICommand ViewAsXmlCommand { get; private set; }
 
-        public TreeView TreeView { get; private set; }
+        public TestCentricTreeView TreeView { get; private set; }
 
         public IMultiSelection OutcomeFilter { get; private set; }
         public ICategoryFilterSelection CategoryFilter { get; private set; }
@@ -182,6 +269,7 @@ namespace TestCentric.Gui.Views
         public IChanged TextFilter { get; private set; }
 
         public TreeNode ContextNode { get; private set; }
+
         public ContextMenuStrip TreeContextMenu => TreeView.ContextMenuStrip;
 
         private OutcomeImageSet _outcomeImages;
@@ -191,6 +279,8 @@ namespace TestCentric.Gui.Views
             get { return _outcomeImages; }
             set { LoadAlternateImages(_outcomeImages = value); }
         }
+
+        public int MouseHoverDelay { get; } = 1000;
 
         public TreeNodeCollection Nodes => treeView.Nodes;
 

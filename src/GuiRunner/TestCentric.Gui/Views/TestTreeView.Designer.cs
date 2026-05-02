@@ -33,7 +33,6 @@ namespace TestCentric.Gui.Views
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestTreeView));
-            this.treeView = new System.Windows.Forms.TreeView();
             this.testTreeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.runMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,25 +67,12 @@ namespace TestCentric.Gui.Views
             this.filterByCategory = new System.Windows.Forms.ToolStripDropDownButton();
             this.filterResetButton = new System.Windows.Forms.ToolStripButton();
             this.filterTextToolStrip = new System.Windows.Forms.ToolStrip();
+            this.treeView = new TestCentric.Gui.Controls.TestCentricTreeView();
             this.filterTextBox = new TestCentric.Gui.Controls.StretchToolStripTextBox();
             this.testTreeContextMenu.SuspendLayout();
             this.filterToolStrip.SuspendLayout();
             this.filterTextToolStrip.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // treeView
-            // 
-            this.treeView.ContextMenuStrip = this.testTreeContextMenu;
-            this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView.HideSelection = false;
-            this.treeView.ImageIndex = 0;
-            this.treeView.ImageList = this.treeImages;
-            this.treeView.Location = new System.Drawing.Point(0, 25);
-            this.treeView.Name = "treeView";
-            this.treeView.SelectedImageIndex = 0;
-            this.treeView.ShowNodeToolTips = true;
-            this.treeView.Size = new System.Drawing.Size(191, 221);
-            this.treeView.TabIndex = 1;
             // 
             // testTreeContextMenu
             // 
@@ -356,10 +342,24 @@ namespace TestCentric.Gui.Views
             this.filterTextToolStrip.TabIndex = 1;
             this.filterTextToolStrip.Visible = false;
             // 
+            // treeView
+            // 
+            this.treeView.ContextMenuStrip = this.testTreeContextMenu;
+            this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
+            this.treeView.HideSelection = false;
+            this.treeView.ImageIndex = 0;
+            this.treeView.ImageList = this.treeImages;
+            this.treeView.Location = new System.Drawing.Point(0, 0);
+            this.treeView.Name = "treeView";
+            this.treeView.SelectedImageIndex = 0;
+            this.treeView.Size = new System.Drawing.Size(191, 246);
+            this.treeView.TabIndex = 1;
+            // 
             // filterTextBox
             // 
             this.filterTextBox.Name = "filterTextBox";
-            this.filterTextBox.Size = new System.Drawing.Size(179, 23);
+            this.filterTextBox.Size = new System.Drawing.Size(179, 25);
             // 
             // TestTreeView
             // 
@@ -382,7 +382,7 @@ namespace TestCentric.Gui.Views
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeView;
+        private TestCentric.Gui.Controls.TestCentricTreeView treeView;
         private System.Windows.Forms.ContextMenuStrip testTreeContextMenu;
         private System.Windows.Forms.ToolStrip filterToolStrip;
         private System.Windows.Forms.ToolStripLabel filterOutcomeLabel;

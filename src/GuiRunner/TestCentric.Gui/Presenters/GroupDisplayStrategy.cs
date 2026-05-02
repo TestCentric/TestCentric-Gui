@@ -9,7 +9,6 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Presenters
 {
     using System.Linq;
-    using System.Security.Cryptography;
     using Model;
     using Views;
 
@@ -48,30 +47,6 @@ namespace TestCentric.Gui.Presenters
             });
         }
 
-        // TODO: Move this to TestGroup? Would need access to results.
-        public int CalcImageIndexForGroup(TestGroup group)
-        {
-            var groupIndex = -1;
-
-            bool isLatestRun = group.TestNodes.Any(t => _model.IsInTestRun(t));
-            foreach (var testNode in group)
-            {
-                var result = GetResultForTest(testNode);
-                if (result != null)
-                {
-                    var imageIndex = CalcImageIndex(result, isLatestRun);
-
-                    if (imageIndex == TestTreeView.FailureIndex)
-                        return TestTreeView.FailureIndex; // Early return - can't get any worse!
-
-                    if (imageIndex >= TestTreeView.SuccessIndex_NotLatestRun) // Only those values propagate
-                        groupIndex = Math.Max(groupIndex, imageIndex);
-                }
-            }
-
-            return groupIndex;
-        }
-
         public void Add(TreeNode treeNode)
         {
             _view.Add(treeNode);
@@ -90,6 +65,27 @@ namespace TestCentric.Gui.Presenters
         #region Protected Members
 
         protected abstract string GroupBy { get; }
+
+        protected TreeNode MakeTreeNode(TestGroup group, bool recursive)
+        {
+            TreeNode treeNode = new TreeNode(group.Name)
+            {
+                Name = group.Name,
+                Tag = group,
+            };
+
+            if (recursive)
+            {
+                if (group.SubGroups.Count > 0)
+                    foreach (var subGroup in group.SubGroups)
+                        treeNode.Nodes.Add(MakeTreeNode(subGroup, recursive));
+                else
+                    foreach (TestNode test in group)
+                        AddTreeNodeToCollection(test, treeNode.Nodes);
+            }
+
+            return group.TreeNode = treeNode;
+        }
 
         protected TestGrouping CreateTestGrouping(string groupBy)
         {

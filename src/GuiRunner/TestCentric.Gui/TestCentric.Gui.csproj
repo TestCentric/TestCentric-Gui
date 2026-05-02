@@ -11,7 +11,7 @@
     </PropertyGroup>
 
 	<PropertyGroup>
-		<DefineConstants>$(DefineConstants);DISABLE_MINI_GUI</DefineConstants>
+		<DefineConstants>$(DefineConstants);DISABLE_MINI_GUI;USE_TIPWINDOW</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>

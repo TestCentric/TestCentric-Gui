@@ -61,7 +61,10 @@ namespace TestCentric.Gui.Presenters
             _view.TreeView.ExpandAll();
 
             visualState?.ApplyTo(_view.TreeView);
+
             ApplyResultsToTree();
+
+            _view.EnableTestFilter(true);
 
             _model.SaveProject();
         }

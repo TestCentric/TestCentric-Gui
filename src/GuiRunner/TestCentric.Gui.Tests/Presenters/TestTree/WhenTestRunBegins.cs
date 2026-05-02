@@ -14,6 +14,7 @@ namespace TestCentric.Gui.Presenters.TestTree
 {
     using System;
     using System.Collections.Generic;
+    using TestCentric.Gui.Controls;
     using TestCentric.Gui.Model.Settings;
 
     public class WhenTestRunBegins : PresenterTestBase<ITestTreeView>
@@ -43,7 +44,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void TreeNodeImageIconsAreSet()
         {
             // Arrange
-            var tv = new TreeView();
+            var tv = new TestCentricTreeView();
             _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
             _view.TreeView.Returns(tv);
 
@@ -101,7 +102,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void TreeNodeWithResults_ImageIconsAreSet_ToPreviousOutcomeIcon(string resultState, int expectedImageIndex)
         {
             // Arrange
-            var tv = new TreeView();
+            var tv = new TestCentricTreeView();
             _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
             _view.TreeView.Returns(tv);
 

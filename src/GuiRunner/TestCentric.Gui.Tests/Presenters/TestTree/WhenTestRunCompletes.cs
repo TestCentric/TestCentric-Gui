@@ -6,6 +6,7 @@
 using System.Windows.Forms;
 using NSubstitute;
 using NUnit.Framework;
+using TestCentric.Gui.Controls;
 using TestCentric.Gui.Model;
 using TestCentric.Gui.Views;
 
@@ -35,14 +36,14 @@ namespace TestCentric.Gui.Presenters.TestTree
         };
 
         [TestCaseSource(nameof(resultData))]
-        public void RunningIcons_AreUpdated_WhenTestRunFinish(int runningIndex, int expectedIndex)
+        public void RunningIcons_AreUpdated_WhenTestRunFinishes(int runningIndex, int expectedIndex)
         {
             var testNode = new TestNode("<test-run id='1'><test-suite id='100'><test-case id='200'/></test-suite></test-run>");
 
             // Make it look like the view loaded
             _view.Load += Raise.Event<System.EventHandler>(_view, new System.EventArgs());
 
-            TreeView treeView = new TreeView();
+            TreeView treeView = new TestCentricTreeView();
             _view.TreeView.Returns(treeView);
 
             // We can't construct a TreeNodeCollection, so we fake it
