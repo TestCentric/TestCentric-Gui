@@ -86,7 +86,6 @@ namespace TestCentric.Gui.Presenters
                     TryLoadVisualState(out VisualState visualState);
 
                     Strategy.OnTestLoaded(ea.Test, visualState);
-                    _view.CheckBoxes = _view.ShowCheckBoxes.Checked; // TODO: View should handle this
                 });
             };
 
@@ -150,15 +149,8 @@ namespace TestCentric.Gui.Presenters
             _view.CollapseToFixturesCommand.Execute += () => Strategy.CollapseToFixtures();
             _view.RemoveTestPackageCommand.Execute += () => RemoveTestPackage();
             _view.TreeViewDeleteKeyCommand.KeyUp += () => RemoveTestPackage();
-
-            _view.ShowCheckBoxes.CheckedChanged += () =>
-                _view.CheckBoxes = TreeConfiguration.ShowCheckBoxes = _view.ShowCheckBoxes.Checked;
-
-            _view.ShowTestDuration.CheckedChanged += () =>
-            {
-                TreeConfiguration.NUnitTreeShowTestDuration = _view.ShowTestDuration.Checked;
-                Strategy?.UpdateTreeNodeNames();
-            };
+            _view.ShowCheckBoxes.CheckedChanged += OnShowCheckBoxChanged;
+            _view.ShowTestDuration.CheckedChanged += OnShowTestDurationChanged;
 
             _view.SortCommand.SelectionChanged += () => UpdateTreeViewSortMode();
 
@@ -292,6 +284,18 @@ namespace TestCentric.Gui.Presenters
 
         #region Private Methods
 
+
+        private void OnShowTestDurationChanged()
+        {
+            TreeConfiguration.NUnitTreeShowTestDuration = _view.ShowTestDuration.Checked;
+            Strategy?.UpdateTreeNodeNames();
+        }
+
+        private void OnShowCheckBoxChanged()
+        { 
+            _view.CheckBoxes = TreeConfiguration.ShowCheckBoxes = _view.ShowCheckBoxes.Checked;
+        }
+
         private void OnSettingsChanged(object sender, SettingsEventArgs e)
         {
             switch (e.SettingName)
@@ -346,7 +350,7 @@ namespace TestCentric.Gui.Presenters
                     Strategy?.Reload();
                     break;
                 case nameof(TreeConfiguration.ShowCheckBoxes):
-                    _view.ShowCheckBoxes.Checked = TreeConfiguration.ShowCheckBoxes;
+                    _view.CheckBoxes = TreeConfiguration.ShowCheckBoxes;
                     break;
             }
         }
@@ -420,8 +424,7 @@ namespace TestCentric.Gui.Presenters
             }
 
             // Update UI elements according to latest values
-            _view.ShowCheckBoxes.Checked = TreeConfiguration.ShowCheckBoxes;
-            _view.ShowTestDuration.Checked = TreeConfiguration.NUnitTreeShowTestDuration;
+            _view.CheckBoxes = TreeConfiguration.ShowCheckBoxes;
 
             // 3. Subscribe again to setting changed events
             _model.Settings.Changed += OnSettingsChanged;
@@ -607,6 +610,17 @@ namespace TestCentric.Gui.Presenters
             _view.RunContextCommand.Enabled = _model.HasTests && !_model.IsTestRunning;
             _view.DebugContextCommand.Enabled = _model.HasTests && !_model.IsTestRunning;
             _view.ClearResultsContextCommand.Enabled = _model.HasResults && !_model.IsTestRunning;
+
+            // Disable changed events temporarily to avoid triggering unnecessary tree updates while opening the context menu
+            _view.ShowCheckBoxes.CheckedChanged -= OnShowCheckBoxChanged;
+            _view.ShowTestDuration.CheckedChanged -= OnShowTestDurationChanged;
+
+            _view.ShowTestDuration.Checked = _model.TreeConfiguration.NUnitTreeShowTestDuration;
+            _view.ShowCheckBoxes.Checked = _model.TreeConfiguration.ShowCheckBoxes;
+
+            // Enable changed events again
+            _view.ShowCheckBoxes.CheckedChanged += OnShowCheckBoxChanged;
+            _view.ShowTestDuration.CheckedChanged += OnShowTestDurationChanged;
         }
 
         private void RemoveTestPackage()

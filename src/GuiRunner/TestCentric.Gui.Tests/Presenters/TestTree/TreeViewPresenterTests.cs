@@ -27,7 +27,7 @@ namespace TestCentric.Gui.Presenters.TestTree
 
             _model.TreeConfiguration.Changed += Raise.Event<SettingsEventHandler>(this, new SettingsEventArgs(nameof(TreeConfiguration.ShowCheckBoxes)));
 
-            Assert.That(_view.ShowCheckBoxes.Checked, Is.EqualTo(showCheckBoxSetting));
+            Assert.That(_view.CheckBoxes, Is.EqualTo(showCheckBoxSetting));
         }
 
         [TestCase(true)]
