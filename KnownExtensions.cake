@@ -34,7 +34,7 @@ public static class KnownExtensions
     private static FieldInfo[] ExtensionFields =>
         typeof(KnownExtensions).GetFields(BindingFlags.Static | BindingFlags.Public).ToArray();
 
-    private static ExtensionSpecifier[] BundledAgents =>
+    public static ExtensionSpecifier[] BundledAgents =>
     [
         Net462PluggableAgent,
         Net80PluggableAgent,
@@ -52,7 +52,63 @@ public static class KnownExtensions
 
     public static IEnumerable<ExtensionSpecifier> AllAgents =>
         AllExtensions.Where(ex => ex.NuGetId.EndsWith("PluggableAgent"));
+
+    public static void RestoreBundledAgents()
+    {
+        var context = BuildSettings.Context;
+
+        context.CleanDirectory("bundled-agents");
+
+        var packageRefs = new StringBuilder();
+        foreach (ExtensionSpecifier agent in KnownExtensions.BundledAgents)
+        {
+            packageRefs.AppendLine($"<PackageReference Include=\"{agent.NuGetId}\" Version=\"{agent.Version}\" />");
+            packageRefs.AppendLine($"<PackageReference Include=\"{agent.ChocoId}\" Version=\"{agent.Version}\" />");
+        }
+
+        using (StreamWriter sw = SIO.File.CreateText(SIO.Path.Combine("bundled-agents", "BundledAgents.csproj")))
+        {
+            sw.WriteLine($"""
+            <Project Sdk="Microsoft.NET.Sdk">
+                <PropertyGroup>
+                    <TargetFramework>net462</TargetFramework>
+                    <Description>Dummy project generated for restoring bundled agents</Description>
+                </PropertyGroup >
+
+                <ItemGroup>
+
+            {packageRefs}
+                </ItemGroup>
+
+            </Project>
+            """);
+        }
+
+        context.NuGetRestore("bundled-agents/BundledAgents.csproj");
+    }
 }
+
+TaskSetup(setupContext =>
+{
+    if (CommandLineOptions.NoBuild && setupContext.Task.Name == "Package")
+    {
+        Banner.Display("Restoring Agents bundled with the GUI");
+        KnownExtensions.RestoreBundledAgents();
+    }
+});
+
+TaskTeardown(teardownContext =>
+{ 
+    if (!CommandLineOptions.NoBuild && teardownContext.Task.Name == "Restore" && BuildSettings.TasksToExecute.Contains("Package"))
+    {
+        Banner.Display("Restoring Agents bundled with the GUI");
+        KnownExtensions.RestoreBundledAgents();
+    }
+});
+
+Task("RestoreBundledAgents")
+    .Description("Ensures the agents we bundle are in the cache")
+    .Does(() => KnownExtensions.RestoreBundledAgents());
 
 Task("InstallBundledAgents")
     .Description("Installs just the agents we bundle with the GUI runner.")

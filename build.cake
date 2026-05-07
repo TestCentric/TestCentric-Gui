@@ -1,7 +1,7 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.5.0
+//#load nuget:?package=TestCentric.Cake.Recipe&version=1.5.0
 // Comment out above line and uncomment below for local tests of recipe changes
-//#load ../TestCentric.Cake.Recipe/recipe/*.cake
+#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
 #load "./package-tests.cake"
 #load "KnownExtensions.cake"
@@ -121,6 +121,7 @@ var ChocolateyGuiPackage = new ChocolateyPackage(
 );
 
 BuildSettings.Packages.Add(NuGetGuiPackage);
+// Temporarily pausing packaging for chocolatey
 //BuildSettings.Packages.Add(ChocolateyGuiPackage);
 
 //////////////////////////////////////////////////////////////////////
