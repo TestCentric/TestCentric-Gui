@@ -81,9 +81,6 @@ publish
 # Publish Web Output
 *.Publish.xml
 
-# NuGet Packages Directory
-packages
-
 # Windows Azure Build Output
 csx
 *.build.csdef
@@ -118,11 +115,10 @@ TestResult.xml
 *.VisualState.xml
 !TestResultSubView*
 
-# TestCentric projects
+# TestCentric files and directories
 *.tcproj
-
-# Package Directory
-package
+packages/
+bundled-agents/
 
 # Tools pulled from nuget
 tools

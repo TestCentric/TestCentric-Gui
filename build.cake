@@ -121,7 +121,7 @@ var ChocolateyGuiPackage = new ChocolateyPackage(
 );
 
 BuildSettings.Packages.Add(NuGetGuiPackage);
-BuildSettings.Packages.Add(ChocolateyGuiPackage);
+//BuildSettings.Packages.Add(ChocolateyGuiPackage);
 
 //////////////////////////////////////////////////////////////////////
 // PACKAGE TEST RUNNER
