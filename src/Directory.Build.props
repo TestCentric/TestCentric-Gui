@@ -22,11 +22,6 @@
         <!-- Debugging -->
         <DebugType>portable</DebugType>
         <DebugSymbols>true</DebugSymbols>
-        <!-- Commonly Used Package Versions -->
-		<EngineVersion>2.0.0-dev01907</EngineVersion>
-		<ExtensibilityVersion>3.3.0-dev00018</ExtensibilityVersion>
-		<MetadataVersion>3.0.4</MetadataVersion>
-		<InternalTraceVersion>1.2.1</InternalTraceVersion>
         <!-- Informational Settings -->
         <Company>TestCentric</Company>
         <Product>TestCentric Gui Runner and Engine</Product>
@@ -54,7 +49,7 @@
 	<PropertyGroup>
 		<NUnitVersion Condition="'$(NUnitVersion)'==''">4.4.0</NUnitVersion>
 		<NSubstituteVersion Condition="'$(NSubstituteVersion)'==''">5.3.0</NSubstituteVersion>
-		<NUnitEngineVersion Condition="'$(NUnitEngineVersion)'==''">4.0.0-beta.1.39</NUnitEngineVersion>
+		<NUnitEngineVersion Condition="'$(NUnitEngineVersion)'==''">4.0.0-beta.1.45</NUnitEngineVersion>
 	</PropertyGroup>
 
 	<!-- Common package metadata, may be overridden in individual projects -->
