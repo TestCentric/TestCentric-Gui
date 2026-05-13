@@ -158,17 +158,16 @@ namespace TestCentric.Gui.Presenters
                         newGroup = newGroup.GetOrAddSubGroup(fixtureName);
                 }
                 else // ShowFixtures only
-                {
                     newGroup = topLevelGroup.GetOrAddSubGroup(fixtureName);
-                }
             }
 
             // If the group didn't change, we can get out of here
             if (oldGroup == newGroup)
                 return;
 
-            newGroup.Add(result);
-            oldGroup.TestNodes.RemoveId(result.Id);
+            TestNode testNode = _model.GetTestById(result.Id);
+            AddTestToGroups(newGroup, testNode);
+            RemoveTestFromGroups(oldGroup, testNode);
             var newParent = newGroup.TreeNode;
 
             _view.InvokeIfRequired(() =>
@@ -182,6 +181,22 @@ namespace TestCentric.Gui.Presenters
                 newParent.Text = GroupDisplayName(newGroup);
                 ExpandNewParentNodes(newParent);
             });
+        }
+
+        private void AddTestToGroups(TestGroup testGroup, TestNode testNode)
+        {
+            testGroup.Add(testNode);
+            TestGroup parentGroup = testGroup.ParentGroup;
+            if (parentGroup != null)
+                AddTestToGroups(parentGroup, testNode);
+        }
+
+        private void RemoveTestFromGroups(TestGroup testGroup, TestNode testNode)
+        {
+            testGroup.TestNodes.RemoveId(testNode.Id);
+            TestGroup parentGroup = testGroup.ParentGroup;
+            if (parentGroup != null)
+                RemoveTestFromGroups(parentGroup, testNode);
         }
 
         #endregion
