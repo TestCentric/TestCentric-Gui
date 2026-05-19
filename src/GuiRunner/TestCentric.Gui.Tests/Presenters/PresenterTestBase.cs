@@ -43,6 +43,11 @@ namespace TestCentric.Gui.Presenters
 
         #region Helper Methods
 
+        protected TestCentricProject CreateProject(string projectPath, params string[] testFiles)
+        {
+            return new TestCentricProject(projectPath, testFiles);
+        }
+
         protected void ClearAllReceivedCalls()
         {
             _view.ClearReceivedCalls();

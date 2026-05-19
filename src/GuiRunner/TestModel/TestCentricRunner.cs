@@ -20,8 +20,9 @@ namespace TestCentric.Gui.Model
     {
         static Logger log = InternalTrace.GetLogger(typeof(TestModel));
 
-        internal TestCentricRunner(ITestEngine testEngine, TestEventDispatcher testEvents)
+        internal TestCentricRunner(TestModel model, ITestEngine testEngine, TestEventDispatcher testEvents)
         {
+            Guard.ArgumentNotNull(model, nameof(model));
             Guard.ArgumentNotNull(testEngine, nameof(testEngine));
             Guard.ArgumentNotNull(testEvents, nameof(testEvents));
 

@@ -38,7 +38,7 @@ namespace TestCentric.Gui.Model
             Console.WriteLine($"PROJ_PATH = {PROJ_PATH}");
             Console.WriteLine($"NEW_PROJ_PATH = {NEW_PROJ_PATH}");
 
-            _testProject = new TestCentricProject(new TestModel(new MockTestEngine()), PROJ_PATH, FILE1_PATH, FILE2_PATH);
+            _testProject = new TestCentricProject(PROJ_PATH, FILE1_PATH, FILE2_PATH);
             Directory.CreateDirectory(Path.Combine(PROJ_DIR, "bin"));
             Directory.CreateDirectory(Path.Combine(NEW_PROJ_DIR, "bin"));
 
@@ -60,11 +60,11 @@ namespace TestCentric.Gui.Model
                 <?xml version = "1.0" encoding="utf-8"?>
                 <TestCentricProject OriginalPath="{PROJ_PATH}">
                 <TestPackage id="{package.ID}">
-                <Settings foo="bar" num="42" critical="True" />
+                <Settings InternalTraceLevel="Off" WorkDirectory="{Environment.CurrentDirectory}" MaxAgents="0" foo="bar" num="42" critical="True" />
                 <TestPackage id="{subPackages[0].ID}" fullname="{FILE1_PATH}">
-                <Settings foo="bar" num="42" critical="True" cpu="x86" /></TestPackage>
+                <Settings InternalTraceLevel="Off" WorkDirectory="{Environment.CurrentDirectory}" foo="bar" num="42" critical="True" cpu="x86" /></TestPackage>
                 <TestPackage id="{subPackages[1].ID}" fullname="{FILE2_PATH}">
-                <Settings foo="bar" num="42" critical="True" /></TestPackage></TestPackage>
+                <Settings InternalTraceLevel="Off" WorkDirectory="{Environment.CurrentDirectory}" foo="bar" num="42" critical="True" /></TestPackage></TestPackage>
                 </TestCentricProject>
                 """.Replace(CR, string.Empty).Replace(LF, string.Empty);
 
@@ -186,13 +186,15 @@ namespace TestCentric.Gui.Model
         [Test]
         public void SaveAndReloadEmptyTestProject()
         {
-            var project = new TestCentricProject(new TestModel(new MockTestEngine()), "MyProject");
+            var project = new TestCentricProject("MyProject");
             project.SaveAs(PROJ_PATH);
 
             var expectedXml = $"""
                 <?xml version="1.0" encoding="utf-8"?>
                 <TestCentricProject OriginalPath="{PROJ_PATH}">
-                <TestPackage id="{project.TopLevelPackage.ID}" />
+                <TestPackage id="{project.TopLevelPackage.ID}">
+                <Settings InternalTraceLevel="Off" WorkDirectory="{Environment.CurrentDirectory}" MaxAgents="0" />
+                </TestPackage>
                 </TestCentricProject>
                 """.Replace(CR, string.Empty).Replace(LF, string.Empty);
 
