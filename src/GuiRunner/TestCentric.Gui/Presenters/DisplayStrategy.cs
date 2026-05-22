@@ -128,7 +128,7 @@ namespace TestCentric.Gui.Presenters
 
                 foreach (TreeNode treeNode in GetTreeNodesForTest(result))
                 {
-                    treeNode.Text = GetTreeNodeDisplayName(result);
+                    UpdateTreeNodeName(treeNode);
                     _view.SetImageIndex(treeNode, imageIndex, true);
                 }
             });
@@ -213,17 +213,19 @@ namespace TestCentric.Gui.Presenters
 
         public string GroupDisplayName(TestGroup group)
         {
-            return string.Format("{0} ({1})", group.Name, group.TestNodes.Count());
+            return $"{group.Name}{GetTreeNodeNameCountSuffix(group.TestNodes.Count())}";
         }
 
-        protected virtual string GetTreeNodeName(TestNode testNode)
+        private string GetTreeNodeNameCountSuffix(int count)
         {
-            return testNode.Name;
+            return $" ({count} " + (count > 1 ? "tests)" : "test)");
         }
 
-        protected string GetTreeNodeDisplayName(TestNode testNode)
+        private string GetTreeNodeDisplayName(TestNode testNode)
         {
-            string treeNodeName = GetTreeNodeName(testNode);
+            string treeNodeName = testNode.Name;
+            if (testNode.IsSuite)
+                treeNodeName += GetTreeNodeNameCountSuffix(GetTestCount(testNode));
 
             // Check if test result is available for this node
             ResultNode result = testNode as ResultNode ?? _model.TestResultManager.GetResultForTest(testNode.Id);
@@ -231,6 +233,16 @@ namespace TestCentric.Gui.Presenters
                 treeNodeName += $" [{result.Duration:0.000}s]";
 
             return treeNodeName;
+        }
+
+        private static int GetTestCount(TestNode testNode)
+        {
+            // Check if the node is a test case, and it's not filtered out (e.g. by outcome filter)
+            if (!testNode.IsSuite && testNode.IsVisible)
+                return 1;
+
+            // Iterate through all child nodes
+            return testNode.Children.Sum(GetTestCount);
         }
 
         /// <summary>
@@ -242,7 +254,7 @@ namespace TestCentric.Gui.Presenters
             UpdateTreeNodeNames(_view.Nodes);
         }
 
-        private void UpdateTreeNodeNames(TreeNodeCollection nodes)
+        protected void UpdateTreeNodeNames(TreeNodeCollection nodes)
         {
             _treeView.BeginUpdate();
             foreach (TreeNode treeNode in nodes)
@@ -253,13 +265,7 @@ namespace TestCentric.Gui.Presenters
             _treeView.EndUpdate();
         }
 
-        public void UpdateTreeNodeNames(IEnumerable<TestGroup> groups)
-        {
-            foreach (TestGroup group in groups)
-                UpdateTreeNodeName(group.TreeNode);
-        }
-
-        private void UpdateTreeNodeName(TreeNode treeNode)
+        protected void UpdateTreeNodeName(TreeNode treeNode)
         {
             string treeNodeName = "";
             TestNode testNode = treeNode.Tag as TestNode; 
