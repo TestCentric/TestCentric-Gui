@@ -218,7 +218,7 @@ namespace TestCentric.Gui.Presenters
 
         private string GetTreeNodeNameCountSuffix(int count)
         {
-            return $" ({count} " + (count > 1 ? "tests)" : "test)");
+            return $" ({count} " + (count == 1 ? "test)" : "tests)");
         }
 
         private string GetTreeNodeDisplayName(TestNode testNode)
@@ -237,8 +237,12 @@ namespace TestCentric.Gui.Presenters
 
         private static int GetTestCount(TestNode testNode)
         {
-            // Check if the node is a test case, and it's not filtered out (e.g. by outcome filter)
-            if (!testNode.IsSuite && testNode.IsVisible)
+            // If TestNode is filtered out (e.g. by outcome filter)
+            if (!testNode.IsVisible)
+                return 0;
+
+            // Check if the node is a test case
+            if (!testNode.IsSuite)
                 return 1;
 
             // Iterate through all child nodes
