@@ -271,7 +271,7 @@ namespace TestCentric.Gui.Presenters
         private TestSelection GetTestCases(TestNode testNode)
         {
             return new TestSelection(testNode
-                .Select(n => !n.IsSuite && n.IsVisible)
+                .Select(n => !n.IsSuite && n.FilteredOut)
                 .OrderBy(s => s.Name));
         }
 

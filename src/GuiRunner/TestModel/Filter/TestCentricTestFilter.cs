@@ -94,8 +94,8 @@ namespace TestCentric.Gui.Model.Filter
 
             // 2. Check if node itself is visible
             bool isVisible = _filters.All(f => f.IsMatching(testNode));
-            testNode.IsVisible = isVisible || childIsVisible;
-            return testNode.IsVisible;
+            testNode.FilteredOut = isVisible || childIsVisible;
+            return testNode.FilteredOut;
         }
 
         private IEnumerable<string> GetFilterCondition(string filterId)

@@ -204,7 +204,7 @@ namespace TestCentric.Gui.Model.Filter
             foreach (string testId in expectedVisibleNodes)
             {
                 TestNode node = GetTestNode(testNode, testId);
-                Assert.That(node.IsVisible, Is.True);
+                Assert.That(node.FilteredOut, Is.True);
             }
         }
 
@@ -253,7 +253,7 @@ namespace TestCentric.Gui.Model.Filter
             foreach (string testId in expectedVisibleNodes)
             {
                 TestNode node = GetTestNode(testNode, testId);
-                Assert.That(node.IsVisible, Is.True);
+                Assert.That(node.FilteredOut, Is.True);
             }
         }
 
@@ -302,7 +302,7 @@ namespace TestCentric.Gui.Model.Filter
             foreach (string testId in expectedVisibleNodes)
             {
                 TestNode node = GetTestNode(testNode, testId);
-                Assert.That(node.IsVisible, Is.True);
+                Assert.That(node.FilteredOut, Is.True);
             }
         }
 
@@ -353,7 +353,7 @@ namespace TestCentric.Gui.Model.Filter
             foreach (TestNode node in nodes)
             {
                 bool expectedIsVisible = expectedVisibleNodes.Contains(node.Id);
-                Assert.That(node.IsVisible, Is.EqualTo(expectedIsVisible));
+                Assert.That(node.FilteredOut, Is.EqualTo(expectedIsVisible));
             }
         }
 
@@ -405,7 +405,7 @@ namespace TestCentric.Gui.Model.Filter
             foreach (string testId in expectedVisibleNodes)
             {
                 TestNode node = GetTestNode(testNode, testId);
-                Assert.That(node.IsVisible, Is.True);
+                Assert.That(node.FilteredOut, Is.True);
             }
         }
 
@@ -497,7 +497,7 @@ namespace TestCentric.Gui.Model.Filter
 
         private void AssertTestNodeIsInvisible(TestNode testNode)
         {
-            Assert.That(testNode.IsVisible, Is.False, $"TestNode {testNode.Id} is not invisible.");
+            Assert.That(testNode.FilteredOut, Is.False, $"TestNode {testNode.Id} is not invisible.");
             foreach (TestNode child in testNode.Children)
                 AssertTestNodeIsInvisible(child);
         }

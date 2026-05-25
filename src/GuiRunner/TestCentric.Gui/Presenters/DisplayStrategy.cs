@@ -94,7 +94,7 @@ namespace TestCentric.Gui.Presenters
 
         protected void AddTreeNodeToCollection(TestNode testNode, TreeNodeCollection treeNodes)
         {
-            if (ShowTreeNodeType(testNode) && testNode.IsVisible)
+            if (ShowTreeNodeType(testNode) && testNode.FilteredOut)
             {
                 var treeNode = MakeTreeNode(testNode, false);
                 treeNodes.Add(treeNode);
@@ -238,7 +238,7 @@ namespace TestCentric.Gui.Presenters
         private static int GetTestCount(TestNode testNode)
         {
             // If TestNode is filtered out (e.g. by outcome filter)
-            if (!testNode.IsVisible)
+            if (!testNode.FilteredOut)
                 return 0;
 
             // Check if the node is a test case
