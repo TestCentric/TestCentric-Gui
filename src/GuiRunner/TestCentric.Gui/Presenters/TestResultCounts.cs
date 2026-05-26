@@ -74,7 +74,7 @@ namespace TestCentric.Gui.Presenters
             ResultNode result = model.TestResultManager.GetResultForTest(testNode.Id);
 
             // Only consider outcome from test cases; and check if testNode is filtered out
-            if (!testNode.IsProject && !testNode.IsSuite && !testNode.IsAssembly && testNode.IsVisible)
+            if (!testNode.IsProject && !testNode.IsSuite && !testNode.IsAssembly && testNode.FilteredOut)
             {
                 if (result != null)
                 {

@@ -63,6 +63,7 @@ namespace TestCentric.Gui.Presenters
             visualState?.ApplyTo(_view.TreeView);
 
             ApplyResultsToTree();
+            UpdateTreeNodeNames();
 
             _view.EnableTestFilter(true);
 
@@ -186,6 +187,7 @@ namespace TestCentric.Gui.Presenters
         private void AddTestToGroups(TestGroup testGroup, TestNode testNode)
         {
             testGroup.Add(testNode);
+            UpdateTreeNodeName(testGroup.TreeNode);
             TestGroup parentGroup = testGroup.ParentGroup;
             if (parentGroup != null)
                 AddTestToGroups(parentGroup, testNode);
@@ -194,6 +196,7 @@ namespace TestCentric.Gui.Presenters
         private void RemoveTestFromGroups(TestGroup testGroup, TestNode testNode)
         {
             testGroup.TestNodes.RemoveId(testNode.Id);
+            UpdateTreeNodeName(testGroup.TreeNode);
             TestGroup parentGroup = testGroup.ParentGroup;
             if (parentGroup != null)
                 RemoveTestFromGroups(parentGroup, testNode);
@@ -268,7 +271,7 @@ namespace TestCentric.Gui.Presenters
         private TestSelection GetTestCases(TestNode testNode)
         {
             return new TestSelection(testNode
-                .Select(n => !n.IsSuite && n.IsVisible)
+                .Select(n => !n.IsSuite && n.FilteredOut)
                 .OrderBy(s => s.Name));
         }
 

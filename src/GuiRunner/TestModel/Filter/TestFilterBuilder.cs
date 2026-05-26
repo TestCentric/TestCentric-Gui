@@ -138,7 +138,7 @@ namespace TestCentric.Gui.Model.Filter
         private void GetAllTestcaseNodes(TestNode testNode, IList<TestNode> result)
         {
             // Only consider Visible nodes (e.g. nodes not filtered out by the UI filter)
-            if (!testNode.IsVisible)
+            if (!testNode.FilteredOut)
                 return;
 
             // Ignore explicit tests except those which were selected by the user actively 

@@ -33,7 +33,7 @@ namespace TestCentric.Gui.Model
 
         public TestNode(XmlNode xmlNode)
         {
-            IsVisible = true;
+            FilteredOut = true;
             Xml = xmlNode;
 
             // It's a quirk of the test engine that the test-run element does;
@@ -75,9 +75,11 @@ namespace TestCentric.Gui.Model
 
 
         /// <summary>
-        /// Controls if the TestNode should be visible or hidden in the TestTree
+        /// This property is set when applying a filter to the test tree (for example outcome filter)
+        /// It's used to control if TestNodes should be visible or hidden in the TestTree
         /// </summary>
-        public bool IsVisible { get; set; }
+        public bool FilteredOut { get; set; }
+
         public int TestCount => IsSuite ? GetAttribute("testcasecount", 0) : 1;
         public RunState RunState => GetRunState();
 

@@ -97,7 +97,7 @@ namespace TestCentric.Gui.Presenters
         {
             // 1. Arrange
             TestNode testNode = new TestNode("<test-case id='1' />");
-            testNode.IsVisible = false;
+            testNode.FilteredOut = false;
             ITestModel model = Substitute.For<ITestModel>();
 
             // 2. Act
