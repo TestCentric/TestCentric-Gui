@@ -345,12 +345,14 @@ namespace TestCentric.Gui.Presenters
             {
                 ResultNode resultNode = GetResultForTest(testNode);
                 if (resultNode != null)
+                {
                     treeNode.ImageIndex = treeNode.SelectedImageIndex = CalcImageIndex(resultNode);
 
-                // NOTE: the loop only executes at the point in the hierarchy where the current
-                // TreeNode represents a TestNode and the parent is a TestGroup;
-                for (var parent = treeNode.Parent; parent?.Tag is TestGroup; parent = parent.Parent)
-                    parent.ImageIndex = parent.SelectedImageIndex = Math.Max(parent.ImageIndex, treeNode.ImageIndex);
+                    // NOTE: the loop only executes at the point in the hierarchy where the current
+                    // TreeNode represents a TestNode and the parent is a TestGroup;
+                    for (var parent = treeNode.Parent; parent?.Tag is TestGroup; parent = parent.Parent)
+                        parent.ImageIndex = parent.SelectedImageIndex = Math.Max(parent.ImageIndex, treeNode.ImageIndex);
+                }
             }
 
             foreach (TreeNode childNode in treeNode.Nodes)
@@ -397,6 +399,11 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         private int GetRunningImageIndex(TreeNode treeNode)
         {
+            // Testcase tree nodes might get an ImageIndex by default without any test run: Ignored or NotRunnable for example
+            // Such kind of nodes should not add their ImageIndex to the calculation of the "running" image index.
+            if (treeNode.Tag is TestNode { IsSuite: false } testNode && _model.TestResultManager.GetResultForTest(testNode.Id) == null)
+                return TestTreeView.RunningIndex;
+
             switch (treeNode.ImageIndex)
             {
                 case TestTreeView.SuccessIndex:
