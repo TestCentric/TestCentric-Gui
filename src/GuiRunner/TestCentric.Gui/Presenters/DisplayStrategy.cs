@@ -127,10 +127,7 @@ namespace TestCentric.Gui.Presenters
                 int imageIndex = CalcImageIndex(result);
 
                 foreach (TreeNode treeNode in GetTreeNodesForTest(result))
-                {
-                    UpdateTreeNodeName(treeNode);
                     _view.SetImageIndex(treeNode, imageIndex, true);
-                }
             });
         }
 
