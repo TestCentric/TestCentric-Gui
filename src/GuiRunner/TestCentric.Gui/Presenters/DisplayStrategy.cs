@@ -339,18 +339,17 @@ namespace TestCentric.Gui.Presenters
 
         private void ApplyResultsToTree(TreeNode treeNode)
         {
-            TestNode testNode = treeNode.Tag as TestNode;
-
-            if (testNode != null)
+            // Consider only treeNodes representing a test case. Test results from fixtures/assemblies might be inaccurate
+            // if some filters are applied (e.g. outcome filter) and some test case nodes are currently not displayed in the tree.
+            if (treeNode.Tag is TestNode testNode && !testNode.IsSuite)
             {
                 ResultNode resultNode = GetResultForTest(testNode);
                 if (resultNode != null)
                 {
                     treeNode.ImageIndex = treeNode.SelectedImageIndex = CalcImageIndex(resultNode);
 
-                    // NOTE: the loop only executes at the point in the hierarchy where the current
-                    // TreeNode represents a TestNode and the parent is a TestGroup;
-                    for (var parent = treeNode.Parent; parent?.Tag is TestGroup; parent = parent.Parent)
+                    // Calculate the ImageIndex of the parent hierarchy 
+                    for (var parent = treeNode.Parent; parent?.Tag is ITestItem; parent = parent.Parent)
                         parent.ImageIndex = parent.SelectedImageIndex = Math.Max(parent.ImageIndex, treeNode.ImageIndex);
                 }
             }
