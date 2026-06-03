@@ -63,7 +63,12 @@ namespace TestCentric.Gui.Presenters
             visualState?.ApplyTo(_view.TreeView);
 
             ApplyResultsToTree();
+            SetTestDurationOfGroups();
             UpdateTreeNodeNames();
+
+            // TestGroup duration is only available after entire tree is build up => sort tree now
+            if (_view.SortCommand.SelectedItem == TreeViewNodeComparer.Duration)
+                _view.Sort();
 
             _view.EnableTestFilter(true);
 
@@ -182,6 +187,36 @@ namespace TestCentric.Gui.Presenters
                 newParent.Text = GroupDisplayName(newGroup);
                 ExpandNewParentNodes(newParent);
             });
+        }
+
+        public override void OnTestRunFinished()
+        {
+            SetTestDurationOfGroups();
+            base.OnTestRunFinished();
+        }
+
+        private void SetTestDurationOfGroups()
+        {
+            foreach (var node in _treeView.Nodes)
+                SetTestDurationOfGroups(node as TreeNode);
+        }
+
+        private double SetTestDurationOfGroups(TreeNode treeNode)
+        {
+            if (treeNode.Tag is TestGroup testGroup)
+            {
+                // Duration of a Testgroup is sum of all child TreeNode durations 
+                testGroup.Duration = treeNode.Nodes.OfType<TreeNode>().Select(SetTestDurationOfGroups).Sum();
+                return testGroup.Duration.Value;
+            }
+            else if (treeNode.Tag is TestNode testNode)
+            {
+                // Duration of a TestNode is determined by the NUnit result
+                ResultNode result = _model.TestResultManager.GetResultForTest(testNode.Id);
+                return result != null ? result.Duration : 0;
+            }
+
+            return 0;
         }
 
         private void AddTestToGroups(TestGroup testGroup, TestNode testNode)
