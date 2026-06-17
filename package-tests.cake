@@ -11,7 +11,9 @@ public static class PackageTests
 
     static PackageTests()
     {
+        //////////////////////////////////////////////////////////////////////
         // Tests of single assemblies targeting each runtime we support
+        //////////////////////////////////////////////////////////////////////
 
         GuiTests.Add(new PackageTest(1, "Net462Test", "Run net462 mock-assembly.dll under .NET 4.6.2",
             "net462/mock-assembly.dll",
@@ -76,7 +78,9 @@ public static class PackageTests
         //    "net9.0/mock-assembly-x86.dll",
         //    MockAssemblyX86ExpectedResult("Net90AgentLauncher")));
 
+        //////////////////////////////////////////////////////////////////////
         // AspNetCore tests
+        //////////////////////////////////////////////////////////////////////
 
         if (BuildSettings.IsLocalBuild)
         {
@@ -116,7 +120,9 @@ public static class PackageTests
                 Assemblies = new[] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net80AgentLauncher") }
             }));
 
+        //////////////////////////////////////////////////////////////////////
         // Windows Forms Tests
+        //////////////////////////////////////////////////////////////////////
 
         //if (BuildSettings.IsLocalBuild)
         //    GuiTests.Add(new PackageTest(1, "Net50WindowsFormsTest", "Run test using windows forms under .NET 5.0",
@@ -147,7 +153,9 @@ public static class PackageTests
                 Assemblies = new[] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net80AgentLauncher") }
             }));
 
+        //////////////////////////////////////////////////////////////////////
         // Multiple assembly tests
+        //////////////////////////////////////////////////////////////////////
 
         GuiTests.Add(new PackageTest(1, "Net462PlusNet35Test", "Run .NET 4.6.2 and .NET 3.5 builds of mock-assembly.dll together",
             "net462/mock-assembly.dll net35/mock-assembly.dll",
@@ -156,6 +164,17 @@ public static class PackageTests
         GuiTests.Add(new PackageTest(1, "Net462PlusNet60Test", "Run .NET 4.6.2 and .NET 6.0 builds of mock-assembly.dll together",
             "net462/mock-assembly.dll net6.0/mock-assembly.dll",
             MockAssemblyExpectedResult("Net462AgentLauncher", "Net80AgentLauncher")));
+
+        //////////////////////////////////////////////////////////////////////
+        // Tests that use extensions
+        //////////////////////////////////////////////////////////////////////
+
+        // V2 ResultWriter Tests
+        GuiTests.Add(new PackageTest(1, "V2ResultWriterTest_Net462",
+            "Run mock-assembly under .NET 4.6.2 and produce V2 output",
+            "net462/mock-assembly.dll --result=TestResult.xml --result=NUnit2TestResult.xml;format=nunit2",
+            MockAssemblyExpectedResult("Net462AgentLauncher"),
+            KnownExtensions.NUnitV2ResultWriter));
 
         // TODO: Suppress V2 tests until driver is working
         //GuiTests.Add(new PackageTest(1, "NUnitV2Test", "Run mock-assembly.dll built for NUnit V2",

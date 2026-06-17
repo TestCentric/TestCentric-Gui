@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using NUnit;
 using NUnit.Common;
@@ -44,6 +45,8 @@ namespace TestCentric.Gui.Model
         {
             TestEngine = testEngine;
             Options = options ?? new GuiOptions();
+
+            WorkDirectory = Options.WorkDirectory ?? TestEngine.WorkDirectory;
 
             _events = new TestEventDispatcher(this);
             _assemblyWatcher = new AssemblyWatcher();
@@ -110,7 +113,7 @@ namespace TestCentric.Gui.Model
         public GuiOptions Options { get; }
 
         // Work Directory
-        public string WorkDirectory { get { return TestEngine.WorkDirectory; } }
+        public string WorkDirectory { get; }
 
         // Event Dispatcher
         public ITestEvents Events { get { return _events; } }
@@ -694,6 +697,19 @@ namespace TestCentric.Gui.Model
             TestCentricRunner.StopRun(force);
         }
 
+        // Called by the presenter at the end of the run
+        public void SaveResults()
+        {
+            foreach (var spec in Options.ResultSpecifications)
+            {
+                string resultPath = spec.OutputPath;
+                string format = spec.Format;
+                log.Debug($"Saving result to {resultPath} in {format} format.");
+                SaveResults(resultPath, format);
+            }
+        }
+
+        // Called by the presenter when user clicks "Save Results As".
         public void SaveResults(string filePath, string format = "nunit3")
         {
             log.Debug($"Saving test results to {filePath} in {format} format");
@@ -702,8 +718,7 @@ namespace TestCentric.Gui.Model
             {
                 var resultWriter = Services.GetService<IResultService>().GetResultWriter(format, []);
                 var results = TestResultManager.GetResultForTest(LoadedTests.Id);
-                log.Debug(results.Xml.OuterXml);
-                resultWriter.WriteResultFile(results.Xml, filePath);
+                resultWriter.WriteResultFile(results.Xml, Path.Combine(WorkDirectory, filePath));
             }
             catch(Exception ex)
             {

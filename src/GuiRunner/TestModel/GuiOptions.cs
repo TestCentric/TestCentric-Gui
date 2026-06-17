@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using NUnit;
 
 namespace TestCentric.Gui
 {
@@ -75,6 +76,13 @@ namespace TestCentric.Gui
                 {
                     if (CheckRequiredValue(v, "--work"))
                         WorkDirectory = v;
+                });
+
+            Add("result", "A test result {SPEC} used to save the output", true,
+                v =>
+                {
+                    if (CheckRequiredValue(v, "--result"))
+                        resultSpecifications.Add(new ResultSpecification(v));
                 });
 
             Add("trace", "Set internal trace {LEVEL}. Valid values are Off, Error, Warning, Info or Debug. Verbose is a synonym for Debug.", true,
@@ -211,6 +219,80 @@ namespace TestCentric.Gui
         public string WorkDirectory { get; private set; }
         public IDictionary<string, string> TestParameters { get; } = new Dictionary<string, string>();
         public bool DebugAgent { get; private set; }
+
+        // Output Specifications
+
+        private readonly List<ResultSpecification> resultSpecifications = new List<ResultSpecification>();
+        public IList<ResultSpecification> ResultSpecifications
+        {
+            get
+            {
+                if (resultSpecifications.Count == 0)
+                    resultSpecifications.Add(new ResultSpecification("TestResult.xml;Format=nunit3"));
+
+                return resultSpecifications;
+            }
+        }
+
+        // Class borrowed from NUnit Console Runner
+        public class ResultSpecification
+        {
+            private static readonly char[] SemicolonSeparator = [';'];
+            private static readonly char[] EqualsSeparator = ['='];
+
+            public ResultSpecification(string spec)
+            {
+                Guard.ArgumentNotNull(spec);
+
+                string[] parts = spec.Split(SemicolonSeparator);
+                OutputPath = parts[0];
+
+                for (int i = 1; i < parts.Length; i++)
+                {
+                    string[] opt = parts[i].Split(EqualsSeparator);
+
+                    if (opt.Length != 2)
+                        throw new ArgumentException($"Invalid output specification: {spec}");
+
+                    switch (opt[0].Trim())
+                    {
+                        case "format":
+                            string fmt = opt[1].Trim();
+
+                            if (Format is not null && Format != fmt)
+                                throw new ArgumentException(
+                                    string.Format("Conflicting format options: {0}", spec));
+
+                            Format = fmt;
+                            break;
+
+                        case "transform":
+                            string val = opt[1].Trim();
+
+                            if (Transform is not null && Transform != val)
+                                throw new ArgumentException(
+                                    string.Format("Conflicting transform options: {0}", spec));
+
+                            if (Format is not null && Format != "user")
+                                throw new ArgumentException(
+                                    string.Format("Conflicting format options: {0}", spec));
+
+                            Format = "user";
+                            Transform = val;
+                            break;
+                    }
+                }
+
+                if (Format is null)
+                    Format = "nunit3";
+            }
+
+            public string OutputPath { get; }
+
+            public string Format { get; }
+
+            public string Transform { get; }
+        }
 
         // Error Processing
 

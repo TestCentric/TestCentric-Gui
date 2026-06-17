@@ -193,9 +193,7 @@ namespace TestCentric.Gui.Presenters
 
                 UpdateViewCommands();
 
-                string resultPath = Path.Combine(_model.WorkDirectory, "TestResult.xml");
-                log.Debug($"Saving result to {resultPath}");
-                _model.SaveResults(resultPath);
+                _model.SaveResults();
                 _view.ResultTabs.InvokeIfRequired(() => _view.ResultTabs.SelectedIndex = 1);
 
                 // If we were running unattended, it's time to close
