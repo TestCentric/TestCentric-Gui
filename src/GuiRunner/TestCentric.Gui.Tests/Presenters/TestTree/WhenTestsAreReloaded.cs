@@ -33,7 +33,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void TestFilters_AreReset()
         {
             // Arrange
-            var project = new TestCentricProject(_model, projectName, "dummy.dll");
+            var project = new TestCentricProject(projectName, "dummy.dll");
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);
             _model.TestCentricProject.Returns(project);
@@ -51,7 +51,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void CategoryFilter_IsClosed_And_Init()
         {
             // Arrange
-            var project = new TestCentricProject(_model, projectName, "dummy.dll");
+            var project = new TestCentricProject(projectName, "dummy.dll");
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);
             _model.TestCentricProject.Returns(project);
@@ -71,7 +71,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
             _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
 
-            var project = new TestCentricProject(_model, projectName, "dummy.dll");
+            var project = new TestCentricProject(projectName, "dummy.dll");
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);
             _model.TestCentricProject.Returns(project);

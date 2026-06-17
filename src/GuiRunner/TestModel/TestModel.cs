@@ -50,7 +50,7 @@ namespace TestCentric.Gui.Model
 
             Settings = new UserSettings();
 
-            TestCentricRunner = new TestCentricRunner(testEngine, _events);
+            TestCentricRunner = new TestCentricRunner(this, testEngine, _events);
             TestCentricTestFilter = new TestCentricTestFilter(this, () => _events.FireTestFilterChanged());
             TestResultManager = new TestResultManager(this);
 
@@ -85,7 +85,7 @@ namespace TestCentric.Gui.Model
             // are an engine service and the engine have the internal trace level
             // set as part of its initialization.
             if (!Enum.TryParse(options.InternalTraceLevel, out InternalTraceLevel traceLevel))
-                traceLevel = InternalTraceLevel.Off;
+                traceLevel = NUnit.Engine.InternalTraceLevel.Off;
 
             var logFile = $"InternalTrace.{Process.GetCurrentProcess().Id}.gui.log";
             if (options.WorkDirectory != null)
@@ -301,7 +301,7 @@ namespace TestCentric.Gui.Model
             if (IsProjectLoaded)
                 CloseProject();
 
-            TestCentricProject = new TestCentricProject(this, projectPath, filenames);
+            TestCentricProject = new TestCentricProject(projectPath, new GuiOptions(filenames));
 
             _events.FireTestCentricProjectLoaded();
 
@@ -316,16 +316,24 @@ namespace TestCentric.Gui.Model
         /// </summary>
         /// <param name="projectPath">Path where the project will eventually be saved.</param>
         /// <param name="options">An instance of GuiOptions containing the options passed on the command-line.</param>
-        public void CreateNewProject(string projectPath, GuiOptions options)
+        public TestCentricProject CreateNewProject(string projectPath, GuiOptions options)
         {
             if (IsProjectLoaded)
                 CloseProject();
 
-            TestCentricProject = new TestCentricProject(this, projectPath, options);
+            TestCentricProject = new TestCentricProject(projectPath, options);
+
+            //var package = TestCentricProject.TopLevelPackage;
+            ////var setting = package.Settings.GetValueOrDefault(SettingDefinitions.InternalTraceLevel);
+            ////var level = Enum.Parse(typeof(InternalTraceLevel), setting);
+            //package.AddSetting(SettingDefinitions.InternalTraceLevel.WithValue(InternalTraceLevel));
+
 
             _events.FireTestCentricProjectLoaded();
 
             LoadTests(options.InputFiles);
+
+            return TestCentricProject;
         }
 
         public void OpenOrCreateWrapperProject(string filePath)
@@ -335,6 +343,17 @@ namespace TestCentric.Gui.Model
                 OpenExistingProject(wrapperProjectPath);
             else
                 CreateNewProject(wrapperProjectPath, [filePath]);
+        }
+
+        public void OpenOrCreateWrapperProject(GuiOptions options)
+        {
+            int count = options.InputFiles.Count;
+            Guard.ArgumentValid(count == 1, $"Cannot create a wrapper project with {count} input files", nameof(options));
+
+            var wrapperProjectPath = options.InputFiles[0] + ".tcproj";
+            var project = File.Exists(wrapperProjectPath)
+                ? OpenExistingProject(wrapperProjectPath, options)
+                : CreateNewProject(wrapperProjectPath, options);
         }
 
         private HashSet<string>_knownTestFileExtensions;
@@ -387,16 +406,18 @@ namespace TestCentric.Gui.Model
             _events.FireTestCentricProjectLoaded();
         }
 
-        public void OpenExistingProject(string projectPath)
+        public TestCentricProject OpenExistingProject(string projectPath, GuiOptions options=null)
         {
             if (IsProjectLoaded)
                 CloseProject();
 
-            TestCentricProject = TestCentricProject.LoadFrom(projectPath);
+            TestCentricProject = TestCentricProject.LoadFrom(projectPath, options);
 
             LoadTests(TestCentricProject.TestFiles);
 
             _events.FireTestCentricProjectLoaded();
+
+            return TestCentricProject;
         }
 
         public void OpenMostRecentFile()

@@ -119,7 +119,7 @@ namespace TestCentric.Gui.Model
         /// </summary>
         /// <param name="path">Path where the project will be stored</param>
         /// <param name="options">The command-line options</param>
-        void CreateNewProject(string path, GuiOptions options);
+        TestCentricProject CreateNewProject(string path, GuiOptions options);
 
         bool IsWrapperProjectPath(string path);
 
@@ -139,7 +139,7 @@ namespace TestCentric.Gui.Model
         /// Open an existing TestCentricProject file.
         /// </summary>
         /// <param name="filePath">Path to the project file</param>
-        void OpenExistingProject(string filePath);
+        TestCentricProject OpenExistingProject(string filePath, GuiOptions options=null);
 
         /// <summary>
         /// Open the most recently opened file that still exists, which may be
@@ -167,6 +167,15 @@ namespace TestCentric.Gui.Model
         /// </summary>
         /// <param name="filePath">Path to the test file</param>
         void OpenOrCreateWrapperProject(string filePath);
+
+        /// <summary>
+        /// Open or create a wrapper project for a single test file specified
+        /// in an instance of GuiOptions. If an existing wrapper project is found,
+        /// it is opened. Otherwise a new one is created. Throws an ArgumentException
+        /// if options contains on input files.
+        /// </summary>
+        /// <param name="options">An instance of GuiOptions with a single input file.</param>
+        void OpenOrCreateWrapperProject(GuiOptions options);
 
         /// <summary>
         /// Save the currently open TestCentricProject to the specified path,

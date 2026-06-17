@@ -255,18 +255,23 @@ namespace TestCentric.Gui.Presenters
                 _agentSelectionController.PopulateMenu();
 
                 // Load Project and Tests
-                var testFiles = _options.InputFiles.ToArray();
-                if (testFiles.Length > 0)
+                switch (_options.InputFiles.Count)
                 {
-                    if (_options.Unattended)
-                        _model.CreateNewProject("TestProject", testFiles);
-                    else if (testFiles.Length == 1 && TestCentricProject.IsProjectFile(testFiles[0]))
-                        _model.OpenExistingProject(testFiles[0]);
-                    else 
-                        CreateNewProject(testFiles);
+                    case 0: // No command-line or no input files specified
+                        if (_settings.Gui.LoadLastProject && !_options.NoLoad)
+                            _model.OpenMostRecentFile();
+                        break;
+                    case 1: // Command-line with one input file
+                        string file = _options.InputFiles[0];
+                        if (TestCentricProject.IsProjectFile(file))
+                            _model.OpenExistingProject(file);
+                        else
+                            _model.OpenOrCreateWrapperProject(_options);
+                        break;
+                    default: // Command-line with multiple input files
+                        _model.CreateNewProject("TestProject.tcproj", _options);
+                        break;
                 }
-                else if (_settings.Gui.LoadLastProject && !_options.NoLoad)
-                    _model.OpenMostRecentFile();
 
                 // Run loaded test automatically if called for.
                 if (_model.HasTests && _options.RunAllTests)

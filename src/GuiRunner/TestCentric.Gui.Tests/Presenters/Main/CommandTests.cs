@@ -180,7 +180,7 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase(true)]
         public void CloseProjectCommand_CallsCloseProject(bool dirty)
         {
-            var project = new TestCentricProject(_model, "MyProject", "dummy.dll");
+            var project = new TestCentricProject("MyProject", "dummy.dll");
             if (dirty) project.AddSetting("SomeSetting", "VALUE");
             _model.TestCentricProject.Returns(project);
             _view.MessageDisplay.YesNo(Arg.Any<string>()).Returns(false);
@@ -200,7 +200,7 @@ namespace TestCentric.Gui.Presenters.Main
         public void SaveCommand_CallsSaveProject(params string[] files)
         {
             var projectPath = Path.GetFullPath("MyProject.tcproj");
-            var project = new TestCentricProject(_model, projectPath, files);
+            var project = new TestCentricProject(projectPath, files);
             _model.TestCentricProject.Returns(project);
 
             if(files.Length > 0)
@@ -280,7 +280,7 @@ namespace TestCentric.Gui.Presenters.Main
         public void RunAsX86CheckedChanged_SettingIsAppliedToProject(bool isChecked)
         {
             // 1. Arrange
-            var project = new TestCentricProject(_model, "MyProject", "FILE1", "FILE2");
+            var project = new TestCentricProject("MyProject", "FILE1", "FILE2");
             _model.TestCentricProject.Returns(project);
             _view.RunAsX86.Checked.Returns(isChecked);
 

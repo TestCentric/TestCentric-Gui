@@ -36,60 +36,55 @@ namespace TestCentric.Gui.Model
         /// </summary>
         /// <param name="projectPath"></param>
         /// <param name="testFiles"></param>
-        public TestCentricProject(ITestModel model, string projectPath, params string[] testFiles)
-        {
-            Guard.ArgumentNotNull(model, nameof(model));
-            Guard.ArgumentNotNullOrEmpty(projectPath, nameof(projectPath));
-
-            ProjectPath = Path.GetFullPath(projectPath);
-            TestFiles = [.. testFiles];
-            TopLevelPackage = new TestPackage(testFiles);
-
-            // TODO: Policy decisions should be at a higher level. Handling
-            // setting definition for .sln files is definitely a policy decision
-            // but it's not clear where the check for .tcproj belongs, so it
-            // is kept here for the time being.
-            foreach (var subpackage in TopLevelPackage.SubPackages)
-                switch (Path.GetExtension(subpackage.Name))
-                {
-                    //case ".sln":
-                    //    subpackage.AddSetting(SettingDefinitions.SkipNonTestAssemblies.WithValue(true));
-                    //    break;
-                    case ".tcproj":
-                        throw new InvalidOperationException("A TestCentric project may not contain another TestCentric project.");
-                }
-        }
+        public TestCentricProject(string projectPath, params string[] testFiles)
+            : this(projectPath, new GuiOptions(testFiles)) { } // TODO: Phase this out
 
         /// <summary>
         /// Construct a new project, specifying the ProjectPath and GuiOptions.
         /// </summary>
         /// <param name="projectPath"></param>
         /// <param name="options"></param>
-        public TestCentricProject(ITestModel model, string projectPath, GuiOptions options)
+        public TestCentricProject(string projectPath, GuiOptions options)
         {
-            Guard.ArgumentNotNull(model, nameof(model));
             Guard.ArgumentNotNullOrEmpty(projectPath, nameof(projectPath));
+            Guard.ArgumentNotNull(options, nameof(options));
 
             ProjectPath = Path.GetFullPath(projectPath);
             TestFiles = [.. options.InputFiles];
-            TopLevelPackage = new TestPackage(TestFiles);
+            TopLevelPackage = MakeTestPackage(options);
+        }
 
-            if (options != null) // Happens when we test
-            {
-                AddSetting(SettingDefinitions.InternalTraceLevel.WithValue(options.InternalTraceLevel ?? "Off"));
-                if (options.WorkDirectory != null)
-                    AddSetting(SettingDefinitions.WorkDirectory.WithValue(options.WorkDirectory));
-                if (options.MaxAgents >= 0)
-                    SetTopLevelSetting(SettingDefinitions.MaxAgents.WithValue(options.MaxAgents));
-                if (options.RunAsX86)
-                    AddSetting(SettingDefinitions.RunAsX86.WithValue(true));
-                if (options.DebugAgent)
-                    SetTopLevelSetting(SettingDefinitions.DebugAgent.WithValue(true));
-                if (options.TestParameters.Count > 0)
-                    SetTopLevelSetting(SettingDefinitions.TestParametersDictionary.WithValue(options.TestParameters));
-            }
+        public static TestCentricProject LoadFrom(string path, GuiOptions options=null)
+        {
+            var project = new TestCentricProject();
+            project.Load(path);
 
-            foreach (var subpackage in TopLevelPackage.SubPackages)
+            //if (options != null)
+                // Set Uptions
+            return project;
+        }
+
+        private TestPackage MakeTestPackage(GuiOptions options)
+        {
+            TestPackage package = new TestPackage(options.InputFiles);
+
+            package.AddSetting(SettingDefinitions.InternalTraceLevel.WithValue(options.InternalTraceLevel ?? "Off"));
+            package.AddSetting(SettingDefinitions.WorkDirectory.WithValue(options.WorkDirectory ?? Environment.CurrentDirectory));
+
+            if (options.MaxAgents >= 0)
+                package.Settings.Set(SettingDefinitions.MaxAgents.WithValue(options.MaxAgents));
+            if (options.RunAsX86)
+                package.AddSetting(SettingDefinitions.RunAsX86.WithValue(true));
+            if (options.DebugAgent)
+                package.Settings.Set(SettingDefinitions.DebugAgent.WithValue(true));
+            if (options.TestParameters.Count > 0)
+                package.Settings.Set(SettingDefinitions.TestParametersDictionary.WithValue(options.TestParameters));
+
+            // TODO: Policy decisions should be at a higher level. Handling
+            // setting definition for .sln files is definitely a policy decision
+            // but it's not clear where the check for .tcproj belongs, so it
+            // is kept here for the time being.
+            foreach (var subpackage in package.SubPackages)
                 switch (Path.GetExtension(subpackage.Name))
                 {
                     case ".sln":
@@ -98,19 +93,23 @@ namespace TestCentric.Gui.Model
                     case ".tcproj":
                         throw new InvalidOperationException("A TestCentric project may not contain another TestCentric project.");
                 }
+
+            return package;
         }
 
+        //// Internal for testing
+        //internal TestCentricProject(string projectPath)
+        //{
+        //    ProjectPath = Path.GetFullPath(projectPath);
+        //    TestFiles = [];
+        //    TopLevelPackage = new TestPackage();
+        //}
+
+        // Internal for testing
         internal TestCentricProject()
         {
             TestFiles = [];
             TopLevelPackage = new TestPackage();
-        }
-
-        public static TestCentricProject LoadFrom(string path)
-        {
-            var project = new TestCentricProject();
-            project.Load(path);
-            return project;
         }
 
         private void Load(string path)

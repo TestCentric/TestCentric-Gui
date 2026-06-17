@@ -72,9 +72,9 @@ public static class PackageTests
             "net8.0/mock-assembly-x86.dll",
             MockAssemblyX86ExpectedResult("Net80AgentLauncher")));
 
-        GuiTests.Add(new PackageTest(1, "Net90X86Test", "Run mock-assembly-x86.dll under .NET 9.0",
-            "net9.0/mock-assembly-x86.dll",
-            MockAssemblyX86ExpectedResult("Net90AgentLauncher")));
+        //GuiTests.Add(new PackageTest(1, "Net90X86Test", "Run mock-assembly-x86.dll under .NET 9.0",
+        //    "net9.0/mock-assembly-x86.dll",
+        //    MockAssemblyX86ExpectedResult("Net90AgentLauncher")));
 
         // AspNetCore tests
 

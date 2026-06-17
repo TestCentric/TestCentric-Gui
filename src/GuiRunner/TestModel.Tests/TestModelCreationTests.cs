@@ -3,10 +3,12 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System.IO;
+using NSubstitute;
+using NUnit.Engine;
 using NUnit.Framework;
 using TestCentric.Gui.Model.Fakes;
-using NUnit.Engine;
-
+using TestCentric.Tests;
 using PackageSettings = NUnit.Engine.PackageSettings;
 using SettingDefinitions = NUnit.Common.SettingDefinitions;
 
@@ -14,49 +16,69 @@ namespace TestCentric.Gui.Model
 {
     public class TestModelCreationTests
     {
-        [TestCase("dummy.dll")]
-        [TestCase("dummy.dll", "--work=/Path/To/Directory")]
-        [TestCase("dummy.dll", "--trace=Off")]
-        [TestCase("dummy.dll", "--trace=Error", "--work=/Path/To/Directory")]
-        [TestCase("dummy.dll", "--trace=Warning")]
-        [TestCase("dummy.dll", "--trace=Info", "--work=/Path/To/Directory")]
-        [TestCase("dummy.dll", "--trace=Debug")]
-        [TestCase("dummy.dll", "--work=/Some/Directory", "--agents:32")]
-        [TestCase("dummy.dll", "--agents:5")]
-        [TestCase("dummy.dll", "--X86")]
-        [TestCase("dummy.dll", "--param:X=5")]
-        [TestCase("dummy.dll", "--param:X=5", "-p:Y=7")]
-        public void CreateTestModel(params string[] args)
+        private static readonly string PROJECT_PATH = Path.GetFullPath("dummy.tcproj");
+
+        private ITestModel _model;
+        private GuiOptions _options;
+        private ITestEngine _engine;
+
+        [TestCaseSource(nameof(TestCases))]
+        public void CreateTestModelForAssembly(params string[] args)
         {
-            ITestEngine engine = new MockTestEngine();
-            var options = new GuiOptions(args);
-            var model = TestModel.CreateTestModel(engine, options);
+            CreateTestModel(args);
 
-            Assert.That(model, Is.Not.Null, "Unable to create TestModel");
+            // Create Project in memory, without saving
+            _model.CreateNewProject(PROJECT_PATH, _options);
 
-            Assert.That(engine.WorkDirectory, Is.EqualTo(options.WorkDirectory));
-            Assert.That(engine.InternalTraceLevel.ToString(), Is.EqualTo(options.InternalTraceLevel ?? "Off"));
+            CheckProjectAndPackageSettings();
+        }
 
-            model.CreateNewProject("MyProject", options);
-            var checker = new PackageSettingsChecker(model.TopLevelPackage.Settings);
+        [TestCaseSource(nameof(TestCases))]
+        public void CreateTestModelForTestProject(params string[] args)
+        {
+            CreateTestModel(args);
 
-            checker.CheckSetting(options.MaxAgents, SettingDefinitions.MaxAgents.Name);
-            checker.CheckSetting(options.RunAsX86, SettingDefinitions.RunAsX86.Name);
+            // Create, Save and then Open Project
+            _model.CreateNewProject("MyProject", _options).SaveAs(PROJECT_PATH);
+            _model.OpenExistingProject(PROJECT_PATH);
 
-            if (options.TestParameters.Count > 0)
+            CheckProjectAndPackageSettings();
+        }
+
+        private void CreateTestModel(string[] args)
+        {
+            _options = new GuiOptions(args);
+            _engine = new MockTestEngine();
+            _model = TestModel.CreateTestModel(_engine, _options);
+
+            Assert.That(_model, Is.Not.Null, "Unable to create TestModel");
+        }
+
+        private void CheckProjectAndPackageSettings()
+        {
+            Assert.That(_model.TestCentricProject.ProjectPath, Is.EqualTo(PROJECT_PATH));
+            Assert.That(_engine.WorkDirectory, Is.EqualTo(_options.WorkDirectory));
+            Assert.That(_engine.InternalTraceLevel.ToString(), Is.EqualTo(_options.InternalTraceLevel ?? "Off"));
+
+            var packageChecker = new PackageSettingsChecker(_model.TopLevelPackage.Settings);
+
+            packageChecker.CheckSetting(_options.MaxAgents, SettingDefinitions.MaxAgents.Name);
+            packageChecker.CheckSetting(_options.RunAsX86, SettingDefinitions.RunAsX86.Name);
+
+            if (_options.TestParameters.Count > 0)
             {
-                string[] parms = new string[options.TestParameters.Count];
+                string[] parms = new string[_options.TestParameters.Count];
                 int index = 0;
-                foreach (string key in options.TestParameters.Keys)
-                    parms[index++] = $"{key}={options.TestParameters[key]}";
+                foreach (string key in _options.TestParameters.Keys)
+                    parms[index++] = $"{key}={_options.TestParameters[key]}";
 
-                checker.CheckSetting(options.TestParameters, SettingDefinitions.TestParametersDictionary.Name);
+                packageChecker.CheckSetting(_options.TestParameters, SettingDefinitions.TestParametersDictionary.Name);
             }
         }
 
         private class PackageSettingsChecker
         {
-           PackageSettings _settings;
+            PackageSettings _settings;
 
             public PackageSettingsChecker(PackageSettings settings)
             {
@@ -67,7 +89,6 @@ namespace TestCentric.Gui.Model
             {
                 if (option || _settings.HasSetting(key))
                 {
-                    //Assert.That(_settings, Contains.Key(key));
                     Assert.That(_settings.GetSetting(key), Is.EqualTo(option));
                 }
             }
@@ -83,5 +104,20 @@ namespace TestCentric.Gui.Model
                     Assert.That(_settings.HasSetting(key), Is.False);
             }
         }
+
+        static string[][] TestCases = [
+            ["dummy.dll"],
+            ["dummy.dll", "--work=/Path/To/Directory"],
+            ["dummy.dll", "--trace=Off"],
+            ["dummy.dll", "--trace=Error", "--work=/Path/To/Directory"],
+            ["dummy.dll", "--trace=Warning"],
+            ["dummy.dll", "--trace=Info", "--work=/Path/To/Directory"],
+            ["dummy.dll", "--trace=Debug"],
+            ["dummy.dll", "--work=/Some/Directory", "--agents:32"],
+            ["dummy.dll", "--agents:5"],
+            ["dummy.dll", "--X86"],
+            ["dummy.dll", "--param:X=5"],
+            ["dummy.dll", "--param:X=5", "-p:Y=7"]
+        ];
     }
 }
