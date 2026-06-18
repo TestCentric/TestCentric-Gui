@@ -5,8 +5,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
+using NUnit.FileSystemAccess;
 using NUnit.Framework;
+
+using Spec = TestCentric.Gui.GuiOptions.ResultSpecification;
 
 namespace TestCentric.Gui.Tests
 {
@@ -76,6 +80,52 @@ namespace TestCentric.Gui.Tests
 
             Assert.That(options.Validate(), Is.True, $"Should be valid: {option}");
             Assert.That(property.GetValue(options, null), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ResultOptionWithFilePath()
+        {
+            GuiOptions options = new GuiOptions("tests.dll", "--result:results.xml");
+            Assert.That(options.ErrorMessages.Count, Is.EqualTo(0));
+            Assert.That(options.InputFiles.Count, Is.EqualTo(1), "assembly should be set");
+            Assert.That(options.InputFiles[0], Is.EqualTo("tests.dll"));
+
+            Spec spec = options.ResultSpecifications[0];
+            Assert.That(spec.OutputPath, Is.EqualTo("results.xml"));
+            Assert.That(spec.Format, Is.EqualTo("nunit3"));
+            Assert.That(spec.Transform, Is.Null);
+        }
+
+        [Test]
+        public void ResultOptionWithFilePathAndFormat()
+        {
+            GuiOptions options = new GuiOptions("tests.dll", "-result:results.xml;format=nunit2");
+            Assert.That(options.ErrorMessages.Count, Is.EqualTo(0));
+            Assert.That(options.InputFiles.Count, Is.EqualTo(1), "assembly should be set");
+            Assert.That(options.InputFiles[0], Is.EqualTo("tests.dll"));
+
+            Spec spec = options.ResultSpecifications[0];
+            Assert.That(spec.OutputPath, Is.EqualTo("results.xml"));
+            Assert.That(spec.Format, Is.EqualTo("nunit2"));
+            Assert.That(spec.Transform, Is.Null);
+        }
+
+        [Test]
+        public void ResultOptionWithFilePathAndTransform()
+        {
+            string transformFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "TextSummary.xslt");
+
+            GuiOptions options = new GuiOptions(
+                "tests.dll", $"-result:results.xml;transform={transformFile}");
+            Assert.That(options.ErrorMessages.Count, Is.EqualTo(0));
+            Assert.That(options.InputFiles.Count, Is.EqualTo(1), "assembly should be set");
+            Assert.That(options.InputFiles[0], Is.EqualTo("tests.dll"));
+
+            Spec spec = options.ResultSpecifications[0];
+            Assert.That(spec.OutputPath, Is.EqualTo("results.xml"));
+            Assert.That(spec.Format, Is.EqualTo("user"));
+            var fullFilePath = Path.Combine(TestContext.CurrentContext.TestDirectory, transformFile);
+            Assert.That(spec.Transform, Is.EqualTo(fullFilePath));
         }
 
         [TestCase("--param:X=5")]

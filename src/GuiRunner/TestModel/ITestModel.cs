@@ -214,6 +214,9 @@ namespace TestCentric.Gui.Model
 
         #endregion
 
+        // Save all results using defaults or specifications provided on the command-line
+        void SaveResults();
+
         // Save the results of the last run in the specified format
         void SaveResults(string fileName, string format="nunit3");
 

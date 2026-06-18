@@ -59,8 +59,10 @@ namespace TestCentric.Gui.Model
             var project = new TestCentricProject();
             project.Load(path);
 
-            //if (options != null)
-                // Set Uptions
+            var workDir = options?.WorkDirectory;
+            if (workDir != null)
+                project.ApplySetting(SettingDefinitions.WorkDirectory.WithValue(options.WorkDirectory));
+
             return project;
         }
 
