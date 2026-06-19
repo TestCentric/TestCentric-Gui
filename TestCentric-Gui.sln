@@ -86,6 +86,41 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui.Model.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageTester", "src\GuiRunner\MessageTester\MessageTester.csproj", "{7740EE8A-D548-496D-713D-A13ED3D34830}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "recipe", "recipe", "{28E73554-5267-44FB-80FF-1FB22DAD8D20}"
+	ProjectSection(SolutionItems) = preProject
+		recipe\recipe\agent-factory.cake = recipe\recipe\agent-factory.cake
+		recipe\recipe\Banner.cake = recipe\recipe\Banner.cake
+		recipe\recipe\build-settings.cake = recipe\recipe\build-settings.cake
+		recipe\recipe\builder.cake = recipe\recipe\builder.cake
+		recipe\recipe\chocolatey-package.cake = recipe\recipe\chocolatey-package.cake
+		recipe\recipe\command-line-options.cake = recipe\recipe\command-line-options.cake
+		recipe\recipe\console-reporter.cake = recipe\recipe\console-reporter.cake
+		recipe\recipe\constants.cake = recipe\recipe\constants.cake
+		recipe\recipe\dotnet-tool-package.cake = recipe\recipe\dotnet-tool-package.cake
+		recipe\recipe\extension-specifier.cake = recipe\recipe\extension-specifier.cake
+		recipe\recipe\gui-runner.cake = recipe\recipe\gui-runner.cake
+		recipe\recipe\headers.cake = recipe\recipe\headers.cake
+		recipe\recipe\help-messages.cake = recipe\recipe\help-messages.cake
+		recipe\recipe\nuget-package.cake = recipe\recipe\nuget-package.cake
+		recipe\recipe\package-checks.cake = recipe\recipe\package-checks.cake
+		recipe\recipe\package-content.cake = recipe\recipe\package-content.cake
+		recipe\recipe\package-definition.cake = recipe\recipe\package-definition.cake
+		recipe\recipe\package-reference.cake = recipe\recipe\package-reference.cake
+		recipe\recipe\package-test.cake = recipe\recipe\package-test.cake
+		recipe\recipe\publishing.cake = recipe\recipe\publishing.cake
+		recipe\recipe\recipe-package.cake = recipe\recipe\recipe-package.cake
+		recipe\recipe\recipe.cake = recipe\recipe\recipe.cake
+		recipe\recipe\setup.cake = recipe\recipe\setup.cake
+		recipe\recipe\task-builders.cake = recipe\recipe\task-builders.cake
+		recipe\recipe\task-definitions.cake = recipe\recipe\task-definitions.cake
+		recipe\recipe\test-reports.cake = recipe\recipe\test-reports.cake
+		recipe\recipe\test-results.cake = recipe\recipe\test-results.cake
+		recipe\recipe\test-runners.cake = recipe\recipe\test-runners.cake
+		recipe\recipe\tools.cake = recipe\recipe\tools.cake
+		recipe\recipe\unit-testing.cake = recipe\recipe\unit-testing.cake
+		recipe\recipe\versioning.cake = recipe\recipe\versioning.cake
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -287,6 +322,7 @@ Global
 		{2206E606-B000-9D49-0A57-384A51ED0EF3} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{A0C933E6-708A-357C-EE71-10582CD4A7BF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{7740EE8A-D548-496D-713D-A13ED3D34830} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{28E73554-5267-44FB-80FF-1FB22DAD8D20} = {A65042E1-D8BC-48DD-8DE1-F0991F07EA77}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDFF439B-8888-4133-8734-86F4F899BC40}
