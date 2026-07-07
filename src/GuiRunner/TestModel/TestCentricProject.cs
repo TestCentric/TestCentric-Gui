@@ -237,12 +237,20 @@ namespace TestCentric.Gui.Model
 
         public void RemoveSetting(string key)
         {
-            TopLevelPackage.Settings.Remove(key);
-            foreach (var subPackage in TopLevelPackage.SubPackages)
-                subPackage.Settings.Remove(key);
+            RemoveSettingFromPackage(key, TopLevelPackage);
+            //TopLevelPackage.Settings.Remove(key);
+            //foreach (var subPackage in TopLevelPackage.SubPackages)
+            //    subPackage.Settings.Remove(key);
         }
 
         public void RemoveSetting(SettingDefinition setting) => RemoveSetting(setting.Name);
+
+        private void RemoveSettingFromPackage(string Key, TestPackage package)
+        {
+            package.Settings.Remove(Key);
+            foreach (var subPackage in package.SubPackages)
+                RemoveSettingFromPackage(Key, subPackage);
+        }
 
         public void SetTopLevelSetting(PackageSetting setting) => TopLevelPackage.Settings.Set(setting);
 
