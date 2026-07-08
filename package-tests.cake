@@ -193,14 +193,13 @@ public static class PackageTests
         // TODO: Use --config option when it's supported by the extension.
         // Current test relies on the fact that the Release config appears
         // first in the project file.
-        // Completely suppressed for the time being
         //if (BuildSettings.Configuration == "Release")
         //{
-        //    GuiTests.Add(new PackageTest(1, "NUnitProjectTest", "Run an NUnit project",
-        //        "../../TestProject.nunit --trace:Debug",
-        //        MockAssemblyExpectedResult(
-        //            "Net462AgentLauncher", "Net462AgentLauncher", "Net80AgentLauncher", "Net80AgentLauncher"),
-        //        NUnitProjectLoader));
+            GuiTests.Add(new PackageTest(1, "NUnitProjectTest", "Run an NUnit project",
+                "../../TestProject.nunit --trace:Debug",
+                MockAssemblyExpectedResult(
+                    "Net462AgentLauncher", "Net462AgentLauncher", "Net80AgentLauncher", "Net80AgentLauncher"),
+                KnownExtensions.NUnitProjectLoader));
         //}
 
         ExpectedResult MockAssemblyExpectedResult(params string[] agentNames)
