@@ -336,7 +336,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.OpenTestFileCommand.Execute += () =>
             {
-                string file = _view.DialogManager.GetFileOpenPath("Open Test File", _view.DialogManager.CreateOpenTestFileFilter());
+                string file = _view.DialogManager.GetFileOpenPath("Open Test File", _view.DialogManager.CreateOpenTestFileFilter(_model.NUnitProjectSupport, _model.VisualStudioSupport));
                 if (file != null)
                     _model.OpenOrCreateWrapperProject(file);
             };
