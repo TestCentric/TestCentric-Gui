@@ -44,6 +44,8 @@ namespace TestCentric.Gui.Views
             TestRunSettingsCommand = new CommandMenuElement(testRunSettingsMenuItem);
             SelectAgentMenu = new PopupMenuElement(selectAgentMenu);
             RunAsX86 = new CheckedMenuElement(runAsX86MenuItem);
+            SelectConfigurationMenu = new PopupMenuElement(selectConfigurationMenu);
+
             RecentProjectsMenu = new PopupMenuElement(recentProjectsMenu);
             RecentFilesMenu = new PopupMenuElement(recentFilesMenu);
             ExitCommand = new CommandMenuElement(exitMenuItem);
@@ -136,6 +138,9 @@ namespace TestCentric.Gui.Views
         public ICommand EditProjectCommand { get; }
         public ICommand ReloadTestsCommand { get; }
         public IPopup SelectAgentMenu { get; }
+
+        public IPopup SelectConfigurationMenu { get; }
+
         public IChecked RunAsX86 { get; private set; }
         public IPopup RecentProjectsMenu { get; }
         public IPopup RecentFilesMenu { get; }

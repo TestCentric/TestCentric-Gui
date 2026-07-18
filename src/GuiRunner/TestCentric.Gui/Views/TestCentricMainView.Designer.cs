@@ -65,6 +65,7 @@ namespace TestCentric.Gui.Views
             this.selectAgentMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.selectAgentDummyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runAsX86MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectConfigurationMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.recentProjectsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.recentFilesMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -269,6 +270,7 @@ namespace TestCentric.Gui.Views
             this.toolStripSeparator2,
             this.testRunSettingsMenuItem,
             this.selectAgentMenu,
+            this.selectConfigurationMenu,
             this.runAsX86MenuItem,
             this.toolStripSeparator3,
             this.recentProjectsMenu,
@@ -375,6 +377,15 @@ namespace TestCentric.Gui.Views
             this.runAsX86MenuItem.Name = "runAsX86MenuItem";
             this.runAsX86MenuItem.Size = new System.Drawing.Size(179, 22);
             this.runAsX86MenuItem.Text = "Run as X86";
+            // 
+            // selectConfigurationMenu
+            // 
+            this.selectConfigurationMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectAgentDummyMenuItem});
+            this.selectConfigurationMenu.Name = "selectConfigurationMenu";
+            this.selectConfigurationMenu.Size = new System.Drawing.Size(179, 22);
+            this.selectConfigurationMenu.Text = "Select Configuration";
+            this.selectConfigurationMenu.ToolTipText = "Select active configuration for a NUnit project or Visual Studio solution";
             // 
             // toolStripSeparator3
             // 
@@ -877,6 +888,7 @@ namespace TestCentric.Gui.Views
         private ToolStripSeparator toolStripSeparator11;
         private ToolStripSeparator toolStripSeparator12;
         private ToolStripMenuItem runAsX86MenuItem;
+        private ToolStripMenuItem selectConfigurationMenu;
         private ToolStripMenuItem selectAgentMenu;
         private ToolStripMenuItem selectAgentDummyMenuItem;
         private ToolStripButton runSelectedButton;

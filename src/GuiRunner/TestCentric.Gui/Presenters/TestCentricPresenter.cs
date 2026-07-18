@@ -321,6 +321,9 @@ namespace TestCentric.Gui.Presenters
 
                 _view.ReloadTestsCommand.Enabled = isPackageLoaded && !isTestRunning;
 
+                var configSelectionController = new ConfigurationSelectionController(_model, _view);
+                configSelectionController.PopulateMenu();
+
                 _agentSelectionController.UpdateMenuItems();
                 _recentFileController.PopulateMenu();
                 _recentProjectController.PopulateMenu();
