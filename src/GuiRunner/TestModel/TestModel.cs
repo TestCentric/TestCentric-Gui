@@ -614,21 +614,7 @@ namespace TestCentric.Gui.Model
         {
             _events.FireTestsReloading();
 
-#if false
-            Runner.Reload();
-#else
-            // NOTE: The `ITestRunner.Reload` method supported by the engine
-            // has some problems, so we simulate Unload+Load. See issue #328.
-            // Discover tests
-            LoadedTests = TestCentricRunner.Explore(TopLevelPackage);
-            TestCentricProject.InitRandomSeed();
-
-            AvailableCategories = GetAvailableCategories();
-            BuildTestIndex();
-            TestCentricTestFilter.Init();
-
-            TestResultManager.ReloadTestResults();
-#endif
+            TestEngine.GetRunner(TopLevelPackage).Reload();
 
             _events.FireTestReloaded(LoadedTests);
         }
