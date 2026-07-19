@@ -170,15 +170,21 @@ Task("PackageChocolatey")
 		ChocolateyGuiPackage.BuildVerifyAndTest();
 	});
 
-// The following task installs an individual extensions in the bin
-// directory, where it will be found by both Debug and Release builds.
-// You can modify or duplicate this task to install a different extension.
-// Note that 'KnownExtensions.cake' contains additional installation targets.
+// The following tasks install individual extensions in the bin directory
+// where it will be found by both Debug and Release builds.
+
 Task("InstallNUnitV2ResultWriter")
-	.Description("Installs just the NUnitV2ResultWriter. Modify as needed.")
+	.Description("Installs the NUnitV2ResultWriter extension.")
 	.Does(() =>
 	{
 		KnownExtensions.NUnitV2ResultWriter.NuGetPackage.Install(BuildSettings.ProjectDirectory + BIN_DIR);
+	});
+
+Task("InstallNUnitProjectLoader")
+	.Description("Installs the NUnitProjectLoader extension.")
+	.Does(() =>
+	{
+		KnownExtensions.NUnitProjectLoader.NuGetPackage.Install(BuildSettings.ProjectDirectory + BIN_DIR);
 	});
 
 //////////////////////////////////////////////////////////////////////
