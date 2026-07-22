@@ -16,7 +16,7 @@ using TestCentric.Gui.Views;
 
 namespace TestCentric.Gui.Presenters
 {
-    internal class ConfigurationSelectionController
+    public class ConfigurationSelectionController
     {
         private ITestModel _model;
         private IMainView _view;
@@ -32,8 +32,10 @@ namespace TestCentric.Gui.Presenters
             IPopup configurationMenu = _view.SelectConfigurationMenu;
             configurationMenu.MenuItems.Clear();
 
+            IList<string> configurations = GetPackageConfigurations();
+            configurationMenu.Enabled = _model.IsProjectLoaded && !_model.IsTestRunning && configurations.Count >= 1;
             string activeConfig = GetActiveConfiguration();
-            foreach (string configName in GetPackageConfigurations())
+            foreach (string configName in configurations)
             {
                 var menuItem = new ToolStripMenuItem(configName);
                 menuItem.Tag = configName;
@@ -55,7 +57,7 @@ namespace TestCentric.Gui.Presenters
                 configurations.AddRange(configNames);
             }
 
-            return configurations;
+            return configurations.Where(c => !string.IsNullOrEmpty(c)).Distinct().ToList();
         }
 
         private string GetActiveConfiguration()
@@ -64,7 +66,7 @@ namespace TestCentric.Gui.Presenters
                 return string.Empty;
                         
             TestPackage package = _model.TopLevelPackage.SubPackages.FirstOrDefault();
-            return package.Settings.GetValueOrDefault(SettingDefinitions.ActiveConfig);
+            return package?.Settings.GetValueOrDefault(SettingDefinitions.ActiveConfig);
         }
 
         private void OnConfigurationMenuItemClicked(object sender, EventArgs e)
