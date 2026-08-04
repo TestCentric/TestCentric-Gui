@@ -42,6 +42,7 @@ namespace TestCentric.Gui.Views
         ICommand EditProjectCommand { get; }
         ICommand ReloadTestsCommand { get; }
         IPopup SelectAgentMenu { get; }
+        IPopup SelectConfigurationMenu { get; }
         IChecked RunAsX86 { get; }
         IPopup RecentProjectsMenu { get; }
         IPopup RecentFilesMenu { get; }

@@ -24,9 +24,9 @@ namespace TestCentric.Gui.Model
     {
         static Logger log = InternalTrace.GetLogger(typeof(TestModel));
 
-        private const string PROJECT_LOADER_EXTENSION_PATH = "/NUnit/Engine/TypeExtensions/IProjectLoader";
-        private const string NUNIT_PROJECT_LOADER = "TestCentric.Engine.Services.ProjectLoaders.NUnitProjectLoader";
-        private const string VISUAL_STUDIO_PROJECT_LOADER = "TestCentric.Engine.Services.ProjectLoaders.VisualStudioProjectLoader";
+        private const string PROJECT_LOADER_EXTENSION_PATH = "/NUnit/Engine/ProjectLoaders";
+        private const string NUNIT_PROJECT_LOADER = "NUnit.Engine.Services.ProjectLoaders.NUnitProjectLoader";
+        private const string VISUAL_STUDIO_PROJECT_LOADER = "NUnit.Engine.Services.ProjectLoaders.VisualStudioProjectLoader";
 
         // Our event dispatcher. Events are exposed through the Events
         // property. This is used when firing events from the model.
@@ -614,21 +614,7 @@ namespace TestCentric.Gui.Model
         {
             _events.FireTestsReloading();
 
-#if false
-            Runner.Reload();
-#else
-            // NOTE: The `ITestRunner.Reload` method supported by the engine
-            // has some problems, so we simulate Unload+Load. See issue #328.
-            // Discover tests
-            LoadedTests = TestCentricRunner.Explore(TopLevelPackage);
-            TestCentricProject.InitRandomSeed();
-
-            AvailableCategories = GetAvailableCategories();
-            BuildTestIndex();
-            TestCentricTestFilter.Init();
-
-            TestResultManager.ReloadTestResults();
-#endif
+            TestEngine.GetRunner(TopLevelPackage).Reload();
 
             _events.FireTestReloaded(LoadedTests);
         }

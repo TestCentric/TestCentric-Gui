@@ -321,6 +321,9 @@ namespace TestCentric.Gui.Presenters
 
                 _view.ReloadTestsCommand.Enabled = isPackageLoaded && !isTestRunning;
 
+                var configSelectionController = new ConfigurationSelectionController(_model, _view);
+                configSelectionController.PopulateMenu();
+
                 _agentSelectionController.UpdateMenuItems();
                 _recentFileController.PopulateMenu();
                 _recentProjectController.PopulateMenu();
@@ -336,7 +339,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.OpenTestFileCommand.Execute += () =>
             {
-                string file = _view.DialogManager.GetFileOpenPath("Open Test File", _view.DialogManager.CreateOpenTestFileFilter());
+                string file = _view.DialogManager.GetFileOpenPath("Open Test File", _view.DialogManager.CreateOpenTestFileFilter(_model.NUnitProjectSupport, _model.VisualStudioSupport));
                 if (file != null)
                     _model.OpenOrCreateWrapperProject(file);
             };
