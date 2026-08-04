@@ -534,7 +534,7 @@ namespace TestCentric.Gui.Presenters.TestTree
 
         //    _view.RunCommand.Execute += Raise.Event<CommandHandler>();
 
-        //    _model.Received().RunTests(Arg.Compat.Is<TestSelection>((sel) => sel.Count == 2 && sel[0].Id == "DUMMY-1" && sel[1].Id == "DUMMY-2"));
+        //    _model.Received().RunTests(Arg.Is<TestSelection>((sel) => sel.Count == 2 && sel[0].Id == "DUMMY-1" && sel[1].Id == "DUMMY-2"));
         //}
 
 
@@ -563,7 +563,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         //    TestNode testNode = new TestNode(XmlHelper.CreateXmlNode("<test-run id='1'><test-suite id='42'/></test-run>"));
         //    _model.Tests.Returns(testNode);
 
-        //    _view.Tree.Received().Add(Arg.Compat.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "42"));
+        //    _view.Tree.Received().Add(Arg.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "42"));
         //}
 
         //[Test, Combinatorial]

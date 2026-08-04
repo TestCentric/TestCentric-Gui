@@ -243,7 +243,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         //    _model.TestFiles.Returns(new List<string>(new[] { "test.dll", "another.dll" }));
         //    FireTestLoadedEvent(testNode);
 
-        //    _view.Tree.Received().Load(Arg.Compat.Is<TreeNode>((tn) => tn.Text == "TestRun" && tn.Nodes.Count == 2));
+        //    _view.Tree.Received().Load(Arg.Is<TreeNode>((tn) => tn.Text == "TestRun" && tn.Nodes.Count == 2));
         //}
 
         // TODO: Version 1 Test - Make it work if needed.
@@ -255,7 +255,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         //    _model.TestFiles.Returns(new List<string>(new[] { "test.dll" }));
         //    FireTestLoadedEvent(testNode);
 
-        //    _view.Tree.Received().Load(Arg.Compat.Is<TreeNode>(tn => tn.Text == "another.dll"));
+        //    _view.Tree.Received().Load(Arg.Is<TreeNode>(tn => tn.Text == "another.dll"));
         //}
     }
 }
