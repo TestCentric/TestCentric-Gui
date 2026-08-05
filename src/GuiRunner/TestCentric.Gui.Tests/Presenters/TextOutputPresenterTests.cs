@@ -392,7 +392,7 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         private void VerifyNothingWasWritten()
         {
-            _view.DidNotReceiveWithAnyArgs().Write(Arg.Compat.Any<string>(), Arg.Compat.Any<Color>());
+            _view.DidNotReceiveWithAnyArgs().Write(Arg.Any<string>(), Arg.Any<Color>());
         }
 
         /// <summary>
