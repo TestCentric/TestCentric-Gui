@@ -60,8 +60,16 @@ namespace TestCentric.Gui.Views
             DecreaseFixedFontCommand = new CommandMenuElement(decreaseFixedFontMenuItem);
             RestoreFixedFontCommand = new CommandMenuElement(restoreFixedFontMenuItem);
 
+#if DISABLE_FONT_SETTING
+            guiFontMenuItem.Visible = fixedFontMenuItem.Visible = false;
+#endif
+
 #if DISABLE_MINI_GUI
             miniGuiMenuItem.Visible = fullGuiMenuItem.Visible = toolStripSeparator8.Visible = false;
+#endif
+
+#if DISABLE_FONT_SETTING && DISABLE_MINI_GUI
+            viewMenu.Visible = false;
 #endif
 
             // Initialize Tools Menu Comands
