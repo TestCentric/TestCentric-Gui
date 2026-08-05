@@ -55,8 +55,8 @@ namespace TestCentric.Gui.Presenters.TestTree
                 null);
 
             _view.Received().Clear();
-            _view.Received().Add(Arg.Compat.Is<TreeNode>((tn) => (tn.Tag as TestNode).Id == "42"));
-            _view.Received().Add(Arg.Compat.Is<TreeNode>((tn) => (tn.Tag as TestNode).Id == "99"));
+            _view.Received().Add(Arg.Is<TreeNode>((tn) => (tn.Tag as TestNode).Id == "42"));
+            _view.Received().Add(Arg.Is<TreeNode>((tn) => (tn.Tag as TestNode).Id == "99"));
         }
 
         [Test]

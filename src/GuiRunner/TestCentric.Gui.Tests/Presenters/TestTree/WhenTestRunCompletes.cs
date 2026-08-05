@@ -54,7 +54,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model.Events.TestLoaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
             FireRunFinishedEvent(new ResultNode("<test-run id='1' result='Passed' />"));
 
-            _view.Received().SetImageIndex(Arg.Compat.Any<TreeNode>(), expectedIndex, false);
+            _view.Received().SetImageIndex(Arg.Any<TreeNode>(), expectedIndex, false);
         }
     }
 }
