@@ -126,8 +126,9 @@ namespace TestCentric.Gui.Presenters
             {
                 int imageIndex = CalcImageIndex(result);
 
+                bool updateParentNodes = this.StrategyID == "TEST_LIST";
                 foreach (TreeNode treeNode in GetTreeNodesForTest(result))
-                    _view.SetImageIndex(treeNode, imageIndex, true);
+                    _view.SetImageIndex(treeNode, imageIndex, updateParentNodes);
             });
         }
 

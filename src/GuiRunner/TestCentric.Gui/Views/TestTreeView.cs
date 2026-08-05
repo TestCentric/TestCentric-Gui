@@ -326,6 +326,10 @@ namespace TestCentric.Gui.Views
 
         public void SetImageIndex(TreeNode treeNode, int imageIndex, bool applyToParents = false) 
         {
+            // If imageIndex is already applied, avoid any flickering or performance delays
+            if (imageIndex == treeNode.ImageIndex && imageIndex == treeNode.SelectedImageIndex)
+                return;
+
             InvokeIfRequired(() => treeNode.ImageIndex = treeNode.SelectedImageIndex = imageIndex);
 
             if (applyToParents)
