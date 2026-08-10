@@ -124,13 +124,13 @@ namespace TestCentric.Gui.Presenters
         {
             // 1. Arrange
             TestNode testNode = new TestNode(
-                "<test-suite type='TestSuite'> " +
-                    "<test-suite type='TestFixture' id='2-1000'> " +
-                        "<test-case id='2-1001' />" +
+                "<test-suite type='TestSuite' id='0' name='TestSuite'> " +
+                    "<test-suite type='TestFixture' id='2-1000'  name='FixtureA'> " +
+                        "<test-case id='2-1001'  name='testA'/>" +
                     "</test-suite>" +
-                    "<test-suite type='TestFixture' id='3-1000'> " +
-                        "<test-case id='3-1001' />" +
-                        "<test-case id='3-1002' />" +
+                    "<test-suite type='TestFixture' id='3-1000'  name='FixtureB'> " +
+                        "<test-case id='3-1001' name='testB'/>" +
+                        "<test-case id='3-1002' name='testC'/>" +
                     "</test-suite>" +
             "</test-suite>");
 
@@ -158,7 +158,7 @@ namespace TestCentric.Gui.Presenters
         public void TestGroupNode_WithoutResult_ReturnsExpectedCount()
         {
             // 1. Arrange
-            TestNode testNode = new TestNode("<test-case id='1' />");
+            TestNode testNode = new TestNode("<test-case id='1' name='TestA'/>");
             TestGroup testGroup = new TestGroup("TestGroup");
             testGroup.TestNodes.Add(testNode);
             ITestModel model = Substitute.For<ITestModel>();

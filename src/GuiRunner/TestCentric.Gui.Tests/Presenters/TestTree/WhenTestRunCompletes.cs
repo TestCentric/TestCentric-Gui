@@ -38,7 +38,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         [TestCaseSource(nameof(resultData))]
         public void RunningIcons_AreUpdated_WhenTestRunFinishes(int runningIndex, int expectedIndex)
         {
-            var testNode = new TestNode("<test-run id='1'><test-suite id='100'><test-case id='200'/></test-suite></test-run>");
+            var testNode = new TestNode("<test-run id='1'><test-suite id='100' name='Fixture1' type='TestFixture'><test-case id='200' name='TestA'/></test-suite></test-run>");
 
             // Make it look like the view loaded
             _view.Load += Raise.Event<System.EventHandler>(_view, new System.EventArgs());

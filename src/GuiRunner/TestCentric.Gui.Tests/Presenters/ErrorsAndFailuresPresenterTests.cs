@@ -16,7 +16,7 @@ namespace TestCentric.Gui.Presenters
 
     public class ErrorsAndFailuresPresenterTests : PresenterTestBase<IErrorsAndFailuresView>
     {
-        private static readonly TestNode FAKE_TEST_RUN = new TestNode("<test-suite id='1' testcasecount='1234' />");
+        private static readonly TestNode FAKE_TEST_RUN = new TestNode("<test-suite id='1' testcasecount='1234' name='TestRun'/>");
         ITestResultSubViewPresenter _testResultPresenter;
 
         [SetUp]
@@ -67,6 +67,9 @@ namespace TestCentric.Gui.Presenters
         [TestCase("Inconclusive", FailureSite.Test, false)]
         public void WhenTestCaseFinishes_FailuresAndErrorsAreDisplayed(string resultState, FailureSite site, bool shouldDisplay)
         {
+            var testNode = new TestNode("<test-case id='0' name='MyTest' />");
+            _model.Events.SelectedItemChanged += Raise.Event<TestItemEventHandler>(new TestItemEventArgs(testNode));
+
             FireTestFinishedEvent("MyTest", resultState, site);
 
             VerifyDisplay(shouldDisplay);
@@ -91,6 +94,9 @@ namespace TestCentric.Gui.Presenters
         [TestCase("Inconclusive", FailureSite.Test, false)]
         public void WhenTestSuiteFinishes_FailuresAndErrorsAreDisplayed(string resultState, FailureSite site, bool shouldDisplay)
         {
+            var testNode = new TestNode("<test-case id='0' name='MyTest'  />");
+            _model.Events.SelectedItemChanged += Raise.Event<TestItemEventHandler>(new TestItemEventArgs(testNode));
+
             FireSuiteFinishedEvent("MyTest", resultState, site, 1);
 
             VerifyDisplay(shouldDisplay);
@@ -100,6 +106,9 @@ namespace TestCentric.Gui.Presenters
         [TestCase(2, false)]
         public void WhenTestSuiteFinishes_WithFailures_TestCount_FailuresAndErrorsAreDisplayed(int testCount, bool shouldDisplay)
         {
+            var testNode = new TestNode("<test-case id='0' name='MyTest'  />");
+            _model.Events.SelectedItemChanged += Raise.Event<TestItemEventHandler>(new TestItemEventArgs(testNode));
+
             FireSuiteFinishedEvent("MyTest", "Failed", FailureSite.Test, testCount);
 
             VerifyDisplay(shouldDisplay);
@@ -229,7 +238,7 @@ namespace TestCentric.Gui.Presenters
         public void WhenSelectedItemChanged_ToTestNode_TestResultSubView_IsUpdated()
         {
             TestNode testItem = FAKE_TEST_RUN;
-            var resultNode = new ResultNode($"<test-case id='1'/>");
+            var resultNode = new ResultNode($"<test-case id='1' name='TestA'/>");
             _model.TestResultManager.GetResultForTest("1").Returns(resultNode);
 
             _model.Events.SelectedItemChanged += Raise.Event<TestItemEventHandler>(new TestItemEventArgs(testItem));
@@ -274,7 +283,10 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestCaseFinishes_TestContainsOutput_OutputView_IsVisible()
         {
-            var resultNode = new ResultNode($"<test-case id='1'> <output>Hello world</output> </test-case>");
+            var testNode = new TestNode($"<test-case id='1' name='1'>  </test-case>");
+            _model.Events.SelectedItemChanged += Raise.Event<TestItemEventHandler>(new TestItemEventArgs(testNode));
+
+            var resultNode = new ResultNode($"<test-case id='1' name='1'> <output>Hello world</output> </test-case>");
             FireTestFinishedEvent(resultNode);
 
             _view.TestOutputSubView.Received().SetVisibility(true);
@@ -283,7 +295,10 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestCaseFinishes_TestContainsNoOutput_OutputView_IsHidden()
         {
-            var resultNode = new ResultNode($"<test-case id='1'>  </test-case>");
+            var testNode = new TestNode($"<test-case id='1' name='1'>  </test-case>");
+            _model.Events.SelectedItemChanged += Raise.Event<TestItemEventHandler>(new TestItemEventArgs(testNode));
+
+            var resultNode = new ResultNode(testNode.Xml);
             FireTestFinishedEvent(resultNode);
 
             _view.TestOutputSubView.Received().SetVisibility(false);
@@ -292,7 +307,10 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestCaseFinishes_TestContainsOutput_OutputView_ShowsOutput()
         {
-            var resultNode = new ResultNode($"<test-case id='1'> <output>Hello world</output> </test-case>");
+            var testNode = new TestNode($"<test-case id='1' name='1'>  </test-case>");
+            _model.Events.SelectedItemChanged += Raise.Event<TestItemEventHandler>(new TestItemEventArgs(testNode));
+
+            var resultNode = new ResultNode($"<test-case id='1' name='1'> <output>Hello world</output> </test-case>");
             FireTestFinishedEvent(resultNode);
 
             _view.TestOutputSubView.Received().Output = "Hello world";

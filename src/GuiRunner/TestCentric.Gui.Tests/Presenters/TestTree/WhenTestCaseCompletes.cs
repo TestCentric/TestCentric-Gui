@@ -42,10 +42,10 @@ namespace TestCentric.Gui.Presenters.TestTree
             var result = resultState.Status.ToString();
             var label = resultState.Label;
 
-            var testNode = new TestNode("<test-run id='1'><test-case id='123'/></test-run>");
+            var testNode = new TestNode("<test-run id='1'><test-case id='123' name='TestA'/></test-run>");
             var resultNode = new ResultNode(string.IsNullOrEmpty(label)
-                ? string.Format($"<test-case id='123' result='{result}'/>")
-                : string.Format($"<test-case id='123' result='{result}' label='{label}'/>"));
+                ? string.Format($"<test-case id='123' name='TestA' result='{result}'/>")
+                : string.Format($"<test-case id='123' name='TestA' result='{result}' label='{label}'/>"));
 
             _model.GetTestById("123").Returns(testNode.Children.First());
             _model.TestResultManager.GetResultForTest("123").Returns(resultNode);

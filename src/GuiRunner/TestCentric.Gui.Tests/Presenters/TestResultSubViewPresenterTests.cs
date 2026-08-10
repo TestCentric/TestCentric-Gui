@@ -56,7 +56,7 @@ namespace TestCentric.Gui.Presenters
             ITestResultSubView view = Substitute.For<ITestResultSubView>();
             ITestModel model = Substitute.For<ITestModel>();
 
-            TestNode testNode = new TestNode("<test-suite id='1' />");
+            TestNode testNode = new TestNode("<test-suite id='1' type='TestFixture' name='FixtureA'/>");
 
             // 2. Act
             TestResultSubViewPresenter presenter = new TestResultSubViewPresenter(view, model);

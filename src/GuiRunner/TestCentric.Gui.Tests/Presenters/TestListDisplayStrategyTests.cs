@@ -164,7 +164,7 @@ namespace TestCentric.Gui.Presenters
 
             TestNode testNode = new TestNode(
                 "<test-suite type='TestFixture'> " +
-                    "<test-case  id='3-1000'> " +
+                    "<test-case  id='3-1000' name='testA'> " +
                         "<properties> " +
                             "<property name='Category' value='Category_1' /> " +
                             "<property name='Category' value='Category_2' /> " +
@@ -286,7 +286,7 @@ namespace TestCentric.Gui.Presenters
 
         private string CreateTestcaseXml(string testId, string category)
         {
-            string str = $"<test-case id='{testId}'> ";
+            string str = $"<test-case id='{testId}' name='{testId}' > ";
             if (!string.IsNullOrEmpty(category))
                 str += $"<properties> <property name='Category' value='{category}' /> </properties> ";
 

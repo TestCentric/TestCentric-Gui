@@ -187,11 +187,11 @@ namespace TestCentric.Gui.Presenters
             {
                 string status = result.Substring(0, colon);
                 string label = result.Substring(colon + 1);
-                xml = $"<{element} fullname='{testName}' result='{status}' label='{label}'/>";
+                xml = $"<{element} id='0' name='{testName}' fullname='{testName}' result='{status}' label='{label}'/>";
             }
             else
             {
-                xml = $"<{element} fullname='{testName}' result='{result}'/>";
+                xml = $"<{element} id='0' name='{testName}' fullname='{testName}' result='{result}'/>";
             }
 
             var xmlNode = XmlHelper.CreateXmlNode(xml);
