@@ -151,8 +151,9 @@ namespace TestCentric.Gui.Model
             {
                 if (!result.IsSuite && result.Outcome.Status == TestStatus.Failed)
                 {
-                    TestNode testNode = Model.GetTestById(result.Id);
-                    failedTests.Add(testNode);
+                    TestNode? testNode = Model.GetTestById(result.Id);
+                    if (testNode != null)
+                        failedTests.Add(testNode);
                 }
             }
 
@@ -163,7 +164,7 @@ namespace TestCentric.Gui.Model
         {
             var results = new List<ResultNode>();
 
-            TestNode node = Model.GetTestById(resultNode.Id);
+            TestNode? node = Model.GetTestById(resultNode.Id);
             if (node == null)
                 return results;
 

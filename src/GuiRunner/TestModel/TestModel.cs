@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -41,7 +42,7 @@ namespace TestCentric.Gui.Model
 
         #region Constructor and Creation
 
-        public TestModel(ITestEngine testEngine, GuiOptions options = null)
+        public TestModel(ITestEngine testEngine, GuiOptions? options = null)
         {
             TestEngine = testEngine;
             Options = options ?? new GuiOptions();
@@ -56,6 +57,8 @@ namespace TestCentric.Gui.Model
             TestCentricRunner = new TestCentricRunner(this, testEngine, _events);
             TestCentricTestFilter = new TestCentricTestFilter(this, () => _events.FireTestFilterChanged());
             TestResultManager = new TestResultManager(this);
+            AvailableCategories = new List<string>();
+            SelectedCategories = new List<string>();
 
             _extensionService = Services.GetService<IExtensionService>();
             _extensionService.InstallExtensions();          
@@ -78,7 +81,7 @@ namespace TestCentric.Gui.Model
         }
 
         // Public for testing
-        public static ITestModel CreateTestModel(ITestEngine testEngine, GuiOptions options = null)
+        public static ITestModel CreateTestModel(ITestEngine testEngine, GuiOptions? options = null)
         {
             if (options is null)
                 options = new GuiOptions();
@@ -136,7 +139,7 @@ namespace TestCentric.Gui.Model
         public List<string> KnownProjectExtensions { get; } = new List<string>();
 
         // Runtime Support
-        private List<NUnit.Engine.IRuntimeFramework> _runtimes;
+        private List<NUnit.Engine.IRuntimeFramework>? _runtimes;
         public IList<NUnit.Engine.IRuntimeFramework> AvailableRuntimes
         {
             get
@@ -149,7 +152,7 @@ namespace TestCentric.Gui.Model
         }
 
         // Result Format Support
-        private List<string> _resultFormats;
+        private List<string>? _resultFormats;
         public IEnumerable<string> ResultFormats
         {
             get
@@ -170,13 +173,19 @@ namespace TestCentric.Gui.Model
         /// <summary>
         /// The current TestProject
         /// </summary>
-        public TestCentricProject TestCentricProject { get; set; }
+        public TestCentricProject? TestCentricProject { get; set; }
 
-        public TestPackage TopLevelPackage => TestCentricProject?.TopLevelPackage;
+        public TestPackage? TopLevelPackage => TestCentricProject?.TopLevelPackage;
 
+        [MemberNotNullWhen(true, nameof(TestCentricProject))]
+        [MemberNotNullWhen(true, nameof(TopLevelPackage))]
         public bool IsProjectLoaded => TestCentricProject != null;
 
         public TestNode? LoadedTests { get; private set; }
+
+        [MemberNotNullWhen(true, nameof(TestCentricProject))]
+        [MemberNotNullWhen(true, nameof(TopLevelPackage))]
+        [MemberNotNullWhen(true, nameof(LoadedTests))]
         public bool HasTests => LoadedTests != null;
 
         public IList<string> AvailableCategories { get; private set; }
@@ -185,19 +194,26 @@ namespace TestCentric.Gui.Model
 
         public ITestResultManager TestResultManager { get; }
 
-        public ResultSummary ResultSummary { get; internal set; }
+        public ResultSummary? ResultSummary { get; internal set; }
+
+        [MemberNotNullWhen(true, nameof(ResultSummary))]
         public bool HasResults => ResultSummary != null;
 
         /// <summary>
         /// Gets or sets the active test item. This is the item
         /// for which details are displayed in the various views.
         /// </summary>
-        public ITestItem ActiveTestItem
+        public ITestItem? ActiveTestItem
         {
             get { return _activeItem; }
-            set { _activeItem = value; _events.FireActiveItemChanged(_activeItem); }
+            set 
+            { 
+                Guard.OperationValid(value != null, "Cannot set ActiveTestItem to null");
+                _activeItem = value; 
+                _events.FireActiveItemChanged(_activeItem); 
+            }
         }
-        private ITestItem _activeItem;
+        private ITestItem? _activeItem;
 
         /// <summary>
         ///  Gets or sets the list of selected tests.
@@ -207,7 +223,7 @@ namespace TestCentric.Gui.Model
             get {  return _selectedTests; }
             set { _selectedTests = value; _events?.FireSelectedTestsChanged(_selectedTests); }
         }
-        private TestSelection _selectedTests;
+        private TestSelection _selectedTests = new TestSelection();
 
         public List<string> SelectedCategories { get; private set; }
 
@@ -233,20 +249,20 @@ namespace TestCentric.Gui.Model
 
             // A possibly empty filter to be applied to the selected tests.
             // NOTE: Currently, filter is always empty
-            public TestFilter CategoryFilter { get; }
+            public TestFilter? CategoryFilter { get; }
 
             public bool DebuggingRequested { get; }
 
             public bool IsEmpty => SelectedTests.Count() == 0;
 
-            public TestRunSpecification(TestSelection selectedTests, TestFilter filter, bool debuggingRequested)
+            public TestRunSpecification(TestSelection selectedTests, TestFilter? filter, bool debuggingRequested)
             {
                 SelectedTests = selectedTests;
                 CategoryFilter = filter;
                 DebuggingRequested = debuggingRequested;
             }
 
-            public TestRunSpecification(TestNode testNode, TestFilter filter, bool debuggingRequested)
+            public TestRunSpecification(TestNode testNode, TestFilter? filter, bool debuggingRequested)
             {
                 SelectedTests = new TestSelection { testNode };
                 CategoryFilter = filter;
@@ -359,7 +375,7 @@ namespace TestCentric.Gui.Model
                 : CreateNewProject(wrapperProjectPath, options);
         }
 
-        private HashSet<string>_knownTestFileExtensions;
+        private HashSet<string>?_knownTestFileExtensions;
         private HashSet<string> KnownTestFileExtensions
         {
             get
@@ -400,7 +416,7 @@ namespace TestCentric.Gui.Model
 
         public void RemoveTestPackage(NUnit.Engine.TestPackage subPackage)
         {
-            if (!IsProjectLoaded || IsTestRunning || subPackage == null || TopLevelPackage.SubPackages.Count <= 1)
+            if (!IsProjectLoaded || IsTestRunning || subPackage == null || TopLevelPackage?.SubPackages.Count <= 1)
                 return;
 
             TestCentricProject.RemoveSubPackage(subPackage);
@@ -409,7 +425,7 @@ namespace TestCentric.Gui.Model
             _events.FireTestCentricProjectLoaded();
         }
 
-        public TestCentricProject OpenExistingProject(string projectPath, GuiOptions options=null)
+        public TestCentricProject OpenExistingProject(string projectPath, GuiOptions? options=null)
         {
             if (IsProjectLoaded)
                 CloseProject();
@@ -486,8 +502,9 @@ namespace TestCentric.Gui.Model
             }
         }
 
-        public void SaveProject(string filename = null)
+        public void SaveProject(string? filename = null)
         {
+            Guard.OperationValid(IsProjectLoaded, "Cannot save project");
             Guard.OperationValid(filename is not null || TestCentricProject.ProjectPath is not null,
                 "Cannot save a previously unsaved project without providing a file name.");
 
@@ -515,6 +532,7 @@ namespace TestCentric.Gui.Model
 
         public void LoadTests(IList<string> files)
         {
+            Guard.OperationValid(IsProjectLoaded, "No project created");
             log.Info($"Loading test files '{string.Join("', '", files.ToArray())}'");
             if (IsProjectLoaded && LoadedTests != null)
                 UnloadTests();
@@ -573,7 +591,7 @@ namespace TestCentric.Gui.Model
         private void MapTestsToPackages()
         {
             _packageMap.Clear();
-            MapTestToPackage(LoadedTests!, TopLevelPackage);
+            MapTestToPackage(LoadedTests!, TopLevelPackage!);
         }
 
         private void MapTestToPackage(TestNode test, NUnit.Engine.TestPackage package)
@@ -584,7 +602,7 @@ namespace TestCentric.Gui.Model
                 MapTestToPackage(test.Children[index], package.SubPackages[index]);
         }
 
-        public IList<string> GetAgentsForPackage(NUnit.Engine.TestPackage package = null)
+        public IList<string> GetAgentsForPackage(NUnit.Engine.TestPackage? package = null)
         {
             if (package == null)
                 package = TopLevelPackage;
@@ -603,7 +621,7 @@ namespace TestCentric.Gui.Model
 
             TestCentricTestFilter.ResetAll(true);
             LoadedTests = null;
-            AvailableCategories = null;
+            AvailableCategories = new List<string>();
             ClearResults();
             _assemblyWatcher.Stop();
 
@@ -612,7 +630,7 @@ namespace TestCentric.Gui.Model
 
         public void ReloadTests()
         {
-            Guard.OperationValid(LoadedTests != null, "No tests have been loaded");
+            Guard.OperationValid(HasTests, "No tests have been loaded");
 
             _events.FireTestsReloading();
 
@@ -725,7 +743,7 @@ namespace TestCentric.Gui.Model
             resultWriter?.WriteResultFile(results.Xml, targetFile);
         }
 
-        public TestNode GetTestById(string id)
+        public TestNode? GetTestById(string id)
         {
             return _testsById.TryGetValue(id, out var node) ? node : null;
         }
@@ -740,12 +758,12 @@ namespace TestCentric.Gui.Model
             return _lastTestRun.ContainTest(testNode);
         }
 
-        public NUnit.Engine.PackageSettings GetPackageSettingsForTest(string id)
+        public NUnit.Engine.PackageSettings? GetPackageSettingsForTest(string id)
         {
             return GetPackageForTest(id)?.Settings;
         }
 
-        public NUnit.Engine.TestPackage GetPackageForTest(string id)
+        public NUnit.Engine.TestPackage? GetPackageForTest(string id)
         {
             return _packageMap.ContainsKey(id) 
                 ? _packageMap[id] 
@@ -863,10 +881,9 @@ namespace TestCentric.Gui.Model
         private void RunTests(TestRunSpecification runSpec)
         {
             log.Debug("RunningTests");
-            if (runSpec == null)
-                throw new ArgumentNullException(nameof(runSpec));
-            if (_lastTestRun == null)
-                throw new InvalidOperationException("Field '_lastTestRun' is null");
+            Guard.ArgumentNotNull(runSpec, nameof(runSpec));
+            Guard.OperationValid(_lastTestRun != null, "Field '_lastTestRun' is null");
+            Guard.OperationValid(HasTests, "No tests loaded to run");
 
             // Create a test filter incorporating the selected tests, the tree grouping
             // and the UI tree filter (category, outcome or duration)
