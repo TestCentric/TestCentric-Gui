@@ -18,7 +18,7 @@ namespace TestCentric.Gui.Model
         public static bool IsProjectFile(string path) => Path.GetExtension(path).ToLower() == ".tcproj";
 
         public string ProjectPath { get; internal set; }
-        internal string OriginalProjectPath { get; set; }
+        internal string? OriginalProjectPath { get; set; }
 
         public TestPackage TopLevelPackage { get; private set; }
 
@@ -54,14 +54,14 @@ namespace TestCentric.Gui.Model
             TopLevelPackage = MakeTestPackage(options);
         }
 
-        public static TestCentricProject LoadFrom(string path, GuiOptions options=null)
+        public static TestCentricProject LoadFrom(string path, GuiOptions? options=null)
         {
             var project = new TestCentricProject();
             project.Load(path);
 
             var workDir = options?.WorkDirectory;
             if (workDir != null)
-                project.ApplySetting(SettingDefinitions.WorkDirectory.WithValue(options.WorkDirectory));
+                project.ApplySetting(SettingDefinitions.WorkDirectory.WithValue(workDir));
 
             return project;
         }
@@ -112,6 +112,7 @@ namespace TestCentric.Gui.Model
         {
             TestFiles = [];
             TopLevelPackage = new TestPackage();
+            ProjectPath = null!;
         }
 
         private void Load(string path)
@@ -155,7 +156,8 @@ namespace TestCentric.Gui.Model
                     if (ProjectPath != OriginalProjectPath && !File.Exists(subPackage.FullName))
                     {
                         // Test file may have been moved as well
-                        var relPath = PathUtils.RelativePath(OriginalProjectPath, subPackage.FullName);
+                        string fullName = subPackage.FullName.ShouldNotBeNull("Subpackage fullname");
+                        var relPath = PathUtils.RelativePath(OriginalProjectPath, fullName);
                         if (relPath is not null)
                         {
                             var newFile = Path.Combine(ProjectPath, relPath);
@@ -165,7 +167,8 @@ namespace TestCentric.Gui.Model
                     }
 
                     // Add to TestFiles whether it exists or not
-                    TestFiles.Add(subPackage.FullName);
+                    string subPackageFullName = subPackage.FullName.ShouldNotBeNull("Subpackage fullname");
+                    TestFiles.Add(subPackageFullName);
                 }
 
                 bool FindTestCentricProjectElement()
@@ -217,7 +220,8 @@ namespace TestCentric.Gui.Model
             if (subPackage != null)
             {
                 TopLevelPackage.SubPackages.Remove(subPackage);
-                TestFiles.Remove(subPackage.FullName);
+                string subPackageFullName = subPackage.FullName.ShouldNotBeNull("Subpackage fullname");
+                TestFiles.Remove(subPackageFullName);
             }
         }
 
@@ -310,7 +314,7 @@ namespace TestCentric.Gui.Model
             {
                 string name = xmlReader.Name;
                 string value = xmlReader.Value;
-                SettingDefinition settingDefinition = SettingDefinitions.Lookup(name);
+                SettingDefinition? settingDefinition = SettingDefinitions.Lookup(name);
                 bool result2;
                 int result3;
                 if (settingDefinition != null)
