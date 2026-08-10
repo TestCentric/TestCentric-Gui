@@ -257,6 +257,8 @@ namespace TestCentric.Gui.Model
 
         private void InitializeProjectDictionary()
         {
+            Guard.OperationValid(_model.LoadedTests != null, "No tests have been loaded");
+
             // Initialize Dictionary to look up projects to which assemblies belong
             _projectLookup = new Dictionary<string, ProjectInfo>();
 

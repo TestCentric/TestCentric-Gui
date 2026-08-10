@@ -7,6 +7,7 @@ namespace TestCentric.Gui.Model
 {
     using System.Collections.Generic;
     using System.Linq;
+    using NUnit;
 
     public interface ITestResultManager
     {
@@ -106,6 +107,8 @@ namespace TestCentric.Gui.Model
         /// <inheritdoc />
         public void ReloadTestResults()
         {
+            Guard.OperationValid(Model.LoadedTests != null, "No tests have been loaded");
+
             // Get all existing test results
             List<ResultNode> oldResults = Results.Values.ToList();
             ClearResults();

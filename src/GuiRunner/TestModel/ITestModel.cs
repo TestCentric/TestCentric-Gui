@@ -54,7 +54,7 @@ namespace TestCentric.Gui.Model
         bool IsProjectLoaded { get; }
 
         // TestNode hierarchy representing the discovered tests
-        TestNode LoadedTests { get; }
+        TestNode? LoadedTests { get; }
 
         // See if tests are available
         bool HasTests { get; }

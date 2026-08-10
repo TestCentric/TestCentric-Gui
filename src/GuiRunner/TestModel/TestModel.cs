@@ -176,7 +176,7 @@ namespace TestCentric.Gui.Model
 
         public bool IsProjectLoaded => TestCentricProject != null;
 
-        public TestNode LoadedTests { get; private set; }
+        public TestNode? LoadedTests { get; private set; }
         public bool HasTests => LoadedTests != null;
 
         public IList<string> AvailableCategories { get; private set; }
@@ -557,7 +557,7 @@ namespace TestCentric.Gui.Model
         private void BuildTestIndex()
         {
             _testsById.Clear();
-            BuildTestIndex(LoadedTests);
+            BuildTestIndex(LoadedTests!);
         }
 
         private void BuildTestIndex(TestNode node)
@@ -573,7 +573,7 @@ namespace TestCentric.Gui.Model
         private void MapTestsToPackages()
         {
             _packageMap.Clear();
-            MapTestToPackage(LoadedTests, TopLevelPackage);
+            MapTestToPackage(LoadedTests!, TopLevelPackage);
         }
 
         private void MapTestToPackage(TestNode test, NUnit.Engine.TestPackage package)
@@ -612,6 +612,8 @@ namespace TestCentric.Gui.Model
 
         public void ReloadTests()
         {
+            Guard.OperationValid(LoadedTests != null, "No tests have been loaded");
+
             _events.FireTestsReloading();
 
             TestEngine.GetRunner(TopLevelPackage).Reload();
@@ -698,6 +700,8 @@ namespace TestCentric.Gui.Model
         // Called by the presenter when user clicks "Save Results As".
         public void SaveResults(string filePath, string format = "nunit3")
         {
+            Guard.OperationValid(LoadedTests != null, "No tests have been loaded");
+
             log.Debug($"Saving test results to {filePath} in {format} format");
 
             try
@@ -714,6 +718,8 @@ namespace TestCentric.Gui.Model
 
         public void TransformResults(string targetFile, string xsltFile)
         {
+            Guard.OperationValid(LoadedTests != null, "No tests have been loaded");
+
             var resultWriter = Services.GetService<IResultService>().GetResultWriter("user", [xsltFile]);
             var results = TestResultManager.GetResultForTest(LoadedTests.Id);
             resultWriter?.WriteResultFile(results.Xml, targetFile);
@@ -879,7 +885,8 @@ namespace TestCentric.Gui.Model
         public IList<string> GetAvailableCategories()
         {
             var categories = new Dictionary<string, string>();
-            CollectCategories(LoadedTests, categories);
+            if (LoadedTests != null)
+                CollectCategories(LoadedTests, categories);
 
             var list = new List<string>(categories.Values);
             list.Sort();
