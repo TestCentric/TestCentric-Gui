@@ -35,7 +35,7 @@ namespace TestCentric.Gui.Model
         /// <summary>
         /// overall result of the test run as returned by the engine
         /// </summary>
-        public string OverallResult { get; set; }
+        public string? OverallResult { get; set; }
 
         /// <summary>
         /// Total time in fractional seconds how long the test run lasted as returned by the engine

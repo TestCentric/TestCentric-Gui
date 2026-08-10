@@ -36,8 +36,6 @@ namespace TestCentric.Gui.Model.Filter
 
         private TestSelection SelectedTests { get; }
 
-        public Func<IEnumerable<TestNode>> AllTestCaseProvider { get; set; }
-
         private bool EmptyCategorySelected { get; set; }
 
 
@@ -123,10 +121,6 @@ namespace TestCentric.Gui.Model.Filter
         private IList<TestNode> GetAllTestcaseNodes()
         {
             IList<TestNode> result = new List<TestNode>();
-
-            // Use registered callback (if) to get all test cases
-            if (AllTestCaseProvider != null)
-                return AllTestCaseProvider().ToList();
 
             var selection = SelectedTests.ToList();
             foreach (TestNode testNode in selection)

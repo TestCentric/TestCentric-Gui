@@ -27,7 +27,7 @@ namespace TestCentric.Gui.Model.Settings
     {
         private IDictionary<ApplicationSettingsBase, string> _settingGroups;
 
-        public event SettingsEventHandler Changed;
+        public event SettingsEventHandler? Changed;
 
         public UserSettings()
         {

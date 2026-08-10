@@ -35,6 +35,7 @@ namespace TestCentric.Gui.Model
         public TestEventDispatcher(TestModel model)
         {
             _model = model;
+            _projectLookup = new Dictionary<string, ProjectInfo>();
         }
 
         #region Public Methods to Fire Events
@@ -129,41 +130,41 @@ namespace TestCentric.Gui.Model
         #region ITestEvents Implementation
 
         // TestCentricProject loading events
-        public event TestEventHandler TestCentricProjectLoaded;
-        public event TestEventHandler TestCentricProjectUnloaded;
+        public event TestEventHandler? TestCentricProjectLoaded;
+        public event TestEventHandler? TestCentricProjectUnloaded;
 
         // Test loading events
-        public event TestFilesLoadingEventHandler TestsLoading;
-        public event TestEventHandler TestsReloading;
-        public event TestEventHandler TestsUnloading;
-        public event TestEventHandler TestChanged;
+        public event TestFilesLoadingEventHandler? TestsLoading;
+        public event TestEventHandler? TestsReloading;
+        public event TestEventHandler? TestsUnloading;
+        public event TestEventHandler? TestChanged;
 
-        public event TestNodeEventHandler TestLoaded;
-        public event TestNodeEventHandler TestReloaded;
-        public event TestEventHandler TestUnloaded;
+        public event TestNodeEventHandler? TestLoaded;
+        public event TestNodeEventHandler? TestReloaded;
+        public event TestEventHandler? TestUnloaded;
 
-        public event TestLoadFailureEventHandler TestLoadFailure;
+        public event TestLoadFailureEventHandler? TestLoadFailure;
 
         // Test running events
-        public event RunStartingEventHandler RunStarting;
-        public event TestResultEventHandler RunFinished;
+        public event RunStartingEventHandler? RunStarting;
+        public event TestResultEventHandler? RunFinished;
 
-        public event TestNodeEventHandler SuiteStarting;
-        public event TestResultEventHandler SuiteFinished;
+        public event TestNodeEventHandler? SuiteStarting;
+        public event TestResultEventHandler? SuiteFinished;
 
-        public event TestNodeEventHandler TestStarting;
-        public event TestResultEventHandler TestFinished;
+        public event TestNodeEventHandler? TestStarting;
+        public event TestResultEventHandler? TestFinished;
 
-        public event TestOutputEventHandler TestOutput;
+        public event TestOutputEventHandler? TestOutput;
 
-        public event UnhandledExceptionEventHandler UnhandledException;
+        public event UnhandledExceptionEventHandler? UnhandledException;
 
         // Test Selection Event
-        public event TestItemEventHandler SelectedItemChanged;
-        public event TestSelectionEventHandler SelectedTestsChanged;
+        public event TestItemEventHandler? SelectedItemChanged;
+        public event TestSelectionEventHandler? SelectedTestsChanged;
 
-        public event TestEventHandler CategorySelectionChanged;
-        public event TestEventHandler TestFilterChanged;
+        public event TestEventHandler? CategorySelectionChanged;
+        public event TestEventHandler? TestFilterChanged;
 
         #endregion
 
@@ -235,7 +236,7 @@ namespace TestCentric.Gui.Model
 
         #region Helper Methods
 
-        private void InvokeHandler(MulticastDelegate handlerList, EventArgs e)
+        private void InvokeHandler(MulticastDelegate? handlerList, EventArgs e)
         {
             if (handlerList == null)
                 return;
@@ -244,13 +245,13 @@ namespace TestCentric.Gui.Model
             foreach (Delegate handler in handlerList.GetInvocationList())
             {
                 object target = handler.Target;
-                System.Windows.Forms.Control control
+                System.Windows.Forms.Control? control
                     = target as System.Windows.Forms.Control;
 
                 if (control != null && control.InvokeRequired)
-                        control.Invoke(handler, args);
-                    else
-                        handler.Method.Invoke(target, args);
+                    control.Invoke(handler, args);
+                else
+                    handler.Method.Invoke(target, args);
             }
         }
 
@@ -274,7 +275,7 @@ namespace TestCentric.Gui.Model
                         _projectLookup.Add(child.GetAttribute("id"), projectInfo);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     log.Error("Unexpected exception", ex);
                 }

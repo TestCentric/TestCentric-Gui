@@ -33,7 +33,7 @@ namespace TestCentric.Gui.Model
     /// </summary>
     public class TreeConfiguration : ITreeConfiguration
     {
-        public event SettingsEventHandler Changed;
+        public event SettingsEventHandler? Changed;
 
         private string _displayFormat = "NUNIT_TREE";
         public string DisplayFormat

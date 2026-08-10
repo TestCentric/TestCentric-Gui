@@ -83,9 +83,9 @@ namespace TestCentric.Gui.Model
         public int TestCount => IsSuite ? GetAttribute("testcasecount", 0) : 1;
         public RunState RunState => GetRunState();
 
-        public TestNode Parent { get; private set; }
+        public TestNode? Parent { get; private set; }
 
-        private List<TestNode> _children;
+        private List<TestNode>? _children;
         public IList<TestNode> Children
         {
             get
@@ -116,7 +116,7 @@ namespace TestCentric.Gui.Model
             return Xml.GetAttribute(name, defaultValue);
         }
 
-        public string GetProperty(string name)
+        public string? GetProperty(string name)
         {
             var propNode = Xml.SelectSingleNode("properties/property[@name='" + name + "']");
 

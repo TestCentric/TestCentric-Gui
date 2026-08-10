@@ -23,7 +23,7 @@ namespace TestCentric.Gui.Model
         }
 
         public string Status { get; }
-        public string Message { get; }
-        public string StackTrace { get; }
+        public string? Message { get; }
+        public string? StackTrace { get; }
     }
 }

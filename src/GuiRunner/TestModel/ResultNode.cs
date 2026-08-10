@@ -79,7 +79,7 @@ namespace TestCentric.Gui.Model
         /// </summary>
         public bool IsLatestRun { get; set; }
 
-        public string Message
+        public string? Message
         {
             get
             {
@@ -88,17 +88,17 @@ namespace TestCentric.Gui.Model
             }
         }
 
-        public string StackTrace
+        public string? StackTrace
         {
             get { return GetTrimmedInnerText(Xml.SelectSingleNode("failure/stack-trace")); }
         }
 
-        public string Output
+        public string? Output
         {
             get { return GetTrimmedInnerText(Xml.SelectSingleNode("output")); }
         }
 
-        private List<AssertionResult> _assertions;
+        private List<AssertionResult>? _assertions;
         public List<AssertionResult> Assertions
         {
             get
@@ -176,7 +176,7 @@ namespace TestCentric.Gui.Model
 
         private static readonly char[] EOL_CHARS = new char[] { '\r', '\n' };
 
-        private static string GetTrimmedInnerText(XmlNode node)
+        private static string? GetTrimmedInnerText(XmlNode node)
         {
             // In order to control the format, we trim any line-end chars
             // from end of the strings we write and supply them via calls
