@@ -6,6 +6,7 @@
 namespace TestCentric.Gui.Model
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using NUnit;
 
@@ -14,7 +15,7 @@ namespace TestCentric.Gui.Model
         /// <summary>
         /// Get result by a test ID
         /// </summary>
-        ResultNode GetResultForTest(string id);
+        ResultNode? GetResultForTest(string id);
 
         /// <summary>
         /// Add one test result
@@ -64,7 +65,7 @@ namespace TestCentric.Gui.Model
         private ITestModel Model { get; }
 
         /// <inheritdoc />
-        public ResultNode GetResultForTest(string id)
+        public ResultNode? GetResultForTest(string id)
         {
             if (string.IsNullOrEmpty(id))
                 return null;
@@ -81,7 +82,7 @@ namespace TestCentric.Gui.Model
                 if (resultNode.Outcome.Equals(ResultState.Explicit))
                     return oldResult;
 
-                if (resultNode.IsSuite && UpdateResultFromPreviousTestRun(resultNode, out ResultState newTestResult))
+                if (resultNode.IsSuite && UpdateResultFromPreviousTestRun(resultNode, out ResultState? newTestResult))
                     resultNode = ResultNode.Create(resultNode.Xml, newTestResult);
             }
 
@@ -116,7 +117,7 @@ namespace TestCentric.Gui.Model
             // Search for TestFullName of all old results in new TestNodes
             foreach (ResultNode oldResult in oldResults)
             {
-                TestNode testNode = TryGetTestNode(Model.LoadedTests, oldResult.FullName);
+                TestNode? testNode = TryGetTestNode(Model.LoadedTests, oldResult.FullName);
                 if (testNode != null)
                 {
                     // Test for result still exists: Create new result by keeping result content, but use current test ID
@@ -126,14 +127,14 @@ namespace TestCentric.Gui.Model
             }
         }
 
-        private TestNode TryGetTestNode(TestNode testNode, string fullName)
+        private TestNode? TryGetTestNode(TestNode testNode, string fullName)
         {
             if (testNode.FullName == fullName)
                 return testNode;
 
             foreach (TestNode childNode in testNode.Children)
             {
-                TestNode foundNode = TryGetTestNode(childNode, fullName);
+                TestNode? foundNode = TryGetTestNode(childNode, fullName);
                 if (foundNode != null)
                     return foundNode;
             }
@@ -168,7 +169,7 @@ namespace TestCentric.Gui.Model
 
             foreach (TestNode child in node.Children)
             {
-                ResultNode childResult = GetResultForTest(child.Id);
+                ResultNode? childResult = GetResultForTest(child.Id);
                 if (childResult != null)
                     results.Add(childResult);
             }
@@ -180,7 +181,7 @@ namespace TestCentric.Gui.Model
         /// If a TestNode was not executed entirely in the current test run
         /// Some child TestNodes might contain contracting TestResults from a previous test run
         /// </summary>
-        private bool UpdateResultFromPreviousTestRun(ResultNode testResult, out ResultState newResultState)
+        private bool UpdateResultFromPreviousTestRun(ResultNode testResult, [NotNullWhen(true)] out ResultState? newResultState)
         {
             newResultState = null;
             IList<ResultNode> childResults = GetChildTestResults(testResult);

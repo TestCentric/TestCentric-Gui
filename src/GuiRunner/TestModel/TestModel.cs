@@ -707,7 +707,7 @@ namespace TestCentric.Gui.Model
             try
             {
                 var resultWriter = Services.GetService<IResultService>().GetResultWriter(format, []);
-                var results = TestResultManager.GetResultForTest(LoadedTests.Id);
+                var results = TestResultManager.GetResultForTest(LoadedTests.Id).ShouldNotBeNull("No test result exists");
                 resultWriter.WriteResultFile(results.Xml, Path.Combine(WorkDirectory, filePath));
             }
             catch(Exception ex)
@@ -721,7 +721,7 @@ namespace TestCentric.Gui.Model
             Guard.OperationValid(LoadedTests != null, "No tests have been loaded");
 
             var resultWriter = Services.GetService<IResultService>().GetResultWriter("user", [xsltFile]);
-            var results = TestResultManager.GetResultForTest(LoadedTests.Id);
+            var results = TestResultManager.GetResultForTest(LoadedTests.Id).ShouldNotBeNull("No test result exists");
             resultWriter?.WriteResultFile(results.Xml, targetFile);
         }
 
