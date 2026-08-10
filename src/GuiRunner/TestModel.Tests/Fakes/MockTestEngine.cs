@@ -120,7 +120,12 @@ namespace TestCentric.Gui.Model.Fakes
                 throw new NotImplementedException();
             }
 
-            void ITestRunner.StopRun(bool force)
+            void ITestRunner.RequestStop()
+            {
+                throw new NotImplementedException();
+            }
+
+            void ITestRunner.ForcedStop()
             {
                 throw new NotImplementedException();
             }
