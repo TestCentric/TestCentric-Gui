@@ -82,7 +82,7 @@ namespace TestCentric
         /// <param name="result">The result.</param>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public static string GetAttribute(this XmlNode result, string name)
+        public static string? GetAttribute(this XmlNode result, string name)
         {
             XmlAttribute attr = result.Attributes[name];
 
@@ -130,7 +130,7 @@ namespace TestCentric
         /// <returns></returns>
         public static DateTime GetAttribute(this XmlNode result, string name, DateTime defaultValue)
         {
-            string dateStr = GetAttribute(result, name);
+            string? dateStr = GetAttribute(result, name);
             if (dateStr == null)
                 return defaultValue;
 

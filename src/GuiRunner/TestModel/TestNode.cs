@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using NUnit;
 
 namespace TestCentric.Gui.Model
 {
@@ -53,7 +54,7 @@ namespace TestCentric.Gui.Model
 
         #region ITestItem Implementation
 
-        public string Name => Xml.GetAttribute("name");
+        public string Name => Xml.GetAttribute("name").ShouldNotBeNull("XML attribute name");
 
         #endregion
 
@@ -62,9 +63,9 @@ namespace TestCentric.Gui.Model
         public XmlNode Xml { get; }
 
         public bool IsSuite => Xml.Name == "test-suite" || Xml.Name == "test-run";
-        public string Id => GetAttribute("id");
+        public string Id => GetAttribute("id").ShouldNotBeNull("XML attribute id");
         public string FullName => GetAttribute("fullname") ?? Name;
-        public string Type => IsSuite ? GetAttribute("type") : "TestCase";
+        public string Type => IsSuite ? GetAttribute("type").ShouldNotBeNull("XML attribute type") : "TestCase";
         public bool IsAssembly => IsSuite && Type == "Assembly";
         public bool IsFixture => IsSuite && Type == "TestFixture";
         public bool IsProject => IsSuite && Type == "Project";
@@ -106,7 +107,7 @@ namespace TestCentric.Gui.Model
 
         #region Additional Public Methods
 
-        public string GetAttribute(string name)
+        public string? GetAttribute(string name)
         {
             return Xml.GetAttribute(name);
         }
@@ -130,7 +131,11 @@ namespace TestCentric.Gui.Model
 
             var result = new List<string>();
             foreach (XmlNode propNode in propList)
-                result.Add(propNode.GetAttribute("value"));
+            {
+                string? propValue = propNode.GetAttribute("value");
+                if (propValue != null)
+                    result.Add(propValue);
+            }
 
             return result.ToArray();
         }

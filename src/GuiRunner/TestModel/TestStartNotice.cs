@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -16,8 +16,8 @@ namespace TestCentric.Gui.Model
             FullName = xmlNode.GetAttribute("fullname");
         }
 
-        public string Id { get; private set; }
-        public string Name { get; private set; }
-        public string FullName { get; private set; }
+        public string? Id { get; private set; }
+        public string? Name { get; private set; }
+        public string? FullName { get; private set; }
     }
 }

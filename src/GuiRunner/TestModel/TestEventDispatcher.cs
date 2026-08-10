@@ -217,15 +217,15 @@ namespace TestCentric.Gui.Model
                     break;
 
                 case "test-output":
-                    string testName = xmlNode.GetAttribute("testname");
-                    string stream = xmlNode.GetAttribute("stream");
+                    string testName = xmlNode.GetAttribute("testname").ShouldNotBeNull("XML attribute testname");
+                    string? stream = xmlNode.GetAttribute("stream");
                     string text = xmlNode.InnerText;
                     InvokeHandler(TestOutput, new TestOutputEventArgs(testName, stream, text));
                     break;
 
                 case "unhandled-exception":
-                    string message = xmlNode.GetAttribute("message");
-                    string stackTrace = xmlNode.GetAttribute("stacktrace");
+                    string message = xmlNode.GetAttribute("message").ShouldNotBeNull("XML attribute message");
+                    string stackTrace = xmlNode.GetAttribute("stacktrace").ShouldNotBeNull("XML attribute stacktrace");
 
                     InvokeHandler(UnhandledException, new UnhandledExceptionEventArgs(message, stackTrace));
                     break;
@@ -274,7 +274,7 @@ namespace TestCentric.Gui.Model
                     foreach (var child in projectNode.Select((tn) => tn.Type == "Assembly"))
                     {
                         projectInfo.AssembliesToRun++;
-                        _projectLookup.Add(child.GetAttribute("id"), projectInfo);
+                        _projectLookup.Add(child.GetAttribute("id").ShouldNotBeNull("XML attribute id"), projectInfo);
                     }
                 }
                 catch (Exception ex)

@@ -68,7 +68,7 @@ namespace TestCentric.Gui.Model
         #region Public Properties
 
         public TestStatus Status { get; }
-        public string Label { get; }
+        public string? Label { get; }
         public FailureSite Site { get; }
         public ResultState Outcome { get; }
         public int AssertCount { get; }
@@ -121,7 +121,7 @@ namespace TestCentric.Gui.Model
 
         private TestStatus GetStatus()
         {
-            string status = GetAttribute("result");
+            string? status = GetAttribute("result");
             switch (status)
             {
                 case "Passed":
@@ -157,7 +157,7 @@ namespace TestCentric.Gui.Model
 
         private FailureSite GetSite()
         {
-            string site = GetAttribute("site");
+            string? site = GetAttribute("site");
             switch (site)
             {
                 case "Test":

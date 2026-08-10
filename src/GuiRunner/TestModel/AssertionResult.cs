@@ -22,7 +22,7 @@ namespace TestCentric.Gui.Model
             StackTrace = assertion.SelectSingleNode("stack-trace")?.InnerText;
         }
 
-        public string Status { get; }
+        public string? Status { get; }
         public string? Message { get; }
         public string? StackTrace { get; }
     }

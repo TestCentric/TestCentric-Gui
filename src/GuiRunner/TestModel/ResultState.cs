@@ -37,7 +37,7 @@ namespace TestCentric.Gui.Model
         /// </summary>
         /// <param name="status">The TestStatus.</param>
         /// <param name="label">The label.</param>
-        public ResultState(TestStatus status, string label) : this(status, label, FailureSite.Test)
+        public ResultState(TestStatus status, string? label) : this(status, label, FailureSite.Test)
         {
         }
 
@@ -56,7 +56,7 @@ namespace TestCentric.Gui.Model
         /// <param name="status">The TestStatus.</param>
         /// <param name="label">The label.</param>
         /// <param name="site">The stage at which the result was produced</param>
-        public ResultState(TestStatus status, string label, FailureSite site)
+        public ResultState(TestStatus status, string? label, FailureSite site)
         {
             Status = status;
             Label = label == null ? string.Empty : label;
