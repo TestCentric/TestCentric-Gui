@@ -73,9 +73,9 @@ namespace TestCentric.Gui.Presenters
             ITestModel model = Substitute.For<ITestModel>();
             GroupDisplayStrategy strategy = Substitute.For<GroupDisplayStrategy>(treeView, model);
 
-            var resultNode = new ResultNode($"<test-case id='1' duration='{duration}'/>");
+            var resultNode = new ResultNode($"<test-case id='1' name='TestA' duration='{duration}'/>");
 
-            var testNode = new TestNode($"<test-case id='1' />");
+            var testNode = new TestNode($"<test-case id='1' name='TestA'/>");
             var tests = new List<TestNode> { testNode };
 
             model.TestResultManager.GetResultForTest("1").Returns(resultNode);
@@ -97,7 +97,7 @@ namespace TestCentric.Gui.Presenters
             ITestModel model = Substitute.For<ITestModel>();
             GroupDisplayStrategy strategy = Substitute.For<GroupDisplayStrategy>(treeView, model);
 
-            var testNode = new TestNode($"<test-case id='1' />");
+            var testNode = new TestNode($"<test-case id='1' name='TestA'/>");
             var tests = new List<TestNode> { testNode };
 
             model.TestResultManager.GetResultForTest("1").Returns((ResultNode)null);
@@ -118,7 +118,7 @@ namespace TestCentric.Gui.Presenters
             ITestTreeView treeView = Substitute.For<ITestTreeView>();
             ITestModel model = Substitute.For<ITestModel>();
             GroupDisplayStrategy strategy = Substitute.For<GroupDisplayStrategy>(treeView, model);
-            ResultNode result = new ResultNode("<test-case id='1'/>");
+            ResultNode result = new ResultNode("<test-case id='1' name='TestA'/>");
 
             // 2. Act
             DurationGrouping grouping = new DurationGrouping(strategy);

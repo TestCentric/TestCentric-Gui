@@ -65,7 +65,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestCasePasses_CountIsIncremented()
         {
-            var result = new ResultNode("<test-case id='1' result='Passed' />");
+            var result = new ResultNode("<test-case id='1' name='TestA' result='Passed' />");
 
             for (int i = 1; i <= 3; i++)
                 FireTestFinishedEvent(result);
@@ -81,7 +81,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestCaseHasWarning_CountIsIncremented()
         {
-            var result = new ResultNode("<test-case id='1' result='Warning' />");
+            var result = new ResultNode("<test-case id='1' name='TestA' result='Warning' />");
 
             for (int i = 1; i <= 3; i++)
                 FireTestFinishedEvent(result);
@@ -97,7 +97,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestCaseIsInconclusive_CountIsIncremented()
         {
-            var result = new ResultNode("<test-case id='1' result='Inconclusive' />");
+            var result = new ResultNode("<test-case id='1' result='Inconclusive' name='TestA'/>");
 
             for (int i = 1; i <= 3; i++)
                 FireTestFinishedEvent(result);
@@ -113,7 +113,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestCaseFails_CountIsIncremented()
         {
-            var result = new ResultNode("<test-case id='1' result='Failed' />");
+            var result = new ResultNode("<test-case id='1' result='Failed' name='TestA'/>");
 
             for (int i = 1; i <= 3; i++)
                 FireTestFinishedEvent(result);
@@ -129,7 +129,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestsFinish_DurationIsDisplayed()
         {
-            var result = new ResultNode("<test-run duration='1.234' />");
+            var result = new ResultNode("<test-run duration='1.234' id='0' name='TestA'/>");
             FireRunFinishedEvent(result);
 
             _view.Received().Text = "Completed";

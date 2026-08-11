@@ -20,7 +20,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.HasTests.Returns(true);
             _model.IsTestRunning.Returns(false);
 
-            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            TestNode testNode = new TestNode("<test-suite id='1' name='TestA' type='TestFixture'/>");
             _model.LoadedTests.Returns(testNode);
             _model.SelectedTests.Returns(new TestSelection(new[] { testNode }));
 

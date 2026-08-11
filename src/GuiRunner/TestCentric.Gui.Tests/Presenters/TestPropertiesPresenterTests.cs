@@ -39,7 +39,7 @@ namespace TestCentric.Gui.Presenters
         [TestCase("SomethingElse", "test.dll", "NotRunnable", ExpectedResult = "SomethingElse")]
         public string GetTestTypeTest(string type, string fullname, string runstate)
         {
-            TestNode testNode = new TestNode(XmlHelper.CreateXmlNode(string.Format("<test-suite id='1' type='{0}' fullname='{1}' runstate='{2}'><test-suite id='42'/></test-suite>", type, fullname, runstate)));
+            TestNode testNode = new TestNode(XmlHelper.CreateXmlNode(string.Format("<test-suite id='1' name='TestA' type='{0}' fullname='{1}' runstate='{2}'><test-suite id='42' name='TestB' type='TestFixture'/></test-suite>", type, fullname, runstate)));
 
             return TestPropertiesPresenter.GetTestType(testNode);
         }

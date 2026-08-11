@@ -31,7 +31,7 @@ namespace TestCentric.Gui.Model.Filter
             // 1. Arrange
             TextFilter filter = new TextFilter();
             filter.Condition = new[] { filterText };
-            TestNode testNode = new TestNode($"<test-case id='1' fullname='${nodeName}' />");
+            TestNode testNode = new TestNode($"<test-case id='1' fullname='${nodeName}' name='${nodeName}'/>");
 
             // 2. Act
             bool isMatch = filter.IsMatching(testNode);
@@ -48,7 +48,7 @@ namespace TestCentric.Gui.Model.Filter
             // 1. Arrange
             TextFilter filter = new TextFilter();
             filter.Condition = new[] { filterText };
-            TestNode testNode = new TestNode($"<test-case id='1' fullname='${nodeName}' />");
+            TestNode testNode = new TestNode($"<test-case id='1' fullname='${nodeName}' name='${nodeName}'/>");
 
             // 2. Act
             bool isMatch = filter.IsMatching(testNode);

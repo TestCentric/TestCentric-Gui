@@ -29,7 +29,7 @@ namespace TestCentric.Gui.Model.Filter
         {
             // Arrange
             bool isCalled = false;
-            var testNode = new TestNode($"<test-case id='1' />");
+            var testNode = new TestNode($"<test-case id='1' name='TestA'/>");
             _model.LoadedTests.Returns(testNode);
 
             // Act
@@ -45,7 +45,7 @@ namespace TestCentric.Gui.Model.Filter
         {
             // Arrange
             bool isCalled = false;
-            var testNode = new TestNode($"<test-case id='1' />");
+            var testNode = new TestNode($"<test-case id='1' name='TestA'/>");
             _model.LoadedTests.Returns(testNode);
 
             // Act
@@ -61,7 +61,7 @@ namespace TestCentric.Gui.Model.Filter
         {
             // Arrange
             bool isCalled = false;
-            var testNode = new TestNode($"<test-case id='1' />");
+            var testNode = new TestNode($"<test-case id='1' name='TestA'/>");
             _model.LoadedTests.Returns(testNode);
 
             // Act
@@ -76,7 +76,7 @@ namespace TestCentric.Gui.Model.Filter
         public void AllCategories_NoCategoriesDefinedInModel_ReturnsDefaultCategory()
         {
             // Arrange
-            var testNode = new TestNode($"<test-case id='1' />");
+            var testNode = new TestNode($"<test-case id='1' name='TestA' />");
             _model.LoadedTests.Returns(testNode);
 
             // Act
@@ -93,7 +93,7 @@ namespace TestCentric.Gui.Model.Filter
         public void AllCategories_CategoriesDefinedInModel_ReturnsModelAndDefaultCategory()
         {
             // Arrange
-            var testNode = new TestNode($"<test-case id='1' />");
+            var testNode = new TestNode($"<test-case id='1' name='TestA'/>");
             _model.LoadedTests.Returns(testNode);
             _model.AvailableCategories.Returns(new List<string>() { "Feature_1" });
 
@@ -538,7 +538,7 @@ namespace TestCentric.Gui.Model.Filter
 
         private string CreateTestcaseXml(string testId, string testName, string outcome, IList<string> categories)
         {
-            string str = $"<test-case id='{testId}' fullname='{testName}'> ";
+            string str = $"<test-case id='{testId}' fullname='{testName}' name='{testName}'> ";
 
             str += "<properties> ";
             foreach (string category in categories)
@@ -548,7 +548,7 @@ namespace TestCentric.Gui.Model.Filter
             str += "</test-case> ";
 
             if (!string.IsNullOrEmpty(outcome))
-                _model.TestResultManager.GetResultForTest(testId).Returns(new ResultNode($"<test-case id='{testId}' result='{outcome}' />"));
+                _model.TestResultManager.GetResultForTest(testId).Returns(new ResultNode($"<test-case id='{testId}' result='{outcome}' name='{testName}'/>"));
             return str;
         }
 
@@ -559,7 +559,7 @@ namespace TestCentric.Gui.Model.Filter
 
         private string CreateTestFixtureXml(string testId, string testName, string outcome, IEnumerable<string> categories, params string[] testCases)
         {
-            string str = $"<test-suite type='TestFixture' id='{testId}'  fullname='{testName}'> ";
+            string str = $"<test-suite type='TestFixture' id='{testId}'  fullname='{testName}' name='{testName}'> ";
 
             str += "<properties> ";
             foreach (string category in categories)
@@ -572,21 +572,21 @@ namespace TestCentric.Gui.Model.Filter
             str += "</test-suite>";
 
             if (!string.IsNullOrEmpty(outcome))
-                _model.TestResultManager.GetResultForTest(testId).Returns(new ResultNode($"<test-case id='{testId}' result='{outcome}' />"));
+                _model.TestResultManager.GetResultForTest(testId).Returns(new ResultNode($"<test-case id='{testId}' result='{outcome}' name='{testName}'/>"));
 
             return str;
         }
 
         private string CreateTestSuiteXml(string testId, string testName, string outcome, params string[] testSuites)
         {
-            string str = $"<test-suite type='TestSuite' id='{testId}' fullname='{testName}'> ";
+            string str = $"<test-suite type='TestSuite' id='{testId}' fullname='{testName}' name='{testName}'> ";
             foreach (string testSuite in testSuites)
                 str += testSuite;
 
             str += "</test-suite>";
 
             if (!string.IsNullOrEmpty(outcome))
-                _model.TestResultManager.GetResultForTest(testId).Returns(new ResultNode($"<test-case id='{testId}' result='{outcome}' />"));
+                _model.TestResultManager.GetResultForTest(testId).Returns(new ResultNode($"<test-case id='{testId}' result='{outcome}' name='{testName}'/>"));
 
             return str;
         }

@@ -17,7 +17,7 @@ namespace TestCentric.Gui.Model
         {
             TestDelegate newResultNode = () =>
             {
-                var resultNode = new ResultNode("<test-case duration='0.000'/>");
+                var resultNode = new ResultNode("<test-case id='0' name='TestA' duration='0.000'/>");
             };
             Assert.DoesNotThrow(newResultNode);
         }
@@ -26,7 +26,7 @@ namespace TestCentric.Gui.Model
         public void CreateResultNode_FromOldResult()
         {
             // Act
-            var resultNode = new ResultNode("<test-case id='1' fullname='Assembly.Folder1.TestB' result='Passed'/>");
+            var resultNode = new ResultNode("<test-case id='1' fullname='Assembly.Folder1.TestB' name='TestB' result='Passed'/>");
 
             // Arrange
             ResultNode newResultNode = ResultNode.Create(resultNode.Xml, "100");
@@ -54,7 +54,7 @@ namespace TestCentric.Gui.Model
         public void CreateResultNode_FromOldResult_ReplaceResultState(ResultState resultState, TestStatus expectedTestStatus)
         {
             // Act
-            var resultNode = new ResultNode("<test-case id='1' fullname='Assembly.Folder1.TestB' result='Passed'/>");
+            var resultNode = new ResultNode("<test-case id='1' fullname='Assembly.Folder1.TestB' name='TestB' result='Passed'/>");
 
             // Arrange
             ResultNode newResultNode = ResultNode.Create(resultNode.Xml, resultState);
@@ -70,7 +70,7 @@ namespace TestCentric.Gui.Model
         public void CreateResultNode_FromOldResult_ReplaceResultState2(ResultState resultState, TestStatus expectedTestStatus)
         {
             // Act
-            var resultNode = new ResultNode("<test-case id='1' fullname='Assembly.Folder1.TestB' result='Skipped' label='Ignored' />");
+            var resultNode = new ResultNode("<test-case id='1' fullname='Assembly.Folder1.TestB' name='TestB' result='Skipped' label='Ignored' />");
 
             // Arrange
             ResultNode newResultNode = ResultNode.Create(resultNode.Xml, resultState);
@@ -85,7 +85,7 @@ namespace TestCentric.Gui.Model
         [Test]
         public void IsLatestRun_NewResultNode_IsTrue()
         {
-            var resultNode = new ResultNode("<test-case id='1'/>");
+            var resultNode = new ResultNode("<test-case id='1' name='TestA'/>");
             
             Assert.That(resultNode.IsLatestRun, Is.True);
         }

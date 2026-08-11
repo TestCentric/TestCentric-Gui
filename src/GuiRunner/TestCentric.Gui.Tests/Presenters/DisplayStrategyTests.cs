@@ -24,7 +24,7 @@ namespace TestCentric.Gui.Presenters
         public void CalcImageIndex_ReturnsExpectedIndex(string result, bool isLatestRun, int expectedImageIndex)
         {
             // Arrange
-            var resultNode = new ResultNode($"<test-case id='1' result='{result}'/>");
+            var resultNode = new ResultNode($"<test-case id='1' name='TestA' result='{result}'/>");
             resultNode.IsLatestRun = isLatestRun;
 
             // Act
@@ -39,7 +39,7 @@ namespace TestCentric.Gui.Presenters
         public void CalcImageIndex_IgnoreTest_ReturnsExpectedIndex(bool isLatestRun, int expectedImageIndex)
         {
             // Arrange
-            var resultNode = new ResultNode($"<test-case id='1' result='Skipped' label='Ignored' />");
+            var resultNode = new ResultNode($"<test-case id='1' name='TestA' result='Skipped' label='Ignored' />");
             resultNode.IsLatestRun = isLatestRun;
 
             // Act

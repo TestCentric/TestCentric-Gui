@@ -34,7 +34,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         {
             // Arrange
             var project = new TestCentricProject(projectName, "dummy.dll");
-            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            TestNode testNode = new TestNode("<test-suite id='1' name='TestA' type='TestFixture'/>");
             _model.LoadedTests.Returns(testNode);
             _model.TestCentricProject.Returns(project);
 
@@ -52,7 +52,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         {
             // Arrange
             var project = new TestCentricProject(projectName, "dummy.dll");
-            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            TestNode testNode = new TestNode("<test-suite id='1' name='TestA' type='TestFixture'/>");
             _model.LoadedTests.Returns(testNode);
             _model.TestCentricProject.Returns(project);
 
@@ -72,7 +72,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
 
             var project = new TestCentricProject(projectName, "dummy.dll");
-            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            TestNode testNode = new TestNode("<test-suite id='1' name='TestA' type='TestFixture'/>");
             _model.LoadedTests.Returns(testNode);
             _model.TestCentricProject.Returns(project);
 

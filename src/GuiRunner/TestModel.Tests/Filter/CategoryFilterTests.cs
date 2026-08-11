@@ -160,7 +160,7 @@ namespace TestCentric.Gui.Model.Filter
 
         private string CreateTestcaseXml(string testId, string testName, IList<string> categories)
         {
-            string str = $"<test-case id='{testId}' fullname='{testName}'> ";
+            string str = $"<test-case id='{testId}' name='{testName}' fullname='{testName}'> ";
 
             str += "<properties> ";
             foreach (string category in categories)

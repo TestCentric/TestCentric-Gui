@@ -116,13 +116,13 @@ namespace TestCentric.Gui.Presenters
 
         protected void FireTestStartingEvent(string testName)
         {
-            var start = new TestNode($"<test-start fullname='{testName}'/>");
+            var start = new TestNode($"<test-start fullname='{testName}' name='TestA' id='0'/>");
             _model.Events.TestStarting += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(start));
         }
 
         protected void FireSuiteStartingEvent(string testName)
         {
-            var start = new TestNode($"<suite-start fullname='{testName}'/>");
+            var start = new TestNode($"<suite-start id='0' name='{testName}' fullname='{testName}'/>");
             _model.Events.SuiteStarting += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(start));
         }
 
@@ -183,15 +183,17 @@ namespace TestCentric.Gui.Presenters
             int colon = result.IndexOf(':');
             string xml;
 
+            string nodeType = element == "test-case" ? "TestCase" : "TestFixture";
+
             if (colon > 0)
             {
                 string status = result.Substring(0, colon);
                 string label = result.Substring(colon + 1);
-                xml = $"<{element} id='0' name='{testName}' fullname='{testName}' result='{status}' label='{label}'/>";
+                xml = $"<{element} id='0' name='{testName}' fullname='{testName}' type='{nodeType}' result='{status}' label='{label}'/>";
             }
             else
             {
-                xml = $"<{element} id='0' name='{testName}' fullname='{testName}' result='{result}'/>";
+                xml = $"<{element} id='0' name='{testName}' fullname='{testName}' type='{nodeType}' result='{result}'/>";
             }
 
             var xmlNode = XmlHelper.CreateXmlNode(xml);

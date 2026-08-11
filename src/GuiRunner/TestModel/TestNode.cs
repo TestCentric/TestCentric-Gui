@@ -46,6 +46,14 @@ namespace TestCentric.Gui.Model
                 Xml.AddAttribute("type", "TestRun");
                 Xml.AddAttribute("runstate", "Runnable");
             }
+
+            // Initialize properties once, check mandatory properties for null values
+            IsSuite = Xml.Name == "test-suite" || Xml.Name == "test-run";
+            Id = GetAttribute("id").ShouldNotBeNull("XML attribute id");
+            Name = Xml.GetAttribute("name").ShouldNotBeNull("XML attribute name");
+            Type = IsSuite ? GetAttribute("type").ShouldNotBeNull("XML attribute type") : "TestCase";
+            FullName = GetAttribute("fullname") ?? Name;
+            TestCount = IsSuite ? GetAttribute("testcasecount", 0) : 1;
         }
 
         public TestNode(string xmlText) : this(XmlHelper.CreateXmlNode(xmlText)) { }
@@ -54,7 +62,7 @@ namespace TestCentric.Gui.Model
 
         #region ITestItem Implementation
 
-        public string Name => Xml.GetAttribute("name").ShouldNotBeNull("XML attribute name");
+        public string Name { get; }
 
         #endregion
 
@@ -62,10 +70,10 @@ namespace TestCentric.Gui.Model
 
         public XmlNode Xml { get; }
 
-        public bool IsSuite => Xml.Name == "test-suite" || Xml.Name == "test-run";
-        public string Id => GetAttribute("id").ShouldNotBeNull("XML attribute id");
-        public string FullName => GetAttribute("fullname") ?? Name;
-        public string Type => IsSuite ? GetAttribute("type").ShouldNotBeNull("XML attribute type") : "TestCase";
+        public bool IsSuite { get; }
+        public string Id { get; }
+        public string FullName { get; }
+        public string Type { get; }
         public bool IsAssembly => IsSuite && Type == "Assembly";
         public bool IsFixture => IsSuite && Type == "TestFixture";
         public bool IsProject => IsSuite && Type == "Project";
@@ -81,7 +89,7 @@ namespace TestCentric.Gui.Model
         /// </summary>
         public bool FilteredOut { get; set; }
 
-        public int TestCount => IsSuite ? GetAttribute("testcasecount", 0) : 1;
+        public int TestCount { get; }
         public RunState RunState => GetRunState();
 
         public TestNode? Parent { get; private set; }

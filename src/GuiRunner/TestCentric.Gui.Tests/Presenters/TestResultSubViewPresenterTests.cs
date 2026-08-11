@@ -35,8 +35,8 @@ namespace TestCentric.Gui.Presenters
             ITestResultSubView view = Substitute.For<ITestResultSubView>();
             ITestModel model = Substitute.For<ITestModel>();
 
-            TestNode testNode = new TestNode("<test-case id='1' />");
-            ResultNode resultNode = new ResultNode($"<test-case id='1' result='Passed' />");
+            TestNode testNode = new TestNode("<test-case id='1' name='TestA'/>");
+            ResultNode resultNode = new ResultNode($"<test-case id='1' name='TestA' result='Passed' />");
             model.TestResultManager.GetResultForTest("1").Returns(resultNode);
 
             // 2. Act

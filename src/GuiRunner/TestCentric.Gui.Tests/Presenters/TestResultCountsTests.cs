@@ -21,8 +21,8 @@ namespace TestCentric.Gui.Presenters
         public void TestCaseNode_WithOutcome_ReturnsExpectedCount(string resultState, int expectedPassed, int expectedFailed, int expectedWarning, int expectedInconclusive)
         {
             // 1. Arrange
-            TestNode testNode = new TestNode("<test-case id='1' />");
-            ResultNode resultNode = new ResultNode($"<test-case id='1' result='{resultState}' />");
+            TestNode testNode = new TestNode("<test-case id='1' name='TestA'/>");
+            ResultNode resultNode = new ResultNode($"<test-case id='1' name='TestA' result='{resultState}' />");
 
             ITestModel model = Substitute.For<ITestModel>();
             model.TestResultManager.GetResultForTest("1").Returns(resultNode);
@@ -48,8 +48,8 @@ namespace TestCentric.Gui.Presenters
         public void TestCaseNode_WithSkippedOutcome_ReturnsExpectedCount(string label, int expectedIgnore, int expectedExplicit)
         {
             // 1. Arrange
-            TestNode testNode = new TestNode("<test-case id='1' />");
-            ResultNode resultNode = new ResultNode($"<test-case id='1' result='Skipped' label='{label}' />");
+            TestNode testNode = new TestNode("<test-case id='1' name='TestA'/>");
+            ResultNode resultNode = new ResultNode($"<test-case id='1' name='TestA' result='Skipped' label='{label}' />");
 
             ITestModel model = Substitute.For<ITestModel>();
             model.TestResultManager.GetResultForTest("1").Returns(resultNode);
@@ -73,7 +73,7 @@ namespace TestCentric.Gui.Presenters
         public void TestCaseNode_WithoutResult_ReturnsExpectedCount()
         {
             // 1. Arrange
-            TestNode testNode = new TestNode("<test-case id='1' />");
+            TestNode testNode = new TestNode("<test-case id='1' name='TestA'/>");
             ITestModel model = Substitute.For<ITestModel>();
             model.TestResultManager.GetResultForTest("1").Returns((ResultNode)null);
 
@@ -96,7 +96,7 @@ namespace TestCentric.Gui.Presenters
         public void TestCaseNode_NotVisible_ReturnsExpectedCount()
         {
             // 1. Arrange
-            TestNode testNode = new TestNode("<test-case id='1' />");
+            TestNode testNode = new TestNode("<test-case id='1' name='TestA'/>");
             testNode.FilteredOut = false;
             ITestModel model = Substitute.For<ITestModel>();
 
@@ -135,9 +135,9 @@ namespace TestCentric.Gui.Presenters
             "</test-suite>");
 
             ITestModel model = Substitute.For<ITestModel>();
-            model.TestResultManager.GetResultForTest("2-1001").Returns(string.IsNullOrEmpty(resultState1) ? null : new ResultNode($"<test-case id='2-1001' result='{resultState1}' />"));
-            model.TestResultManager.GetResultForTest("3-1001").Returns(string.IsNullOrEmpty(resultState2) ? null : new ResultNode($"<test-case id='3-1001' result='{resultState2}' />"));
-            model.TestResultManager.GetResultForTest("3-1002").Returns(string.IsNullOrEmpty(resultState3) ? null : new ResultNode($"<test-case id='3-1002' result='{resultState3}' />"));
+            model.TestResultManager.GetResultForTest("2-1001").Returns(string.IsNullOrEmpty(resultState1) ? null : new ResultNode($"<test-case id='2-1001' name='TestA' result='{resultState1}' />"));
+            model.TestResultManager.GetResultForTest("3-1001").Returns(string.IsNullOrEmpty(resultState2) ? null : new ResultNode($"<test-case id='3-1001' name='TestB' result='{resultState2}' />"));
+            model.TestResultManager.GetResultForTest("3-1002").Returns(string.IsNullOrEmpty(resultState3) ? null : new ResultNode($"<test-case id='3-1002' name='TestC' result='{resultState3}' />"));
 
             // 2. Act
             TestResultCounts resultCounts = TestResultCounts.GetResultCounts(model, testNode);
@@ -209,11 +209,11 @@ namespace TestCentric.Gui.Presenters
         public void TestGroupNode_WithOutcome_ReturnsExpectedCount()
         {
             // 1. Arrange
-            TestNode testNode1 = new TestNode("<test-case id='1' />");
-            ResultNode resultNode1 = new ResultNode($"<test-case id='1' result='Passed' asserts='2' duration='1.0'/>");
+            TestNode testNode1 = new TestNode("<test-case id='1' name='TestA'/>");
+            ResultNode resultNode1 = new ResultNode($"<test-case id='1' name='TestA' result='Passed' asserts='2' duration='1.0'/>");
 
-            TestNode testNode2 = new TestNode("<test-case id='2' />");
-            ResultNode resultNode2 = new ResultNode($"<test-case id='2' result='Failed' asserts='3' duration='1.0'/>");
+            TestNode testNode2 = new TestNode("<test-case id='2' name='TestB'/>");
+            ResultNode resultNode2 = new ResultNode($"<test-case id='2' name='TestB' result='Failed' asserts='3' duration='1.0'/>");
 
             ITestModel model = Substitute.For<ITestModel>();
             model.TestResultManager.GetResultForTest("1").Returns(resultNode1);

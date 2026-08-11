@@ -72,7 +72,7 @@ namespace TestCentric.Gui.Presenters
             ITestModel model = Substitute.For<ITestModel>();
             GroupDisplayStrategy strategy = Substitute.For<GroupDisplayStrategy>(treeView, model);
             
-            var testNode = new TestNode($"<test-case id='1' />");
+            var testNode = new TestNode($"<test-case id='1' name='TestA'/>");
             var tests = new List<TestNode> { testNode };
 
             // 2. Act
@@ -92,7 +92,7 @@ namespace TestCentric.Gui.Presenters
             ITestModel model = Substitute.For<ITestModel>();
             GroupDisplayStrategy strategy = Substitute.For<GroupDisplayStrategy>(treeView, model);
 
-            var testNode = new TestNode($"<test-case id='1'> <properties> <property name='Category' value='Feature_1' /> </properties> </test-case>");
+            var testNode = new TestNode($"<test-case id='1' name='TestA'> <properties> <property name='Category' value='Feature_1' /> </properties> </test-case>");
             var tests = new List<TestNode> { testNode };
 
             // 2. Act
@@ -114,11 +114,11 @@ namespace TestCentric.Gui.Presenters
             ITestModel model = Substitute.For<ITestModel>();
             GroupDisplayStrategy strategy = Substitute.For<GroupDisplayStrategy>(treeView, model);
 
-            var testNode1 = new TestNode($"<test-case id='1'> <properties> <property name='Category' value='Feature_1' /> </properties> </test-case>");
-            var testNode2 = new TestNode($"<test-case id='2'> <properties> <property name='Category' value='Feature_1' /> </properties> </test-case>");
-            var testNode3 = new TestNode($"<test-case id='3'> <properties> <property name='Category' value='Feature_2' /> </properties> </test-case>");
-            var testNode4 = new TestNode($"<test-case id='4'> <properties> <property name='Category' value='Feature_2' /> </properties> </test-case>");
-            var testNode5 = new TestNode($"<test-case id='5'> </test-case>");
+            var testNode1 = new TestNode($"<test-case id='1' name='TestA'> <properties> <property name='Category' value='Feature_1' /> </properties> </test-case>");
+            var testNode2 = new TestNode($"<test-case id='2' name='TestB'> <properties> <property name='Category' value='Feature_1' /> </properties> </test-case>");
+            var testNode3 = new TestNode($"<test-case id='3' name='TestC'> <properties> <property name='Category' value='Feature_2' /> </properties> </test-case>");
+            var testNode4 = new TestNode($"<test-case id='4' name='TestD'> <properties> <property name='Category' value='Feature_2' /> </properties> </test-case>");
+            var testNode5 = new TestNode($"<test-case id='5' name='TestE'> </test-case>");
             var tests = new List<TestNode> { testNode1, testNode2, testNode3, testNode4, testNode5 };
 
             // 2. Act
@@ -150,7 +150,7 @@ namespace TestCentric.Gui.Presenters
             ITestTreeView treeView = Substitute.For<ITestTreeView>();
             ITestModel model = Substitute.For<ITestModel>();
             GroupDisplayStrategy strategy = Substitute.For<GroupDisplayStrategy>(treeView, model);
-            ResultNode result = new ResultNode("<test-case id='1'/>");
+            ResultNode result = new ResultNode("<test-case id='1' name='TestA'/>");
 
             // 2. Act
             CategoryGrouping grouping = new CategoryGrouping(strategy, false);

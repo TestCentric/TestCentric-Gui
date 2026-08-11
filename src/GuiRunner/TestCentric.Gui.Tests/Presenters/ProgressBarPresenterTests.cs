@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -22,7 +22,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestsAreLoaded_ProgressBar_IsInitialized()
         {
-            var testNode = new TestNode("<test-suite id='1' testcasecount='1234'/>");
+            var testNode = new TestNode("<test-suite id='1' testcasecount='1234' name='TestA' type='TestFixture'/>");
             FireTestLoadedEvent(testNode);
 
             _view.Received().Initialize(100);
@@ -39,7 +39,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestsAreReloaded_ProgressBar_IsInitialized()
         {
-            var testNode = new TestNode("<test-suite id='1' testcasecount='1234'/>");
+            var testNode = new TestNode("<test-suite id='1' testcasecount='1234' name='TestA' type='TestFixture'/>");
             FireTestReloadedEvent(testNode);
 
             _view.Received().Initialize(100);
@@ -56,7 +56,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestCaseCompletes_ProgressIsIncremented()
         {
-            var result = new ResultNode("<test-case id='1'/>");
+            var result = new ResultNode("<test-case id='1' name='TestA'/>");
 
             FireTestFinishedEvent(result);
 
@@ -66,7 +66,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestSuiteCompletes_ProgressIsNotIncremented()
         {
-            var result = new ResultNode("<test-suite id='1'/>");
+            var result = new ResultNode("<test-suite id='1' name='TestA' type='TestFixture'/>");
 
             FireSuiteFinishedEvent(result);
 

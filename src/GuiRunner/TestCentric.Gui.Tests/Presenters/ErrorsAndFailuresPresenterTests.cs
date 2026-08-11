@@ -16,7 +16,7 @@ namespace TestCentric.Gui.Presenters
 
     public class ErrorsAndFailuresPresenterTests : PresenterTestBase<IErrorsAndFailuresView>
     {
-        private static readonly TestNode FAKE_TEST_RUN = new TestNode("<test-suite id='1' testcasecount='1234' name='TestRun'/>");
+        private static readonly TestNode FAKE_TEST_RUN = new TestNode("<test-run id='1' testcasecount='1234'/>");
         ITestResultSubViewPresenter _testResultPresenter;
 
         [SetUp]

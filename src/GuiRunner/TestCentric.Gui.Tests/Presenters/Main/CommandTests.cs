@@ -449,7 +449,7 @@ namespace TestCentric.Gui.Presenters.Main
         {
             // Arrange
             _model.HasTests.Returns(true);
-            _model.SelectedTests.Returns(new TestSelection(new[] { new TestNode("<test-case id='1' />") }));
+            _model.SelectedTests.Returns(new TestSelection(new[] { new TestNode("<test-case id='1' name='TestA'/>") }));
 
             // Act
             _model.Events.SelectedTestsChanged += Raise.Event<TestSelectionEventHandler>(new TestSelectionEventArgs(null));

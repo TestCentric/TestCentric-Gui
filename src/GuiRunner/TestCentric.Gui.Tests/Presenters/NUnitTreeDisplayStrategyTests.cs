@@ -116,7 +116,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             // Arrange
             _model.TreeConfiguration.NUnitTreeShowNamespaces = false;
             string xml =
-                "<test-run> <test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                "<test-run id='0'> <test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
                     "<test-suite type='TestSuite' id='1-1031' name='Library'>" +
                     "</test-suite>" +
                 "</test-suite> </test-run>";
@@ -135,7 +135,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             // Arrange
             _model.TreeConfiguration.NUnitTreeShowAssemblies = false;
             string xml =
-                "<test-run> <test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                "<test-run id='0'> <test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
                     "<test-suite type='TestSuite' id='1-1031' name='Library'>" +
                     "</test-suite>" +
                 "</test-suite> </test-run>";
@@ -155,7 +155,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model.TreeConfiguration.NUnitTreeShowFixtures = false;
 
             string xml =
-                "<test-run> <test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                "<test-run id='0'> <test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
                     "<test-suite type='TestSuite' id='1-1031' name='Library'>" +
                         "<test-suite type='TestFixture' id='1-1032' name='FixtureA'/>" +
                         "<test-suite type='TestFixture' id='1-1033' name='FixtureB'/>" +
