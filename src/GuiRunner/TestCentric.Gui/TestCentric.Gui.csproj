@@ -14,14 +14,19 @@
 	  <DefineConstants>$(DefineConstants);DISABLE_MINI_GUI;DISABLE_FONT_SETTING</DefineConstants>
 	</PropertyGroup>
 
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 	  <DefineConstants>$(DefineConstants);DISABLE_MINI_GUI;USE_TIPWINDOW;DISABLE_FONT_SETTING</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
-        <ProjectReference Include="..\TestModel\TestCentric.Gui.Model.csproj" />
-        <ProjectReference Include="..\NUnit.UiException\NUnit.UiException.csproj" />
-    </ItemGroup>
+    <PackageReference Include="Nullable" Version="1.3.1" PrivateAssets="all" />
+    <ProjectReference Include="..\TestModel\TestCentric.Gui.Model.csproj" />
+    <ProjectReference Include="..\NUnit.UiException\NUnit.UiException.csproj" />
+  </ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="NUnit.Common" Version="$(NUnitEngineVersion)" />
