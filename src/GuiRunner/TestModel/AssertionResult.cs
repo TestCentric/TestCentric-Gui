@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System.Xml;
+using NUnit;
 
 namespace TestCentric.Gui.Model
 {
@@ -17,12 +18,12 @@ namespace TestCentric.Gui.Model
 
         public AssertionResult(XmlNode assertion)
         {
-            Status = assertion.GetAttribute("label") ?? assertion.GetAttribute("result");
+            Status = (assertion.GetAttribute("label") ?? assertion.GetAttribute("result")).ShouldNotBeNull();
             Message = assertion.SelectSingleNode("message")?.InnerText;
             StackTrace = assertion.SelectSingleNode("stack-trace")?.InnerText;
         }
 
-        public string? Status { get; }
+        public string Status { get; }
         public string? Message { get; }
         public string? StackTrace { get; }
     }

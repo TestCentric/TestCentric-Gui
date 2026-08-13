@@ -129,9 +129,7 @@ namespace TestCentric.Gui
             for (int i = 0; i < args.Length; i++)
             {
                 string arg = args[i];
-                Option? option;
-                string? val;
-                if (TryParseOption(arg, out option, out val))
+                if (TryParseOption(arg, out Option? option, out string? val))
                 {
                     if (option.RequiresValue)
                     {
