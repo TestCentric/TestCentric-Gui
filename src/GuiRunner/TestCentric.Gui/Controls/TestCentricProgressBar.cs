@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -99,6 +100,7 @@ namespace TestCentric.Gui.Controls
             }
         }
 
+        [MemberNotNull(nameof(_brush))]
         private void CreateNewBrush()
         {
             Color[] colors = BrushColors[(int)_status];

@@ -21,7 +21,7 @@ namespace TestCentric.Gui.Presenters
 
         public override TestGroup[] SelectGroups(TestNode testNode)
         {
-            for (TestNode parent = testNode.Parent; parent != null; parent = parent.Parent)
+            for (TestNode? parent = testNode.Parent; parent != null; parent = parent.Parent)
             {
                 if (parent.IsAssembly)
                 {

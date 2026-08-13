@@ -29,13 +29,16 @@ namespace TestCentric.Gui.Dialogs
 
             var projectPath = project?.ProjectPath;
 
-            if (projectPath is not null )
+            if (projectPath is not null)
             {
                 if (!_model.IsWrapperProjectPath(projectPath))
                     projectNameTextBox.Text = Path.GetFileNameWithoutExtension(projectPath);
                 projectDirectoryTextBox.Text = Path.GetDirectoryName(projectPath);
-                testFilesListBox.Items.AddRange(project.TestFiles.ToArray());
             }
+
+            var testFiles = project?.TestFiles;
+            if (testFiles is not null)
+                testFilesListBox.Items.AddRange(testFiles.ToArray());
         }
 
         /// <summary>

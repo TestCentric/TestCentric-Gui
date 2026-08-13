@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Engine;
 using TestCentric.Gui.Model.Filter;
 using TestCentric.Gui.Model.Settings;
@@ -51,12 +52,17 @@ namespace TestCentric.Gui.Model
 
         TestPackage? TopLevelPackage { get; }
 
+        [MemberNotNullWhen(true, nameof(TestCentricProject))]
+        [MemberNotNullWhen(true, nameof(TopLevelPackage))]
         bool IsProjectLoaded { get; }
 
         // TestNode hierarchy representing the discovered tests
         TestNode? LoadedTests { get; }
 
         // See if tests are available
+        [MemberNotNullWhen(true, nameof(TestCentricProject))]
+        [MemberNotNullWhen(true, nameof(TopLevelPackage))]
+        [MemberNotNullWhen(true, nameof(LoadedTests))]
         bool HasTests { get; }
 
         IList<string> AvailableCategories { get; }
@@ -71,6 +77,7 @@ namespace TestCentric.Gui.Model
         ResultSummary? ResultSummary { get; }
 
         // Is ResultSummary available?
+        [MemberNotNullWhen(true, nameof(ResultSummary))]
         bool HasResults { get; }
 
         /// <summary>

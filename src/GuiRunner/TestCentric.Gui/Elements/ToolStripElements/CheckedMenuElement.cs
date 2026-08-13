@@ -12,7 +12,7 @@ namespace TestCentric.Gui.Elements
     /// </summary>
     public class CheckedMenuElement : ToolStripMenuElement, IChecked
     {
-        public event CommandHandler CheckedChanged;
+        public event CommandHandler? CheckedChanged;
 
         public CheckedMenuElement(ToolStripMenuItem menuItem)
             : base(menuItem)

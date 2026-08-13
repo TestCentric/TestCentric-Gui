@@ -27,6 +27,10 @@ namespace TestCentric.Gui.Dialogs
         {
             _extensionService = extensionService;
 
+            _extensionPoints = [];
+            _extensionPointExtensions = [];
+            _allExtensions = [];
+
             //
             // Required for Windows Form Designer support
             //

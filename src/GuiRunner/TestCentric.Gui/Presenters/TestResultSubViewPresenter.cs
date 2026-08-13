@@ -49,10 +49,10 @@ namespace TestCentric.Gui.Presenters
             TestResultCounts summary = TestResultCounts.GetResultCounts(_model, testItem);
 
             bool detailSectionVisible = false;
-            ResultState overallOutcome = null;
+            ResultState? overallOutcome = null;
             if (testItem is TestNode testNode)
             {
-                ResultNode result = _model.TestResultManager.GetResultForTest(testNode.Id);
+                ResultNode? result = _model.TestResultManager.GetResultForTest(testNode.Id);
                 overallOutcome = result?.Outcome;
                 detailSectionVisible = testNode.IsAssembly || testNode.IsProject || testNode.IsSuite;
             }
@@ -73,12 +73,12 @@ namespace TestCentric.Gui.Presenters
             _view.UpdateDetailSection(summary);
         }
 
-        private ResultState GetGroupOutcome(TestGroup testGroup)
+        private ResultState? GetGroupOutcome(TestGroup testGroup)
         {
-            ResultState state = null;
+            ResultState? state = null;
             foreach(TestNode testNode in testGroup)
             {
-                ResultNode result = _model.TestResultManager.GetResultForTest(testNode.Id);
+                ResultNode? result = _model.TestResultManager.GetResultForTest(testNode.Id);
                 if (result == null)
                     continue;
 

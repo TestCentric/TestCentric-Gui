@@ -5,6 +5,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -24,7 +25,7 @@ namespace TestCentric.Gui.Controls
         /// <summary>
         /// Our window for displaying expanded text
         /// </summary>
-        private TipWindow _tipWindow;
+        private TipWindow? _tipWindow;
 
 
         #endregion
@@ -35,6 +36,7 @@ namespace TestCentric.Gui.Controls
         /// Returns true if the label is expanded, i.e. showing it's TipWindow.
         /// </summary>
         [Browsable(false)]
+        [MemberNotNullWhen(true, nameof(_tipWindow))]
         public bool IsExpanded => _tipWindow != null && _tipWindow.Visible;
 
         /// <summary>

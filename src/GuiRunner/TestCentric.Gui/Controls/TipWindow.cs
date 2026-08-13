@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -44,12 +45,12 @@ namespace TestCentric.Gui.Controls
         /// <summary>
         /// Timer used for auto-close
         /// </summary>
-        private System.Windows.Forms.Timer _autoCloseTimer;
+        private System.Windows.Forms.Timer? _autoCloseTimer;
 
         /// <summary>
         /// Timer used for mouse leave delay
         /// </summary>
-        private System.Windows.Forms.Timer _mouseLeaveTimer;
+        private System.Windows.Forms.Timer? _mouseLeaveTimer;
 
         /// <summary>
         /// Rectangle used to display text
@@ -86,6 +87,7 @@ namespace TestCentric.Gui.Controls
         {
             InitializeComponent();
             InitializeControl(treeView);
+            TipText = "";
         }
 
         private void InitializeComponent()
@@ -105,6 +107,7 @@ namespace TestCentric.Gui.Controls
 
         }
 
+        [MemberNotNull(nameof(_control))]
         private void InitializeControl(Control control)
         {
             _control = control;

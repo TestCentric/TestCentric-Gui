@@ -5,6 +5,7 @@
 
 using System.Collections;
 using System.Windows.Forms;
+using NUnit;
 using TestCentric.Gui.Model;
 
 namespace TestCentric.Gui.Presenters
@@ -50,8 +51,8 @@ namespace TestCentric.Gui.Presenters
 
             public int Compare(object x, object y)
             {
-                TreeNode node1 = x as TreeNode;
-                TreeNode node2 = y as TreeNode;
+                TreeNode node1 = (x as TreeNode).ShouldNotBeNull();
+                TreeNode node2 = (y as TreeNode).ShouldNotBeNull();
 
                 if (!_ascending)
                     Swap(ref node1, ref node2);
@@ -80,14 +81,14 @@ namespace TestCentric.Gui.Presenters
 
             public int Compare(object x, object y)
             {
-                TreeNode node1 = x as TreeNode;
-                TreeNode node2 = y as TreeNode;
+                TreeNode node1 = (x as TreeNode).ShouldNotBeNull();
+                TreeNode node2 = (y as TreeNode).ShouldNotBeNull();
 
                 if (!_ascending)
                     Swap(ref node1, ref node2);
 
-                TestGroup testGroup1 = node1?.Tag as TestGroup;
-                TestGroup testGroup2 = node2?.Tag as TestGroup;
+                TestGroup? testGroup1 = node1?.Tag as TestGroup;
+                TestGroup? testGroup2 = node2?.Tag as TestGroup;
                 if (testGroup1 != null && testGroup2 != null)
                 {
                     if (testGroup1.Duration.HasValue && testGroup2.Duration.HasValue)
@@ -99,22 +100,22 @@ namespace TestCentric.Gui.Presenters
                     if (!testGroup1.Duration.HasValue && testGroup2.Duration.HasValue)
                         return -1;
 
-                    return node1.Text.CompareTo(node2.Text);
+                    return node1!.Text.CompareTo(node2!.Text);
                 }
 
-                TestNode testNode1 = node1?.Tag as TestNode;
-                TestNode testNode2 = node2?.Tag as TestNode;
+                TestNode? testNode1 = node1?.Tag as TestNode;
+                TestNode? testNode2 = node2?.Tag as TestNode;
 
                 if (testNode1 == null || testNode2 == null)
                     return 1;
 
-                ResultNode resultNode1 = _model.TestResultManager.GetResultForTest(testNode1.Id);
-                ResultNode resultNode2 = _model.TestResultManager.GetResultForTest(testNode2.Id);
+                ResultNode? resultNode1 = _model.TestResultManager.GetResultForTest(testNode1.Id);
+                ResultNode? resultNode2 = _model.TestResultManager.GetResultForTest(testNode2.Id);
 
                 if (resultNode1 != null && resultNode2 != null)
                         return resultNode1.Duration.CompareTo(resultNode2.Duration);
 
-                return node1.Text.CompareTo(node2.Text);
+                return node1!.Text.CompareTo(node2!.Text);
             }
         }
 

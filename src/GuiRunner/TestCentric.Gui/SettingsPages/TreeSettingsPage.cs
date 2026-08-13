@@ -45,7 +45,7 @@ namespace TestCentric.Gui.SettingsPages
 
         private void imageSetListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string imageSetName = imageSetListBox.SelectedItem as string;
+            string imageSetName = (imageSetListBox.SelectedItem as string)!;
             OutcomeImageSet imageSet = _imageSetManager.LoadImageSet(imageSetName);
 
             successImage.Image = imageSet.LoadImage("Success");

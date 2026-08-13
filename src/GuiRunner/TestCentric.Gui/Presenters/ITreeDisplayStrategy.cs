@@ -13,7 +13,7 @@ namespace TestCentric.Gui.Presenters
         /// Called when a test is loaded: build of all tree nodes and apply VisualState
         /// (for example: expand/collapse nodes)
         /// </summary>
-        void OnTestLoaded(TestNode testNode, VisualState visualState);
+        void OnTestLoaded(TestNode testNode, VisualState? visualState);
 
         /// <summary>
         /// Called when a test is unloaded: clear all tree nodes

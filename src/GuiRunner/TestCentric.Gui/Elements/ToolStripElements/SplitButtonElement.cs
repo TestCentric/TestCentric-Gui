@@ -19,6 +19,6 @@ namespace TestCentric.Gui.Elements
             button.ButtonClick += delegate { if (Execute != null) Execute(); };
         }
 
-        public event CommandHandler Execute;
+        public event CommandHandler? Execute;
     }
 }

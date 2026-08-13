@@ -5,7 +5,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
@@ -13,6 +12,7 @@ namespace TestCentric.Gui.Presenters
     using System;
     using Model;
     using Model.Settings;
+    using NUnit;
     using Views;
 
     /// <summary>
@@ -69,7 +69,7 @@ namespace TestCentric.Gui.Presenters
         /// <summary>
         /// Load all tests into the tree, starting from a root TestNode.
         /// </summary>
-        public virtual void OnTestLoaded(TestNode rootNode, VisualState visualState)
+        public virtual void OnTestLoaded(TestNode rootNode, VisualState? visualState)
         {
             ClearTree();
 
@@ -161,10 +161,12 @@ namespace TestCentric.Gui.Presenters
         // changes. May need to distinguish these cases.
         public void Reload(bool applyVisualState = false)
         {
+            Guard.OperationValid(_model.HasTests, "No project is currently loaded");
+
             TestNode testNode = _model.LoadedTests;
             if (testNode != null)
             {
-                VisualState visualState = applyVisualState ? CreateVisualState() : null;
+                VisualState? visualState = applyVisualState ? CreateVisualState() : null;
                 OnTestLoaded(testNode, visualState);
             }
         }
@@ -226,10 +228,12 @@ namespace TestCentric.Gui.Presenters
                 treeNodeName += GetTreeNodeNameCountSuffix(GetTestCount(testNode));
 
             // Check if test result is available for this node
-            ResultNode result = testNode as ResultNode ?? _model.TestResultManager.GetResultForTest(testNode.Id);
-            if (TreeConfiguration.NUnitTreeShowTestDuration && result != null)
-                treeNodeName += $" [{result.Duration:0.000}s]";
-
+            if (TreeConfiguration.NUnitTreeShowTestDuration)
+            {
+                ResultNode? result = testNode as ResultNode ?? _model.TestResultManager.GetResultForTest(testNode.Id);
+                if (result != null)
+                    treeNodeName += $" [{result.Duration:0.000}s]";
+            }
             return treeNodeName;
         }
 
@@ -270,8 +274,7 @@ namespace TestCentric.Gui.Presenters
         protected void UpdateTreeNodeName(TreeNode treeNode)
         {
             string treeNodeName = "";
-            TestNode testNode = treeNode.Tag as TestNode; 
-            if (testNode != null)
+            if (treeNode.Tag is TestNode testNode)
                 treeNodeName = GetTreeNodeDisplayName(testNode);
             else if (treeNode.Tag is TestGroup testGroup)
             {
@@ -341,7 +344,7 @@ namespace TestCentric.Gui.Presenters
             // if some filters are applied (e.g. outcome filter) and some test case nodes are currently not displayed in the tree.
             if (treeNode.Tag is TestNode testNode && !testNode.IsSuite)
             {
-                ResultNode resultNode = GetResultForTest(testNode);
+                ResultNode? resultNode = GetResultForTest(testNode);
                 if (resultNode != null)
                 {
                     treeNode.ImageIndex = treeNode.SelectedImageIndex = CalcImageIndex(resultNode);
@@ -484,7 +487,7 @@ namespace TestCentric.Gui.Presenters
 
         protected void CollapseToFixtures(TreeNode treeNode)
         {
-            TestNode testNode = treeNode.Tag as TestNode;
+            TestNode? testNode = treeNode.Tag as TestNode;
 
             if (testNode != null && testNode.Type == "TestFixture")
                 treeNode.Collapse();
@@ -521,7 +524,7 @@ namespace TestCentric.Gui.Presenters
             treeNode.Remove();
         }
 
-        public ResultNode GetResultForTest(TestNode testNode)
+        public ResultNode? GetResultForTest(TestNode testNode)
         {
             return _model.TestResultManager.GetResultForTest(testNode.Id);
         }

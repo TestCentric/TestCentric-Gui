@@ -10,6 +10,7 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Dialogs
 {
     using System;
+    using System.Reflection;
     using Model;
     using Model.Settings;
     using NUnit.Engine;
@@ -42,6 +43,7 @@ namespace TestCentric.Gui.Dialogs
             TopLevelPackageSettingChanges.Clear();
         }
 
+#nullable disable
         public SettingsDialogBase() : base("TestCentric Settings")
         {
             //
@@ -51,6 +53,7 @@ namespace TestCentric.Gui.Dialogs
 
             pageList = new SettingsPageCollection();
         }
+#nullable restore
         #endregion
 
         #region Properties
@@ -124,7 +127,7 @@ namespace TestCentric.Gui.Dialogs
                         if (page.Key == key)
                             return page;
 
-                    return null;
+                    throw new InvalidOperationException($"SettingsPage with key '{key}' not found.");
                 }
             }
         }

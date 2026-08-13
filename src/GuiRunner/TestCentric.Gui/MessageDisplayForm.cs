@@ -32,29 +32,30 @@ namespace TestCentric.Gui
 
         private string _defaultCaption;
 
-        public MessageDisplayForm(string defaultCaption, Font font = null)
+        public MessageDisplayForm(string defaultCaption, Font? font = null)
         {
             InitializeComponent();
 
             _defaultCaption = defaultCaption;
+            _messageText = string.Empty;
 
             if (font != null)
                 Font = font;
         }
 
-        public void Error(string text, string caption = null) =>
+        public void Error(string text, string? caption = null) =>
             Show(text, caption ?? _defaultCaption, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
 
-        public void Info(string text, string caption = null) =>
+        public void Info(string text, string? caption = null) =>
             Show(text, caption ?? _defaultCaption, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
 
-        public bool YesNo(string text, string caption = null) =>
+        public bool YesNo(string text, string? caption = null) =>
             Show(text, caption ?? _defaultCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes;
 
-        public bool OkCancel(string text, string caption = null) =>
+        public bool OkCancel(string text, string? caption = null) =>
             Show(text, caption ?? _defaultCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.OK;
 
-        public DialogResult YesNoCancel(string text, string caption = null) =>
+        public DialogResult YesNoCancel(string text, string? caption = null) =>
             Show(text, caption ?? _defaultCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
 
         public DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)

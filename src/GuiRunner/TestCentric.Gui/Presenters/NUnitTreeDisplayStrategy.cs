@@ -39,14 +39,14 @@ namespace TestCentric.Gui.Presenters
 
         public override VisualState CreateVisualState()
         {
-            VisualState visualState = null;
+            VisualState? visualState = null;
 
             _view.InvokeIfRequired(() =>
             {
                 visualState = new VisualState("NUNIT_TREE", null, TreeConfiguration).LoadFrom(_view.TreeView);
             });
 
-            return visualState;
+            return visualState!;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace TestCentric.Gui.Presenters
 
         protected override void SetInitialExpansion()
         {
-            TreeNode firstNode = null;
+            TreeNode? firstNode = null;
             foreach (TreeNode node in _view.Nodes)
             {
                 if (_view.VisibleNodeCount >= node.GetNodeCount(true))

@@ -16,10 +16,10 @@ namespace TestCentric.Gui.Views
     {
         private string _status;
         private string _testName;
-        private string _message;
-        private string _rawStackTrace;
+        private string? _message;
+        private string? _rawStackTrace;
 
-        public TestResultItem(string status, string testName, string message, string stackTrace)
+        public TestResultItem(string status, string testName, string? message, string? stackTrace)
         {
             this._status = status;
             this._testName = testName;
@@ -40,7 +40,7 @@ namespace TestCentric.Gui.Views
             return String.Format("{0}: {1}{2}{3}", _status, _testName, Environment.NewLine, _message);
         }
 
-        public string FilteredStackTrace
+        public string? FilteredStackTrace
         {
             get
             {

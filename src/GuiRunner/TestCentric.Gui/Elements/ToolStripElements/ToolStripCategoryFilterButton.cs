@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -21,14 +22,14 @@ namespace TestCentric.Gui.Elements
     /// </summary>
     internal class ToolStripCategoryFilterButton : ToolStripElement, ICategoryFilterSelection
     {
-        public event CommandHandler SelectionChanged;
+        public event CommandHandler? SelectionChanged;
 
         private ToolStripDropDownButton _button;
-        private ITestModel _model;
-        private CategoryFilterDialog _dialog;
+        private ITestModel _model = null!;
+        private CategoryFilterDialog? _dialog;
         private Point _dialogLocation;
         private Size _dialogSize;
-        IEnumerable<string> _selectedItems;
+        IEnumerable<string> _selectedItems = [];
 
         public ToolStripCategoryFilterButton(ToolStripDropDownButton button)
             : base(button)
@@ -51,6 +52,7 @@ namespace TestCentric.Gui.Elements
             }
         }
 
+        [MemberNotNull(nameof(_model))]
         public void Init(ITestModel model)
         {
             _model = model;
@@ -75,7 +77,7 @@ namespace TestCentric.Gui.Elements
             // Create dialog and set Owner property to place it on top of main form
             _dialog = new CategoryFilterDialog();
             _dialog.Owner = Form.ActiveForm;
-            SetDialogSizeAndPosition();
+            SetDialogSizeAndPosition(_dialog);
 
             // Init dialog with available test categories and currently selected categories
             var allCategories = _model.TestCentricTestFilter.AllCategories;
@@ -100,21 +102,20 @@ namespace TestCentric.Gui.Elements
             _dialog.Show();
         }
 
-        private void SetDialogSizeAndPosition()
+        private void SetDialogSizeAndPosition(CategoryFilterDialog dialog)
         {
-            _dialog.StartPosition = FormStartPosition.Manual;
-
+            dialog.StartPosition = FormStartPosition.Manual;
             if (_dialogSize != default(Size))
             {
                 // Restore previous position and size of dialog
-                _dialog.Size = _dialogSize;
-                _dialog.Location = _dialogLocation;
+                dialog.Size = _dialogSize;
+                dialog.Location = _dialogLocation;
             }
             else
             {
                 // Determine position of button on screen and place dialog below
                 var bounds = _button.AccessibilityObject.Bounds;
-                _dialog.Location = new Point(bounds.Left, bounds.Bottom);
+                dialog.Location = new Point(bounds.Left, bounds.Bottom);
             }
         }
 

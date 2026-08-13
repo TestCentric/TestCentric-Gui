@@ -23,14 +23,15 @@ namespace TestCentric.Gui.Dialogs
     using Presenters;
     using System.Linq;
     using System.Xml;
+    using System.Diagnostics.CodeAnalysis;
 
     public partial class TestPropertiesDialog : PinnableDisplay
     {
         private ITestModel _model;
         private ITestTreeView _treeView;
 
-        private TreeNode _treeNode;
-        private TestNode _testNode;
+        private TreeNode _treeNode = null!;
+        private TestNode _testNode = null!;
 
         private TestPropertiesView _view;
 #if USING_PRESENTER
@@ -57,6 +58,7 @@ namespace TestCentric.Gui.Dialogs
 
         #region Public Methods
 
+        [MemberNotNull(nameof(_treeNode), nameof(_testNode))]
         public void Display(TreeNode treeNode)
         {
             _view.Visible = true;
@@ -65,7 +67,7 @@ namespace TestCentric.Gui.Dialogs
                 throw new ArgumentNullException(nameof(treeNode));
 
             _treeNode = treeNode;
-            _testNode = treeNode.Tag as TestNode;
+            _testNode = treeNode.Tag as TestNode ?? throw new InvalidOperationException("TreeNode.Tag is not a TestNode.");
 
             if (_testNode.Type == "Project" || _testNode.Type == "Assembly")
                 TestName = Path.GetFileName(_testNode.Name);
@@ -300,7 +302,7 @@ namespace TestCentric.Gui.Dialogs
 
         #region Helper Methods
 
-        private static string TrimLeadingBlankLines(string s)
+        private static string? TrimLeadingBlankLines(string s)
         {
             if (s == null) return s;
 

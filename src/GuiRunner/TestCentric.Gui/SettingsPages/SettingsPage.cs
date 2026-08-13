@@ -25,12 +25,14 @@ namespace TestCentric.Gui
 
         private MessageDisplay _messageDisplay;
 
+#nullable disable
         // Constructor used by the Windows.Forms Designer
         public SettingsPage()
         {
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
         }
+#nullable restore
 
         // Constructor we use in creating page for a Tabbed
         // or TreeBased dialog.

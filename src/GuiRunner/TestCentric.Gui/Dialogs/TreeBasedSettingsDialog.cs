@@ -11,7 +11,7 @@ namespace TestCentric.Gui.Dialogs
 
     public partial class TreeBasedSettingsDialog : SettingsDialogBase
     {
-        private SettingsPage current;
+        private SettingsPage? current;
 
         public static void Display(TestCentricPresenter presenter, ITestModel model, params SettingsPage[] pages)
         {
@@ -71,17 +71,17 @@ namespace TestCentric.Gui.Dialogs
 
         private void SelectPage(string initialPage)
         {
-            TreeNode node = FindNode(treeView1.Nodes, initialPage);
+            TreeNode? node = FindNode(treeView1.Nodes, initialPage);
             if (node != null)
                 treeView1.SelectedNode = node;
             else
                 SelectFirstPage(treeView1.Nodes);
         }
 
-        private TreeNode FindNode(TreeNodeCollection nodes, string key)
+        private TreeNode? FindNode(TreeNodeCollection nodes, string key)
         {
             int dot = key.IndexOf('.');
-            string tail = null;
+            string? tail = null;
 
             if (dot >= 0)
             {

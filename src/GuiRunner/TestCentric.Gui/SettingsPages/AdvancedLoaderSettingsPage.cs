@@ -10,6 +10,8 @@ using NUnit.Common;
 
 namespace TestCentric.Gui.SettingsPages
 {
+    using System.Diagnostics.CodeAnalysis;
+    using NUnit;
     using NUnit.Engine;
 
     public partial class AdvancedLoaderSettingsPage : SettingsPage
@@ -20,11 +22,16 @@ namespace TestCentric.Gui.SettingsPages
         {
             // This call is required by the Windows Form Designer.
             InitializeComponent();
+            PackageSettings = null!;
         }
-        private PackageSettings PackageSettings => Model.TopLevelPackage.Settings;
+
+        private PackageSettings PackageSettings { get; set; }
 
         public override void LoadSettings()
         {
+            var package = Model.TopLevelPackage.ShouldNotBeNull();
+            PackageSettings = package.Settings;
+
             // Update UI elements based on current settings in TestCentricProject
             int agents = PackageSettings.GetValueOrDefault(SettingDefinitions.MaxAgents);
             numberOfAgentsCheckBox.Checked = agents > 0;

@@ -24,15 +24,15 @@ namespace TestCentric.Gui.Presenters
         private bool _displayBeforeTest = false;
         private bool _displayAfterTest = false;
 
-        private string _currentLabel = null;
-        private string _lastTestOutput = null;
+        private string? _currentLabel = null;
+        private string? _lastTestOutput = null;
 
         private List<Action> OutputActions = new List<Action>();
 
-        private Action<TestNodeEventArgs> TestStartingAction { get; set; }
-        private Action<TestResultEventArgs> TestFinishedAction { get; set; }
-        private Action<TestResultEventArgs> SuiteFinishedAction { get; set; }
-        private Action<TestOutputEventArgs> TestOutputAction { get; set; }
+        private Action<TestNodeEventArgs>? TestStartingAction { get; set; }
+        private Action<TestResultEventArgs>? TestFinishedAction { get; set; }
+        private Action<TestResultEventArgs>? SuiteFinishedAction { get; set; }
+        private Action<TestOutputEventArgs>? TestOutputAction { get; set; }
 
         bool _wantNewLine = false;
 
@@ -189,7 +189,7 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        private void WriteOutputLine(string testName, string text, Color color)
+        private void WriteOutputLine(string? testName, string text, Color color)
         {
             if (_lastTestOutput != testName)
             {

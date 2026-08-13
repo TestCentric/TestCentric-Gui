@@ -24,8 +24,8 @@ namespace TestCentric.Gui.Views
         private const int ITEM_MARGIN = 2;
 
         private int _hoverIndex = -1;
-        private Timer _hoverTimer;
-        private TipWindow _tipWindow;
+        private Timer? _hoverTimer;
+        private TipWindow? _tipWindow;
 
         #region Construction and Disposal
 
@@ -60,10 +60,10 @@ namespace TestCentric.Gui.Views
 
         #region IErrorsAndFailuresView Members
 
-        public event EventHandler SplitterPositionChanged;
-        public event EventHandler SourceCodeSplitterDistanceChanged;
-        public event EventHandler SourceCodeSplitOrientationChanged;
-        public event EventHandler SourceCodeDisplayChanged;
+        public event EventHandler? SplitterPositionChanged;
+        public event EventHandler? SourceCodeSplitterDistanceChanged;
+        public event EventHandler? SourceCodeSplitOrientationChanged;
+        public event EventHandler? SourceCodeDisplayChanged;
 
         public ITestResultSubView TestResultSubView => testResultSubView;
 
@@ -156,7 +156,7 @@ namespace TestCentric.Gui.Views
             });
         }
 
-        public void AddResult(string status, string testName, string message, string stackTrace)
+        public void AddResult(string status, string testName, string? message, string? stackTrace)
         {
             InvokeIfRequired(() =>
             {

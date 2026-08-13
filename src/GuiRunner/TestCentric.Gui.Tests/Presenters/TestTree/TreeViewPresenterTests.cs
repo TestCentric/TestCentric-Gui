@@ -99,6 +99,10 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void WhenContextMenu_ShowTestDuration_IsClicked_SettingsIsUpdated(bool showTestDuration)
         {
             // 1. Arrange
+            ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
+            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+            _model.TreeConfiguration.DisplayFormat.Returns("NUNIT_TREE");
+            _model.TreeConfiguration.Changed += Raise.Event<SettingsEventHandler>(this, new SettingsEventArgs(nameof(TreeConfiguration.DisplayFormat)));
             _view.ShowTestDuration.Checked = showTestDuration;
 
             // 2. Act

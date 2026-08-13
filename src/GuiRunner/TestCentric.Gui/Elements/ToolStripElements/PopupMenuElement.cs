@@ -16,7 +16,7 @@ namespace TestCentric.Gui.Elements
     /// </summary>
     public class PopupMenuElement : ToolStripMenuElement, IPopup
     {
-        public event CommandHandler Popup;
+        public event CommandHandler? Popup;
 
         public PopupMenuElement(ToolStripMenuItem menuItem)
             : base(menuItem)

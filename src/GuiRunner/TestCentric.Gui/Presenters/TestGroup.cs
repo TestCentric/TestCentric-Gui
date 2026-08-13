@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using System.Windows.Forms;
+using NUnit;
 using TestCentric.Gui.Model;
 using TestCentric.Gui.Model.Filter;
 
@@ -61,11 +62,11 @@ namespace TestCentric.Gui.Presenters
         /// </remarks>
         public TestSelection TestNodes { get; } = new TestSelection();
 
-        public TestGroup ParentGroup { get; set; }
+        public TestGroup? ParentGroup { get; set; }
 
         public IList<TestGroup> SubGroups { get; } = new List<TestGroup>();
 
-        public TreeNode TreeNode { get; set; }
+        public TreeNode? TreeNode { get; set; }
 
         #endregion
 
@@ -90,7 +91,7 @@ namespace TestCentric.Gui.Presenters
         /// <summary>
         /// Add a testNode to the TestGroup and apply the testNode result to the result state of the group
         /// </summary>
-        public void Add(TestNode testNode, ResultNode resultNode = null)
+        public void Add(TestNode testNode, ResultNode? resultNode = null)
         {
             if (resultNode == null)
                 resultNode = testNode as ResultNode;
@@ -102,7 +103,7 @@ namespace TestCentric.Gui.Presenters
 
         public TestGroup GetOrAddSubGroup(string name)
         {
-            TestGroup subGroup = null;
+            TestGroup? subGroup = null;
 
             foreach (TestGroup group in SubGroups)
                 if (group.Name == name)
@@ -113,6 +114,8 @@ namespace TestCentric.Gui.Presenters
 
             if (subGroup == null)
             {
+                Guard.OperationValid(TreeNode != null, "TestGroup is not associated with a TreeNode");
+
                 subGroup = new TestGroup(name) { ParentGroup = this };
                 subGroup.TreeNode = new TreeNode(name) { Tag = subGroup, Name = name };
                 SubGroups.Add(subGroup);

@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using NUnit;
 using TestCentric.Gui.Elements;
 using TestCentric.Gui.Model;
 using TestCentric.Gui.Views;
@@ -28,7 +29,7 @@ namespace TestCentric.Gui.Presenters
         public bool AllowAgentSelection()
         {
             var package = _model.TopLevelPackage;
-            return _model.GetAgentsForPackage(package).Count > 1;
+            return package != null && _model.GetAgentsForPackage(package).Count > 1;
         }
 
         public void PopulateMenu()
@@ -75,17 +76,19 @@ namespace TestCentric.Gui.Presenters
             {
                 foreach (ToolStripMenuItem item in agentMenu.MenuItems)
                 {
-                    string itemTag = item.Tag as string;
-                    item.Enabled = itemTag == "DEFAULT" || agentsToEnable.Contains(itemTag);
-                    item.Checked = itemTag == selectedAgent;
+                    if (item.Tag is string itemTag)
+                    {
+                        item.Enabled = itemTag == "DEFAULT" || agentsToEnable.Contains(itemTag);
+                        item.Checked = itemTag == selectedAgent;
+                    }
                 }
             }
         }
 
         private void OnAgentMenuItemClicked(object sender, EventArgs e)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
-            if (!item.Checked)
+            Guard.OperationValid(_model.IsProjectLoaded, "No project is loaded");
+            if (sender is ToolStripMenuItem item && !item.Checked)
             {
                 EnsureSingleItemChecked(item);
 
@@ -93,8 +96,7 @@ namespace TestCentric.Gui.Presenters
                 _model.TestCentricProject.RemoveSetting(SettingDefinitions.SelectedAgentName);
                 _model.TestCentricProject.RemoveSetting(SettingDefinitions.RequestedAgentName);
 
-                string itemTag = item.Tag as string;
-                if (itemTag is not null && itemTag != "DEFAULT")
+                if (item.Tag is string itemTag && itemTag != "DEFAULT")
                 {
                     _model.TestCentricProject.AddSetting(SettingDefinitions.SelectedAgentName.WithValue(itemTag));
                     _model.TestCentricProject.AddSetting(SettingDefinitions.RequestedAgentName.WithValue(itemTag));

@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -27,6 +28,7 @@ namespace TestCentric.Gui.Presenters
         private ITestTreeView _view;
         private ITestModel _model;
         private ITreeDisplayStrategyFactory _treeDisplayStrategyFactory;
+        private ITreeDisplayStrategy? _strategy;
 
         private const string PREVIOUS_RUN = " (Previous Run)";
 
@@ -35,7 +37,15 @@ namespace TestCentric.Gui.Presenters
             "Inconclusive", "Passed", "Ignored", "Warning", "Failed" ];
 
         // Accessed by tests
-        public ITreeDisplayStrategy Strategy { get; private set; }
+        public ITreeDisplayStrategy Strategy 
+        { 
+            get 
+            {
+                Guard.OperationValid(_strategy != null, "Tree display strategy not yet created in OnProjectLoaded event");
+                return _strategy; 
+            } 
+            private set => _strategy = value;
+        }
 
         public ITreeConfiguration TreeConfiguration { get; }
 
@@ -61,8 +71,7 @@ namespace TestCentric.Gui.Presenters
             {
                 EnsureNonRunnableFilesAreVisible(ea.Test);
 
-                bool visualStateLoaded = TryLoadVisualState(out VisualState visualState);
-                if (visualStateLoaded)
+                if (TryLoadVisualState(out VisualState? visualState))
                     UpdateTreeConfiguration(visualState);
                 Strategy = _treeDisplayStrategyFactory.Create(TreeConfiguration.DisplayFormat, _view, _model);
 
@@ -83,7 +92,7 @@ namespace TestCentric.Gui.Presenters
                     _view.CategoryFilter.Close();
                     _view.CategoryFilter.Init(_model);
 
-                    TryLoadVisualState(out VisualState visualState);
+                    TryLoadVisualState(out VisualState? visualState);
 
                     Strategy.OnTestLoaded(ea.Test, visualState);
                 });
@@ -122,7 +131,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestFilterChanged += (ea) =>
             {
-                Strategy?.Reload(true);
+                Strategy.Reload(true);
             };
 
             // Use specific strategy to determine which tree nodes need to be updated.
@@ -214,7 +223,7 @@ namespace TestCentric.Gui.Presenters
                         // If it's a TestNode, make a TestSelection
                         if (selection == null && node != null)
                             selection = new TestSelection() { node };
-                        _model.SelectedTests = selection;
+                        _model.SelectedTests = selection!;
                     }
 
                     if (_propertiesDisplay != null)
@@ -243,8 +252,8 @@ namespace TestCentric.Gui.Presenters
                 foreach (var node in checkedNodes)
                     if (node.Tag is TestGroup testGroup)
                         selection.Add(testGroup.TestNodes);
-                    else 
-                        selection.Add(node.Tag as ITestItem);
+                    else if (node.Tag is ITestItem testItem) 
+                        selection.Add(testItem);
                 
                 selection.AddExplicitChildTests();
                 _model.SelectedTests = selection;
@@ -288,7 +297,7 @@ namespace TestCentric.Gui.Presenters
         private void OnShowTestDurationChanged()
         {
             TreeConfiguration.NUnitTreeShowTestDuration = _view.ShowTestDuration.Checked;
-            Strategy?.UpdateTreeNodeNames();
+            Strategy.UpdateTreeNodeNames();
         }
 
         private void OnShowCheckBoxChanged()
@@ -311,7 +320,7 @@ namespace TestCentric.Gui.Presenters
                     break;
 
                 case "TestCentric.Gui.TestTree.ShowNamespaces":
-                    Strategy?.Reload();
+                    Strategy.Reload();
                     break;
             }
         }
@@ -347,7 +356,7 @@ namespace TestCentric.Gui.Presenters
                 case nameof(TreeConfiguration.TestListShowAssemblies):
                 case nameof(TreeConfiguration.TestListShowFixtures):
                 case nameof(TreeConfiguration.TestListGroupBy):
-                    Strategy?.Reload();
+                    Strategy.Reload();
                     break;
                 case nameof(TreeConfiguration.ShowCheckBoxes):
                     _view.CheckBoxes = TreeConfiguration.ShowCheckBoxes;
@@ -402,7 +411,7 @@ namespace TestCentric.Gui.Presenters
                     case "TEST_LIST":
                         TreeConfiguration.TestListShowAssemblies = visualState.ShowAssemblies;
                         TreeConfiguration.TestListShowFixtures = visualState.ShowFixtures;
-                        TreeConfiguration.TestListGroupBy = visualState.GroupBy;
+                        TreeConfiguration.TestListGroupBy = visualState.GroupBy!;
                         break;
                     default:
                         throw new ArgumentException($"Invalid DisplayStrategy: '{visualState.DisplayStrategy}'", nameof(visualState));
@@ -448,7 +457,7 @@ namespace TestCentric.Gui.Presenters
             _xmlDisplay?.OnTestFinished(args.Result);
         }
 
-        private bool TryLoadVisualState(out VisualState visualState)
+        private bool TryLoadVisualState([NotNullWhen(true)] out VisualState? visualState)
         {
             visualState = null;
 
@@ -464,6 +473,8 @@ namespace TestCentric.Gui.Presenters
 
         private void SaveVisualState()
         {
+            Guard.OperationValid(_model.IsProjectLoaded, "Cannot save visual state when no project is loaded.");
+
             VisualState visualState = Strategy.CreateVisualState();
             string projectPath = _model.TestCentricProject.ProjectPath;
             string visualStatePath = Path.ChangeExtension(projectPath, ".VisualState.xml");
@@ -471,7 +482,7 @@ namespace TestCentric.Gui.Presenters
             visualState.Save(visualStatePath);
         }
 
-        TestPropertiesDialog _propertiesDisplay;
+        TestPropertiesDialog? _propertiesDisplay;
 
         private void ShowPropertiesDisplay()
         {
@@ -498,6 +509,7 @@ namespace TestCentric.Gui.Presenters
                 _propertiesDisplay.Closed += (s, e) => _propertiesDisplay = null;
             }
 
+            if (_view.ContextNode != null)
             _propertiesDisplay.Display(_view.ContextNode);
         }
 
@@ -516,7 +528,7 @@ namespace TestCentric.Gui.Presenters
                 ClosePropertiesDisplay();
         }
 
-        private XmlDisplay _xmlDisplay;
+        private XmlDisplay? _xmlDisplay;
 
         private void ShowXmlDisplayDialog()
         {
@@ -553,7 +565,8 @@ namespace TestCentric.Gui.Presenters
                 _xmlDisplay.Closed += (s, e) => _xmlDisplay = null;
             }
 
-            _xmlDisplay.Display(_view.ContextNode);
+            if (_view.ContextNode != null)
+                _xmlDisplay.Display(_view.ContextNode);
         }
 
         private void CloseXmlDisplay()
@@ -629,11 +642,12 @@ namespace TestCentric.Gui.Presenters
             if (CanRemovePackageNode(testNode))
             {
                 var subPackage = _model.GetPackageForTest(testNode.Id);
-                _model.RemoveTestPackage(subPackage);
+                if (subPackage != null)
+                    _model.RemoveTestPackage(subPackage);
             }
         }
 
-        private bool CanRemovePackageNode(TestNode testNode)
+        private bool CanRemovePackageNode([NotNullWhen(true)] TestNode? testNode)
         {
             return _model.HasTests && !_model.IsTestRunning && testNode != null && testNode.IsAssembly && _model.TopLevelPackage.SubPackages.Count > 1;
         }
@@ -645,15 +659,15 @@ namespace TestCentric.Gui.Presenters
             return treeNode.Bounds.Right > _view.TreeView.ClientRectangle.Right;
         }
 
-        private string GetResultText(TreeNode treeNode)
+        private string? GetResultText(TreeNode treeNode)
         {
-            TestNode testNode = treeNode.Tag as TestNode;
+            TestNode? testNode = treeNode.Tag as TestNode;
 
-            ResultNode resultNode = testNode != null
+            ResultNode? resultNode = testNode != null
                 ? testNode as ResultNode ?? _model.TestResultManager.GetResultForTest(testNode.Id)
                 : null;
-            ResultState result = resultNode?.Outcome;
-            bool isPreviousRun = result != null && !resultNode.IsLatestRun;
+            ResultState? result = resultNode?.Outcome;
+            bool isPreviousRun = result != null && resultNode != null && !resultNode.IsLatestRun;
 
             var resultText = result != null
                 ? !string.IsNullOrEmpty(result.Label) ? result.Label : result.Status.ToString()

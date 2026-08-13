@@ -48,25 +48,25 @@ namespace TestCentric.Gui
         private readonly string _caption;
         private MessageDisplayForm _myDialog;
 
-        public MessageDisplay(string caption = DEFAULT_CAPTION, Font font = null)
+        public MessageDisplay(string caption = DEFAULT_CAPTION, Font? font = null)
         {
             _caption = caption;
             _myDialog = new MessageDisplayForm(caption, font);
         }
 
-        void IMessageDisplay.Error(string text, string caption) =>
+        void IMessageDisplay.Error(string text, string? caption) =>
             _myDialog.Error(text, caption ?? _caption);
 
-        void IMessageDisplay.Info(string text, string caption) =>
+        void IMessageDisplay.Info(string text, string? caption) =>
             _myDialog.Info(text, caption ?? _caption);
 
-        bool IMessageDisplay.YesNo(string text, string caption) =>
+        bool IMessageDisplay.YesNo(string text, string? caption) =>
             _myDialog.YesNo(text, caption ?? _caption);
 
-        bool IMessageDisplay.OkCancel(string text, string caption) =>
+        bool IMessageDisplay.OkCancel(string text, string? caption) =>
             _myDialog.OkCancel(text, caption ?? _caption);
 
-        DialogResult IMessageDisplay.YesNoCancel(string text, string caption) =>
+        DialogResult IMessageDisplay.YesNoCancel(string text, string? caption) =>
             _myDialog.YesNoCancel(text, caption);
 
         #endregion

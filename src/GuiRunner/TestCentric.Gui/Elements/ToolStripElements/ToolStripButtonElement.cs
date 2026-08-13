@@ -14,8 +14,8 @@ namespace TestCentric.Gui.Elements
     {
         private ToolStripButton _button;
 
-        public event CommandHandler Execute;
-        public event CommandHandler CheckedChanged;
+        public event CommandHandler? Execute;
+        public event CommandHandler? CheckedChanged;
 
         public bool Checked
         {
@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Elements
             _button = button;
 
             button.Click += (s, e) => Execute?.Invoke();
-            button.CheckedChanged += (s, e) => CheckedChanged.Invoke();
+            button.CheckedChanged += (s, e) => CheckedChanged?.Invoke();
         }
     }
 }

@@ -13,14 +13,14 @@ namespace TestCentric.Gui
     /// </summary>
     public interface IMessageDisplay
     {
-        void Error(string text, string caption = null);
+        void Error(string text, string? caption = null);
 
-        void Info(string text, string caption = null);
+        void Info(string text, string? caption = null);
 
-        bool YesNo(string text, string caption = null);
+        bool YesNo(string text, string? caption = null);
 
-        bool OkCancel(string text, string caption = null);
+        bool OkCancel(string text, string? caption = null);
 
-        DialogResult YesNoCancel(string text, string caption = null);
+        DialogResult YesNoCancel(string text, string? caption = null);
     }
 }

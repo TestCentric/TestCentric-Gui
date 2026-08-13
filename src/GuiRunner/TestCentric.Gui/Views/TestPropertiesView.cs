@@ -14,7 +14,7 @@ namespace TestCentric.Gui.Views
 
     public partial class TestPropertiesView : UserControlView, ITestPropertiesView
     {
-        public event CommandHandler DisplayHiddenPropertiesChanged;
+        public event CommandHandler? DisplayHiddenPropertiesChanged;
 
         public TestPropertiesView()
         {

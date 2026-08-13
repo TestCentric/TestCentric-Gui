@@ -85,7 +85,7 @@ namespace TestCentric.Gui
 
             throw new System.Exception($"Could not locate image '{imgName}'");
 
-            bool TryToLoadImage(string directory, string imgName, string fileName = null)
+            bool TryToLoadImage(string directory, string imgName, string? fileName = null)
             {
                 if (fileName == null)
                     fileName = imgName + ".png";

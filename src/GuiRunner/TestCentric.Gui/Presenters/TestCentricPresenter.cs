@@ -55,7 +55,6 @@ namespace TestCentric.Gui.Presenters
         private AgentSelectionController _agentSelectionController;
         private RecentFileMenuController _recentProjectController;
         private RecentFileMenuController _recentFileController;
-        private string[] _lastFilesLoaded = null;
 
         private bool _stopRequested;
         private bool _forcedStopRequested;
@@ -80,6 +79,7 @@ namespace TestCentric.Gui.Presenters
             ImageSetManager = new ImageSetManager(_model, _view);
 
             _view.Font = _settings.Gui.Font;
+            _guiLayout = _settings.Gui.GuiLayout;
 
             UpdateViewCommands();
             UpdateRunSelectedTestsTooltip();
@@ -99,6 +99,8 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestCentricProjectLoaded += (TestEventArgs e) =>
             {
+                Guard.OperationValid(_model.IsProjectLoaded, "No project is currently loaded");
+
                 // Update checked state according to loaded project settings
                 // Unregister CheckedChanged event temporarily to avoid reloading (while loading a project)
                 _view.RunAsX86.CheckedChanged -= OnRunAsX86Changed;
@@ -137,7 +139,6 @@ namespace TestCentric.Gui.Presenters
 
                 UpdateViewCommands();
 
-                _lastFilesLoaded = _model.TestCentricProject.TestFiles.ToArray();
                 _view.ResultTabs.InvokeIfRequired(() => _view.ResultTabs.SelectedIndex = 0);
             };
 
@@ -339,13 +340,14 @@ namespace TestCentric.Gui.Presenters
 
             _view.OpenTestFileCommand.Execute += () =>
             {
-                string file = _view.DialogManager.GetFileOpenPath("Open Test File", _view.DialogManager.CreateOpenTestFileFilter(_model.NUnitProjectSupport, _model.VisualStudioSupport));
+                string? file = _view.DialogManager.GetFileOpenPath("Open Test File", _view.DialogManager.CreateOpenTestFileFilter(_model.NUnitProjectSupport, _model.VisualStudioSupport));
                 if (file != null)
                     _model.OpenOrCreateWrapperProject(file);
             };
 
             _view.SaveProjectCommand.Execute += () =>
             {
+                Guard.OperationValid(_model.IsProjectLoaded, "No project is currently loaded");
                 var projectPath = _model.TestCentricProject.ProjectPath;
 
                 if (string.IsNullOrEmpty(projectPath))
@@ -362,10 +364,12 @@ namespace TestCentric.Gui.Presenters
 
             _view.SaveAsCommand.Execute += () =>
             {
+                Guard.OperationValid(_model.IsProjectLoaded, "No project is currently loaded");
+
                 string initialDirectory = _model.WorkDirectory;
                 string suggestedFileName = "";
 
-                string projectPath = _model.TestCentricProject.ProjectPath;
+                string? projectPath = _model.TestCentricProject.ProjectPath;
                 if (projectPath is not null)
                 {
                     initialDirectory = Path.GetDirectoryName(projectPath);
@@ -546,10 +550,10 @@ namespace TestCentric.Gui.Presenters
 
         private void OpenExistingProject()
         {
-            string file = _view.DialogManager.GetFileOpenPath(
+            string? file = _view.DialogManager.GetFileOpenPath(
                 "Open TestCentric Project", "TestCentric Projects (*.tcproj)|*.tcproj");
             if (!string.IsNullOrEmpty(file))
-                _model.OpenExistingProject(file);
+                _model.OpenExistingProject(file!);
         }
 
         private void SaveFormLocationAndSize(string guiLayout)
@@ -586,14 +590,16 @@ namespace TestCentric.Gui.Presenters
 
         private void DisplayTestParametersDialog()
         {
+            Guard.OperationValid(_model.IsProjectLoaded, "No project is currently loaded");
+
             using (var dlg = new TestParametersDialog())
             {
                 dlg.Font = _settings.Gui.Font;
                 dlg.StartPosition = FormStartPosition.CenterParent;
 
-                if (_model.TopLevelPackage.Settings.HasSetting("TestParametersDictionary"))
+                if (_model.TopLevelPackage.Settings.HasSetting(SettingDefinitions.TestParametersDictionary))
                 {
-                    var testParms = _model.TopLevelPackage.Settings.GetSetting("TestParametersDictionary") as IDictionary<string, string>;
+                    var testParms = _model.TopLevelPackage.Settings.GetValueOrDefault(SettingDefinitions.TestParametersDictionary);
                     foreach (string key in testParms.Keys)
                         dlg.Parameters.Add(key, testParms[key]);
                 }
@@ -627,6 +633,8 @@ namespace TestCentric.Gui.Presenters
 
         public void EditProject()
         {
+            Guard.OperationValid(_model.IsProjectLoaded, "No project is currently loaded");
+
             var dlg = new ProjectEditor(_view, _model, _model.TestCentricProject);
 
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -643,7 +651,7 @@ namespace TestCentric.Gui.Presenters
 
         public void SaveResults(string format = "nunit3")
         {
-            string savePath = _view.DialogManager.GetFileSavePath($"Save results in {format} format", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*", _model.WorkDirectory, "TestResult.xml");
+            string? savePath = _view.DialogManager.GetFileSavePath($"Save results in {format} format", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*", _model.WorkDirectory, "TestResult.xml");
 
             if (savePath != null)
             {
@@ -750,7 +758,7 @@ namespace TestCentric.Gui.Presenters
         private void UpdateRunSelectedTestsTooltip()
         {
             bool showCheckBoxes = _view.TreeView.ShowCheckBoxes.Checked;
-            IToolTip tooltip = _view.RunSelectedButton as IToolTip;
+            IToolTip? tooltip = _view.RunSelectedButton as IToolTip;
             if (tooltip != null)
                 tooltip.ToolTipText = showCheckBoxes ? "Run Checked Tests" : "Run Selected Tests";
         }
@@ -779,6 +787,7 @@ namespace TestCentric.Gui.Presenters
 
         private void OnRunAsX86Changed()
         {
+            Guard.OperationValid(_model.IsProjectLoaded, "No project is currently loaded");
             _model.TestCentricProject.SetTopLevelSetting(SettingDefinitions.RunAsX86.WithValue(_view.RunAsX86.Checked));
         }
 
@@ -844,7 +853,7 @@ namespace TestCentric.Gui.Presenters
             return new Font(font.FontFamily, font.SizeInPoints / 1.2f, font.Style);
         }
 
-        private LongRunningOperationDisplay _longRunningOperation;
+        private LongRunningOperationDisplay? _longRunningOperation;
 
         private void BeginLongRunningOperation(string text)
         {
@@ -868,6 +877,8 @@ namespace TestCentric.Gui.Presenters
 
         private void RunAllTests()
         {
+            Guard.OperationValid(_model.HasTests, "No project is currently loaded");
+
             var allTests = _model.LoadedTests;
             _model.RunTests(allTests);
         }

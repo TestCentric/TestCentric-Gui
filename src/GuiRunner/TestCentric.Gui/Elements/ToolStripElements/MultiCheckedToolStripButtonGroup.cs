@@ -15,7 +15,7 @@ namespace TestCentric.Gui.Elements
     /// </summary>
     internal class MultiCheckedToolStripButtonGroup : IMultiSelection
     {
-        public event CommandHandler SelectionChanged;
+        public event CommandHandler? SelectionChanged;
 
         public MultiCheckedToolStripButtonGroup(params ToolStripButton[] buttons)
         {
@@ -26,6 +26,8 @@ namespace TestCentric.Gui.Elements
                 ToolStripButtons.Add(button);
                 button.Click += OnButtonClicked;
             }
+
+            Text = string.Empty;
         }
 
         protected IList<ToolStripButton> ToolStripButtons { get; }
@@ -36,8 +38,8 @@ namespace TestCentric.Gui.Elements
             {
                 IList<string> result = new List<string>();
                 foreach (ToolStripButton button in ToolStripButtons)
-                    if (button.Checked)
-                        result.Add(button.Tag as string);
+                    if (button.Checked && button.Tag is string tag)
+                        result.Add(tag);
 
                 return result;
             }
