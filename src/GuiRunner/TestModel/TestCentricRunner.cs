@@ -35,7 +35,7 @@ namespace TestCentric.Gui.Model
 
         private TestEventDispatcher TestEvents { get; }
 
-        private ITestRunner ActiveTestRun { get; set; }
+        private ITestRunner? ActiveTestRun { get; set; }
 
         public bool IsTestRunning => ActiveTestRun != null && ActiveTestRun.IsTestRunning;
 
@@ -47,7 +47,7 @@ namespace TestCentric.Gui.Model
         /// <summary>
         /// Explore tests from a package
         /// </summary>
-        public TestNode Explore(TestPackage package)
+        public TestNode? Explore(TestPackage package)
         {
             Guard.ArgumentNotNull(package, nameof(package));
 
@@ -55,7 +55,7 @@ namespace TestCentric.Gui.Model
             var runner = TestEngine.GetRunner(package);
             log.Debug($"Got {runner.GetType().Name} for package");
 
-            TestNode loadedTests = null;
+            TestNode? loadedTests = null;
             try
             {
                 log.Debug("Loading tests");
@@ -106,9 +106,9 @@ namespace TestCentric.Gui.Model
                 // up the line when it is more convenient to do so, replacing it with
                 // two separate methods as in the ITestRunner interface.
                 if (force)
-                    ActiveTestRun.ForcedStop();
+                    ActiveTestRun?.ForcedStop();
                 else
-                    ActiveTestRun.RequestStop();
+                    ActiveTestRun?.RequestStop();
                 ResetActiveTestRun();
             });
         }

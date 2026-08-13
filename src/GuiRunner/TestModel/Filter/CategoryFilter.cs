@@ -21,6 +21,7 @@ namespace TestCentric.Gui.Model.Filter
         public CategoryFilter(ITestModel model)
         {
             TestModel = model;
+            AllCategories = new List<string>();
         }
 
         private ITestModel TestModel { get; }

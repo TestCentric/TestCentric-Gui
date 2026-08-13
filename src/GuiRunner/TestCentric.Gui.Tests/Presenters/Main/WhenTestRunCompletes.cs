@@ -22,7 +22,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.HasResults.Returns(true);
             _model.ResultSummary.Returns(new ResultSummary() { FailureCount = 1 });
             _model.IsTestRunning.Returns(false);
-            _model.SelectedTests.Returns(new TestSelection(new[] { new TestNode("<test-case id='1' />") }));
+            _model.SelectedTests.Returns(new TestSelection(new[] { new TestNode("<test-case id='1' name='TestA'/>") }));
             _view.ResultTabs.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
 
             var resultNode = new ResultNode("<test-run id='XXX' result='Failed' />");

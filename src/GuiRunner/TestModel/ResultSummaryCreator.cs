@@ -28,9 +28,9 @@ namespace TestCentric.Gui.Model
 
         private static void Summarize(XmlNode node, ResultSummary summary)
         {
-            string type = node.GetAttribute("type");
-            string status = node.GetAttribute("result");
-            string label = node.GetAttribute("label");
+            string? type = node.GetAttribute("type");
+            string? status = node.GetAttribute("result");
+            string? label = node.GetAttribute("label");
 
             switch (node.Name)
             {
@@ -50,7 +50,7 @@ namespace TestCentric.Gui.Model
             }
         }
 
-        private static void SummarizeTestCase(ResultSummary summary, string status, string label)
+        private static void SummarizeTestCase(ResultSummary summary, string? status, string? label)
         {
             switch (status)
             {
@@ -85,7 +85,7 @@ namespace TestCentric.Gui.Model
             }
         }
 
-        private static void SummarizeTestSuite(XmlNodeList childNodes, ResultSummary summary, string type, string status, string label)
+        private static void SummarizeTestSuite(XmlNodeList childNodes, ResultSummary summary, string? type, string? status, string? label)
         {
             if (status == "Failed" && label == "Invalid")
             {

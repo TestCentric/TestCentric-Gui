@@ -79,10 +79,10 @@ namespace TestCentric.Gui.Presenters
         public void Durationcompare_Ascending_ReturnsExpectedResult(string duration1, string duration2, int expectedCompareResult)
         {
             // Arrange
-            TestNode testNode1 = new TestNode($"<test-start id='1'/>");
-            TestNode testNode2 = new TestNode($"<test-start id='2'/>");
-            var resultNode1 = new ResultNode($"<test-case id='1' duration='{duration1}'/>");
-            var resultNode2 = new ResultNode($"<test-case id='2' duration='{duration2}'/>");
+            TestNode testNode1 = new TestNode($"<test-start id='1' name='TestA'/>");
+            TestNode testNode2 = new TestNode($"<test-start id='2' name='TestB'/>");
+            var resultNode1 = new ResultNode($"<test-case id='1' name='TestA' duration='{duration1}'/>");
+            var resultNode2 = new ResultNode($"<test-case id='2' name='TestB' duration='{duration2}'/>");
             ITestModel model = Substitute.For<ITestModel>();
             model.TestResultManager.GetResultForTest("1").Returns(resultNode1);
             model.TestResultManager.GetResultForTest("2").Returns(resultNode2);
@@ -106,10 +106,10 @@ namespace TestCentric.Gui.Presenters
         public void Durationcompare_Descending_ReturnsExpectedResult(string duration1, string duration2, int expectedCompareResult)
         {
             // Arrange
-            TestNode testNode1 = new TestNode($"<test-start id='1'/>");
-            TestNode testNode2 = new TestNode($"<test-start id='2'/>");
-            var resultNode1 = new ResultNode($"<test-case id='1' duration='{duration1}'/>");
-            var resultNode2 = new ResultNode($"<test-case id='2' duration='{duration2}'/>");
+            TestNode testNode1 = new TestNode($"<test-start id='1' name='TestA'/>");
+            TestNode testNode2 = new TestNode($"<test-start id='2' name='TestB'/>");
+            var resultNode1 = new ResultNode($"<test-case id='1' name='TestA' duration='{duration1}'/>");
+            var resultNode2 = new ResultNode($"<test-case id='2' name='TestB' duration='{duration2}'/>");
             ITestModel model = Substitute.For<ITestModel>();
             model.TestResultManager.GetResultForTest("1").Returns(resultNode1);
             model.TestResultManager.GetResultForTest("2").Returns(resultNode2);
@@ -131,8 +131,8 @@ namespace TestCentric.Gui.Presenters
         public void Durationcompare_NoTestResultAvailable_ReturnsExpectedResult(string text1, string text2, string sortDirection, int expectedCompareResult)
         {
             // Arrange
-            TestNode testNode1 = new TestNode($"<test-start id='1'/>");
-            TestNode testNode2 = new TestNode($"<test-start id='2'/>");
+            TestNode testNode1 = new TestNode($"<test-start id='1' name='TestA'/>");
+            TestNode testNode2 = new TestNode($"<test-start id='2' name='TestB'/>");
             ITestModel model = Substitute.For<ITestModel>();
             model.TestResultManager.GetResultForTest("1").Returns((ResultNode)null);
             model.TestResultManager.GetResultForTest("2").Returns((ResultNode)null);

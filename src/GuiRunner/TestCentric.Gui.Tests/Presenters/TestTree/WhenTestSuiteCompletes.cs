@@ -21,6 +21,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         [SetUp]
         public void Setup()
         {
+            _model.TreeConfiguration.NUnitTreeShowFixtures.Returns(true);
             _presenter = new TreeViewPresenter(_view, _model, new TreeDisplayStrategyFactory());
             _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
         }
@@ -42,13 +43,13 @@ namespace TestCentric.Gui.Presenters.TestTree
             var result = resultState.Status.ToString();
             var label = resultState.Label;
 
-            var testNode = new TestNode("<test-run id='1'><test-suite id='100'><test-case id='200'/></test-suite></test-run>");
+            var testNode = new TestNode("<test-run id='1'><test-suite id='100' type='TestFixture' name='Fixture1'><test-case id='200' name='TestA'/></test-suite></test-run>");
             var resultNode = new ResultNode(string.IsNullOrEmpty(label)
-                ? string.Format("<test-suite id='100' result='{0}'/>", result)
-                : string.Format("<test-suite id='100' result='{0}' label='{1}'/>", result, label));
+                ? string.Format("<test-suite type='TestFixture' id='100' name='Fixture1' result='{0}'/>", result)
+                : string.Format("<test-suite type='TestFixture' id='100' name='Fixture1' result='{0}' label='{1}'/>", result, label));
             var testCaseResultNode = new ResultNode(string.IsNullOrEmpty(label)
-                                                ? string.Format("<test-suite id='200' result='{0}'/>", result)
-                                                : string.Format("<test-suite id='200' result='{0}' label='{1}'/>", result, label));
+                                                ? string.Format("<test-case id='200' name='TestA' result='{0}'/>", result)
+                                                : string.Format("<test-case id='200' name='TestA' result='{0}' label='{1}'/>", result, label));
 
             _model.GetTestById("100").Returns(testNode.Children.First());
             _model.TestResultManager.GetResultForTest("100").Returns(resultNode);

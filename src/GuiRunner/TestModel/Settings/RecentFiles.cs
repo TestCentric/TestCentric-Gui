@@ -24,7 +24,7 @@ namespace TestCentric.Gui.Model.Settings
 
         public string Latest
         {
-            get { return Entries.Count == 0 ? null : Entries[0]; }
+            get { return Entries.Count == 0 ? "" : Entries[0]; }
             set
             {
                 if (Latest != value)

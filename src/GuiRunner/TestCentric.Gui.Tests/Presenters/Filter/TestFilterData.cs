@@ -124,7 +124,7 @@ namespace TestCentric.Gui.Presenters.Filter
 
         private static string CreateTestRunXml(params string[] testSuites)
         {
-            string str = $"<test-run type='TestRun'> ";
+            string str = $"<test-run type='TestRun' id='0' name='TestRun'> ";
             foreach (string testSuite in testSuites)
                 str += testSuite;
 

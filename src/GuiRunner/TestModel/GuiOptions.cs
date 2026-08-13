@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -88,8 +89,8 @@ namespace TestCentric.Gui
             Add("trace", "Set internal trace {LEVEL}. Valid values are Off, Error, Warning, Info or Debug. Verbose is a synonym for Debug.", true,
                 v =>
                 {
-                if (CheckRequiredValue(v, "--trace", "Off", "Error", "Warning", "Info", "Verbose", "Debug"))
-                    InternalTraceLevel = v;
+                    if (CheckRequiredValue(v, "--trace", "Off", "Error", "Warning", "Info", "Verbose", "Debug"))
+                        InternalTraceLevel = v;
                 });
 
             Add("param|p", "Followed by a {KEY-VALUE PAIR} separated by an equals sign. Test code can access the value by name. This option may be repeated.", true,
@@ -114,7 +115,7 @@ namespace TestCentric.Gui
             Add("help|h", "Display the help message and exit.", false,
                 v => ShowHelp = true);
 
-            void Add(string pattern, string description, bool requiresValue, Action<string> action, bool debugOnly=false)
+            void Add(string pattern, string description, bool requiresValue, Action<string?> action, bool debugOnly = false)
             {
                 var option = new Option(pattern, description, requiresValue, action, debugOnly);
                 _options.Add(option);
@@ -128,9 +129,7 @@ namespace TestCentric.Gui
             for (int i = 0; i < args.Length; i++)
             {
                 string arg = args[i];
-                Option option;
-                string val;
-                if (TryParseOption(arg, out option, out val))
+                if (TryParseOption(arg, out Option? option, out string? val))
                 {
                     if (option.RequiresValue)
                     {
@@ -152,7 +151,7 @@ namespace TestCentric.Gui
             }
         }
 
-        private bool TryParseOption(string arg, out Option option, out string value)
+        private bool TryParseOption(string arg, [NotNullWhen(true)] out Option? option, out string? value)
         {
             option = null;
             value = null;
@@ -162,7 +161,7 @@ namespace TestCentric.Gui
             string opt = arg.StartsWith("--")
                 ? arg.Substring(2)
                 : arg.Substring(1);
-            string val = null;
+            string? val = null;
             int delim = opt.IndexOfAny(['=', ':']);
             if (delim > 0)
             {
@@ -192,7 +191,7 @@ namespace TestCentric.Gui
         private void InvalidArgumentError(string arg) =>
             ErrorMessages.Add($"Invalid argument: {arg}");
 
-#endregion
+        #endregion
 
         #region Properties
 
@@ -208,15 +207,15 @@ namespace TestCentric.Gui
         private List<string> inputFiles = new List<string>();
         public IList<string> InputFiles { get { return inputFiles; } }
 
-        public string ActiveConfig { get; private set; }
+        public string? ActiveConfig { get; private set; }
 
         // How to Run Tests
 
-        public string GuiLayout { get; private set; }
+        public string? GuiLayout { get; private set; }
         public bool RunAsX86 { get; private set; }
         public int MaxAgents { get; private set; }
-        public string InternalTraceLevel { get; private set; }
-        public string WorkDirectory { get; private set; }
+        public string? InternalTraceLevel { get; private set; }
+        public string? WorkDirectory { get; private set; }
         public IDictionary<string, string> TestParameters { get; } = new Dictionary<string, string>();
         public bool DebugAgent { get; private set; }
 
@@ -291,7 +290,7 @@ namespace TestCentric.Gui
 
             public string Format { get; }
 
-            public string Transform { get; }
+            public string? Transform { get; }
         }
 
         // Error Processing
@@ -313,7 +312,7 @@ namespace TestCentric.Gui
             }
 
             return ErrorMessages.Count == 0;
-        
+
         }
 
         public string GetHelpText()
@@ -343,7 +342,7 @@ namespace TestCentric.Gui
 
         #region Helper Methods
 
-        private bool CheckRequiredValue(string val, string option, params string[] validValues)
+        private bool CheckRequiredValue([NotNullWhen(true)] string? val, string option, params string[] validValues)
         {
             if (string.IsNullOrEmpty(val))
                 ErrorMessages.Add($"Missing required value for option '{option}'");
@@ -364,7 +363,7 @@ namespace TestCentric.Gui
 
     internal class Option
     {
-        public Option(string aliases, string description, bool requiresValue, Action<string> action, bool debugOnly = false)
+        public Option(string aliases, string description, bool requiresValue, Action<string?> action, bool debugOnly = false)
         {
             Aliases = aliases.Split('|');
             Description = description;
@@ -376,7 +375,7 @@ namespace TestCentric.Gui
         public string[] Aliases { get; }
         public bool RequiresValue { get; }
         public string Description { get; }
-        public Action<string> Action { get; }
+        public Action<string?> Action { get; }
         public bool DebugOnly { get; }
         public string HelpText
         {
@@ -386,7 +385,7 @@ namespace TestCentric.Gui
                 var sb = new StringBuilder();
 
                 sb.Append($"{string.Join(", ", Aliases.Select(a => (a.Length == 1 ? "-" : "--") + a))}");
-               
+
                 if (RequiresValue)
                 {
                     var match = Regex.Match(Description, "\\{(.*?)\\}");

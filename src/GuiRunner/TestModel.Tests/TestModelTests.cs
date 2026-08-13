@@ -79,7 +79,7 @@ namespace TestCentric.Gui.Model
         public void IsInTestRun_TestNode_ReturnsTrue()
         {
             // Arrange
-            var xmlNode = XmlHelper.CreateXmlNode($"<test-case id='1' />");
+            var xmlNode = XmlHelper.CreateXmlNode($"<test-case id='1' name='TestA'/>");
             var testNode = new TestNode(xmlNode);
 
             var runner = Substitute.For<ITestRunner>();
@@ -175,8 +175,8 @@ namespace TestCentric.Gui.Model
             model.CreateNewProject("MyProject");
             model.LoadTests(new[] { "dummy.dll" });
 
-            ResultNode resultNode1 = new ResultNode("<test-case id='1' />");
-            ResultNode resultNode2 = new ResultNode("<test-case id='2' />");
+            ResultNode resultNode1 = new ResultNode("<test-case id='1' name='TestA'/>");
+            ResultNode resultNode2 = new ResultNode("<test-case id='2' name='TestB'/>");
             model.TestResultManager.AddResult(resultNode1);
             model.TestResultManager.AddResult(resultNode2);
 

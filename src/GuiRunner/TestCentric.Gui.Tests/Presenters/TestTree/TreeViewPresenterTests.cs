@@ -178,8 +178,8 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void TreeCheckBoxClicked_TreeNodesAreSelected_AllTests_AreSelected()
         {
             // 1. Arrange
-            var treeNode1 = new TreeNode() { Tag = new TestNode("<test-case id='1' />") };
-            var treeNode2 = new TreeNode() { Tag = new TestNode("<test-case id='2' />") };
+            var treeNode1 = new TreeNode() { Tag = new TestNode("<test-case id='1' name='TestA'/>") };
+            var treeNode2 = new TreeNode() { Tag = new TestNode("<test-case id='2' name='TestB'/>") };
 
             IList<TreeNode> checkedNodes = new List<TreeNode>() { treeNode1, treeNode2 };
             _view.CheckedNodes.Returns(checkedNodes);
@@ -196,8 +196,8 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void TreeCheckBoxClicked_GroupIsSelected_AllTestsOfGroup_AreSelected() 
         {
             // 1. Arrange
-            var subTestNode1 = new TestNode("<test-case id='2' />");
-            var subTestNode2 = new TestNode("<test-case id='3' />");
+            var subTestNode1 = new TestNode("<test-case id='2' name='TestB'/>");
+            var subTestNode2 = new TestNode("<test-case id='3' name='TestC'/>");
             var testGroup = new TestGroup("Category_1", [subTestNode1, subTestNode2]);
 
             var treeNode1 = new TreeNode() { Tag = testGroup };
@@ -217,12 +217,12 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void TreeCheckBoxClicked_TreeNodeAndGroupIsSelected_AllTests_AreSelected()
         {
             // 1. Arrange
-            var subTestNode1 = new TestNode("<test-case id='1' />");
-            var subTestNode2 = new TestNode("<test-case id='2' />");
+            var subTestNode1 = new TestNode("<test-case id='1' name='TestA'/>");
+            var subTestNode2 = new TestNode("<test-case id='2' name='TestB'/>");
             var testGroup = new TestGroup("Category_1", [subTestNode1, subTestNode2]);
 
             var treeNode1 = new TreeNode() { Tag = testGroup.TestNodes };
-            var treeNode2 = new TreeNode() { Tag = new TestNode("<test-case id='3' />") };
+            var treeNode2 = new TreeNode() { Tag = new TestNode("<test-case id='3' name='TestC'/>") };
 
             IList<TreeNode> checkedNodes = new List<TreeNode>() { treeNode1, treeNode2 };
             _view.CheckedNodes.Returns(checkedNodes);
@@ -239,8 +239,8 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void TreeCheckBoxClicked_TreeNodeInsideGroupIsSelected_AllTests_AreSelected()
         {
             // 1. Arrange
-            var subTestNode1 = new TestNode("<test-case id='1' />");
-            var subTestNode2 = new TestNode("<test-case id='2' />");
+            var subTestNode1 = new TestNode("<test-case id='1' name='TestA'/>");
+            var subTestNode2 = new TestNode("<test-case id='2' name='TestB'/>");
             var testGroup = new TestGroup("Category_1", [subTestNode1, subTestNode2]);
 
             var treeNode1 = new TreeNode() { Tag = testGroup.TestNodes };
@@ -475,7 +475,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void WhenContextMenuIsDisplayed_RemoveTestPackageCommandContextMenu_IsNotVisible(bool hasTests, bool isTestRunning, string testNodeType)
         {
             // 1. Arrange
-            TestNode testNode = new TestNode($"<test-suite id='1' type='{testNodeType}' />");
+            TestNode testNode = new TestNode($"<test-suite id='1' name='TestA' type='{testNodeType}' />");
             TreeNode treeNode = new TreeNode();
             treeNode.Tag = testNode;
             _view.ContextNode.Returns(treeNode);

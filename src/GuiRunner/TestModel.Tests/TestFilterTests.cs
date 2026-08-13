@@ -15,7 +15,7 @@ namespace TestCentric.Gui.Model
         public void MakeIdFilter_TestRunNode_ReturnsEmptyFilter()
         {
             // Arrange
-            var testNode = new TestNode("<test-run type='TestRun' />");
+            var testNode = new TestNode("<test-run type='TestRun' id='0'/>");
 
             // Act
             TestFilter filter = TestFilter.MakeIdFilter(testNode);
@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Model
         public void MakeIdFilter_Testcase_ReturnsIdFilter()
         {
             // Arrange
-            var testNode = new TestNode("<test-case id='1' />");
+            var testNode = new TestNode("<test-case id='1' name='TestA' />");
 
             // Act
             TestFilter filter = TestFilter.MakeIdFilter(testNode);
@@ -41,7 +41,7 @@ namespace TestCentric.Gui.Model
         public void MakeIdFilter_TestFixture_ReturnsIdFilter()
         {
             // Arrange
-            var testNode = new TestNode("<test-suite type='TestFixture' id='100' />");
+            var testNode = new TestNode("<test-suite type='TestFixture' id='100' name='Fixture1'/>");
 
             // Act
             TestFilter filter = TestFilter.MakeIdFilter(testNode);
@@ -54,7 +54,7 @@ namespace TestCentric.Gui.Model
         public void MakeIdFilter_TestSelection_SingleTestRunNode_ReturnsEmptyFilter()
         {
             // Arrange
-            var testNode = new TestNode("<test-run type='TestRun' />");
+            var testNode = new TestNode("<test-run type='TestRun' id='0' />");
             var testSelection = new TestSelection(new[] { testNode });
 
             // Act
@@ -68,7 +68,7 @@ namespace TestCentric.Gui.Model
         public void MakeIdFilter_TestSelection_SingleTestcase_ReturnsIdFilter()
         {
             // Arrange
-            var testNode = new TestNode("<test-case id='1' />");
+            var testNode = new TestNode("<test-case id='1' name='TestA'/>");
             var testSelection = new TestSelection(new[] { testNode });
 
             // Act
@@ -82,8 +82,8 @@ namespace TestCentric.Gui.Model
         public void MakeIdFilter_TestSelection_MultipleTests_ReturnsIdFilter()
         {
             // Arrange
-            var testNode1 = new TestNode("<test-case id='1' />");
-            var testNode2 = new TestNode("<test-suite type='TestFixture' id='100' />");
+            var testNode1 = new TestNode("<test-case id='1' name='TestA'/>");
+            var testNode2 = new TestNode("<test-suite type='TestFixture' id='100' name='Fixture1'/>");
 
             var testSelection = new TestSelection(new[] { testNode1, testNode2 });
 
@@ -142,7 +142,7 @@ namespace TestCentric.Gui.Model
         public void MakeAndFilter_OfFilters_ReturnsAndFilter()
         {
             // Arrange
-            var testNode = new TestNode("<test-case id='1' />");
+            var testNode = new TestNode("<test-case id='1' name='TestA'/>");
             var filter1 = TestFilter.MakeIdFilter(testNode);
 
             // Act
@@ -156,10 +156,10 @@ namespace TestCentric.Gui.Model
         public void MakeAndFilter_OfFilters2_ReturnsAndFilter()
         {
             // Arrange
-            var testNode1 = new TestNode("<test-case id='1' />");
+            var testNode1 = new TestNode("<test-case id='1' name='TestA' />");
             var filter1 = TestFilter.MakeIdFilter(testNode1);
 
-            var testNode2 = new TestNode("<test-case id='2' />");
+            var testNode2 = new TestNode("<test-case id='2'  name='TestB' />");
             var filter2 = TestFilter.MakeIdFilter(testNode2);
 
             // Act
@@ -195,7 +195,7 @@ namespace TestCentric.Gui.Model
         public void MakeOrFilter_OfFilters_ReturnsOrFilter()
         {
             // Arrange
-            var testNode = new TestNode("<test-case id='1' />");
+            var testNode = new TestNode("<test-case id='1' name='TestA' />");
             var filter1 = TestFilter.MakeIdFilter(testNode);
 
             // Act
@@ -209,10 +209,10 @@ namespace TestCentric.Gui.Model
         public void MakeOrFilter_OfFilters2_ReturnsAndFilter()
         {
             // Arrange
-            var testNode1 = new TestNode("<test-case id='1' />");
+            var testNode1 = new TestNode("<test-case id='1' name='TestA'/>");
             var filter1 = TestFilter.MakeIdFilter(testNode1);
 
-            var testNode2 = new TestNode("<test-case id='2' />");
+            var testNode2 = new TestNode("<test-case id='2' name='TestB' />");
             var filter2 = TestFilter.MakeIdFilter(testNode2);
 
             // Act

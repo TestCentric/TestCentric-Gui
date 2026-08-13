@@ -47,14 +47,14 @@ namespace TestCentric.Gui.Model
 
         #region Current State of the Model
 
-        TestCentricProject TestCentricProject { get; }
+        TestCentricProject? TestCentricProject { get; }
 
-        TestPackage TopLevelPackage { get; }
+        TestPackage? TopLevelPackage { get; }
 
         bool IsProjectLoaded { get; }
 
         // TestNode hierarchy representing the discovered tests
-        TestNode LoadedTests { get; }
+        TestNode? LoadedTests { get; }
 
         // See if tests are available
         bool HasTests { get; }
@@ -68,7 +68,7 @@ namespace TestCentric.Gui.Model
         ITestResultManager TestResultManager { get; }
 
         // Summary of last test run
-        ResultSummary ResultSummary { get; }
+        ResultSummary? ResultSummary { get; }
 
         // Is ResultSummary available?
         bool HasResults { get; }
@@ -77,7 +77,7 @@ namespace TestCentric.Gui.Model
         /// Gets or sets the active test item. This is the item
         /// for which details are displayed in the various views.
         /// </summary>
-        ITestItem ActiveTestItem { get; set; }
+        ITestItem? ActiveTestItem { get; set; }
 
         /// <summary>
         ///  Gets or sets the list of selected tests.
@@ -139,7 +139,7 @@ namespace TestCentric.Gui.Model
         /// Open an existing TestCentricProject file.
         /// </summary>
         /// <param name="filePath">Path to the project file</param>
-        TestCentricProject OpenExistingProject(string filePath, GuiOptions options=null);
+        TestCentricProject OpenExistingProject(string filePath, GuiOptions? options=null);
 
         /// <summary>
         /// Open the most recently opened file that still exists, which may be
@@ -186,7 +186,7 @@ namespace TestCentric.Gui.Model
         /// This method is called by both the 'Save' and 'SaveAs' functions of the GUI.
         /// </remarks>
         /// <param name="filePath">The path where the project will be saved</param>
-        void SaveProject(string filePath = null);
+        void SaveProject(string? filePath = null);
 
         /// <summary>
         /// Close the currently open TestCentricProject.
@@ -224,11 +224,11 @@ namespace TestCentric.Gui.Model
         void TransformResults(string targetFile, string xsltFile);
 
         // Get a specific test given its id
-        TestNode GetTestById(string id);
+        TestNode? GetTestById(string id);
 
         // Get the TestPackage represented by a test,if available
-        NUnit.Engine.TestPackage GetPackageForTest(string id);
-        NUnit.Engine.PackageSettings GetPackageSettingsForTest(string id);
+        NUnit.Engine.TestPackage? GetPackageForTest(string id);
+        NUnit.Engine.PackageSettings? GetPackageSettingsForTest(string id);
 
         // Get Agents available for a package
         IList<string> GetAgentsForPackage(NUnit.Engine.TestPackage package);

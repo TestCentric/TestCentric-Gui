@@ -77,8 +77,8 @@ namespace TestCentric.Gui.Presenters
             _model.TreeConfiguration.TestListGroupBy = "CATEGORY";
 
             TestNode testNode = new TestNode(
-                "<test-suite type='TestSuite'> " +
-                    "<test-suite type='TestFixture'>" +
+                "<test-suite id='0' type='TestSuite' name='Suite1'> " +
+                    "<test-suite id='1' type='TestFixture' name='Fixture1'>" +
                         CreateTestcaseXml("3-1000", categoryTestcase1) +
                         CreateTestcaseXml("3-1001", categoryTestcase2) +
                         CreateTestcaseXml("3-1002", categoryTestcase3) +
@@ -107,8 +107,8 @@ namespace TestCentric.Gui.Presenters
             // 1. Arrange
             _model.TreeConfiguration.TestListGroupBy = "CATEGORY";
 
-            string xmlText = "<test-suite type='TestSuite'> " + $"<properties> <property name='Category' value='{categoryTestFixture}' /> </properties> " +
-                                "<test-suite type='TestFixture'>" +
+            string xmlText = "<test-suite id='0' type='TestSuite' name='Suite1'> " + $"<properties> <property name='Category' value='{categoryTestFixture}' /> </properties> " +
+                                "<test-suite id='1' type='TestFixture' name='Fixture1'>" +
                                     CreateTestcaseXml("3-1000", categoryTestcase1) +
                                     CreateTestcaseXml("3-1001", categoryTestcase2) +
                                     CreateTestcaseXml("3-1002", categoryTestcase3) +
@@ -135,7 +135,7 @@ namespace TestCentric.Gui.Presenters
             _model.TreeConfiguration.TestListGroupBy = "CATEGORY";
 
             TestNode testNode = new TestNode(
-                        "<test-suite type='TestFixture' id='3-1000'> " +
+                        "<test-suite type='TestFixture' id='3-1000' name='Fixture1'> " +
                             "<properties> " +
                                 "<property name='Category' value='Category_1' /> " +
                                 "<property name='Category' value='Category_2' /> " +
@@ -163,8 +163,8 @@ namespace TestCentric.Gui.Presenters
             _model.TreeConfiguration.TestListGroupBy = "CATEGORY";
 
             TestNode testNode = new TestNode(
-                "<test-suite type='TestFixture'> " +
-                    "<test-case  id='3-1000'> " +
+                "<test-suite id='0' type='TestFixture' name='Fixture1'> " +
+                    "<test-case  id='3-1000' name='testA'> " +
                         "<properties> " +
                             "<property name='Category' value='Category_1' /> " +
                             "<property name='Category' value='Category_2' /> " +
@@ -197,17 +197,17 @@ namespace TestCentric.Gui.Presenters
             _model.TreeConfiguration.TestListGroupBy = "DURATION";
 
             TestNode testNode = new TestNode(
-                "<test-suite type='TestSuite'> " +
-                    "<test-suite type='TestFixture'>" +
+                "<test-suite id='0' name='Suite1' type='TestSuite'> " +
+                    "<test-suite id='1' name='Fixture1' type='TestFixture'>" +
                         CreateTestcaseXml("3-1000", "") +
                         CreateTestcaseXml("3-1001", "") +
                         CreateTestcaseXml("3-1002", "") +
                     "</test-suite>" +
                 "</test-suite>");
 
-            _model.TestResultManager.GetResultForTest("3-1000").Returns(string.IsNullOrEmpty(duration1) ? null : new ResultNode($"<test-case id='3-1000' duration='{duration1}' />"));
-            _model.TestResultManager.GetResultForTest("3-1001").Returns(string.IsNullOrEmpty(duration2) ? null : new ResultNode($"<test-case id='3-1001' duration='{duration2}' />"));
-            _model.TestResultManager.GetResultForTest("3-1002").Returns(string.IsNullOrEmpty(duration3) ? null : new ResultNode($"<test-case id='3-1002' duration='{duration3}' />"));
+            _model.TestResultManager.GetResultForTest("3-1000").Returns(string.IsNullOrEmpty(duration1) ? null : new ResultNode($"<test-case id='3-1000' name='TestA' duration='{duration1}' />"));
+            _model.TestResultManager.GetResultForTest("3-1001").Returns(string.IsNullOrEmpty(duration2) ? null : new ResultNode($"<test-case id='3-1001' name='TestB' duration='{duration2}' />"));
+            _model.TestResultManager.GetResultForTest("3-1002").Returns(string.IsNullOrEmpty(duration3) ? null : new ResultNode($"<test-case id='3-1002' name='TestC' duration='{duration3}' />"));
 
             // 2. Act           
             TestListDisplayStrategy strategy = new TestListDisplayStrategy(_view, _model);
@@ -238,17 +238,17 @@ namespace TestCentric.Gui.Presenters
             _model.TreeConfiguration.TestListGroupBy = "OUTCOME";
 
             TestNode testNode = new TestNode(
-                "<test-suite type='TestSuite'> " +
-                    "<test-suite type='TestFixture'>" +
+                "<test-suite id='0' type='TestSuite' name='Suite1'> " +
+                    "<test-suite id='0' type='TestFixture' name='Fixture1'>" +
                         CreateTestcaseXml("3-1000", "") +
                         CreateTestcaseXml("3-1001", "") +
                         CreateTestcaseXml("3-1002", "") +
                     "</test-suite>" +
                 "</test-suite>");
 
-            _model.TestResultManager.GetResultForTest("3-1000").Returns(string.IsNullOrEmpty(resultState1) ? null : new ResultNode($"<test-case id='3-1000' result='{resultState1}' />"));
-            _model.TestResultManager.GetResultForTest("3-1001").Returns(string.IsNullOrEmpty(resultState2) ? null : new ResultNode($"<test-case id='3-1001' result='{resultState2}' />"));
-            _model.TestResultManager.GetResultForTest("3-1002").Returns(string.IsNullOrEmpty(resultState3) ? null : new ResultNode($"<test-case id='3-1002' result='{resultState3}' />"));
+            _model.TestResultManager.GetResultForTest("3-1000").Returns(string.IsNullOrEmpty(resultState1) ? null : new ResultNode($"<test-case id='3-1000' name='TestA' result='{resultState1}' />"));
+            _model.TestResultManager.GetResultForTest("3-1001").Returns(string.IsNullOrEmpty(resultState2) ? null : new ResultNode($"<test-case id='3-1001' name='TestB' result='{resultState2}' />"));
+            _model.TestResultManager.GetResultForTest("3-1002").Returns(string.IsNullOrEmpty(resultState3) ? null : new ResultNode($"<test-case id='3-1002' name='TestC' result='{resultState3}' />"));
 
             // 2. Act           
             TestListDisplayStrategy strategy = new TestListDisplayStrategy(_view, _model);
@@ -286,7 +286,7 @@ namespace TestCentric.Gui.Presenters
 
         private string CreateTestcaseXml(string testId, string category)
         {
-            string str = $"<test-case id='{testId}'> ";
+            string str = $"<test-case id='{testId}' name='{testId}' > ";
             if (!string.IsNullOrEmpty(category))
                 str += $"<properties> <property name='Category' value='{category}' /> </properties> ";
 

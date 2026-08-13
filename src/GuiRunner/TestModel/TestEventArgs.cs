@@ -73,7 +73,7 @@ namespace TestCentric.Gui.Model
 
     public class TestOutputEventArgs : TestEventArgs
     {
-        public TestOutputEventArgs(string testName, string stream, string text)
+        public TestOutputEventArgs(string testName, string? stream, string text)
         {
             TestName = testName;
             Stream = stream;
@@ -81,7 +81,7 @@ namespace TestCentric.Gui.Model
         }
 
         public string TestName { get; }
-        public string Stream { get; }
+        public string? Stream { get; }
         public string Text { get; }
     }
 

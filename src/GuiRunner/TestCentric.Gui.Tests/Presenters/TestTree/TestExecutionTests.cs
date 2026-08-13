@@ -16,13 +16,13 @@ namespace TestCentric.Gui.Presenters.TestTree
 
     public class TestExecutionTests : TreeViewPresenterTestBase
     {
-        private static TestNode TEST_CASE_NODE = new TestNode(XmlHelper.CreateXmlNode("<test-case/>"));
+        private static TestNode TEST_CASE_NODE = new TestNode(XmlHelper.CreateXmlNode("<test-case id='0' name='TestA'/>"));
         private static TreeNode TEST_CASE_TREE_NODE = new TreeNode()
         {
             Tag = TEST_CASE_NODE
         };
 
-        private static TestNode TEST_SUITE_NODE = new TestNode(XmlHelper.CreateXmlNode("<test-suite/>"));
+        private static TestNode TEST_SUITE_NODE = new TestNode(XmlHelper.CreateXmlNode("<test-suite id='1' type='TestFixture' name='FixtureA'/>"));
         private static TreeNode TEST_SUITE_TREE_NODE = new TreeNode()
         {
             Tag = TEST_SUITE_NODE

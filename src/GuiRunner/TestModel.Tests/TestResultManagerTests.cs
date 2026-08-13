@@ -33,7 +33,7 @@ namespace TestCentric.Gui.Model
         {
             // Arrange
             ITestModel model = Substitute.For<ITestModel>();
-            ResultNode resultNode = new ResultNode("<test-suite id='1' result='Passed'/>");
+            ResultNode resultNode = new ResultNode("<test-suite id='1' result='Passed' name='TestA' type='TestFixture'/>");
 
             var manager = new TestResultManager(model);
             manager.AddResult(resultNode);
@@ -51,7 +51,7 @@ namespace TestCentric.Gui.Model
         {
             // Arrange
             ITestModel model = Substitute.For<ITestModel>();
-            ResultNode resultNode = new ResultNode("<test-suite id='1' result='Passed'/>");
+            ResultNode resultNode = new ResultNode("<test-suite id='1' result='Passed' name='TestA' type='TestFixture'/>");
 
             var manager = new TestResultManager(model);
             manager.AddResult(resultNode);
@@ -69,8 +69,8 @@ namespace TestCentric.Gui.Model
         {
             // Arrange
             ITestModel model = Substitute.For<ITestModel>();
-            ResultNode resultNode1 = new ResultNode("<test-suite id='1' result='Passed'/>");
-            ResultNode resultNode2 = new ResultNode("<test-suite id='2' result='Passed'/>");
+            ResultNode resultNode1 = new ResultNode("<test-suite id='1' result='Passed' name='TestA' type='TestFixture'/>");
+            ResultNode resultNode2 = new ResultNode("<test-suite id='2' result='Passed' name='TestB' type='TestFixture'/>");
 
             var manager = new TestResultManager(model);
             manager.AddResult(resultNode1);
@@ -109,11 +109,11 @@ namespace TestCentric.Gui.Model
             string oldOutcome, string oldLabel, string newOutcome, string newLabel, TestStatus expectedTestStatus)
         {
             // Arrange
-            ResultNode oldResult = new ResultNode($"<test-suite id='1' result='{oldOutcome}' label='{oldLabel}' />");
-            ResultNode childResult1 = new ResultNode($"<test-suite id='2' result='{newOutcome}' label='{newLabel}' />");
-            ResultNode childResult2 = new ResultNode($"<test-suite id='3' result='{oldOutcome}' label='{oldLabel}' />");
+            ResultNode oldResult = new ResultNode($"<test-suite id='1' result='{oldOutcome}' label='{oldLabel}' name='TestA' fullname='TestA' type='TestFixture'/>");
+            ResultNode childResult1 = new ResultNode($"<test-suite id='2' result='{newOutcome}' label='{newLabel}' name='TestB' fullname='TestB' type='TestFixture'/>");
+            ResultNode childResult2 = new ResultNode($"<test-suite id='3' result='{oldOutcome}' label='{oldLabel}' name='TestC' fullname='TestC' type='TestFixture'/>");
 
-            TestNode testNode1 = new TestNode($"<test-suite id='1'> <test-case id='2' />  <test-case id='3' /> </test-suite>");
+            TestNode testNode1 = new TestNode($"<test-suite id='1' name='TestA' type='TestFixture'> <test-case id='2' name='TestB' />  <test-case id='3' name='TestC' /> </test-suite>");
             
             ITestModel model = Substitute.For<ITestModel>();
             model.GetTestById("1").Returns(testNode1);
@@ -123,7 +123,7 @@ namespace TestCentric.Gui.Model
 
             // Act
             manager.TestRunStarting();
-            ResultNode newResult = new ResultNode($"<test-suite id='1' result='{newOutcome}' label='{newLabel}' />");
+            ResultNode newResult = new ResultNode($"<test-suite id='1' result='{newOutcome}' label='{newLabel}' name='TestA' type='TestFixture'/>");
             manager.AddResult(childResult1);
             manager.AddResult(newResult);
 
@@ -142,11 +142,11 @@ namespace TestCentric.Gui.Model
             string oldOutcome, string oldLabel, string newOutcome, string newLabel, TestStatus expectedTestStatus)
         {
             // Arrange
-            ResultNode oldResult = new ResultNode($"<test-suite id='1' result='{oldOutcome}' label='{oldLabel}' />");
-            ResultNode childResult1 = new ResultNode($"<test-suite id='2' result='{newOutcome}' label='{newLabel}' />");
-            ResultNode childResult2 = new ResultNode($"<test-suite id='3' result='{oldOutcome}' label='{oldLabel}' />");
+            ResultNode oldResult = new ResultNode($"<test-suite id='1' result='{oldOutcome}' label='{oldLabel}' name='TestA' type='TestFixture'/>");
+            ResultNode childResult1 = new ResultNode($"<test-suite id='2' result='{newOutcome}' label='{newLabel}' name='TestB' type='TestFixture'/>");
+            ResultNode childResult2 = new ResultNode($"<test-suite id='3' result='{oldOutcome}' label='{oldLabel}' name='TestC' type='TestFixture'/>");
 
-            TestNode testNode1 = new TestNode($"<test-suite id='1'> <test-case id='2' />  <test-case id='3' /> </test-suite>");
+            TestNode testNode1 = new TestNode($"<test-suite id='1' name='TestA' type='TestFixture'> <test-case id='2' name='TestB'/>  <test-case id='3' name='TestC'/> </test-suite>");
 
             ITestModel model = Substitute.For<ITestModel>();
             model.GetTestById("1").Returns(testNode1);
@@ -156,7 +156,7 @@ namespace TestCentric.Gui.Model
 
             // Act
             manager.TestRunStarting();
-            ResultNode newResult = new ResultNode($"<test-suite id='1' result='{newOutcome}' label='{newLabel}' />");
+            ResultNode newResult = new ResultNode($"<test-suite id='1' type='TestFixture' name='TestA' result='{newOutcome}' label='{newLabel}' />");
             manager.AddResult(childResult1);
             ResultNode addedResult = manager.AddResult(newResult);
 
@@ -190,16 +190,16 @@ namespace TestCentric.Gui.Model
             string outcome1stRun, string label1stRun, string outcome2ndRun, string label2ndRun, TestStatus expectedTestStatus)
         {
             // Arrange
-            TestNode testNode1 = new TestNode($"<test-suite id='1' type='TestSuite'> <test-suite id='2' type='TestFixture'> <test-case id='3' />  <test-case id='4' /> </test-suite> </test-suite>");
+            TestNode testNode1 = new TestNode($"<test-suite id='1' name='Suite1' type='TestSuite'> <test-suite id='2' type='TestFixture' name='Fixture1'> <test-case id='3' name='TestA'/>  <test-case id='4' name='TestB'/> </test-suite> </test-suite>");
 
             // Simulate 2 test runs in which only one part of the tests are executed.: 1st run executes test case '3'; 2nd run executes test case '4'
-            ResultNode resultNode1_1stRun = new ResultNode($"<test-suite id='1' type='TestSuite' result='{outcome1stRun}' label='{label1stRun}' />");
-            ResultNode resultNode2_1stRun = new ResultNode($"<test-suite id='2' type='TestFixture' result='{outcome1stRun}' label='{label1stRun}' />");
-            ResultNode resultNode3_1stRun = new ResultNode($"<test-suite id='3' result='{outcome1stRun}' label='{label1stRun}' />");
+            ResultNode resultNode1_1stRun = new ResultNode($"<test-suite id='1' type='TestSuite' name='Suite1' result='{outcome1stRun}' label='{label1stRun}' />");
+            ResultNode resultNode2_1stRun = new ResultNode($"<test-suite id='2' type='TestFixture' name='Fixture1' result='{outcome1stRun}' label='{label1stRun}' />");
+            ResultNode resultNode3_1stRun = new ResultNode($"<test-case id='3' name='TestA' result='{outcome1stRun}' label='{label1stRun}' />");
 
-            ResultNode resultNode1_2ndRun = new ResultNode($"<test-suite id='1' type='TestSuite' result='{outcome2ndRun}' label='{label2ndRun}' />");
-            ResultNode resultNode2_2ndRun = new ResultNode($"<test-suite id='2' type='TestFixture' result='{outcome2ndRun}' label='{label2ndRun}' />");
-            ResultNode resultNode4_2ndRun = new ResultNode($"<test-suite id='4' result='{outcome2ndRun}' label='{label2ndRun}' />");
+            ResultNode resultNode1_2ndRun = new ResultNode($"<test-suite id='1' type='TestSuite' name='Suite1' result='{outcome2ndRun}' label='{label2ndRun}' />");
+            ResultNode resultNode2_2ndRun = new ResultNode($"<test-suite id='2' type='TestFixture' name='Fixture1' result='{outcome2ndRun}' label='{label2ndRun}' />");
+            ResultNode resultNode4_2ndRun = new ResultNode($"<test-case id='4' name='TestA' result='{outcome2ndRun}' label='{label2ndRun}' />");
 
             ITestModel model = Substitute.For<ITestModel>();
             model.GetTestById("1").Returns(testNode1);
@@ -231,8 +231,8 @@ namespace TestCentric.Gui.Model
         public void AddResult_ExplicitResult_ReturnsResultFromPreviousRun()
         {
             // Arrange
-            ResultNode oldResult = new ResultNode($"<test-suite id='1' result='Passed' />");
-            ResultNode newResult = new ResultNode($"<test-suite id='1' result='Skipped' label='Explicit' />");
+            ResultNode oldResult = new ResultNode($"<test-suite id='1' name='TestA' type='TestFixture' result='Passed' />");
+            ResultNode newResult = new ResultNode($"<test-suite id='1' name='TestA' type='TestFixture' result='Skipped' label='Explicit' />");
 
             ITestModel model = Substitute.For<ITestModel>();
             var manager = new TestResultManager(model);
@@ -252,7 +252,7 @@ namespace TestCentric.Gui.Model
         {
             // Arrange
             string xmlReload = "<test-run id='1'>" +
-                               "<test-case id='2' fullname='Assembly.Folder1.TestB'/>" +
+                               "<test-case id='2' fullname='Assembly.Folder1.TestB' name='TestB'/>" +
                                "</test-run>";
 
             var reloadedTestNode = new TestNode(xmlReload);
@@ -261,7 +261,7 @@ namespace TestCentric.Gui.Model
             var manager = new TestResultManager(model);
             model.LoadedTests.Returns(reloadedTestNode);
 
-            var resultXml = "<test-case id='3' fullname='Assembly.Folder1.TestB' result='Passed'/>";
+            var resultXml = "<test-case id='3' fullname='Assembly.Folder1.TestB' name='TestB' result='Passed'/>";
             manager.AddResult(new ResultNode(resultXml));
 
             // Act

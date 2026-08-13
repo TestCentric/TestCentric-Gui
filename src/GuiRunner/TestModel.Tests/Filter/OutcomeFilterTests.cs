@@ -38,8 +38,8 @@ namespace TestCentric.Gui.Model.Filter
             OutcomeFilter filter = new OutcomeFilter(testModel);
             filter.Condition = outcomeFilter;
 
-            TestNode testNode = new TestNode($"<test-case id='1' />");
-            var resultNode = new ResultNode($"<test-case id='1' result='{testOutcome}' />");
+            TestNode testNode = new TestNode($"<test-case id='1' name='TestA' />");
+            var resultNode = new ResultNode($"<test-case id='1' name='TestA' result='{testOutcome}' />");
             testModel.TestResultManager.GetResultForTest(testNode.Id).Returns(resultNode);
 
             // 2. Act
@@ -59,8 +59,8 @@ namespace TestCentric.Gui.Model.Filter
             OutcomeFilter filter = new OutcomeFilter(testModel);
             filter.Condition = outcomeFilter;
 
-            TestNode testNode = new TestNode($"<test-case id='1' />");
-            var resultNode = new ResultNode($"<test-case id='1' result='{testOutcome}' />");
+            TestNode testNode = new TestNode($"<test-case id='1' name='TestA' fullname='TestA'/>");
+            var resultNode = new ResultNode($"<test-case id='1' result='{testOutcome}' name='TestA' fullname='TestA'/>");
             testModel.TestResultManager.GetResultForTest(testNode.Id).Returns(resultNode);
 
             // 2. Act
@@ -78,7 +78,7 @@ namespace TestCentric.Gui.Model.Filter
             OutcomeFilter filter = new OutcomeFilter(testModel);
             filter.Condition = outcomeFilter;
 
-            TestNode testNode = new TestNode($"<test-case id='1' />");
+            TestNode testNode = new TestNode($"<test-case id='1' name='TestA' />");
             testModel.TestResultManager.GetResultForTest(testNode.Id).Returns((ResultNode)null);
 
             // 2. Act

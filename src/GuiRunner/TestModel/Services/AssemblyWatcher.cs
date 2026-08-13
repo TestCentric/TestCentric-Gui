@@ -12,16 +12,11 @@ namespace TestCentric.Gui.Model.Services
 {
     public class AssemblyWatcher : IAsemblyWatcher
     {
-        private List<FileSystemWatcher> fileWatchers;
-        private List<FileInfo> files;
+        private List<FileSystemWatcher>? fileWatchers;
+        private List<FileInfo>? files;
 
-        protected System.Timers.Timer timer;
-        protected string changedAssemblyPath;
-
-        protected FileInfo GetFileInfo(int index)
-        {
-            return files[index];
-        }
+        protected System.Timers.Timer? timer;
+        protected string? changedAssemblyPath;
 
         public void Setup(int delay, string assemblyFileName)
         {
@@ -30,7 +25,6 @@ namespace TestCentric.Gui.Model.Services
 
         public void Setup(int delay, IList<string> assemblies)
         {
-
             files = new List<FileInfo>();
             fileWatchers = new List<FileSystemWatcher>();
 
@@ -79,7 +73,6 @@ namespace TestCentric.Gui.Model.Services
 
         public void Dispose()
         {
-
             Stop();
 
             if (fileWatchers != null)
@@ -104,20 +97,19 @@ namespace TestCentric.Gui.Model.Services
             timer = null;
         }
 
-        public event AssemblyChangedHandler AssemblyChanged;
+        public event AssemblyChangedHandler? AssemblyChanged;
 
         protected void OnTimer(Object source, ElapsedEventArgs e)
         {
             lock (this)
             {
                 PublishEvent();
-                timer.Enabled = false;
+                timer!.Enabled = false;
             }
         }
 
         protected void OnChanged(object source, FileSystemEventArgs e)
         {
-
             changedAssemblyPath = e.FullPath;
             if (timer != null)
             {
@@ -138,7 +130,7 @@ namespace TestCentric.Gui.Model.Services
         {
             if (AssemblyChanged != null)
             {
-                AssemblyChanged(changedAssemblyPath);
+                AssemblyChanged(changedAssemblyPath!);
             }
         }
     }

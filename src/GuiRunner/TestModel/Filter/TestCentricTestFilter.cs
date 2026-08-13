@@ -6,6 +6,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using NUnit;
 
 namespace TestCentric.Gui.Model.Filter
 {
@@ -64,6 +66,8 @@ namespace TestCentric.Gui.Model.Filter
 
         public void ResetAll(bool suppressFilterChangedEvent = false)
         {
+            Guard.OperationValid(TestModel.LoadedTests != null, "No tests have been loaded");
+
             foreach (ITestFilter filter in _filters)
             {
                 filter.Reset();
@@ -106,6 +110,8 @@ namespace TestCentric.Gui.Model.Filter
 
         private void SetFilterCondition(string filterId, IEnumerable<string> filter)
         {
+            Guard.OperationValid(TestModel.LoadedTests != null, "No tests have been loaded");
+
             // 1. Get concrete filter by ID
             var testFilter = _filters.FirstOrDefault(f => f.FilterId == filterId);
             if (testFilter == null)
