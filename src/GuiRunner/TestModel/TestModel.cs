@@ -698,9 +698,14 @@ namespace TestCentric.Gui.Model
             RunTests(new TestRunSpecification(tests, CategoryFilter, true));
         }
 
-        public void StopTestRun(bool force)
+        public void RequestStop()
         {
-            TestCentricRunner.StopRun(force);
+            TestCentricRunner.RequestStop();
+        }
+
+        public void ForcedStop()
+        {
+            TestCentricRunner.ForcedStop();
         }
 
         // Called by the presenter at the end of the run

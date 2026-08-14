@@ -210,7 +210,8 @@ namespace TestCentric.Gui.Model
         void DebugTests(TestNode testNode);
         void DebugTests(TestSelection testSelection);
 
-        void StopTestRun(bool force);
+        void RequestStop();
+        void ForcedStop();
 
         #endregion
 

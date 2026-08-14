@@ -96,21 +96,28 @@ namespace TestCentric.Gui.Model
             ResetActiveTestRun();
         }
 
-        public void StopRun(bool force)
+        public void RequestStop()
         {
-            // Async to avoid blocking the main thread for incoming test events in between
-            Task.Run(() =>
-            {
-                // TODO: Localized fix to avoid conflicts with ongoing work on nullability.
-                // However, we should eliminate the StopRun(bool) method in the callers
-                // up the line when it is more convenient to do so, replacing it with
-                // two separate methods as in the ITestRunner interface.
-                if (force)
-                    ActiveTestRun?.ForcedStop();
-                else
+            if (ActiveTestRun is not null)
+                // Async to avoid blocking the main thread for incoming test events in between
+                Task.Run(() =>
+                {
                     ActiveTestRun?.RequestStop();
-                ResetActiveTestRun();
-            });
+                    ActiveTestRun?.Dispose();
+                    ActiveTestRun = null;
+                });
+        }
+
+        public void ForcedStop()
+        {
+            if (ActiveTestRun is not null)
+                // Async to avoid blocking the main thread for incoming test events in between
+                Task.Run(() =>
+                {
+                    ActiveTestRun?.ForcedStop();
+                    ActiveTestRun?.Dispose();
+                    ActiveTestRun = null;
+                });
         }
 
         private void ResetActiveTestRun()

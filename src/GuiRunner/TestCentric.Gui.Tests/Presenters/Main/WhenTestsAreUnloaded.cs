@@ -36,16 +36,16 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("RunFailedButton", false)]
         [TestCase("DisplayFormatButton", false)]
         [TestCase("RunParametersButton", false)]
-        [TestCase("StopRunButton", false)]
-        [TestCase("ForceStopButton", false)]
+        [TestCase("RequestStopButton", false)]
+        [TestCase("ForcedStopButton", false)]
         [TestCase("TestRunSettingsCommand", false)]
         public void CheckCommandEnabled(string propName, bool enabled)
         {
             ViewElement(propName).Received().Enabled = enabled;
         }
 
-        [TestCase("StopRunButton", true)]
-        [TestCase("ForceStopButton", false)]
+        [TestCase("RequestStopButton", true)]
+        [TestCase("ForcedStopButton", false)]
         public void CheckElementVisibility(string propName, bool visible)
         {
             ViewElement(propName).Received().Visible = visible;
