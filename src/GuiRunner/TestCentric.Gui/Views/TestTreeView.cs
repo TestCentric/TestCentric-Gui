@@ -59,9 +59,9 @@ namespace TestCentric.Gui.Views
         private bool _suppressAfterCheckEvent = false;
 
 #if USE_TIPWINDOW
-        public event TreeNodeActionHandler TreeNodeMouseHover;
-        private Timer _mouseHoverDelayTimer = new Timer();
-        private TreeNode _lastNodeHovered;
+        public event TreeNodeActionHandler? TreeNodeMouseHover;
+        private Timer? _mouseHoverDelayTimer = new Timer();
+        private TreeNode? _lastNodeHovered;
 
         public TipWindow TipWindow { get; }
 #endif

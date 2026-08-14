@@ -196,7 +196,7 @@ namespace TestCentric.Gui.Controls
         public Rectangle ItemBounds { get; set; }
         public bool WantClicks { get; set; }
 
-        public void Display(TreeNode treeNode, string resultText)
+        public void Display(TreeNode treeNode, string? resultText)
         {
             // HACK: Needed until we create a hierarchy of TipWindows with implementations for different controls
             Guard.OperationValid(_control is TreeView, "Internal Error: 'Display(TreeNode node)' may only be called when control is a TreeView.");
