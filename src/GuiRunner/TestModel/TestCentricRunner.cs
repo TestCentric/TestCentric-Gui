@@ -102,7 +102,7 @@ namespace TestCentric.Gui.Model
                 // Async to avoid blocking the main thread for incoming test events in between
                 Task.Run(() =>
                 {
-                    ActiveTestRun.RequestStop();
+                    ActiveTestRun?.RequestStop();
                     ResetActiveTestRun();
                 });
         }
