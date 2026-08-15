@@ -31,10 +31,10 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("RunSelectedButton", false)]
         [TestCase("RerunButton", false)]
         [TestCase("RunFailedButton", false)]
-        [TestCase("StopRunButton", false)]
+        [TestCase("RequestStopButton", false)]
         [TestCase("DisplayFormatButton", false)]
         [TestCase("RunParametersButton", false)]
-        [TestCase("ForceStopButton", false)]
+        [TestCase("ForcedStopButton", false)]
         [TestCase("SaveResultsCommand", false)]
         [TestCase("TransformResultsCommand", false)]
         public void CheckCommandEnabled(string propName, bool enabled)

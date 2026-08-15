@@ -91,8 +91,8 @@ namespace TestCentric.Gui.Views
             RunSelectedButton = new ToolStripButtonElement(runSelectedButton);
             RerunButton = new ToolStripButtonElement(rerunButton);
             RunFailedButton = new ToolStripButtonElement(runFailedButton);
-            StopRunButton = new ToolStripButtonElement(stopRunButton);
-            ForceStopButton = new ToolStripButtonElement(forceStopButton);
+            RequestStopButton = new ToolStripButtonElement(stopRunButton);
+            ForcedStopButton = new ToolStripButtonElement(forceStopButton);
             DisplayFormatButton = new ToolStripButtonElement(displayFormatButton);
 
             ShowHideFilterButton = new ToolStripButtonElement(showFilterButton);
@@ -185,8 +185,8 @@ namespace TestCentric.Gui.Views
         public ICommand RerunButton { get; private set; }
         public ICommand RunFailedButton { get; private set; }
 
-        public ICommand StopRunButton { get; private set; }
-        public ICommand ForceStopButton { get; private set; }
+        public ICommand RequestStopButton { get; private set; }
+        public ICommand ForcedStopButton { get; private set; }
 
         public ICommand DisplayFormatButton { get; private set; }
 

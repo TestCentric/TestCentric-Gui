@@ -413,22 +413,22 @@ namespace TestCentric.Gui.Presenters.Main
 
         #endregion
 
-        #region StopRun
+        #region Stop Commands
 
         [Test]
-        public void StopRunButton_StopsTests()
+        public void RequestStopButton_StopsTests()
         {
-            _view.StopRunButton.ClearReceivedCalls();
-            _view.ForceStopButton.ClearReceivedCalls();
-            _view.StopRunButton.Execute += Raise.Event<CommandHandler>();
-            _model.Received().StopTestRun(false);
+            _view.RequestStopButton.ClearReceivedCalls();
+            _view.ForcedStopButton.ClearReceivedCalls();
+            _view.RequestStopButton.Execute += Raise.Event<CommandHandler>();
+            _model.Received().RequestStop();
         }
 
         [Test]
-        public void ForceStopButton_ForcesTestsToStop()
+        public void ForcedStopButton_ForcesTestsToStop()
         {
-            _view.ForceStopButton.Execute += Raise.Event<CommandHandler>();
-            _model.Received().StopTestRun(true);
+            _view.ForcedStopButton.Execute += Raise.Event<CommandHandler>();
+            _model.Received().ForcedStop();
         }
 
         #endregion

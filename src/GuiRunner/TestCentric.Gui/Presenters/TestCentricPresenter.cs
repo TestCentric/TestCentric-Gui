@@ -298,7 +298,7 @@ namespace TestCentric.Gui.Presenters
                     }
 
                     _stopRequested = _forcedStopRequested = true;
-                    _model.StopTestRun(true);
+                    _model.ForcedStop();
                 }
 
                 _model.CloseProject();
@@ -466,8 +466,8 @@ namespace TestCentric.Gui.Presenters
             _view.ShowHideFilterButton.CheckedChanged += () =>
                 _settings.Gui.TestTree.ShowFilter = _view.ShowHideFilterButton.Checked;
 
-            _view.StopRunButton.Execute += ExecuteNormalStop;
-            _view.ForceStopButton.Execute += ExecuteForcedStop;
+            _view.RequestStopButton.Execute += ExecuteNormalStop;
+            _view.ForcedStopButton.Execute += ExecuteForcedStop;
 
             _view.RunParametersButton.Execute += DisplayTestParametersDialog;
 
@@ -575,7 +575,7 @@ namespace TestCentric.Gui.Presenters
             BeginLongRunningOperation("Waiting for currently running tests to complete. Use the Kill button to terminate the process without waiting.");
             _stopRequested = true;
             _forcedStopRequested = false;
-            _model.StopTestRun(false);
+            _model.RequestStop();
             UpdateViewCommands();
         }
 
@@ -585,7 +585,7 @@ namespace TestCentric.Gui.Presenters
             _stopRequested = _forcedStopRequested = true;
             UpdateViewCommands(false);
 
-            _model.StopTestRun(true);
+            _model.ForcedStop();
         }
 
         private void DisplayTestParametersDialog()
@@ -737,10 +737,10 @@ namespace TestCentric.Gui.Presenters
             _view.RunFailedButton.Enabled = testLoaded && !testRunning && hasFailures;
 
             bool displayForcedStop = testRunning && _stopRequested;
-            _view.ForceStopButton.Visible = displayForcedStop;
-            _view.ForceStopButton.Enabled = displayForcedStop && !_forcedStopRequested;
-            _view.StopRunButton.Visible = !displayForcedStop;
-            _view.StopRunButton.Enabled = testRunning && !_stopRequested;
+            _view.ForcedStopButton.Visible = displayForcedStop;
+            _view.ForcedStopButton.Enabled = displayForcedStop && !_forcedStopRequested;
+            _view.RequestStopButton.Visible = !displayForcedStop;
+            _view.RequestStopButton.Enabled = testRunning && !_stopRequested;
 
             _view.OpenProjectCommand.Enabled = _view.OpenProjectCommand.Enabled = _view.OpenTestFileCommand.Enabled = !testLoading && !testRunning;
             _view.SaveProjectCommand.Enabled = testLoaded && !testRunning;
