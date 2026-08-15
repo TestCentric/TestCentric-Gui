@@ -14,15 +14,15 @@ namespace TestCentric.Gui.Views
     {
         string[] SelectMultipleFiles(string title, string filter);
 
-        string GetFileOpenPath(string title, string filter);
+        string? GetFileOpenPath(string title, string filter);
 
         string CreateOpenTestFileFilter(bool nunit = false, bool vs = false);
 
-        string GetFileSavePath(string title, string filter, string initialDirectory, string suggestedName);
+        string? GetFileSavePath(string title, string filter, string initialDirectory, string? suggestedName);
 
-        string GetFileSavePath(string title, string filter, string initialDirectory, string suggestedName, out int selectedFilterIndex);
+        string? GetFileSavePath(string title, string filter, string initialDirectory, string? suggestedName, out int selectedFilterIndex);
 
-        string GetFolderPath(string message, string initialPath);
+        string? GetFolderPath(string message, string initialPath);
 
         Font SelectFont(Font currentFont);
 

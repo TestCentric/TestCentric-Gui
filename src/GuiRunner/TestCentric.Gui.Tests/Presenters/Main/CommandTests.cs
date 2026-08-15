@@ -201,6 +201,7 @@ namespace TestCentric.Gui.Presenters.Main
         {
             var projectPath = Path.GetFullPath("MyProject.tcproj");
             var project = new TestCentricProject(projectPath, files);
+            _model.IsProjectLoaded.Returns(true);
             _model.TestCentricProject.Returns(project);
 
             if(files.Length > 0)
@@ -282,6 +283,7 @@ namespace TestCentric.Gui.Presenters.Main
             // 1. Arrange
             var project = new TestCentricProject("MyProject", "FILE1", "FILE2");
             _model.TestCentricProject.Returns(project);
+            _model.IsProjectLoaded.Returns(true);
             _view.RunAsX86.Checked.Returns(isChecked);
 
             // 2. Act
@@ -367,6 +369,7 @@ namespace TestCentric.Gui.Presenters.Main
         {
             var loadedTests = new TestNode("<test-run id='ID' name='TOP' />");
             _model.LoadedTests.Returns(loadedTests);
+            _model.HasTests.Returns(true);
 
             _view.RunAllButton.Execute += Raise.Event<CommandHandler>();
 

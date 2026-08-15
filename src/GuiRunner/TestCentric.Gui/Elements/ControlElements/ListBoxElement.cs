@@ -29,7 +29,7 @@ namespace TestCentric.Gui.Elements
 
         public ListBox.SelectedObjectCollection SelectedItems => _listBox.SelectedItems;
 
-        public event CommandHandler DoubleClick;
+        public event CommandHandler? DoubleClick;
 
         public void Add(string item)
         {

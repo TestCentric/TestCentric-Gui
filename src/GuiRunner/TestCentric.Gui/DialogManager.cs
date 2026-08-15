@@ -26,7 +26,7 @@ namespace TestCentric.Gui.Views
                 : new string[0];
         }
 
-        public string GetFileOpenPath(string title, string filter)
+        public string? GetFileOpenPath(string title, string filter)
         {
             OpenFileDialog dlg = CreateOpenFileDialog(title, filter);
 
@@ -84,12 +84,12 @@ namespace TestCentric.Gui.Views
             return sb.ToString();
         }
 
-        public string GetFileSavePath(string title, string filter, string initialDirectory, string suggestedName)
+        public string? GetFileSavePath(string title, string filter, string initialDirectory, string? suggestedName)
         {
             return GetFileSavePath(title, filter, initialDirectory, suggestedName, out int _);
         }
 
-        public string GetFileSavePath(string title, string filter, string initialDirectory, string suggestedName, out int selectedFilterIndex)
+        public string? GetFileSavePath(string title, string filter, string initialDirectory, string? suggestedName, out int selectedFilterIndex)
         {
             SaveFileDialog dlg = CreateSaveFileDialog(title, filter, initialDirectory, suggestedName);
 
@@ -99,7 +99,7 @@ namespace TestCentric.Gui.Views
             return dialogResult == DialogResult.OK ? dlg.FileName : null;
         }
 
-        public string GetFolderPath(string message, string initialPath)
+        public string? GetFolderPath(string message, string initialPath)
         {
             FolderBrowserDialog browser = new FolderBrowserDialog();
             browser.Description = message;
@@ -125,7 +125,7 @@ namespace TestCentric.Gui.Views
             return dlg.ShowDialog() == DialogResult.OK ? dlg.Font : currentFont;
         }
 
-        public event ApplyFontHandler ApplyFont;
+        public event ApplyFontHandler? ApplyFont;
 
         #endregion
 
@@ -144,7 +144,7 @@ namespace TestCentric.Gui.Views
             return dlg;
         }
 
-        private static SaveFileDialog CreateSaveFileDialog(string title, string filter, string initialDirectory, string suggestedName)
+        private static SaveFileDialog CreateSaveFileDialog(string title, string filter, string initialDirectory, string? suggestedName)
         {
             SaveFileDialog dlg = new SaveFileDialog();
 

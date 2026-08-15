@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -17,7 +17,7 @@ namespace TestCentric.Gui.Elements
         public IList<ToolStripMenuItem> MenuItems = new List<ToolStripMenuItem>();
         public ToolStripMenuItem TopMenu;
 
-        public event CommandHandler SelectionChanged;
+        public event CommandHandler? SelectionChanged;
 
         public CheckedToolStripMenuGroup(ToolStripMenuItem topMenu)
         {
@@ -26,14 +26,18 @@ namespace TestCentric.Gui.Elements
                 MenuItems.Add(menuItem);
 
             InitializeMenuItems();
+
+            Text = string.Empty;
         }
 
         public CheckedToolStripMenuGroup(string name, params ToolStripMenuItem[] menuItems)
         {
+            TopMenu = null!;
              foreach (var menuItem in menuItems)
                 MenuItems.Add(menuItem);
 
             InitializeMenuItems();
+            Text = string.Empty;
         }
 
         public void Refresh()
@@ -80,7 +84,7 @@ namespace TestCentric.Gui.Elements
         }
 
         // Note that all items must be on the same toolstrip
-        private ToolStrip _toolStrip;
+        private ToolStrip? _toolStrip;
         public ToolStrip ToolStrip
         {
             get
@@ -88,7 +92,7 @@ namespace TestCentric.Gui.Elements
                 if (_toolStrip == null && MenuItems.Count > 0)
                     _toolStrip = MenuItems[0].GetCurrentParent();
 
-                return _toolStrip;
+                return _toolStrip!;
             }
         }
 

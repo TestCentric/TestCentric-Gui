@@ -51,17 +51,17 @@ namespace TestCentric.Gui.Views
         public const int WarningIndex = 15;
         public const int FailureIndex = 16;
 
-        public event TreeNodeActionHandler SelectedNodeChanged;
-        public event TreeNodeActionHandler AfterCheck;
-        public event TreeNodeActionHandler TreeNodeDoubleClick;
-        public event EventHandler ContextMenuOpening;
+        public event TreeNodeActionHandler? SelectedNodeChanged;
+        public event TreeNodeActionHandler? AfterCheck;
+        public event TreeNodeActionHandler? TreeNodeDoubleClick;
+        public event EventHandler? ContextMenuOpening;
 
         private bool _suppressAfterCheckEvent = false;
 
 #if USE_TIPWINDOW
-        public event TreeNodeActionHandler TreeNodeMouseHover;
-        private Timer _mouseHoverDelayTimer = new Timer();
-        private TreeNode _lastNodeHovered;
+        public event TreeNodeActionHandler? TreeNodeMouseHover;
+        private Timer? _mouseHoverDelayTimer = new Timer();
+        private TreeNode? _lastNodeHovered;
 
         public TipWindow TipWindow { get; }
 #endif
@@ -268,16 +268,14 @@ namespace TestCentric.Gui.Views
 
         public IChanged TextFilter { get; private set; }
 
-        public TreeNode ContextNode { get; private set; }
+        public TreeNode? ContextNode { get; private set; }
 
         public ContextMenuStrip TreeContextMenu => TreeView.ContextMenuStrip;
 
-        private OutcomeImageSet _outcomeImages;
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public OutcomeImageSet OutcomeImages
         {
-            get { return _outcomeImages; }
-            set { LoadAlternateImages(_outcomeImages = value); }
+            set { LoadAlternateImages(value); }
         }
 
         public int MouseHoverDelay { get; } = 1000;
@@ -291,7 +289,7 @@ namespace TestCentric.Gui.Views
             set { InvokeIfRequired(() => treeView.TopNode = value); }
         }
 
-        public TreeNode SelectedNode
+        public TreeNode? SelectedNode
         {
             get { return treeView.SelectedNode; }
             set { InvokeIfRequired(() => treeView.SelectedNode = value); }

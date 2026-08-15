@@ -21,7 +21,7 @@ namespace TestCentric.Gui.Presenters
         private readonly ITestPropertiesView _view;
         private readonly ITestModel _model;
 
-        private ITestItem _selectedItem;
+        private ITestItem? _selectedItem;
 
         public TestPropertiesPresenter(ITestPropertiesView view, ITestModel model)
         {
@@ -95,7 +95,7 @@ namespace TestCentric.Gui.Presenters
             if (visible)
             {
                 var sb = new StringBuilder();
-                foreach (var setting in packageSettings)
+                foreach (var setting in packageSettings!)
                 {
                     if (sb.Length > 0)
                         sb.Append(Environment.NewLine);
@@ -112,7 +112,7 @@ namespace TestCentric.Gui.Presenters
         {
             _view.TestType = GetTestType(testNode);
             _view.FullName = testNode.FullName;
-            _view.Description = testNode.GetProperty("Description");
+            _view.Description = testNode.GetProperty("Description") ?? string.Empty;
             _view.Categories = testNode.GetPropertyList("Category");
             _view.TestCount = testNode.TestCount.ToString();
             _view.RunState = testNode.RunState.ToString();
@@ -178,13 +178,13 @@ namespace TestCentric.Gui.Presenters
         {
             StringBuilder reason = new StringBuilder(testNode.GetProperty("_SKIPREASON"));
 
-            string message = testNode.Xml.SelectSingleNode("failure/message")?.InnerText;
+            string? message = testNode.Xml.SelectSingleNode("failure/message")?.InnerText;
             if (!string.IsNullOrEmpty(message))
             {
                 if (reason.Length > 0)
                     reason.Append("\r\n");
                 reason.Append(message);
-                string stackTrace = testNode.Xml.SelectSingleNode("failure/stack-trace")?.InnerText;
+                string? stackTrace = testNode.Xml.SelectSingleNode("failure/stack-trace")?.InnerText;
                 if (!string.IsNullOrEmpty(stackTrace))
                     reason.Append($"\r\n{stackTrace}");
             }
@@ -207,12 +207,12 @@ namespace TestCentric.Gui.Presenters
         private string GetTestGroupFullName(TestGroup testGroup)
         {
             string fullName = testGroup.Name;
-            testGroup = testGroup.ParentGroup;
-            while (testGroup != null)
+            var parent = testGroup.ParentGroup;
+            while (parent != null)
             {
-                string separator = testGroup.ParentGroup == null ? ": " : ".";
-                fullName = $"{testGroup.Name}{separator}{fullName}";
-                testGroup = testGroup.ParentGroup;
+                string separator = parent.ParentGroup == null ? ": " : ".";
+                fullName = $"{parent.Name}{separator}{fullName}";
+                parent = parent.ParentGroup;
             }
 
             return fullName;

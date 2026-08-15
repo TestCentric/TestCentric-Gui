@@ -15,13 +15,13 @@ namespace TestCentric.Gui.Elements
     internal class KeyCommand : IKeyCommand
     {
 
-        public event CommandHandler KeyUp;
-        public event CommandHandler KeyDown;
+        public event CommandHandler? KeyUp;
+        public event CommandHandler? KeyDown;
 
         private IEnumerable<Keys> _upKeys;
         private IEnumerable<Keys> _downKeys;
 
-        public KeyCommand(Control control, IEnumerable<Keys> upkeys, IEnumerable<Keys> downkeys)
+        public KeyCommand(Control control, IEnumerable<Keys>? upkeys, IEnumerable<Keys>? downkeys)
         {
             _upKeys = upkeys ?? new List<Keys>();
             _downKeys = downkeys ?? new List<Keys>();

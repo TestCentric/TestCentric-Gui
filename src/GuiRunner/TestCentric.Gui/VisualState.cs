@@ -23,7 +23,7 @@ namespace TestCentric.Gui
         // Default constructor is required for serialization.
         public VisualState() : this("NUNIT_TREE") { }
 
-        public VisualState(string strategyID, string groupID, ITreeConfiguration treeConfiguration)
+        public VisualState(string strategyID, string? groupID, ITreeConfiguration treeConfiguration)
         {
             DisplayStrategy = strategyID;
             GroupBy = groupID;
@@ -42,7 +42,7 @@ namespace TestCentric.Gui
             }
         }
 
-        public VisualState(string strategyID, string groupID = null)
+        public VisualState(string strategyID, string? groupID = null)
         {
             if (strategyID == "NUNIT_TREE" && groupID != null)
                 throw new ArgumentException("When strategy is NUNIT_TREE, groupID may not be specified", nameof(groupID));
@@ -55,7 +55,7 @@ namespace TestCentric.Gui
 
         public string DisplayStrategy { get; set; }
 
-        public string GroupBy { get; set; }
+        public string? GroupBy { get; set; }
 
         public bool ShowCheckBoxes { get; set; }
 
@@ -164,8 +164,8 @@ namespace TestCentric.Gui
             }
         }
 
-        private TreeNode _selectedTreeNode;
-        private TreeNode _topTreeNode;
+        private TreeNode? _selectedTreeNode;
+        private TreeNode? _topTreeNode;
 
         private void ApplyVisualNodeToTreeNode(VisualTreeNode visualNode, TreeNode treeNode)
         {
@@ -187,7 +187,7 @@ namespace TestCentric.Gui
 
         #region Load VisualState from a File
 
-        public static VisualState LoadFrom(string fileName)
+        public static VisualState? LoadFrom(string fileName)
         {
             try
             {
@@ -264,7 +264,7 @@ namespace TestCentric.Gui
 
         public XmlSchema GetSchema()
         {
-            return null;
+            return null!;
         }
 
         public void ReadXml(XmlReader reader)
@@ -335,7 +335,7 @@ namespace TestCentric.Gui
 
             void GetNodeList(List<VisualTreeNode> nodeList)
             {
-                VisualTreeNode lastNodeRead = null;
+                VisualTreeNode? lastNodeRead = null;
 
                 // We  are called when Nodes element has been read,
                 // so we look for individual nodes until we see the
@@ -450,7 +450,7 @@ namespace TestCentric.Gui
 
     public class VisualTreeNode
     {
-        public string Name;
+        public string Name = string.Empty;
 
         public bool Expanded;
 

@@ -13,7 +13,7 @@ namespace TestCentric.Gui.Elements
     /// </summary>
     public class CommandMenuElement : ToolStripMenuElement, ICommand
     {
-        public event CommandHandler Execute;
+        public event CommandHandler? Execute;
 
         public CommandMenuElement(ToolStripMenuItem menuItem)
             : base(menuItem)

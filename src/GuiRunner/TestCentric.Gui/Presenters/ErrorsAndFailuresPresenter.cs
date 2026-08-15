@@ -18,8 +18,8 @@ namespace TestCentric.Gui.Presenters
         private ITestModel _model;
         private IUserSettings _settings;
 
-        private ITestItem _selectedItem;
-        private ResultNode _selectedResult;
+        private ITestItem? _selectedItem;
+        private ResultNode? _selectedResult;
         private ITestResultSubViewPresenter _testSubViewPresenter;
 
         public ErrorsAndFailuresPresenter(IErrorsAndFailuresView view, ITestModel model) :
@@ -154,7 +154,7 @@ namespace TestCentric.Gui.Presenters
         private void AddResult(string testName, AssertionResult assertion)
         {
             string status = assertion.Status;
-            if (string.IsNullOrEmpty(status))
+            if (string.IsNullOrEmpty(status) && _selectedResult != null)
                 status = GetStatusDisplay(_selectedResult);
             _view.AddResult(status, testName, IndentMessage(assertion.Message), assertion.StackTrace);
         }
@@ -166,26 +166,26 @@ namespace TestCentric.Gui.Presenters
 
         private string GetStatusDisplay(ResultNode resultNode)
         {
-            string status = _selectedResult.Outcome.Label;
+            string status = _selectedResult!.Outcome.Label;
             if (string.IsNullOrEmpty(status))
                 status = _selectedResult.Status.ToString();
             return status;
         }
 
-        private string IndentMessage(string message)
+        private string? IndentMessage(string? message)
         {
             return message == null ? null : message.StartsWith("  ") ? message : "  " + message;
         }
 
         private void InitializeTestResultSubView()
         {
-            _testSubViewPresenter.Update(_selectedItem);
+            _testSubViewPresenter.Update(_selectedItem!);
         }
 
         private void InitializeTestOutputSubView()
         {
-            string testOutput = (_selectedResult != null) ? _selectedResult.Xml.SelectSingleNode("output")?.InnerText : "";
-            _view.TestOutputSubView.Output = testOutput;
+            string? testOutput = (_selectedResult != null) ? _selectedResult.Xml.SelectSingleNode("output")?.InnerText : null;
+            _view.TestOutputSubView.Output = testOutput ?? string.Empty;
             _view.TestOutputSubView.SetVisibility(!string.IsNullOrEmpty(testOutput));
         }
     }

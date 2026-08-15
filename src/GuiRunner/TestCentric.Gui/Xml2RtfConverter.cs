@@ -24,14 +24,14 @@ namespace TestCentric.Gui
             CData
         }
 
-        private Dictionary<ColorKinds, Color> _colorTable;
+        private Dictionary<ColorKinds, Color>? _colorTable;
         private readonly int _indentationSize;
 
         public Xml2RtfConverter(int indentationSize) : this(indentationSize, null)
         {
         }
 
-        public Xml2RtfConverter(int indentationSize, Dictionary<ColorKinds, Color> colorTable)
+        public Xml2RtfConverter(int indentationSize, Dictionary<ColorKinds, Color>? colorTable)
         {
             _indentationSize = indentationSize;
             _colorTable = colorTable;
@@ -50,7 +50,7 @@ namespace TestCentric.Gui
             }
         }
 
-        public string Convert(XmlNode node)
+        public string Convert(XmlNode? node)
         {
             var sb = new StringBuilder();
             CreateHeader(sb);
@@ -58,7 +58,7 @@ namespace TestCentric.Gui
             return sb.ToString();
         }
 
-        private void AddXmlNode(StringBuilder sb, XmlNode node, int indentationLevel)
+        private void AddXmlNode(StringBuilder sb, XmlNode? node, int indentationLevel)
         {
             var element = node as XmlElement;
             if (element != null)
@@ -228,7 +228,7 @@ namespace TestCentric.Gui
             foreach (ColorKinds colorKind in Enum.GetValues(typeof(ColorKinds)))
             {
                 Color color;
-                if (_colorTable.TryGetValue(colorKind, out color))
+                if (_colorTable != null && _colorTable.TryGetValue(colorKind, out color))
                     sb.Append(string.Format(@"\red{0}\green{1}\blue{2};", color.R, color.G, color.B));
                 else
                     sb.Append(string.Format(@"\red{0}\green{1}\blue{2};", 0, 0, 0));

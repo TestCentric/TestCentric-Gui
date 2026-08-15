@@ -20,7 +20,7 @@ namespace TestCentric.Gui.Dialogs
     {
         public delegate void ApplyButtonClickedEventHandler(IList<string> selectedCategories);
 
-        public event ApplyButtonClickedEventHandler ApplyButtonClicked;
+        public event ApplyButtonClickedEventHandler? ApplyButtonClicked;
 
         public CategoryFilterDialog()
         {
@@ -30,6 +30,8 @@ namespace TestCentric.Gui.Dialogs
             searchTextBox.ForeColor = System.Drawing.Color.LightGray;
             TextBoxElement = new TextBoxElement(searchTextBox, "Search...");
             TextBoxElement.Changed += OnTextBoxChanged;
+
+            AllCategories = [];
         }
 
         private IList<string> AllCategories { get; set; }

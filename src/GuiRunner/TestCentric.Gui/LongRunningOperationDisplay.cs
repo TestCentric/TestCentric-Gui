@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui
 {
+    using System.Diagnostics.CodeAnalysis;
     using Model;
 
     public class LongRunningOperationDisplay : Form, ILongRunningOperationDisplay
@@ -22,6 +23,7 @@ namespace TestCentric.Gui
             Owner = ActiveForm;
         }
 
+        [MemberNotNull(nameof(operation))]
         private void InitializeComponent()
         {
             this.operation = new System.Windows.Forms.Label();

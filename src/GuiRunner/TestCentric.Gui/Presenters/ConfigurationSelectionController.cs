@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using NUnit;
 using NUnit.Common;
 using NUnit.Engine;
 using TestCentric.Gui.Elements;
@@ -66,20 +67,23 @@ namespace TestCentric.Gui.Presenters
                 return string.Empty;
                         
             TestPackage package = _model.TopLevelPackage.SubPackages.FirstOrDefault();
-            return package?.Settings.GetValueOrDefault(SettingDefinitions.ActiveConfig);
+            return package?.Settings.GetValueOrDefault(SettingDefinitions.ActiveConfig) ?? string.Empty;
         }
 
         private void OnConfigurationMenuItemClicked(object sender, EventArgs e)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
-            string config = item.Tag as string;
-            if (item.Checked)
+            Guard.OperationValid(_model.IsProjectLoaded, "No project is loaded");
+
+            if ((sender is not ToolStripMenuItem item) || item.Checked)
                 return;
 
             EnsureSingleItemChecked(item);
 
-            _model.TestCentricProject.ApplySetting(SettingDefinitions.ActiveConfig.WithValue(config));
-            _model.ReloadTests();
+            if (item.Tag is string config)
+            {
+                _model.TestCentricProject.ApplySetting(SettingDefinitions.ActiveConfig.WithValue(config));
+                _model.ReloadTests();
+            }
         }
 
         void EnsureSingleItemChecked(ToolStripMenuItem itemToCheck)

@@ -48,7 +48,7 @@ namespace TestCentric.Gui.Presenters
 
         #region Method Overrides
 
-        public override void OnTestLoaded(TestNode rootNode, VisualState visualState)
+        public override void OnTestLoaded(TestNode rootNode, VisualState? visualState)
         {
             ClearTree();
 
@@ -77,7 +77,7 @@ namespace TestCentric.Gui.Presenters
 
         public override VisualState CreateVisualState()
         {
-            VisualState visualState = null;
+            VisualState? visualState = null;
 
             _view.InvokeIfRequired(() =>
             {
@@ -88,7 +88,7 @@ namespace TestCentric.Gui.Presenters
                 }.LoadFrom(_view.TreeView);
             });
 
-            return visualState;
+            return visualState!;
         }
 
         /// <summary>
@@ -144,11 +144,11 @@ namespace TestCentric.Gui.Presenters
 
             if (ShowAssemblies || ShowFixtures)
             {
-                string assemblyName = null;
-                string fixtureName = null;
+                string? assemblyName = null;
+                string? fixtureName = null;
 
                 // Find assembly and fixture names for this node
-                for (TestNode parent = _model.GetTestById(result.Id).Parent; parent != null; parent = parent.Parent)
+                for (TestNode? parent = _model.GetTestById(result.Id)?.Parent; parent != null; parent = parent.Parent)
                 {
                     if (ShowAssemblies && parent.IsAssembly)
                         assemblyName = parent.Name;
@@ -159,19 +159,19 @@ namespace TestCentric.Gui.Presenters
                 // Create the subGroups
                 if (ShowAssemblies)
                 {
-                    newGroup = topLevelGroup.GetOrAddSubGroup(assemblyName);
+                    newGroup = topLevelGroup.GetOrAddSubGroup(assemblyName!);
                     if (ShowFixtures)
-                        newGroup = newGroup.GetOrAddSubGroup(fixtureName);
+                        newGroup = newGroup.GetOrAddSubGroup(fixtureName!);
                 }
                 else // ShowFixtures only
-                    newGroup = topLevelGroup.GetOrAddSubGroup(fixtureName);
+                    newGroup = topLevelGroup.GetOrAddSubGroup(fixtureName!);
             }
 
             // If the group didn't change, we can get out of here
             if (oldGroup == newGroup)
                 return;
 
-            TestNode testNode = _model.GetTestById(result.Id);
+            TestNode testNode = _model.GetTestById(result.Id).ShouldNotBeNull();
             AddTestToGroups(newGroup, testNode);
             RemoveTestFromGroups(oldGroup, testNode);
             var newParent = newGroup.TreeNode;
@@ -180,10 +180,10 @@ namespace TestCentric.Gui.Presenters
             {
                 // Remove test from the tree.
                 treeNode.Remove();
-                RemoveParentIfEmpty(oldParent);
+                RemoveParentIfEmpty(oldParent!);
 
                 // Add the test back to the tree in it's new position
-                newParent.Nodes.Add(treeNode);
+                newParent!.Nodes.Add(treeNode);
                 newParent.Text = GroupDisplayName(newGroup);
                 ExpandNewParentNodes(newParent);
             });
@@ -198,7 +198,7 @@ namespace TestCentric.Gui.Presenters
         private void SetTestDurationOfGroups()
         {
             foreach (var node in _treeView.Nodes)
-                SetTestDurationOfGroups(node as TreeNode);
+                SetTestDurationOfGroups((node as TreeNode)!);
         }
 
         private double SetTestDurationOfGroups(TreeNode treeNode)
@@ -212,7 +212,7 @@ namespace TestCentric.Gui.Presenters
             else if (treeNode.Tag is TestNode testNode)
             {
                 // Duration of a TestNode is determined by the NUnit result
-                ResultNode result = _model.TestResultManager.GetResultForTest(testNode.Id);
+                ResultNode? result = _model.TestResultManager.GetResultForTest(testNode.Id);
                 return result != null ? result.Duration : 0;
             }
 
@@ -222,8 +222,8 @@ namespace TestCentric.Gui.Presenters
         private void AddTestToGroups(TestGroup testGroup, TestNode testNode)
         {
             testGroup.Add(testNode);
-            UpdateTreeNodeName(testGroup.TreeNode);
-            TestGroup parentGroup = testGroup.ParentGroup;
+            UpdateTreeNodeName(testGroup.TreeNode.ShouldNotBeNull());
+            TestGroup? parentGroup = testGroup.ParentGroup;
             if (parentGroup != null)
                 AddTestToGroups(parentGroup, testNode);
         }
@@ -231,8 +231,8 @@ namespace TestCentric.Gui.Presenters
         private void RemoveTestFromGroups(TestGroup testGroup, TestNode testNode)
         {
             testGroup.TestNodes.RemoveId(testNode.Id);
-            UpdateTreeNodeName(testGroup.TreeNode);
-            TestGroup parentGroup = testGroup.ParentGroup;
+            UpdateTreeNodeName(testGroup.TreeNode.ShouldNotBeNull());
+            TestGroup? parentGroup = testGroup.ParentGroup;
             if (parentGroup != null)
                 RemoveTestFromGroups(parentGroup, testNode);
         }

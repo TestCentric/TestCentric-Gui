@@ -16,7 +16,7 @@ namespace TestCentric.Gui.Elements
     {
         private Button _button;
 
-        public event CommandHandler Execute;
+        public event CommandHandler? Execute;
         //public event CommandHandler CheckedChanged;
 
         //public bool Checked

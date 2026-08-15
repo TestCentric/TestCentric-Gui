@@ -58,7 +58,7 @@ namespace TestCentric.Gui
             //}
 
             log.Info("Instantiating TestModel");
-            ITestModel model = null;
+            ITestModel model;
             try
             {
                 model = TestModel.CreateTestModel(new TestEngine(), options);

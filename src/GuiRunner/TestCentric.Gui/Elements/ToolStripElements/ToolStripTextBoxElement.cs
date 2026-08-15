@@ -16,9 +16,9 @@ namespace TestCentric.Gui.Elements
     /// </summary>
     public class ToolStripTextBoxElement : ToolStripElement, IChanged
     {
-        private Timer _typingTimer;
+        private Timer? _typingTimer;
 
-        public event CommandHandler Changed;
+        public event CommandHandler? Changed;
 
         public ToolStripTextBoxElement(ToolStripTextBox textBox, string placeHolderText)
             : base(textBox)
@@ -31,7 +31,7 @@ namespace TestCentric.Gui.Elements
             TextBox.GotFocus += OnTextBoxGotFocus;
 
             // Call LostFocus to set initial text and color
-            OnTextBoxLostFocus(null, EventArgs.Empty);
+            OnTextBoxLostFocus(TextBox, EventArgs.Empty);
         }
 
         private string PlaceHolderText { get; set; }

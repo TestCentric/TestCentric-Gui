@@ -114,7 +114,7 @@ namespace TestCentric.Gui.Presenters
             if (_topLevelGrouping != null)
             {
                 this.ClearTree();
-                TreeNode topNode = null;
+                TreeNode? topNode = null;
                 foreach (var group in _topLevelGrouping.Groups)
                 {
                     var treeNode = MakeTreeNode(group, true);

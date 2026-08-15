@@ -45,7 +45,7 @@ namespace TestCentric.Gui.Views
             notRunPictureBox.Image = imageSet.LoadImage("Skipped");
         }
 
-        public void UpdateCaption(TestResultCounts testCounts, ResultState resultState)
+        public void UpdateCaption(TestResultCounts testCounts, ResultState? resultState)
         {
             InvokeIfRequired(() =>
             {

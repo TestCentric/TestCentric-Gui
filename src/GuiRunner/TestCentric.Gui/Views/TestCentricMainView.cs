@@ -105,7 +105,7 @@ namespace TestCentric.Gui.Views
 
         #region Events and Properties
 
-        public event EventHandler SplitterPositionChanged;
+        public event EventHandler? SplitterPositionChanged;
 
         public string Title
         {

@@ -18,24 +18,21 @@ namespace TestCentric.Gui
     /// SettingsPage is the base class for all pages used
     /// in a tabbed or tree-structured SettingsDialog.
     /// </summary>
-    public class SettingsPage : UserControl
+    public partial class SettingsPage : UserControl
     {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.Container components = null;
-
         private string _key;
         private string _title;
 
         private MessageDisplay _messageDisplay;
 
+#nullable disable
         // Constructor used by the Windows.Forms Designer
         public SettingsPage()
         {
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
         }
+#nullable restore
 
         // Constructor we use in creating page for a Tabbed
         // or TreeBased dialog.
@@ -46,21 +43,6 @@ namespace TestCentric.Gui
             int dot = key.LastIndexOf('.');
             if (dot >= 0) _title = key.Substring(dot + 1);
             _messageDisplay = new MessageDisplay("TestCentric Settings", Font);
-        }
-
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (components != null)
-                {
-                    components.Dispose();
-                }
-            }
-            base.Dispose(disposing);
         }
 
         #region Properties
@@ -100,22 +82,6 @@ namespace TestCentric.Gui
 
         public virtual void ApplySettings()
         {
-        }
-        #endregion
-
-        #region Component Designer generated code
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            // 
-            // SettingsPage
-            // 
-            Name = "SettingsPage";
-            Size = new System.Drawing.Size(456, 336);
-
         }
         #endregion
 

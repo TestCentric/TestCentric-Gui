@@ -53,14 +53,14 @@ namespace TestCentric.Gui.Views
 
         bool CheckBoxes { get; set; }
 
-        OutcomeImageSet OutcomeImages { get; set; }
+        OutcomeImageSet OutcomeImages { set; }
         int VisibleNodeCount { get; }
         TreeNode TopNode { get; set; }
 
         TestCentricTreeView TreeView { get; }
         TreeNodeCollection Nodes { get; }
-        TreeNode ContextNode { get; }
-        TreeNode SelectedNode { get; set; }
+        TreeNode? ContextNode { get; }
+        TreeNode? SelectedNode { get; set; }
         IList<TreeNode> CheckedNodes { get; }
 
         // Test Filter related properties / methods

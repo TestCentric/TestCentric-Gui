@@ -24,7 +24,7 @@ namespace TestCentric.Gui
     public class WaitCursor : IDisposable
     {
         private Cursor cursor;
-        private Control control;
+        private Control? control;
 
         public WaitCursor()
         {

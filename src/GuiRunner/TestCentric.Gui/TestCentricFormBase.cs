@@ -10,8 +10,8 @@ namespace TestCentric.Gui
 {
     public class TestCentricFormBase : Form
     {
-        private IMessageDisplay _messageDisplay;
-        private string _caption;
+        private IMessageDisplay? _messageDisplay;
+        private string? _caption;
 
         // Default constructor required by designer
         public TestCentricFormBase() { }

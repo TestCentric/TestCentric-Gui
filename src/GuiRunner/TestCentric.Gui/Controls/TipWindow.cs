@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -44,12 +45,12 @@ namespace TestCentric.Gui.Controls
         /// <summary>
         /// Timer used for auto-close
         /// </summary>
-        private System.Windows.Forms.Timer _autoCloseTimer;
+        private System.Windows.Forms.Timer? _autoCloseTimer;
 
         /// <summary>
         /// Timer used for mouse leave delay
         /// </summary>
-        private System.Windows.Forms.Timer _mouseLeaveTimer;
+        private System.Windows.Forms.Timer? _mouseLeaveTimer;
 
         /// <summary>
         /// Rectangle used to display text
@@ -86,6 +87,7 @@ namespace TestCentric.Gui.Controls
         {
             InitializeComponent();
             InitializeControl(treeView);
+            TipText = "";
         }
 
         private void InitializeComponent()
@@ -105,6 +107,7 @@ namespace TestCentric.Gui.Controls
 
         }
 
+        [MemberNotNull(nameof(_control))]
         private void InitializeControl(Control control)
         {
             _control = control;
@@ -193,7 +196,7 @@ namespace TestCentric.Gui.Controls
         public Rectangle ItemBounds { get; set; }
         public bool WantClicks { get; set; }
 
-        public void Display(TreeNode treeNode, string resultText)
+        public void Display(TreeNode treeNode, string? resultText)
         {
             // HACK: Needed until we create a hierarchy of TipWindows with implementations for different controls
             Guard.OperationValid(_control is TreeView, "Internal Error: 'Display(TreeNode node)' may only be called when control is a TreeView.");
