@@ -122,6 +122,7 @@ namespace TestCentric.Gui.Controls
 
         #region Public Methods
 
+        [MemberNotNull(nameof(_tipWindow))]
         public void Expand()
         {
             if (!IsExpanded)
