@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -27,12 +27,12 @@ namespace NUnit.UiException
         /// <summary>
         /// An access path to the source file referred by this item.
         /// </summary>
-        private string _path;
+        private string? _path;
 
         /// <summary>
         /// The full qualified name of the member method referred by this item.
         /// </summary>
-        private string _fullyQualifiedMethodName;
+        private string? _fullyQualifiedMethodName;
 
         /// <summary>
         /// The line index where the exception occured.
@@ -42,7 +42,7 @@ namespace NUnit.UiException
         /// <summary>
         /// Store the content of the file pointed by _path.
         /// </summary>
-        private string _text;
+        private string? _text;
       
         /// <summary>
         /// Create an instance of ErrorItem that
@@ -64,7 +64,7 @@ namespace NUnit.UiException
         /// <param name="path">An absolute path to the source code file.</param>
         /// <param name="fullMethodName">A full qualified name of a member method.</param>
         /// <param name="lineNumber">A line index where the exception occured.</param>
-        public ErrorItem(string path, string fullMethodName, int lineNumber)
+        public ErrorItem(string? path, string? fullMethodName, int lineNumber)
         {
             _path = path;
             _fullyQualifiedMethodName = fullMethodName;
@@ -94,7 +94,7 @@ namespace NUnit.UiException
         /// <summary>
         /// Gets the absolute path to the source code file.
         /// </summary>
-        public string Path 
+        public string? Path 
         {
             get { return (_path); }
         }
@@ -103,7 +103,7 @@ namespace NUnit.UiException
         /// Returns the file language - e.g.: the string after
         /// the last dot or null -
         /// </summary>
-        public string FileExtension
+        public string? FileExtension
         {
             get 
             {
@@ -123,7 +123,7 @@ namespace NUnit.UiException
         /// <summary>
         /// Gets the full qualified name of the member method.
         /// </summary>
-        public string FullyQualifiedMethodName
+        public string? FullyQualifiedMethodName
         {
             get { return (_fullyQualifiedMethodName); }
         }
@@ -235,7 +235,7 @@ namespace NUnit.UiException
 
         public override bool Equals(object obj)
         {
-            ErrorItem item = obj as ErrorItem;
+            ErrorItem? item = obj as ErrorItem;
 
             if (item == null)
                 return (false);

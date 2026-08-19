@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -34,8 +34,8 @@ namespace NUnit.UiException.Controls
         private ToolStripButton _btnPlugin;
         private ToolStripButton _btnSwap;
 
-        public event EventHandler SplitOrientationChanged;
-        public event EventHandler SplitterDistanceChanged;
+        public event EventHandler? SplitOrientationChanged;
+        public event EventHandler? SplitterDistanceChanged;
 
         /// <summary>
         /// Builds a new instance of SourceCodeDisplay.
@@ -135,14 +135,14 @@ namespace NUnit.UiException.Controls
 
         protected void SelectedItemChanged(object sender, EventArgs e)
         {
-            ErrorItem item;
+            ErrorItem? item;
             IFormatterCatalog formatter;
 
             item = _stacktraceView.SelectedItem;
 
             if (item == null)
             {
-                _codeView.Text = null;
+                _codeView.Text = "";
                 return;
             }
 

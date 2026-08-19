@@ -1,9 +1,10 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using NUnit.UiException.Properties;
 
@@ -64,6 +65,7 @@ namespace NUnit.UiException.Controls
         public Font Font
         {
             get { return (_font); }
+            [MemberNotNull(nameof(_font), nameof(_fontUnderlined))]
             set
             {
                 _fontUnderlined = _font = value;
@@ -136,7 +138,7 @@ namespace NUnit.UiException.Controls
             return (new Size((int)w, items.Count * _itemHeight));
         }
 
-        public ErrorItem ItemAt(ErrorItemCollection items, Graphics g, Point point)
+        public ErrorItem? ItemAt(ErrorItemCollection items, Graphics g, Point point)
         {
             int idx = point.Y / _itemHeight;
 
@@ -282,12 +284,17 @@ namespace NUnit.UiException.Controls
         {
             public Graphics WorkingGraphics;
 
-            private ErrorItem _firstItem;
+            private ErrorItem? _firstItem;
             private ErrorItem selection;
             private Rectangle viewport;
             private Image _workingImage;
 
-            public PaintData() { }
+            public PaintData() 
+            {
+                WorkingGraphics = null!;
+                selection = null!;
+                _workingImage = null!;
+            }
 
             public PaintData(ErrorItemCollection items, ErrorItem item, Rectangle rectangle, Graphics g)
             {
@@ -323,7 +330,7 @@ namespace NUnit.UiException.Controls
 
             public bool Equals(ErrorItemCollection items, ErrorItem item, Rectangle rectangle)
             {
-                ErrorItem first = ((items.Count > 0) ? items[0] : null);
+                ErrorItem? first = ((items.Count > 0) ? items[0] : null);
 
                 return (viewport.Equals(rectangle) &&
                         object.ReferenceEquals(item, selection) &&

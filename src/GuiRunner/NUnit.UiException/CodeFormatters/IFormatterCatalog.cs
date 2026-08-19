@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -27,6 +27,6 @@ namespace NUnit.UiException.CodeFormatters
         /// </summary>
         /// <param name="extension">An extension without the dot, like 'cs'</param>
         /// <returns>A language name, like 'C#'</returns>
-        string LanguageFromExtension(string extension);
+        string LanguageFromExtension(string? extension);
     }
 }

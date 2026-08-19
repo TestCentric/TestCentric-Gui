@@ -1,9 +1,10 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 using NUnit.UiException.CodeFormatters;
@@ -199,6 +200,7 @@ namespace NUnit.UiException.Controls
             return;
         }
 
+        [MemberNotNull(nameof(_workingContext))]
         private void createGraphics()
         {
             Graphics gCurrent = CreateGraphics();

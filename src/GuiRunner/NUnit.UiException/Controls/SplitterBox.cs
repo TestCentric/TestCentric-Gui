@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -81,8 +81,8 @@ namespace NUnit.UiException.Controls
         private Rectangle _rHorizontalDirection;
         private Rectangle _rHorizontalCollapse2;
 
-        public event EventHandler OrientationChanged;
-        public event EventHandler SplitterDistanceChanged;
+        public event EventHandler? OrientationChanged;
+        public event EventHandler? SplitterDistanceChanged;
 
         /// <summary>
         /// Creates a new SplitterBox.

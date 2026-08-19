@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -42,6 +42,10 @@ namespace NUnit.UiException.Controls
                 new ColorMaterial(Color.White),        // current line fore color                
             };
 
+            // These members are not initialized within the constructor.
+            // Clients are expected to initialize via properties after construction
+            _graphics = null!;
+            _font = null!;
             return;
         }
 

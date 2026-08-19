@@ -1,8 +1,9 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace NUnit.UiException.Controls
@@ -68,13 +69,11 @@ namespace NUnit.UiException.Controls
 
         public override bool Equals(object obj)
         {
-            PaintLineLocation line;
-
             if (obj == null ||
                 !(obj is PaintLineLocation))
                 return (false);
 
-            line = obj as PaintLineLocation;
+            PaintLineLocation line = (PaintLineLocation)obj;
 
             return (line.LineIndex == LineIndex &&
                 line.Text == Text &&
@@ -101,6 +100,7 @@ namespace NUnit.UiException.Controls
             return;
         }
 
+        [MemberNotNull(nameof(_text))]
         protected void SetText(string text)
         {
             UiExceptionHelper.CheckNotNull(text, "text");

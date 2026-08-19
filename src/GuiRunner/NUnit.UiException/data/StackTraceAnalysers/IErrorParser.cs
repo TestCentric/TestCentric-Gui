@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -7,8 +7,8 @@ namespace NUnit.UiException.StackTraceAnalyzers
 {
     public class RawError
     {
-        private string _function;
-        private string _path;
+        private string? _function;
+        private string? _path;
         private int _line;
         private string _input;
 
@@ -25,13 +25,13 @@ namespace NUnit.UiException.StackTraceAnalyzers
             get { return (_input); }
         }
 
-        public string Function
+        public string? Function
         {
             get { return (_function); }
             set { _function = value; }
         }
 
-        public string Path
+        public string? Path
         {
             get { return (_path); }
             set { _path = value; }

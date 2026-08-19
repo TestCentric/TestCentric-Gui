@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NUnit.UiException.CodeFormatters
 {
@@ -72,7 +73,7 @@ namespace NUnit.UiException.CodeFormatters
         /// </summary>
         /// <param name="language">A file extension such as: "cs".</param>
         /// <returns>True if there is such formatter, false otherwise.</returns>
-        public bool HasExtension(string extension)
+        public bool HasExtension([NotNullWhen(true)] string? extension)
         {
             if (extension == null)
                 return (false);

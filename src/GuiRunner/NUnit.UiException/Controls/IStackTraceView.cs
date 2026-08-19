@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -39,7 +39,7 @@ namespace NUnit.UiException.Controls
         event EventHandler SelectedItemChanged;
 
         string StackTrace { get; set; }
-        ErrorItem SelectedItem { get; }
+        ErrorItem? SelectedItem { get; }
         bool AutoSelectFirstItem { get; set; }
         ErrorListOrderPolicy ListOrderPolicy { get; set; }
     }

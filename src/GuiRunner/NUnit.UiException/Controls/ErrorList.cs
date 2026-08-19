@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -16,11 +16,11 @@ namespace NUnit.UiException.Controls
         UserControl,
         IStackTraceView
     {
-        public event EventHandler SelectedItemChanged;
+        public event EventHandler? SelectedItemChanged;
 
         private ErrorListOrderPolicy _listOrder;
         private ErrorItemCollection _items;
-        private ErrorItem _selection;
+        private ErrorItem? _selection;
         private string _stackTrace;
         protected IErrorListRenderer _renderer;
         protected Graphics _workingGraphics;
@@ -58,7 +58,7 @@ namespace NUnit.UiException.Controls
             get { return (_stackTrace); }
             set
             {
-                ErrorItem candidate;
+                ErrorItem? candidate;
 
                 candidate = PopulateList(value);
 
@@ -76,7 +76,7 @@ namespace NUnit.UiException.Controls
             }
         }
 
-        public ErrorItem SelectedItem
+        public ErrorItem? SelectedItem
         {
             get { return (_selection); }
             set
@@ -122,7 +122,7 @@ namespace NUnit.UiException.Controls
 
             _renderer = renderer;
             _items = new ErrorItemCollection();
-            _stackTrace = null;
+            _stackTrace = null!;
             _selection = null;
             _workingGraphics = CreateGraphics();
             _hoveredIndex = -1;
@@ -151,7 +151,7 @@ namespace NUnit.UiException.Controls
 
             viewport = new Rectangle(-AutoScrollPosition.X, -AutoScrollPosition.Y,
                 ClientRectangle.Width, ClientRectangle.Height);
-            _renderer.DrawToGraphics(_items, _selection, e.Graphics, viewport);
+            _renderer.DrawToGraphics(_items, _selection!, e.Graphics, viewport);
 
             if (_hoveredIndex != -1)
                 _renderer.DrawItem(_items[_hoveredIndex], _hoveredIndex, true,
@@ -174,7 +174,7 @@ namespace NUnit.UiException.Controls
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            ErrorItem item;
+            ErrorItem? item;
             int itemIndex;
 
             base.OnMouseMove(e);
@@ -235,10 +235,10 @@ namespace NUnit.UiException.Controls
             Invalidate();
         }
 
-        private ErrorItem PopulateList(string stackTrace)
+        private ErrorItem? PopulateList(string stackTrace)
         {
             StackTraceParser parser = new StackTraceParser();
-            ErrorItem candidate;
+            ErrorItem? candidate;
 
             _stackTrace = stackTrace;
             parser.Parse(stackTrace);

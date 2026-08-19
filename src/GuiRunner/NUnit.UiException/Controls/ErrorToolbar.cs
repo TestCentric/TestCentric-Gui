@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -19,7 +19,7 @@ namespace NUnit.UiException.Controls
         ToolStrip,
         IEnumerable
     {
-        public event EventHandler SelectedRendererChanged;
+        public event EventHandler? SelectedRendererChanged;
 
         private List<IErrorDisplay> _displays;
 
@@ -45,7 +45,7 @@ namespace NUnit.UiException.Controls
         /// Create and configure a ToolStripButton.
         /// </summary>
         public static ToolStripButton NewStripButton(
-            bool canCheck, string text, Image image, EventHandler onClick)
+            bool canCheck, string text, Image image, EventHandler? onClick)
         {
             ToolStripButton button;
 
@@ -78,7 +78,7 @@ namespace NUnit.UiException.Controls
         /// <summary>
         /// Gets or sets the IErrorDisplay to be selected.
         /// </summary>
-        public IErrorDisplay SelectedDisplay
+        public IErrorDisplay? SelectedDisplay
         {
             get
             {
@@ -188,7 +188,7 @@ namespace NUnit.UiException.Controls
             return;
         }
 
-        private int IndexOf(IErrorDisplay renderer)
+        private int IndexOf(IErrorDisplay? renderer)
         {
             int i;
 
@@ -204,8 +204,8 @@ namespace NUnit.UiException.Controls
 
         private void item_Click(object sender, EventArgs e)
         {
-            ToolStripItem item = sender as ToolStripItem;
-            IErrorDisplay renderer;
+            ToolStripItem? item = sender as ToolStripItem;
+            IErrorDisplay? renderer;
 
             if (item == null || item.Tag == null)
                 return;
