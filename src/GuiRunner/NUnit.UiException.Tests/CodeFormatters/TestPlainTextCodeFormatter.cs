@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -39,7 +39,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
             Assert.That(_formatter.PreProcess("hello\tworld"), Is.EqualTo("hello    world"));
 
             // test to fail: passing null has no effect.
-            Assert.That(_formatter.PreProcess(null), Is.Null);
+            Assert.That(_formatter.PreProcess(null), Is.Empty);
 
             return;
         }

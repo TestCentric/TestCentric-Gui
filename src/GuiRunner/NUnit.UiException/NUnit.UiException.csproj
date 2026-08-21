@@ -6,6 +6,14 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<UseWindowsForms>true</UseWindowsForms>
     </PropertyGroup>
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Nullable" Version="1.3.1" PrivateAssets="all" />
+  </ItemGroup>
     
     <ItemGroup>
         <Compile Remove="data\TextCode.cs" />

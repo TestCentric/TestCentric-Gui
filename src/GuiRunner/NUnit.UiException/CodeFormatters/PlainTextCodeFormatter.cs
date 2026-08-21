@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -81,7 +81,7 @@ namespace NUnit.UiException.CodeFormatters
         public string PreProcess(string text)
         {
             if (text == null)
-                return (null);
+                return string.Empty;
 
             // this replace tabulation by space sequences. The reason is
             // that the technique used to measure strings at rendering time

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -40,11 +40,11 @@ namespace NUnit.UiException.Controls
     /// </summary>
     public class ErrorBrowser : UserControl
     {
-        public event EventHandler StackTraceSourceChanged;
-        public event EventHandler StackTraceDisplayChanged;
+        public event EventHandler? StackTraceSourceChanged;
+        public event EventHandler? StackTraceDisplayChanged;
         private ErrorPanelLayout _layout;
 
-        private string _stackStace;
+        private string _stackStace = null!;
 
         /// <summary>
         /// Builds a new instance of ErrorBrowser.
@@ -96,7 +96,7 @@ namespace NUnit.UiException.Controls
         /// <summary>
         /// Gets the selected display.
         /// </summary>
-        public IErrorDisplay SelectedDisplay
+        public IErrorDisplay? SelectedDisplay
         {
             get { return (Toolbar.SelectedDisplay); }
             set { Toolbar.SelectedDisplay = value; }
@@ -121,22 +121,9 @@ namespace NUnit.UiException.Controls
             return;
         }
 
-        /// <summary>
-        /// Removes all display from ErrorBrowser.
-        /// </summary>
-        public void ClearAll()
-        {
-            Toolbar.Clear();
-
-            LayoutPanel.Option = null;
-            LayoutPanel.Content = null;
-
-            return;
-        }
-
         void Toolbar_SelectedRendererChanged(object sender, EventArgs e)
         {
-            LayoutPanel.Content = Toolbar.SelectedDisplay.Content;
+            LayoutPanel.Content = Toolbar.SelectedDisplay!.Content;
 
             if (StackTraceDisplayChanged != null)
                 StackTraceDisplayChanged(this, EventArgs.Empty);
