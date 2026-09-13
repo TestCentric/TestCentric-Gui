@@ -12,8 +12,8 @@ namespace TestCentric.Gui.Model.Settings
 {
     internal abstract class SettingTestsBase
     {
-        protected UserSettings UserSettings { get; private set; }
-        protected object SettingGroup { get; set; }
+        protected UserSettings UserSettings { get; private set; } = null!;
+        protected object SettingGroup { get; set; } = null!;
 
         [SetUp]
         public void SetUp()

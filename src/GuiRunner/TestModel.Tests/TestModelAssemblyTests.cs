@@ -15,7 +15,7 @@ namespace TestCentric.Gui.Model
     {
         private const string MOCK_ASSEMBLY = "mock-assembly.dll";
 
-        private ITestModel _model;
+        private ITestModel _model = null!;
 
         [SetUp]
         public void CreateTestModel()
@@ -41,7 +41,7 @@ namespace TestCentric.Gui.Model
             Assert.That(_model.HasResults, Is.False, "HasResults");
 
             var testRun = _model.LoadedTests;
-            Assert.That(testRun.Xml.Name, Is.EqualTo("test-run"), "Expected test-run element");
+            Assert.That(testRun!.Xml.Name, Is.EqualTo("test-run"), "Expected test-run element");
             Assert.That(testRun.RunState, Is.EqualTo(RunState.Runnable), "RunState of test-run");
             Assert.That(testRun.TestCount, Is.EqualTo(MockAssembly.Tests), "TestCount of test-run");
             Assert.That(testRun.Children.Count, Is.EqualTo(1), "Child count of test-run");
@@ -55,15 +55,15 @@ namespace TestCentric.Gui.Model
         [TestCase("FailingTest")]
         public void CheckGetTestById(string testName)
         {
-            var testNode = FindTestByName(_model.LoadedTests, testName);
+            var testNode = FindTestByName(_model.LoadedTests!, testName);
             Assert.That(testNode, Is.Not.Null, $"Internal Test Error: Can't find {testName} in mock-assembly");
 
-            var foundTest = _model.GetTestById(testNode.Id);
+            var foundTest = _model.GetTestById(testNode!.Id);
             Assert.That(foundTest, Is.Not.Null, $"No test found with id {testNode.Id}");
-            Assert.That(foundTest.Name, Is.EqualTo(testName), "Found the test but name is wrong");
+            Assert.That(foundTest!.Name, Is.EqualTo(testName), "Found the test but name is wrong");
         }
 
-        private TestNode FindTestByName(TestNode parent, string name)
+        private TestNode? FindTestByName(TestNode parent, string name)
         {
             if (parent.Name == name)
                 return parent;
@@ -80,7 +80,7 @@ namespace TestCentric.Gui.Model
         [Test]
         public void CheckThatTestsMapToPackages()
         {
-            var package1 = _model.GetPackageForTest(_model.LoadedTests.Id);
+            var package1 = _model.GetPackageForTest(_model.LoadedTests!.Id);
             var package2 = _model.GetPackageForTest(_model.LoadedTests.Children[0].Id);
             var nopackage = _model.GetPackageForTest(_model.LoadedTests.Children[0].Children[0].Id);
 
@@ -88,10 +88,10 @@ namespace TestCentric.Gui.Model
             Assert.That(package2, Is.Not.Null, "Package2");
             Assert.That(nopackage, Is.Null);
 
-            Assert.That(package1.Name, Is.Null);
+            Assert.That(package1!.Name, Is.Null);
             Assert.That(package1.SubPackages.Count, Is.EqualTo(1));
 
-            Assert.That(package2.Name, Is.EqualTo(MOCK_ASSEMBLY));
+            Assert.That(package2!.Name, Is.EqualTo(MOCK_ASSEMBLY));
             Assert.That(package2.SubPackages.Count, Is.Zero);
 
             Assert.That(package2, Is.SameAs(package1.SubPackages[0]));
@@ -134,7 +134,7 @@ namespace TestCentric.Gui.Model
 
             _model.ReloadTests();
 
-            Assert.Multiple(() => CheckNodesAreEqual(originalTests, _model.LoadedTests));
+            Assert.Multiple(() => CheckNodesAreEqual(originalTests!, _model.LoadedTests!));
         }
 
         private void RunAllTestsAndWaitForCompletion()
@@ -142,7 +142,7 @@ namespace TestCentric.Gui.Model
             bool runComplete = false;
             _model.Events.RunFinished += (r) => runComplete = true;
 
-            _model.RunTests(_model.LoadedTests);
+            _model.RunTests(_model.LoadedTests!);
 
             while (!runComplete)
                 System.Threading.Thread.Sleep(1);

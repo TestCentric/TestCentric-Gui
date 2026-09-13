@@ -12,11 +12,11 @@ namespace TestCentric.Gui.Model.Services
     [TestFixture]
     public class AssemblyWatcherTests
     {
-        private AssemblyWatcher watcher;
-        private CounterEventHandler handler;
+        private AssemblyWatcher watcher = null!;
+        private CounterEventHandler handler = null!;
         private static int watcherDelayMs = 100;
-        private string fileName;
-        private string tempFileName;
+        private string fileName = null!;
+        private string tempFileName = null!;
 
         [SetUp]
         public void CreateFile()
@@ -111,7 +111,7 @@ namespace TestCentric.Gui.Model.Services
         private class CounterEventHandler
         {
             int counter;
-            String fileName;
+            String fileName = string.Empty;
 
             public int Counter
             {

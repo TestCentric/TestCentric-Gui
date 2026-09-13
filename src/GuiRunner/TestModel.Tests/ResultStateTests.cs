@@ -86,7 +86,7 @@ namespace TestCentric.Gui.Model
         [TestCase(TestStatus.Skipped, null, "Skipped")]
         [TestCase(TestStatus.Passed, "", "Passed")]
         [TestCase(TestStatus.Passed, "testLabel", "Passed:testLabel")]
-        public void ToString_Constructor_ReturnsExpectedString(TestStatus status, string label, string expected)
+        public void ToString_Constructor_ReturnsExpectedString(TestStatus status, string? label, string expected)
         {
             ResultState resultState = new ResultState(status, label);
 
@@ -154,8 +154,8 @@ namespace TestCentric.Gui.Model
         {
             var rs = new ResultState(TestStatus.Passed);
             Assert.That(rs, Is.Not.EqualTo(null));
-            Assert.That(null, Is.Not.EqualTo(rs));
-            Assert.That(rs.Equals(null), Is.False);
+            Assert.That(null!, Is.Not.EqualTo(rs));
+            Assert.That(rs.Equals(null!), Is.False);
         }
 
         #endregion

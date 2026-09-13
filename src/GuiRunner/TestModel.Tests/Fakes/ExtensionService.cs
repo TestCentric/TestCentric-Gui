@@ -56,7 +56,7 @@ namespace TestCentric.Gui.Model.Fakes
             return new IExtensionNode[0];
         }
 
-        public IExtensionPoint GetExtensionPoint(string path)
+        public IExtensionPoint? GetExtensionPoint(string path)
         {
             return null;
         }
@@ -103,6 +103,12 @@ namespace TestCentric.Gui.Model.Fakes
             Path = path;
             TypeName = typeName;
             Description = description;
+
+            AssemblyTargetFramework = null!;
+            AssemblyPath = null!;
+            AssemblyVersion = null!;
+            ExtensionObject = null!;
+            PropertyNames = new List<string>();
         }
 
         public string Description { get; }
@@ -111,7 +117,7 @@ namespace TestCentric.Gui.Model.Fakes
 
         public ExtensionStatus Status { get; }
 
-        public Exception Exception { get; }
+        public Exception? Exception { get; }
 
         public string Path { get; }
 

@@ -22,7 +22,7 @@ namespace TestCentric.Gui.Model
 
             // Act
             var manager = new TestResultManager(model);
-            ResultNode result = manager.GetResultForTest(testId);
+            ResultNode? result = manager.GetResultForTest(testId);
 
             // Assert
             Assert.That(result, Is.Null);
@@ -39,11 +39,11 @@ namespace TestCentric.Gui.Model
             manager.AddResult(resultNode);
 
             // Act
-            ResultNode result = manager.GetResultForTest("1");
+            ResultNode? result = manager.GetResultForTest("1");
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Outcome.Status, Is.EqualTo(TestStatus.Passed));
+            Assert.That(result!.Outcome.Status, Is.EqualTo(TestStatus.Passed));
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace TestCentric.Gui.Model
             manager.ClearResults();
 
             // Assert
-            ResultNode result = manager.GetResultForTest("1");
+            ResultNode? result = manager.GetResultForTest("1");
             Assert.That(result, Is.Null);
         }
 
@@ -128,8 +128,8 @@ namespace TestCentric.Gui.Model
             manager.AddResult(newResult);
 
             // Assert
-            ResultNode result = manager.GetResultForTest("1");
-            Assert.That(result.Outcome.Status, Is.EqualTo(expectedTestStatus));
+            ResultNode? result = manager.GetResultForTest("1");
+            Assert.That(result!.Outcome.Status, Is.EqualTo(expectedTestStatus));
         }
 
         [TestCase("Failed", "", "Passed", "", TestStatus.Failed)]
@@ -220,11 +220,11 @@ namespace TestCentric.Gui.Model
             manager.AddResult(resultNode1_2ndRun);
 
             // Assert
-            ResultNode result = manager.GetResultForTest("1");
-            Assert.That(result.Outcome.Status, Is.EqualTo(expectedTestStatus));
+            ResultNode? result = manager.GetResultForTest("1");
+            Assert.That(result!.Outcome.Status, Is.EqualTo(expectedTestStatus));
 
             result = manager.GetResultForTest("2");
-            Assert.That(result.Outcome.Status, Is.EqualTo(expectedTestStatus));
+            Assert.That(result!.Outcome.Status, Is.EqualTo(expectedTestStatus));
         }
 
         [Test]
@@ -271,7 +271,7 @@ namespace TestCentric.Gui.Model
             var r = manager.GetResultForTest("2");
 
             Assert.That(r, Is.Not.Null);
-            Assert.That(r.Id, Is.EqualTo("2"));
+            Assert.That(r!.Id, Is.EqualTo("2"));
             Assert.That(r.Outcome.Status, Is.EqualTo(TestStatus.Passed));
             Assert.That(r.IsLatestRun, Is.False);
         }

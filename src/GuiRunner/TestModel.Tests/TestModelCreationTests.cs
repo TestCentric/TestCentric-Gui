@@ -18,9 +18,9 @@ namespace TestCentric.Gui.Model
     {
         private static readonly string PROJECT_PATH = Path.GetFullPath("dummy.tcproj");
 
-        private ITestModel _model;
-        private GuiOptions _options;
-        private ITestEngine _engine;
+        private ITestModel _model = null!;
+        private GuiOptions _options = null!;
+        private ITestEngine _engine = null!;
 
         [TestCaseSource(nameof(TestCases))]
         public void CreateTestModelForAssembly(params string[] args)
@@ -56,11 +56,11 @@ namespace TestCentric.Gui.Model
 
         private void CheckProjectAndPackageSettings()
         {
-            Assert.That(_model.TestCentricProject.ProjectPath, Is.EqualTo(PROJECT_PATH));
+            Assert.That(_model.TestCentricProject!.ProjectPath, Is.EqualTo(PROJECT_PATH));
             Assert.That(_engine.WorkDirectory, Is.EqualTo(_options.WorkDirectory));
             Assert.That(_engine.InternalTraceLevel.ToString(), Is.EqualTo(_options.InternalTraceLevel ?? "Off"));
 
-            var packageChecker = new PackageSettingsChecker(_model.TopLevelPackage.Settings);
+            var packageChecker = new PackageSettingsChecker(_model.TopLevelPackage!.Settings);
 
             packageChecker.CheckSetting(_options.MaxAgents, SettingDefinitions.MaxAgents.Name);
             packageChecker.CheckSetting(_options.RunAsX86, SettingDefinitions.RunAsX86.Name);

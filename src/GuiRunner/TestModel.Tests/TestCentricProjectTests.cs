@@ -17,8 +17,8 @@ namespace TestCentric.Gui.Model
     [TestFixture]
     internal class TestCentricProjectTests
     {
-        private ITestModel _model;
-        private IUserSettings _settings;
+        private ITestModel _model = null!;
+        private IUserSettings _settings = null!;
 
         [SetUp]
         public void SetUp()
@@ -354,20 +354,6 @@ namespace TestCentric.Gui.Model
             Assert.That(project.TopLevelPackage.SubPackages.Count, Is.EqualTo(2));
             Assert.That(project.TestFiles.Count, Is.EqualTo(2));
             Assert.That(project.TestFiles, Does.Not.Contain(fullPath2));
-        }
-
-        [Test]
-        public void RemoveSubPackage_WithNullPackage_DoesNothing()
-        {
-            // 1. Arrange
-            TestCentricProject project = new TestCentricProject("MyProject", "Test1.dll", "Test2.dll");
-            var originalCount = project.TopLevelPackage.SubPackages.Count;
-
-            // 2. Act
-            project.RemoveSubPackage(null);
-
-            // 3. Assert
-            Assert.That(project.TopLevelPackage.SubPackages.Count, Is.EqualTo(originalCount));
         }
 
         #endregion

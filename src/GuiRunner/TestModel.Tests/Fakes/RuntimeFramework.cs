@@ -15,6 +15,7 @@ namespace TestCentric.Gui.Model.Fakes
         {
             FrameworkName = new FrameworkName(frameworkName);
             DisplayName = frameworkName;
+            TFM = string.Empty;
         }
 
         public FrameworkName FrameworkName { get; }
