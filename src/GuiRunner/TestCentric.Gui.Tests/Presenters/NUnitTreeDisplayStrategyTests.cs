@@ -15,9 +15,9 @@ namespace TestCentric.Gui.Presenters.TestTree
 
     public abstract class DisplayStrategyTests
     {
-        protected ITestTreeView _view;
-        protected ITestModel _model;
-        protected DisplayStrategy _strategy;
+        protected ITestTreeView _view = null!;
+        protected ITestModel _model = null!;
+        protected DisplayStrategy _strategy = null!;
 
         [SetUp]
         public void CreateDisplayStrategy()
@@ -55,8 +55,8 @@ namespace TestCentric.Gui.Presenters.TestTree
                 null);
 
             _view.Received().Clear();
-            _view.Received().Add(Arg.Is<TreeNode>((tn) => (tn.Tag as TestNode).Id == "42"));
-            _view.Received().Add(Arg.Is<TreeNode>((tn) => (tn.Tag as TestNode).Id == "99"));
+            _view.Received().Add(Arg.Is<TreeNode>((tn) => (tn.Tag as TestNode)!.Id == "42"));
+            _view.Received().Add(Arg.Is<TreeNode>((tn) => (tn.Tag as TestNode)!.Id == "99"));
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _strategy.OnTestLoaded(new TestNode(xml), null);
 
             // Assert
-            _view.Received().Add(Arg.Is<TreeNode>(tn => (tn.Tag as TestNode).Id == "1-1031"));
+            _view.Received().Add(Arg.Is<TreeNode>(tn => (tn.Tag as TestNode)!.Id == "1-1031"));
         }
 
         [Test]
@@ -176,7 +176,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         {
             foreach (TreeNode treeNode in nodes)
             {
-                TestNode testNode = treeNode.Tag as TestNode;
+                TestNode? testNode = treeNode.Tag as TestNode;
                 if (testNode != null && testNode.Id == testNodeId)
                     return true;
 
@@ -202,14 +202,14 @@ namespace TestCentric.Gui.Presenters.TestTree
                     "</test-suite>" +
                 "</test-suite>";
 
-            TreeNode treeNode = null;
+            TreeNode treeNode = null!;
             _view.Add(Arg.Do<TreeNode>(tn => treeNode = tn));
 
             // Act
             _strategy.OnTestLoaded(new TestNode(xml), null);
 
             // Assert
-            Assert.That((treeNode.Tag as TestNode).Id, Is.EqualTo("1-1031"));
+            Assert.That((treeNode.Tag as TestNode)!.Id, Is.EqualTo("1-1031"));
             Assert.That(treeNode.Text, Is.EqualTo("Library.Test.Folder (0)"));
             Assert.That(treeNode.Nodes.Count, Is.EqualTo(0));
         }
@@ -231,22 +231,22 @@ namespace TestCentric.Gui.Presenters.TestTree
                     "</test-suite>" +
                 "</test-suite>";
 
-            TreeNode treeNode = null;
+            TreeNode treeNode = null!;
             _view.Add(Arg.Do<TreeNode>(tn => treeNode = tn));
 
             // Act
             _strategy.OnTestLoaded(new TestNode(xml), null);
 
             // Assert
-            Assert.That((treeNode.Tag as TestNode).Id, Is.EqualTo("1-1031"));
+            Assert.That((treeNode.Tag as TestNode)!.Id, Is.EqualTo("1-1031"));
             Assert.That(treeNode.Text, Is.EqualTo("Library (2)"));
 
             var child1 = treeNode.Nodes[0];
-            Assert.That((child1.Tag as TestNode).Id, Is.EqualTo("1-1032"));
+            Assert.That((child1.Tag as TestNode)!.Id, Is.EqualTo("1-1032"));
             Assert.That(child1.Text, Is.EqualTo("Test (1)"));
 
             var child2 = treeNode.Nodes[1];
-            Assert.That((child2.Tag as TestNode).Id, Is.EqualTo("1-1033"));
+            Assert.That((child2.Tag as TestNode)!.Id, Is.EqualTo("1-1033"));
             Assert.That(child2.Text, Is.EqualTo("Folder (1)"));
         }
 
@@ -265,14 +265,14 @@ namespace TestCentric.Gui.Presenters.TestTree
                     "</test-suite>" +
                 "</test-suite>";
 
-            TreeNode treeNode = null;
+            TreeNode treeNode = null!;
             _view.Add(Arg.Do<TreeNode>(tn => treeNode = tn));
 
             // Act
             _strategy.OnTestLoaded(new TestNode(xml), null);
 
             // Assert
-            Assert.That((treeNode.Tag as TestNode).Id, Is.EqualTo("1-1031"));
+            Assert.That((treeNode.Tag as TestNode)!.Id, Is.EqualTo("1-1031"));
             Assert.That(treeNode.Text, Is.EqualTo("Library.Test.Folder (0)"));
             Assert.That(treeNode.Nodes.Count, Is.EqualTo(0));
         }
@@ -294,22 +294,22 @@ namespace TestCentric.Gui.Presenters.TestTree
                     "</test-suite>" +
                 "</test-suite>";
 
-            TreeNode treeNode = null;
+            TreeNode treeNode = null!;
             _view.Add(Arg.Do<TreeNode>(tn => treeNode = tn));
 
             // Act
             _strategy.OnTestLoaded(new TestNode(xml), null);
 
             // Assert
-            Assert.That((treeNode.Tag as TestNode).Id, Is.EqualTo("1-1031"));
+            Assert.That((treeNode.Tag as TestNode)!.Id, Is.EqualTo("1-1031"));
             Assert.That(treeNode.Text, Is.EqualTo("Library (2)"));
 
             var child1 = treeNode.Nodes[0];
-            Assert.That((child1.Tag as TestNode).Id, Is.EqualTo("1-1032"));
+            Assert.That((child1.Tag as TestNode)!.Id, Is.EqualTo("1-1032"));
             Assert.That(child1.Text, Is.EqualTo("Test (1)"));
 
             var child2 = treeNode.Nodes[1];
-            Assert.That((child2.Tag as TestNode).Id, Is.EqualTo("1-1033"));
+            Assert.That((child2.Tag as TestNode)!.Id, Is.EqualTo("1-1033"));
             Assert.That(child2.Text, Is.EqualTo("Folder (1)"));
         }
 

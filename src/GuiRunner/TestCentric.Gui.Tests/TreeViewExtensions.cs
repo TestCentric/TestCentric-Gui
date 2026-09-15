@@ -11,19 +11,19 @@ namespace TestCentric.Gui
     {
         #region Tree Extensions tailored for use in our tests
 
-        public static TreeNode Search(this TreeView treeView, string text)
+        public static TreeNode? Search(this TreeView treeView, string text)
         {
             return Search(treeView.Nodes, text);
         }
 
-        private static TreeNode Search(TreeNodeCollection nodes, string text)
+        private static TreeNode? Search(TreeNodeCollection nodes, string text)
         {
             foreach (TreeNode node in nodes)
             {
                 if (node.Text == text)
                     return node;
 
-                TreeNode child = Search(node.Nodes, text);
+                TreeNode? child = Search(node.Nodes, text);
                 if (child != null)
                     return child;
             }
@@ -47,7 +47,7 @@ namespace TestCentric.Gui
         {
             foreach (string item in items)
             {
-                TreeNode node = treeView.Search(item);
+                TreeNode? node = treeView.Search(item);
                 if (node != null)
                     node.Checked = true;
             }

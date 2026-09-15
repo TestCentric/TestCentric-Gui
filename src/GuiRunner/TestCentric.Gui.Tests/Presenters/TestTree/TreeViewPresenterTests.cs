@@ -35,7 +35,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void WhenTreeConfigurationIsChanged_ShowNamespace_StrategyIsReloaded(bool showNamespace)
         {
             ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
-            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+            _treeDisplayStrategyFactory.Create(null!, null!, null!).ReturnsForAnyArgs(strategy);
             _model.TreeConfiguration.DisplayFormat.Returns("NUNIT_TREE");
             _model.TreeConfiguration.Changed += Raise.Event<SettingsEventHandler>(this, new SettingsEventArgs(nameof(TreeConfiguration.DisplayFormat)));
 
@@ -52,7 +52,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void WhenTreeConfigurationIsChanged_ShowAssemblies_StrategyIsReloaded(bool showAssemblies)
         {
             ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
-            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+            _treeDisplayStrategyFactory.Create(null!, null!, null!).ReturnsForAnyArgs(strategy);
             _model.TreeConfiguration.DisplayFormat.Returns("NUNIT_TREE");
             _model.TreeConfiguration.Changed += Raise.Event<SettingsEventHandler>(this, new SettingsEventArgs(nameof(TreeConfiguration.DisplayFormat)));
 
@@ -69,7 +69,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void WhenTreeConfigurationIsChanged_ShowFixtures_StrategyIsReloaded(bool showFixtures)
         {
             ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
-            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+            _treeDisplayStrategyFactory.Create(null!, null!, null!).ReturnsForAnyArgs(strategy);
             _model.TreeConfiguration.DisplayFormat.Returns("NUNIT_TREE");
             _model.TreeConfiguration.Changed += Raise.Event<SettingsEventHandler>(this, new SettingsEventArgs(nameof(TreeConfiguration.DisplayFormat)));
 
@@ -100,7 +100,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         {
             // 1. Arrange
             ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
-            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+            _treeDisplayStrategyFactory.Create(null!, null!, null!).ReturnsForAnyArgs(strategy);
             _model.TreeConfiguration.DisplayFormat.Returns("NUNIT_TREE");
             _model.TreeConfiguration.Changed += Raise.Event<SettingsEventHandler>(this, new SettingsEventArgs(nameof(TreeConfiguration.DisplayFormat)));
             _view.ShowTestDuration.Checked = showTestDuration;
@@ -171,7 +171,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.CheckedNodes.Returns(checkedNodes);
 
             // 2. Act
-            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null);
+            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null!);
 
             // 3. Assert
             TestSelection testSelection = _model.SelectedTests;
@@ -189,7 +189,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.CheckedNodes.Returns(checkedNodes);
 
             // 2. Act
-            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null);
+            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null!);
 
             // 3. Assert
             TestSelection testSelection = _model.SelectedTests;
@@ -210,7 +210,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.CheckedNodes.Returns(checkedNodes);
 
             // 2. Act
-            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null);
+            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null!);
 
             // 3. Assert
             TestSelection testSelection = _model.SelectedTests;
@@ -232,7 +232,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.CheckedNodes.Returns(checkedNodes);
 
             // 2. Act
-            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null);
+            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null!);
 
             // 3. Assert
             TestSelection testSelection = _model.SelectedTests;
@@ -254,7 +254,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.CheckedNodes.Returns(checkNodes);
 
             // 2. Act
-            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null);
+            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null!);
 
             // 3. Assert
             TestSelection testSelection = _model.SelectedTests;
@@ -293,7 +293,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         {
             // 1. Arrange
             ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
-            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+            _treeDisplayStrategyFactory.Create(null!, null!, null!).ReturnsForAnyArgs(strategy);
             _model.TreeConfiguration.DisplayFormat.Returns("NUNIT_TREE");
             _model.TreeConfiguration.Changed += Raise.Event<SettingsEventHandler>(this, new SettingsEventArgs(nameof(TreeConfiguration.DisplayFormat)));
 
@@ -313,7 +313,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.SortCommand.SelectionChanged += Raise.Event<CommandHandler>();
 
             // 3. Assert
-            _view.ReceivedWithAnyArgs().Sort(null);
+            _view.ReceivedWithAnyArgs().Sort(null!);
         }
 
         [Test]
@@ -325,7 +325,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.SortCommand.SelectionChanged += Raise.Event<CommandHandler>();
 
             // 3. Assert
-            _view.ReceivedWithAnyArgs().Sort(null);
+            _view.ReceivedWithAnyArgs().Sort(null!);
         }
 
         [Test]
@@ -365,8 +365,8 @@ namespace TestCentric.Gui.Presenters.TestTree
 
             // 3. Assert
             _view.TextFilter.Received().Text = "";
-            _view.OutcomeFilter.ReceivedWithAnyArgs().SelectedItems = null;
-            _view.CategoryFilter.ReceivedWithAnyArgs().SelectedItems = null;
+            _view.OutcomeFilter.ReceivedWithAnyArgs().SelectedItems = null!;
+            _view.CategoryFilter.ReceivedWithAnyArgs().SelectedItems = null!;
         }
 
         [Test]
@@ -374,7 +374,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         {
             // 1. Arrange
             ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
-            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+            _treeDisplayStrategyFactory.Create(null!, null!, null!).ReturnsForAnyArgs(strategy);
             _model.TreeConfiguration.DisplayFormat.Returns("NUNIT_TREE");
             _model.TreeConfiguration.Changed += Raise.Event<SettingsEventHandler>(this, new SettingsEventArgs(nameof(TreeConfiguration.DisplayFormat)));
 
@@ -390,7 +390,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         {
             // 1. Arrange
             ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
-            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+            _treeDisplayStrategyFactory.Create(null!, null!, null!).ReturnsForAnyArgs(strategy);
             _model.TreeConfiguration.DisplayFormat.Returns("NUNIT_TREE");
             _model.TreeConfiguration.Changed += Raise.Event<SettingsEventHandler>(this, new SettingsEventArgs(nameof(TreeConfiguration.DisplayFormat)));
 
@@ -405,13 +405,13 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void RemoveTestPackageCommand_SelectedNode_IsNull_TestPackageIsNotRemoved()
         {
             // 1. Arrange
-            _view.SelectedNode.Returns((TreeNode)null);
+            _view.SelectedNode.Returns((TreeNode)null!);
 
             // 2. Act
             _view.RemoveTestPackageCommand.Execute += Raise.Event<CommandHandler>();
 
             // 3. Assert
-            _model.DidNotReceiveWithAnyArgs().RemoveTestPackage(null);
+            _model.DidNotReceiveWithAnyArgs().RemoveTestPackage(null!);
         }
 
         [TestCase(false, false, "TestSuite")]
@@ -435,7 +435,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.RemoveTestPackageCommand.Execute += Raise.Event<CommandHandler>();
 
             // 3. Assert
-            _model.DidNotReceiveWithAnyArgs().RemoveTestPackage(null);
+            _model.DidNotReceiveWithAnyArgs().RemoveTestPackage(null!);
         }
 
         [Test, Ignore("Needs work")]
@@ -456,14 +456,14 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.RemoveTestPackageCommand.Execute += Raise.Event<CommandHandler>();
 
             // 3. Assert
-            _model.ReceivedWithAnyArgs().RemoveTestPackage(null);
+            _model.ReceivedWithAnyArgs().RemoveTestPackage(null!);
         }
 
         [Test]
         public void WhenContextMenuIsDisplayed_ContextNode_IsNull_RemoveTestPackageCommandContextMenu_IsNotVisible()
         {
             // 1. Arrange
-            _view.ContextNode.Returns((TreeNode)null);
+            _view.ContextNode.Returns((TreeNode)null!);
 
             // 2. Act
             _view.RemoveTestPackageCommand.Execute += Raise.Event<CommandHandler>();

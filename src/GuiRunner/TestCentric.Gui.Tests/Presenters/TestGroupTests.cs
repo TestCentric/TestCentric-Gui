@@ -16,7 +16,7 @@ namespace TestCentric.Gui.Presenters
 
     public class TestGroupTests
     {
-        private TestGroup _group;
+        private TestGroup _group = null!;
 
         [SetUp]
         public void CreateTestGroup()

@@ -12,11 +12,10 @@ namespace TestCentric.Gui
     public class VisualStateTestData
     {
         public string DisplayStrategy;
-        public string Grouping;
+        public string? Grouping;
         public string ExpectedGrouping;
-        public VisualState InitialVisualState;
 
-        public VisualStateTestData(string strategy, string grouping = null)
+        public VisualStateTestData(string strategy, string? grouping = null)
         {
             DisplayStrategy = strategy;
             Grouping = grouping;
@@ -225,12 +224,12 @@ namespace TestCentric.Gui
             return CreateVisualState(strategy, null, checkBoxes, visualTreeNodes);
         }
 
-        public static VisualState CreateVisualState(string strategy, string grouping, bool checkBoxes = false, params VisualTreeNode[] visualTreeNodes)
+        public static VisualState CreateVisualState(string strategy, string? grouping, bool checkBoxes = false, params VisualTreeNode[] visualTreeNodes)
         {
             return CreateVisualState(strategy, grouping, checkBoxes, false, visualTreeNodes);
         }
 
-        public static VisualState CreateVisualState(string strategy, string grouping, bool checkBoxes = false, bool showNamespace = false, params VisualTreeNode[] visualTreeNodes)
+        public static VisualState CreateVisualState(string strategy, string? grouping, bool checkBoxes = false, bool showNamespace = false, params VisualTreeNode[] visualTreeNodes)
         {
             VisualState visualState;
 

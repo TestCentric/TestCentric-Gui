@@ -134,8 +134,8 @@ namespace TestCentric.Gui.Presenters
             TestNode testNode1 = new TestNode($"<test-start id='1' name='TestA'/>");
             TestNode testNode2 = new TestNode($"<test-start id='2' name='TestB'/>");
             ITestModel model = Substitute.For<ITestModel>();
-            model.TestResultManager.GetResultForTest("1").Returns((ResultNode)null);
-            model.TestResultManager.GetResultForTest("2").Returns((ResultNode)null);
+            model.TestResultManager.GetResultForTest("1").Returns((ResultNode)null!);
+            model.TestResultManager.GetResultForTest("2").Returns((ResultNode)null!);
 
             TreeNode treeNode1 = new TreeNode(text1) { Tag = testNode1 };
             TreeNode treeNode2 = new TreeNode(text2) { Tag = testNode2 };

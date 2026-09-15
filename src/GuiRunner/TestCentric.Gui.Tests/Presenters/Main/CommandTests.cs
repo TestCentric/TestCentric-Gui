@@ -19,14 +19,14 @@ namespace TestCentric.Gui.Presenters.Main
     public class CommandTests : MainPresenterTestBase
     {
         private static string[] NO_FILES_SELECTED = new string[0];
-        private static string NO_FILE_PATH = null;
+        private static string NO_FILE_PATH = null!;
 
         #region OpenTestCentricProject
 
         [Test]
         public void OpenTestCentricProjectCommand_DisplaysDialogCorrectly()
         {
-            _view.DialogManager.GetFileOpenPath(null, null).ReturnsForAnyArgs("");
+            _view.DialogManager.GetFileOpenPath(null!, null!).ReturnsForAnyArgs("");
 
             _view.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
 
@@ -38,7 +38,7 @@ namespace TestCentric.Gui.Presenters.Main
         public void OpenTestCentricProjectCommand_TestCentricProjectFileSelected_OpenExistingProject(string projectname)
         {
             var file = Path.GetFullPath(projectname);
-            _view.DialogManager.GetFileOpenPath(null, null).ReturnsForAnyArgs(file);
+            _view.DialogManager.GetFileOpenPath(null!, null!).ReturnsForAnyArgs(file);
 
             _view.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
 
@@ -49,17 +49,17 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("")]
         public void OpenTestCentricProjectCommand_NoFileSelected_DoesNotCreateProject(string fileName)
         {
-            _view.DialogManager.GetFileOpenPath(null, null).ReturnsForAnyArgs(fileName);
+            _view.DialogManager.GetFileOpenPath(null!, null!).ReturnsForAnyArgs(fileName);
 
             _view.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.DidNotReceiveWithAnyArgs().OpenExistingProject(null);
+            _model.DidNotReceiveWithAnyArgs().OpenExistingProject(null!);
         }
 
         [Test, Ignore("Needs rewriting after implementation of MessageDispayForm")]
         public void OpenTestCentricProjectCommand_ThrowsException_ErrorMessage_IsDisplayed()
         {
-            _view.DialogManager.GetFileOpenPath(null, null).ReturnsForAnyArgs("Test.tcproj");
+            _view.DialogManager.GetFileOpenPath(null!, null!).ReturnsForAnyArgs("Test.tcproj");
             _model.When(m => m.OpenExistingProject("Test.tcproj")).Do(x => throw new IOException("Disk error"));
 
             _view.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
@@ -87,7 +87,7 @@ namespace TestCentric.Gui.Presenters.Main
         public void OpenTestFileCommand_DisplaysDialogCorrectly(bool nunitSupport, bool vsSupport, string filter)
         {
             // Return no files so model is not called
-            _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(NO_FILES_SELECTED);
+            _view.DialogManager.SelectMultipleFiles(null!, null!).ReturnsForAnyArgs(NO_FILES_SELECTED);
             _model.NUnitProjectSupport.Returns(nunitSupport);
             _model.VisualStudioSupport.Returns(vsSupport);
 
@@ -111,7 +111,7 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void OpenTestFileCommand_NoFileSelected_DoesNotCreateProject()
         {
-            _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(NO_FILES_SELECTED);
+            _view.DialogManager.SelectMultipleFiles(null!, null!).ReturnsForAnyArgs(NO_FILES_SELECTED);
 
             _view.OpenTestFileCommand.Execute += Raise.Event<CommandHandler>();
 
@@ -205,7 +205,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.TestCentricProject.Returns(project);
 
             if(files.Length > 0)
-                _view.DialogManager.GetFileSavePath(null, null, null, null).ReturnsForAnyArgs(projectPath);
+                _view.DialogManager.GetFileSavePath(null!, null!, null!, null!).ReturnsForAnyArgs(projectPath);
 
             _view.SaveProjectCommand.Execute += Raise.Event<CommandHandler>();
 
@@ -232,7 +232,7 @@ namespace TestCentric.Gui.Presenters.Main
         public void SaveResultsCommand_DisplaysDialogCorrectly()
         {
             // Return no file path so model is not called
-            _view.DialogManager.GetFileSavePath(null, null, null, null).ReturnsForAnyArgs(NO_FILE_PATH);
+            _view.DialogManager.GetFileSavePath(null!, null!, null!, null!).ReturnsForAnyArgs(NO_FILE_PATH);
             _model.WorkDirectory.Returns("WORKDIRECTORY");
 
             _presenter.SaveResults("nunit3");
@@ -244,7 +244,7 @@ namespace TestCentric.Gui.Presenters.Main
         public void SaveResultsCommand_FilePathSelected_SavesResults()
         {
             var savePath = Path.GetFullPath("/path/to/TestResult.xml");
-            _view.DialogManager.GetFileSavePath(null, null, null, null).ReturnsForAnyArgs(savePath);
+            _view.DialogManager.GetFileSavePath(null!, null!, null!, null!).ReturnsForAnyArgs(savePath);
 
             _presenter.SaveResults("nunit3");
 
@@ -254,11 +254,11 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void SaveResultsCommand_NoFilePathSelected_DoesNotSaveResults()
         {
-            _view.DialogManager.GetFileSavePath(null, null, null, null).ReturnsForAnyArgs(NO_FILE_PATH);
+            _view.DialogManager.GetFileSavePath(null!, null!, null!, null!).ReturnsForAnyArgs(NO_FILE_PATH);
 
             _presenter.SaveResults("nunit3");
 
-            _model.DidNotReceiveWithAnyArgs().SaveResults(null);
+            _model.DidNotReceiveWithAnyArgs().SaveResults(null!);
         }
 
         #endregion
@@ -327,7 +327,7 @@ namespace TestCentric.Gui.Presenters.Main
         {
             Font currentFont = _settings.Gui.Font = new Font(FontFamily.GenericSansSerif, 12.0f);
             // Return same font to avoid setting the font
-            _view.DialogManager.SelectFont(null).ReturnsForAnyArgs(currentFont);
+            _view.DialogManager.SelectFont(null!).ReturnsForAnyArgs(currentFont);
 
             _view.ChangeFontCommand.Execute += Raise.Event<CommandHandler>();
 
@@ -340,7 +340,7 @@ namespace TestCentric.Gui.Presenters.Main
             Font currentFont = _settings.Gui.Font = new Font(FontFamily.GenericSansSerif, 12.0f);
             Font newFont = new Font(FontFamily.GenericSerif, 16.0f);
 
-            _view.DialogManager.SelectFont(null).ReturnsForAnyArgs(newFont);
+            _view.DialogManager.SelectFont(null!).ReturnsForAnyArgs(newFont);
 
             _view.ChangeFontCommand.Execute += Raise.Event<CommandHandler>();
 
@@ -405,7 +405,7 @@ namespace TestCentric.Gui.Presenters.Main
         {
             // Arrange
             _model.HasTests.Returns(true);
-            _model.SelectedTests = null;
+            _model.SelectedTests = null!;
 
             // Act + Assert
             Assert.That(_view.RunSelectedButton.Enabled, Is.False);
@@ -441,7 +441,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.SelectedTests.Returns(new TestSelection());
 
             // Act
-            _model.Events.SelectedTestsChanged += Raise.Event<TestSelectionEventHandler>(new TestSelectionEventArgs(null));
+            _model.Events.SelectedTestsChanged += Raise.Event<TestSelectionEventHandler>(new TestSelectionEventArgs(null!));
 
             // Assert
             Assert.That(_view.RunSelectedButton.Enabled, Is.False);
@@ -455,7 +455,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.SelectedTests.Returns(new TestSelection(new[] { new TestNode("<test-case id='1' name='TestA'/>") }));
 
             // Act
-            _model.Events.SelectedTestsChanged += Raise.Event<TestSelectionEventHandler>(new TestSelectionEventArgs(null));
+            _model.Events.SelectedTestsChanged += Raise.Event<TestSelectionEventHandler>(new TestSelectionEventArgs(null!));
 
             // Assert
             Assert.That(_view.RunSelectedButton.Enabled, Is.True);
@@ -484,7 +484,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.TreeConfiguration.DisplayFormat.Returns(displayFormat);
 
             // Act
-            _model.Events.SelectedTestsChanged += Raise.Event<TestSelectionEventHandler>(new TestSelectionEventArgs(null));
+            _model.Events.SelectedTestsChanged += Raise.Event<TestSelectionEventHandler>(new TestSelectionEventArgs(null!));
 
             // Assert
             Assert.That(_view.ShowHideFilterButton.Enabled, Is.EqualTo(expectedIsEnabled));
@@ -499,7 +499,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.TreeConfiguration.DisplayFormat.Returns(displayFormat);
 
             // Act
-            _model.Events.SelectedTestsChanged += Raise.Event<TestSelectionEventHandler>(new TestSelectionEventArgs(null));
+            _model.Events.SelectedTestsChanged += Raise.Event<TestSelectionEventHandler>(new TestSelectionEventArgs(null!));
 
             // Assert
             Assert.That(_view.ShowHideFilterButton.Visible, Is.EqualTo(expectedIsVisible));

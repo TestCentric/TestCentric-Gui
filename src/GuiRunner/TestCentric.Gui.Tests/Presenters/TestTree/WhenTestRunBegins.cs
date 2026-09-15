@@ -22,14 +22,6 @@ namespace TestCentric.Gui.Presenters.TestTree
         // Use dedicated test file name; Used for VisualState file too
         const string TestFileName = "TreeViewPresenterTestRunBegin.dll";
 
-        private TreeViewPresenter _presenter;
-
-        [SetUp]
-        public void SetUp()
-        {
-            _presenter = new TreeViewPresenter(_view, _model, new TreeDisplayStrategyFactory());
-        }
-
         [TearDown]
         public void TearDown()
         {
@@ -72,7 +64,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.Nodes.Returns(nodes);
 
             IList<TreeNode> treeNodes = new List<TreeNode>();
-            _view.When(v => v.Add(Arg.Any<TreeNode>())).Do(t => treeNodes.Add(t[0] as TreeNode));
+            _view.When(v => v.Add(Arg.Any<TreeNode>())).Do(t => treeNodes.Add((t[0] as TreeNode)!));
 
             var project = new TestCentricProject("MyProject", TestFileName);
             _model.TestCentricProject.Returns(project);
@@ -128,7 +120,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             //    .Do(a => a.ArgAt<TreeNode>(0).ImageIndex = a.ArgAt<int>(1));
 
             IList<TreeNode> treeNodes = new List<TreeNode>();
-            _view.When(v => v.Add(Arg.Any<TreeNode>())).Do(t => treeNodes.Add(t[0] as TreeNode));
+            _view.When(v => v.Add(Arg.Any<TreeNode>())).Do(t => treeNodes.Add((t[0] as TreeNode)!));
 
             ResultNode resultNode2 = new ResultNode($"<test-case id='2' result='{resultState}'/>");
             ResultNode resultNode3 = new ResultNode($"<test-case id='3' result='{resultState}'/>");

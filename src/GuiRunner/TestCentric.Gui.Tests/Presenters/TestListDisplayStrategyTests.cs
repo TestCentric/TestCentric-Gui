@@ -17,11 +17,12 @@ namespace TestCentric.Gui.Presenters
     [TestFixture]
     internal class TestListDisplayStrategyTests
     {
-        ITestTreeView _view;
-        ITestModel _model;
+        ITestTreeView _view = null!;
+        ITestModel _model = null!;
 
-        TreeView _treeView;
-        List<TreeNode> _treeNodes;
+        TreeView _treeView = null!;
+        List<TreeNode> _treeNodes = null!;
+
         private List<TreeNode> TreeNodes
         {
             get
@@ -44,7 +45,7 @@ namespace TestCentric.Gui.Presenters
             _view.TreeView.Returns(_treeView);
             _view.Nodes.Returns(_treeView.Nodes);
 
-            _treeNodes = null;
+            _treeNodes = null!;
         }
 
         [TestCase(true)]
@@ -279,7 +280,7 @@ namespace TestCentric.Gui.Presenters
             Assert.That(treeNode.Text, Does.StartWith(testGroupName));
 
             // Assert testGroup
-            TestGroup testGroup = treeNode.Tag as TestGroup;
+            TestGroup testGroup = (treeNode.Tag as TestGroup)!;
             Assert.That(testGroup, Is.Not.Null);
             Assert.That(testGroup.TestNodes.Count(), Is.EqualTo(expectedInGroup));
         }

@@ -15,7 +15,10 @@ namespace TestCentric.Gui
     /// </summary>
     public class ControlTester
     {
-        public ControlTester() { }
+        public ControlTester()
+        {
+            _control = null!;
+        }
 
         public ControlTester(Control control)
         {
@@ -26,9 +29,6 @@ namespace TestCentric.Gui
 
         // The control we are testing
         protected Control _control;
-
-        // Various ways of looking at this control's controls
-        private ControlCollection controls;
 
         #region Properties
 
@@ -41,7 +41,6 @@ namespace TestCentric.Gui
             set
             {
                 _control = value;
-                controls = new ControlCollection(_control.Controls);
             }
         }
 
@@ -52,7 +51,7 @@ namespace TestCentric.Gui
         public void AssertControlExists(string expectedName, Type expectedType)
         {
             bool gotName = false;
-            System.Type gotType = null;
+            System.Type? gotType = null;
             foreach (Control ctl in _control.Controls)
             {
                 if (ctl.Name == expectedName)
@@ -67,7 +66,7 @@ namespace TestCentric.Gui
             }
 
             if (gotName)
-                Assert.Fail($"Expected control {expectedName} to be a {expectedType.Name} but was {gotType.Name}");
+                Assert.Fail($"Expected control {expectedName} to be a {expectedType.Name} but was {gotType!.Name}");
             else
                 Assert.Fail($"{_control.Name} does not contain {expectedName} control");
         }
@@ -80,9 +79,9 @@ namespace TestCentric.Gui
         public class ControlEnumerator : IEnumerator
         {
             IEnumerator sourceEnum;
-            System.Type typeFilter;
+            System.Type? typeFilter;
 
-            public ControlEnumerator(Control.ControlCollection source, System.Type typeFilter)
+            public ControlEnumerator(Control.ControlCollection source, System.Type? typeFilter)
             {
                 this.sourceEnum = source.GetEnumerator();
                 this.typeFilter = typeFilter;
@@ -120,29 +119,15 @@ namespace TestCentric.Gui
         public class ControlCollection : IEnumerable
         {
             private Control.ControlCollection source;
-            private System.Type typeFilter;
+            private System.Type? typeFilter;
 
             public ControlCollection(Control.ControlCollection source)
                 : this(source, null) { }
 
-            public ControlCollection(Control.ControlCollection source, System.Type typeFilter)
+            public ControlCollection(Control.ControlCollection source, System.Type? typeFilter)
             {
                 this.source = source;
                 this.typeFilter = typeFilter;
-            }
-
-            private Control this[string name]
-            {
-                get
-                {
-                    foreach (Control control in this)
-                    {
-                        if (control.Name == name)
-                            return control;
-                    }
-
-                    return null;
-                }
             }
 
             #region IEnumerable Members

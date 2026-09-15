@@ -30,10 +30,12 @@ namespace TestCentric.Gui.Views
             Assert.That(displayFormatButton, Is.Not.Null);
         }
 
-        T GetToolStripItem<T>(string name) where T : ToolStripItem
+        T? GetToolStripItem<T>(string name) where T : ToolStripItem
         {
-            ToolStrip toolStrip = GetToolStrip();
-            foreach (ToolStripItem ctl in toolStrip.Items)
+            ToolStrip? toolStrip = GetToolStrip();
+            Assert.That(toolStrip, Is.Not.Null, "ToolStrip not found");
+
+            foreach (ToolStripItem ctl in toolStrip!.Items)
             {
                 if (ctl.Name == name)
                     return ctl as T;
@@ -42,7 +44,7 @@ namespace TestCentric.Gui.Views
             return null;
         }
 
-        ToolStrip GetToolStrip()
+        ToolStrip? GetToolStrip()
         {
             foreach (Control ctl in _control.Controls)
             {

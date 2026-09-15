@@ -17,7 +17,7 @@ namespace TestCentric.Gui.Presenters
     public class ErrorsAndFailuresPresenterTests : PresenterTestBase<IErrorsAndFailuresView>
     {
         private static readonly TestNode FAKE_TEST_RUN = new TestNode("<test-run id='1' testcasecount='1234'/>");
-        ITestResultSubViewPresenter _testResultPresenter;
+        ITestResultSubViewPresenter _testResultPresenter = null!;
 
         [SetUp]
         public void CreatePresenter()
@@ -277,7 +277,7 @@ namespace TestCentric.Gui.Presenters
             FireTestFinishedEvent(resultNode);
 
             // Assert
-            _testResultPresenter.DidNotReceiveWithAnyArgs().Update(null);
+            _testResultPresenter.DidNotReceiveWithAnyArgs().Update(null!);
         }
 
         [Test]
@@ -361,7 +361,7 @@ namespace TestCentric.Gui.Presenters
             if (shouldDisplay)
                 _view.Received().AddResult(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
             else
-                _view.DidNotReceiveWithAnyArgs().AddResult(null, null, null, null);
+                _view.DidNotReceiveWithAnyArgs().AddResult(null!, null!, null!, null!);
         }
     }
 }

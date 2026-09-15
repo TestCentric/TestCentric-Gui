@@ -100,7 +100,7 @@ namespace TestCentric.Gui.Presenters
             var testNode = new TestNode($"<test-case id='1' name='TestA'/>");
             var tests = new List<TestNode> { testNode };
 
-            model.TestResultManager.GetResultForTest("1").Returns((ResultNode)null);
+            model.TestResultManager.GetResultForTest("1").Returns((ResultNode)null!);
 
             // 2. Act
             DurationGrouping grouping = new DurationGrouping(strategy);

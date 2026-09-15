@@ -16,8 +16,7 @@ namespace TestCentric.Gui.Presenters.TestTree
 
     public class WhenTestSuiteCompletes : PresenterTestBase<ITestTreeView>
     {
-        private TreeViewPresenter _presenter;
-
+        private TreeViewPresenter _presenter = null!;
         [SetUp]
         public void Setup()
         {

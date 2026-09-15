@@ -20,10 +20,10 @@ namespace TestCentric.Gui.Presenters
     /// </summary>
     public class PresenterTestBase<TView> where TView : class
     {
-        protected TView _view;
-        protected ITestModel _model;
-        protected IUserSettings _settings;
-        protected GuiOptions _options;
+        protected TView _view = null!;
+        protected ITestModel _model = null!;
+        protected IUserSettings _settings = null!;
+        protected GuiOptions _options = null!;
 
         [SetUp]
         public void Initialize()
@@ -126,7 +126,7 @@ namespace TestCentric.Gui.Presenters
             _model.Events.SuiteStarting += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(start));
         }
 
-        protected void FireTestFinishedEvent(string testName, string result, string output = null)
+        protected void FireTestFinishedEvent(string testName, string result, string? output = null)
         {
             FireTestFinishedEvent(CreateResultNode("test-case", testName, result, output));
 
@@ -142,7 +142,7 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
         }
 
-        protected void FireSuiteFinishedEvent(string testName, string result, string output = null)
+        protected void FireSuiteFinishedEvent(string testName, string result, string? output = null)
         {
             FireSuiteFinishedEvent(CreateResultNode("test-suite", testName, result, output));
         }
@@ -157,7 +157,7 @@ namespace TestCentric.Gui.Presenters
             _model.Events.SuiteFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
         }
 
-        private static ResultNode CreateResultNode(string element, string testName, string result, string output = null)
+        private static ResultNode CreateResultNode(string element, string testName, string result, string? output = null)
         {
             return new ResultNode(CreateResultXml(element, testName, result, output));
         }
@@ -178,7 +178,7 @@ namespace TestCentric.Gui.Presenters
             return xmlNode;
         }
 
-        private static XmlNode CreateResultXml(string element, string testName, string result, string output = null)
+        private static XmlNode CreateResultXml(string element, string testName, string result, string? output = null)
         {
             int colon = result.IndexOf(':');
             string xml;
