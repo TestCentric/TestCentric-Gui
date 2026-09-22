@@ -64,11 +64,11 @@ public static class PackageTests
 
         GuiTests.Add(new PackageTest(1, "Net60X86Test", "Run mock-assembly-x86.dll under .NET 6.0",
             "net6.0/mock-assembly-x86.dll",
-            MockAssemblyX86ExpectedResult("Net60AgentLauncher")));
+            MockAssemblyX86ExpectedResult("Net80AgentLauncher")));
 
         GuiTests.Add(new PackageTest(1, "Net70X86Test", "Run mock-assembly-x86.dll under .NET 7.0",
             "net7.0/mock-assembly-x86.dll",
-            MockAssemblyX86ExpectedResult("Net70AgentLauncher")));
+            MockAssemblyX86ExpectedResult("Net80AgentLauncher")));
 
         GuiTests.Add(new PackageTest(1, "Net80X86Test", "Run mock-assembly-x86.dll under .NET 8.0",
             "net8.0/mock-assembly-x86.dll",

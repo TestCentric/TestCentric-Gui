@@ -858,7 +858,7 @@ namespace TestCentric.Gui.Model
             foreach (var runtime in Services.GetService<NUnit.Engine.IAvailableRuntimes>().AvailableRuntimes)
             {
                 // We don't support anything below .NET Framework 2.0
-                if (runtime.Id.StartsWith("net-") && runtime.FrameworkVersion.Major < 2)
+                if (runtime.FrameworkName.Identifier == ".NETFramework" && runtime.FrameworkName.Version.Major < 2)
                     continue;
 
                 runtimes.Add(runtime);
@@ -872,10 +872,10 @@ namespace TestCentric.Gui.Model
                 var rt1 = runtimes[i];
                 var rt2 = runtimes[i + 1];
 
-                if (rt1.Id != rt2.Id)
+                if (rt1.FrameworkName.Identifier != rt2.FrameworkName.Identifier)
                     continue;
 
-                if (rt1.Profile == "Client" && rt2.Profile == "Full")
+                if (rt1.FrameworkName.Profile == "Client" && rt2.FrameworkName.Profile == "Full")
                     runtimes.RemoveAt(i);
             }
 

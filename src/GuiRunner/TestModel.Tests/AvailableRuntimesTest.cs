@@ -17,8 +17,8 @@ namespace TestCentric.Gui.Model
         public void RuntimesSupportedByEngineAreAvailable()
         {
             var mockEngine = new MockTestEngine().WithRuntimes(
-                new RuntimeFramework("net-4.5", new Version(4, 5)),
-                new RuntimeFramework("net-4.0", new Version(4, 0)));
+                new RuntimeFramework(".NETFramework,Version=4.5"),
+                new RuntimeFramework(".NETFramework,Version=4.0"));
 
             var model = new TestModel(mockEngine);
 
