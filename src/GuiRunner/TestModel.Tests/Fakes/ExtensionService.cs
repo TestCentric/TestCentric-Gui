@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Versioning;
 using NUnit.Engine;
 using NUnit.Extensibility;
 
@@ -118,7 +119,7 @@ namespace TestCentric.Gui.Model.Fakes
 
         public string TypeName { get; }
 
-        public NUnit.Engine.IRuntimeFramework TargetFramework { get; }
+        public FrameworkName AssemblyTargetFramework { get; }
 
         public IEnumerable<string> GetValues(string name)
         {

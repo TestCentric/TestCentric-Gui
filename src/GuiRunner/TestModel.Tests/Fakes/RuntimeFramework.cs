@@ -4,27 +4,23 @@
 // ***********************************************************************
 
 using System;
+using System.Runtime.Versioning;
 using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model.Fakes
 {
     public class RuntimeFramework : NUnit.Engine.IRuntimeFramework
     {
-        public RuntimeFramework(string id, Version version)
+        public RuntimeFramework(string frameworkName)
         {
-            Id = id;
-            FrameworkVersion = version.Build >= 0
-                ? new Version(version.Major, version.Minor)
-                : version;
-            DisplayName = id;
+            FrameworkName = new FrameworkName(frameworkName);
+            DisplayName = frameworkName;
         }
 
-        public string Id { get; }
+        public FrameworkName FrameworkName { get; }
 
-        public Version FrameworkVersion { get; }
+        public string TFM { get; }
 
         public string DisplayName { get; set; }
-
-        public string Profile { get; set; }
     }
 }
