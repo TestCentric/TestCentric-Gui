@@ -11,7 +11,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NUnit" Version="$(NUnitVersion)" />
+		<PackageReference Include="NUnit" />
 	</ItemGroup>
 
 </Project>

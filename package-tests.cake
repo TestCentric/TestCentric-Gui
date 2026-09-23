@@ -195,7 +195,8 @@ public static class PackageTests
         // first in the project file.
         //if (BuildSettings.Configuration == "Release")
         //{
-            GuiTests.Add(new PackageTest(1, "NUnitProjectTest", "Run an NUnit project",
+            GuiTests.Add(new PackageTest(1, "NUnitProjectTest",
+                "Run an NUnit project",
                 "../../TestProject.nunit --trace:Debug",
                 MockAssemblyExpectedResult(
                     "Net462AgentLauncher", "Net462AgentLauncher", "Net80AgentLauncher", "Net80AgentLauncher"),

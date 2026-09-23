@@ -11,13 +11,13 @@ public static class KnownExtensions
     public static ExtensionSpecifier VSProjectLoader = new ExtensionSpecifier(
         "NUnit.Extension.VSProjectLoader", "nunit-extension-vs-project-loader", "3.9.0");
     public static ExtensionSpecifier NUnitV2ResultWriter = new ExtensionSpecifier(
-        "NUnit.Extension.NUnitV2ResultWriter", "nunit-extension-nunit-v2-result-writer", "4.0.0-beta.1");
+        "NUnit.Extension.NUnitV2ResultWriter", "nunit-extension-nunit-v2-result-writer", "4.0.0-beta.2");
     public static ExtensionSpecifier Net462PluggableAgent = new ExtensionSpecifier(
-        "NUnit.Extension.Net462PluggableAgent", "nunit-extension-net462-pluggable-agent", "4.1.1");
+        "NUnit.Extension.Net462PluggableAgent", "nunit-extension-net462-pluggable-agent", "4.1.2");
     public static ExtensionSpecifier Net80PluggableAgent = new ExtensionSpecifier(
-        "NUnit.Extension.Net80PluggableAgent", "nunit-extension-net80-pluggable-agent", "4.1.1");
+        "NUnit.Extension.Net80PluggableAgent", "nunit-extension-net80-pluggable-agent", "4.1.3");
     public static ExtensionSpecifier Net90PluggableAgent = new ExtensionSpecifier(
-        "NUnit.Extension.Net90PluggableAgent", "nunit-extension-net90-pluggable-agent", "4.1.1");
+        "NUnit.Extension.Net90PluggableAgent", "nunit-extension-net90-pluggable-agent", "4.1.2");
 
     // TODO: Decide if we want to support any of these older extensions
     //public static ExtensionSpecifier Net20PluggableAgent = new ExtensionSpecifier(
