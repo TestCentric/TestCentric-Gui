@@ -20,7 +20,7 @@ namespace NUnit.UiException.Tests.data
     {
         string path;
 
-        public TempResourceFile(Type type, string name) : this(type, name, null) { }
+        public TempResourceFile(Type type, string name) : this(type, name, null!) { }
 
         public TempResourceFile(Type type, string name, string filePath)
         {

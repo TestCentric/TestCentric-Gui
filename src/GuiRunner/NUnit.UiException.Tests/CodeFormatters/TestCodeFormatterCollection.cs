@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -12,10 +12,10 @@ namespace NUnit.UiException.Tests.CodeFormatters
     [TestFixture]
     public class TestCodeFormatterCollection
     {
-        private CodeFormatterCollection _empty;
-        private CodeFormatterCollection _filled;
-        private ICodeFormatter _csFormatter;
-        private ICodeFormatter _defaultFormatter;
+        private CodeFormatterCollection _empty = null!;
+        private CodeFormatterCollection _filled = null!;
+        private ICodeFormatter _csFormatter = null!;
+        private ICodeFormatter _defaultFormatter = null!;
 
         [SetUp]
         public void SetUp()
@@ -158,7 +158,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
             Assert.That(_filled, Is.EquivalentTo(new List<string>()));
 
             // should not fail
-            _filled.Remove(null);
+            _filled.Remove(null!);
             _filled.Remove("unknown");
 
             return;
@@ -185,7 +185,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
         [Test]
         public void ContainsFormatterFromExtension()
         {
-            Assert.That(_filled.HasExtension((string)null), Is.False);
+            Assert.That(_filled.HasExtension((string)null!), Is.False);
         }
     }
 }

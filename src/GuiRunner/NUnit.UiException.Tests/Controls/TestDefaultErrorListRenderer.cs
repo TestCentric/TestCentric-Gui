@@ -13,10 +13,10 @@ namespace NUnit.UiException.Tests.Controls
     [TestFixture]
     public class TestDefaultErrorListRenderer
     {
-        private ErrorList _empty;
-        private ErrorList _filled;
-        private DefaultErrorListRenderer _renderer;
-        private Graphics _gr;
+        private ErrorList _empty = null!;
+        private ErrorList _filled = null!;
+        private DefaultErrorListRenderer _renderer = null!;
+        private Graphics _gr = null!;
 
         [SetUp]
         public void SetUp()
@@ -90,7 +90,7 @@ namespace NUnit.UiException.Tests.Controls
         [Test]
         public void ItemAt()
         {
-            ErrorItem item;
+            ErrorItem? item;
 
             int itemHeight = _renderer.Font.Height * 4 + 6;
 
@@ -104,7 +104,7 @@ namespace NUnit.UiException.Tests.Controls
 
             Assert.That(_renderer.ItemAt(_filled.Items, _gr, new Point(0, 480)), Is.Null);
             Assert.That(_renderer.ItemAt(_filled.Items, _gr, new Point(0, -1)), Is.Null);
-            Assert.That(_renderer.ItemAt(null, _gr, new Point(0, 0)), Is.Null);
+            Assert.That(_renderer.ItemAt(null!, _gr, new Point(0, 0)), Is.Null);
 
             return;
         }
@@ -146,7 +146,7 @@ namespace NUnit.UiException.Tests.Controls
         {
             try
             {
-                _renderer.DrawToGraphics(null, null, _gr, new Rectangle()); // throws exception
+                _renderer.DrawToGraphics(null!, null!, _gr, new Rectangle()); // throws exception
                 Assert.Fail();
             }
             catch (Exception e)
@@ -156,7 +156,7 @@ namespace NUnit.UiException.Tests.Controls
 
             try
             {
-                _renderer.DrawToGraphics(_filled.Items, null, null, new Rectangle()); // throws exception
+                _renderer.DrawToGraphics(_filled.Items, null!, null!, new Rectangle()); // throws exception
                 Assert.Fail();
             }
             catch (Exception e)
@@ -186,7 +186,7 @@ namespace NUnit.UiException.Tests.Controls
             // changes selected item
 
             renderer.DrawToGraphics(_filled.Items, _filled.Items[0], _gr, viewport);
-            Assert.That(renderer.IsDirty(_filled.Items, null, viewport), Is.True);
+            Assert.That(renderer.IsDirty(_filled.Items, null!, viewport), Is.True);
             Assert.That(renderer.IsDirty(_filled.Items,
                 new ErrorItem(_filled.Items[0].Path,
                               _filled.Items[0].FullyQualifiedMethodName,

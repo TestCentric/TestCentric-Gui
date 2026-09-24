@@ -13,7 +13,7 @@ namespace NUnit.UiException.Tests.Controls
     [TestFixture]
     public class TestCodeRenderingContext
     {
-        private CodeRenderingContext _context;
+        private CodeRenderingContext _context = null!;
 
         [SetUp]
         public void SetUp()

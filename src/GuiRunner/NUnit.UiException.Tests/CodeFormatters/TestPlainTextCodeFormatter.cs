@@ -11,7 +11,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
     [TestFixture]
     public class TestPlainTextCodeFormatter
     {
-        private PlainTextCodeFormatter _formatter;
+        private PlainTextCodeFormatter _formatter = null!;
 
         [SetUp]
         public void SetUp()
@@ -39,7 +39,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
             Assert.That(_formatter.PreProcess("hello\tworld"), Is.EqualTo("hello    world"));
 
             // test to fail: passing null has no effect.
-            Assert.That(_formatter.PreProcess(null), Is.Empty);
+            Assert.That(_formatter.PreProcess(null!), Is.Empty);
 
             return;
         }

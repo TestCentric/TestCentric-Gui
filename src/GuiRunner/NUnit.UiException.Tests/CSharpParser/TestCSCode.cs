@@ -13,7 +13,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
     [TestFixture]
     public class TestFormattedCode
     {
-        private FormattedCode _code;
+        private FormattedCode _code = null!;
 
         [Test]
         public void Test_SimpleCollection()
@@ -179,8 +179,8 @@ namespace NUnit.UiException.Tests.CodeFormatters
 
             // Tests to fail
 
-            Assert.That(_code.Equals(null), Is.False);
-            Assert.That(_code.Equals("hello"), Is.False);
+            Assert.That(_code.Equals(null!), Is.False);
+            Assert.That(_code!.Equals("hello"), Is.False);
             Assert.That(_code.Equals(
                 new TestingCSCode("a", new int[] { 0 }, new byte[] { 0 }, new int[] { 0 })),
                 Is.False);

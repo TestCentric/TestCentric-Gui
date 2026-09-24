@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -14,7 +14,7 @@ namespace NUnit.UiException.Tests.StackTraceAnalyzers
     public class TestIErrorParser
     {
         protected StackTraceParser _stack;
-        protected IErrorParser[] _array;
+        protected IErrorParser[] _array = null!;
 
         public TestIErrorParser()
         {
@@ -52,7 +52,7 @@ namespace NUnit.UiException.Tests.StackTraceAnalyzers
 
                 try
                 {
-                    item.TryParse(null, new RawError("test")); // throws exception
+                    item.TryParse(null!, new RawError("test")); // throws exception
                 }
                 catch (Exception e)
                 {
@@ -78,7 +78,7 @@ namespace NUnit.UiException.Tests.StackTraceAnalyzers
 
                 try
                 {
-                    item.TryParse(_stack, null); // throws exception
+                    item.TryParse(_stack, null!); // throws exception
                 }
                 catch (Exception e)
                 {

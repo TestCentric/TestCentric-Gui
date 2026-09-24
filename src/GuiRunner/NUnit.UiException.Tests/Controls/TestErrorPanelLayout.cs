@@ -12,9 +12,9 @@ namespace NUnit.UiException.Tests.Controls
     [TestFixture]
     public class TestErrorPanelLayout
     {
-        private ErrorPanelLayout _panel;
-        private Control _aToolbar;
-        private Control _aContent;
+        private ErrorPanelLayout _panel = null!;
+        private Control _aToolbar = null!;
+        private Control _aContent = null!;
 
         [SetUp]
         public void SetUp()
@@ -75,7 +75,7 @@ namespace NUnit.UiException.Tests.Controls
 
             // restoring default state
 
-            _panel.Toolbar = null;
+            _panel.Toolbar = null!;
 
             Assert.That(_panel.Toolbar, Is.EqualTo(prev));
             Assert.That(_panel.Controls.Contains(_aToolbar), Is.False);
@@ -103,7 +103,7 @@ namespace NUnit.UiException.Tests.Controls
 
             // restoring Content to its default state
 
-            _panel.Content = null;
+            _panel.Content = null!;
 
             Assert.That(_panel.Content, Is.EqualTo(prev));
             Assert.That(_panel.Controls.Contains(_aContent), Is.False);

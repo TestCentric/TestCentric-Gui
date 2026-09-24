@@ -13,7 +13,7 @@ namespace NUnit.UiException.Tests.Controls
     [TestFixture]
     public class TestStackTraceDisplay
     {
-        private StackTraceDisplay _traceDisplay;
+        private StackTraceDisplay _traceDisplay = null!;
 
         [SetUp]
         public void SetUp()
@@ -32,7 +32,7 @@ namespace NUnit.UiException.Tests.Controls
 
             Assert.That(_traceDisplay.Content, Is.Not.Null);
             Assert.That(_traceDisplay.Content, Is.TypeOf(typeof(TextBox)));
-            TextBox text = _traceDisplay.Content as TextBox;
+            TextBox text = (_traceDisplay.Content as TextBox)!;
             Assert.That(text.Text, Is.EqualTo(""));
             Assert.That(text.ReadOnly, Is.True);
             Assert.That(text.Multiline, Is.True);
@@ -50,7 +50,7 @@ namespace NUnit.UiException.Tests.Controls
                     "à NUnit.UiException.Tests.MockHelper.Two_Mocks_In_Dictionary() dans C:\\folder\\file1.cs:ligne 87\r\n";
 
             string trace_2 = "";
-            TextBox content = _traceDisplay.Content as TextBox;
+            TextBox content = (_traceDisplay.Content as TextBox)!;
 
             _traceDisplay.OnStackTraceChanged(trace_1);
             Assert.That(content.Text, Is.EqualTo(trace_1));
@@ -60,7 +60,7 @@ namespace NUnit.UiException.Tests.Controls
 
             // passing null should not cause error
 
-            _traceDisplay.OnStackTraceChanged(null);
+            _traceDisplay.OnStackTraceChanged(null!);
             Assert.That(content.Text, Is.EqualTo(""));
 
             return;
@@ -91,7 +91,7 @@ namespace NUnit.UiException.Tests.Controls
                 "ac ligula. Nullam ut metus. Maecenas sagittis nibh in nisl.\r\n" +
                 "Phasellus rhoncus diam a nulla. Integer vestibulum.\r\n");
 
-            TextBox text = _traceDisplay.Content as TextBox;
+            TextBox text = (_traceDisplay.Content as TextBox)!;
             Assert.That(text.Text, Is.Not.Null);
 
             return;

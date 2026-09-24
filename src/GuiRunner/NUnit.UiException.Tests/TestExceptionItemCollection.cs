@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -13,12 +13,12 @@ namespace NUnit.UiException.Tests
     [TestFixture]
     public class TestErrorItemCollection
     {
-        TestResource _resourceA;
-        TestResource _resourceB;
+        TestResource _resourceA = null!;
+        TestResource _resourceB = null!;
 
-        private ErrorItemCollection _items;
-        private ErrorItem _itemA;
-        private ErrorItem _itemB;
+        private ErrorItemCollection _items = null!;
+        private ErrorItem _itemA = null!;
+        private ErrorItem _itemB = null!;
 
         [SetUp]
         public void SetUp()
@@ -40,13 +40,13 @@ namespace NUnit.UiException.Tests
             if (_resourceA != null)
             {
                 _resourceA.Dispose();
-                _resourceA = null;
+                _resourceA = null!;
             }
 
             if (_resourceB != null)
             {
                 _resourceB.Dispose();
-                _resourceB = null;
+                _resourceB = null!;
             }
         }
 
@@ -99,7 +99,7 @@ namespace NUnit.UiException.Tests
         [Test]
         public void Test_Contains()
         {
-            Assert.That(_items.Contains(null), Is.False);
+            Assert.That(_items.Contains(null!), Is.False);
             Assert.That(_items.Contains(_itemA), Is.False);
 
             _items.Add(_itemA);

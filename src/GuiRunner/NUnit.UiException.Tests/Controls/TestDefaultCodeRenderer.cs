@@ -14,11 +14,11 @@ namespace NUnit.UiException.Tests.Controls
     [TestFixture]
     public class TestDefaultCodeRenderer
     {
-        private ICodeRenderer _renderer;
-        private FormattedCode _empty;
-        private FormattedCode _loremIpsum;
-        private FormattedCode _text3x7;
-        private CodeRenderingContext _args;
+        private ICodeRenderer _renderer = null!;
+        private FormattedCode _empty = null!;
+        private FormattedCode _loremIpsum = null!;
+        private FormattedCode _text3x7 = null!;
+        private CodeRenderingContext _args = null!;
 
         [SetUp]
         public void SetUp()
@@ -62,7 +62,7 @@ namespace NUnit.UiException.Tests.Controls
         {
             try
             {
-                _renderer.DrawToGraphics(null, _args, new Rectangle()); // throws exception
+                _renderer.DrawToGraphics(null!, _args, new Rectangle()); // throws exception
                 Assert.Fail();
             }
             catch (Exception e)
@@ -72,7 +72,7 @@ namespace NUnit.UiException.Tests.Controls
 
             try
             {
-                _renderer.DrawToGraphics(_loremIpsum, null, new Rectangle()); // throws exception
+                _renderer.DrawToGraphics(_loremIpsum, null!, new Rectangle()); // throws exception
                 Assert.Fail();
             }
             catch (Exception e)
@@ -88,7 +88,7 @@ namespace NUnit.UiException.Tests.Controls
         {
             try
             {
-                _renderer.GetDocumentSize(null, _args.Graphics, _args.Font); // throws exception
+                _renderer.GetDocumentSize(null!, _args.Graphics, _args.Font); // throws exception
                 Assert.Fail();
             }
             catch (Exception e)
@@ -98,7 +98,7 @@ namespace NUnit.UiException.Tests.Controls
 
             try
             {
-                _renderer.GetDocumentSize(_loremIpsum, null, _args.Font); // throws exception
+                _renderer.GetDocumentSize(_loremIpsum, null!, _args.Font); // throws exception
                 Assert.Fail();
             }
             catch (Exception e)
@@ -108,7 +108,7 @@ namespace NUnit.UiException.Tests.Controls
 
             try
             {
-                _renderer.GetDocumentSize(_loremIpsum, _args.Graphics, null); // throws exception
+                _renderer.GetDocumentSize(_loremIpsum, _args.Graphics, null!); // throws exception
                 Assert.Fail();
             }
             catch (Exception e)
@@ -124,7 +124,7 @@ namespace NUnit.UiException.Tests.Controls
         {
             try
             {
-                _renderer.LineIndexToYCoordinate(0, null, _args.Font); // throws exception
+                _renderer.LineIndexToYCoordinate(0, null!, _args.Font); // throws exception
                 Assert.Fail();
             }
             catch (Exception e)
@@ -134,7 +134,7 @@ namespace NUnit.UiException.Tests.Controls
 
             try
             {
-                _renderer.LineIndexToYCoordinate(0, _args.Graphics, null); // throws exception
+                _renderer.LineIndexToYCoordinate(0, _args.Graphics, null!); // throws exception
                 Assert.Fail();
             }
             catch (Exception e)

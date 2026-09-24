@@ -10,7 +10,7 @@ namespace NUnit.UiException.Tests
     [TestFixture]
     public class TestStackTraceParser
     {
-        private StackTraceParser _parser;
+        private StackTraceParser _parser = null!;
 
         [SetUp]
         public void SetUp()
@@ -255,7 +255,7 @@ namespace NUnit.UiException.Tests
         [Test]
         public void Test_Parse_Null()
         {
-            _parser.Parse(null);
+            _parser.Parse(null!);
         }
     }
 }

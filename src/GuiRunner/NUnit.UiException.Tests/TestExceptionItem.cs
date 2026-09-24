@@ -171,8 +171,8 @@ namespace NUnit.UiException.Tests
             itemB = new ErrorItem("file2.txt", 44);
             itemC = new ErrorItem("file1.txt", "myFunction()", 43);
 
-            Assert.That(itemA.Equals(null), Is.False);
-            Assert.That(itemA.Equals("hello"), Is.False);
+            Assert.That(itemA.Equals(null!), Is.False);
+            Assert.That(itemA!.Equals("hello"), Is.False);
             Assert.That(itemA.Equals(itemB), Is.False);
             Assert.That(itemA.Equals(itemC), Is.False);
             Assert.That(itemA.Equals(itemA), Is.True);
