@@ -18,9 +18,9 @@
     </ItemGroup>
        
 	<ItemGroup>
-		<PackageReference Include="NSubstitute" Version="$(NSubstituteVersion)" />
-		<PackageReference Include="NUnit" Version="$(NUnitVersion)" />
-		<PackageReference Include="NUnitLite" Version="$(NUnitVersion)" />
+		<PackageReference Include="NSubstitute" />
+		<PackageReference Include="NUnit" />
+		<PackageReference Include="NUnitLite" />
 	</ItemGroup>
 	
 </Project>

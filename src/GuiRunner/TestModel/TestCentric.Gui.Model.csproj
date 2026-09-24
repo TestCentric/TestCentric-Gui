@@ -17,10 +17,10 @@
     </PropertyGroup>
 	
     <ItemGroup>
-      <PackageReference Include="Nullable" Version="1.3.1" PrivateAssets="all" />
-	    <PackageReference Include="NUnit.Common" Version="$(NUnitEngineVersion)" />
-	    <PackageReference Include="NUnit.Engine" Version="$(NUnitEngineVersion)" />
-	    <PackageReference Include="NUnit.Extensibility" Version="$(NUnitExtensibilityVersion)" />
+      <PackageReference Include="Nullable" PrivateAssets="all" />
+	    <PackageReference Include="NUnit.Common" />
+	    <PackageReference Include="NUnit.Engine" />
+	    <PackageReference Include="NUnit.Extensibility" />
     </ItemGroup>
 
 	<ItemGroup>
