@@ -13,14 +13,6 @@
 		<DefineConstants>$(DefineConstants);DISABLE_MINI_GUI</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup>
-		<Nullable>enable</Nullable>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Nullable" Version="1.3.1" PrivateAssets="all" />
-	</ItemGroup>
-	
     <ItemGroup>
         <ProjectReference Include="..\..\TestData\mock-assembly\mock-assembly.csproj" />
         <ProjectReference Include="..\TestModel\TestCentric.Gui.Model.csproj" />
