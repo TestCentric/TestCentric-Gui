@@ -23,11 +23,11 @@
     </ItemGroup>
 	
     <ItemGroup>
-        <PackageReference Include="NSubstitute" Version="$(NSubstituteVersion)" />
-        <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
-        <PackageReference Include="NUnitLite" Version="$(NUnitVersion)" />
-        <PackageReference Include="NUnit.Extensibility" Version="$(NUnitExtensibilityVersion)" />
-	    <PackageReference Include="XmlUnit.NUnit4.Constraints" Version="2.11.2" />
+        <PackageReference Include="NSubstitute" />
+        <PackageReference Include="NUnit" />
+        <PackageReference Include="NUnitLite" />
+        <PackageReference Include="NUnit.Extensibility" />
+	    <PackageReference Include="XmlUnit.NUnit4.Constraints" />
     </ItemGroup>
 	
 </Project>

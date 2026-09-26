@@ -32,28 +32,6 @@
 		<TestCentricPublicKey>00240000048000009400000006020000002400005253413100040000010001005171B59E932AA53ACD8D9DCA80CD505543204EB39E8BA2587C85E266A8100322053D51A43EE239EBD7D1DC9DB8C14E558FBB873E1606D762FCF8C91538564707A1862833123B95B70ACE974428CB88F2E023E2B382EEE4F3044C6F65994729464866498A1C5830D80BE3F1825A66A25367C2537A5B68E0D7FB28DEBFA8C44BC0</TestCentricPublicKey>
 	</PropertyGroup>
 
-	<!-- Version of NUnit.Engine.Api depends on target framework -->
-	<PropertyGroup Condition="'$(TargetFramework)'=='net35' OR '$(TargetFramework)'=='net20'">
-		<NUnitEngineVersion>3.16.2</NUnitEngineVersion>
-	</PropertyGroup>
-	
-	<!-- Version of NUnit and NSubstitute used depends on the target framework -->
-	<PropertyGroup Condition="'$(TargetFramework)'=='net35'
-			OR '$(TargetFramework)'=='netcoreapp2.1' OR '$(TargetFramework)'=='netcoreapp3.1'
-		    OR '$(TargetFramework)'=='net5.0' Or '$(TargetFramework)'=='net5.0-windows'" >
-		<NUnitVersion>3.14.0</NUnitVersion>
-		<NSubstituteVersion>2.0.3</NSubstituteVersion>
-	</PropertyGroup>
-
-    <!-- Default versions for targets not listed above -->
-	<PropertyGroup>
-		<NUnitVersion Condition="'$(NUnitVersion)'==''">4.4.0</NUnitVersion>
-		<NSubstituteVersion Condition="'$(NSubstituteVersion)'==''">6.2.0</NSubstituteVersion>
-		<NUnitEngineVersion Condition="'$(NUnitEngineVersion)'==''">4.0.0-beta.4.10</NUnitEngineVersion>
-		<NUnitEngineApiVersion>4.0.0-beta.8.12</NUnitEngineApiVersion>
-		<NUnitExtensibilityVersion>4.0.0-beta.4.8</NUnitExtensibilityVersion>
-	</PropertyGroup>
-
 	<!-- Common package metadata, may be overridden in individual projects -->
     <!-- Each project should supply properties for PackageId, Title and Description -->
     <PropertyGroup>

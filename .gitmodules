@@ -1,3 +1,0 @@
-[submodule "recipe"]
-	path = recipe
-	url = https://github.com/TestCentric/TestCentric.Cake.Recipe.git
