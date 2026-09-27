@@ -153,7 +153,7 @@ namespace TestCentric.Gui.Model
                 TestFiles.Clear();
                 foreach (TestPackage subPackage in TopLevelPackage.SubPackages)
                 {
-                    if (ProjectPath != OriginalProjectPath && !File.Exists(subPackage.FullName))
+                    if (!string.IsNullOrEmpty(OriginalProjectPath) && ProjectPath != OriginalProjectPath && !File.Exists(subPackage.FullName))
                     {
                         // Test file may have been moved as well
                         string fullName = subPackage.FullName.ShouldNotBeNull("Subpackage fullname");

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -83,7 +83,7 @@ namespace NUnit.UiException.Controls
 
         #endregion
 
-        private void OnClick(object sender, EventArgs args)
+        private void OnClick(object? sender, EventArgs args)
         {
             CopyToClipBoard();
         }

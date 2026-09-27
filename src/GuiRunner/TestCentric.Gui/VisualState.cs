@@ -208,7 +208,11 @@ namespace TestCentric.Gui
         public static VisualState LoadFrom(TextReader reader)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(VisualState));
-            return (VisualState)serializer.Deserialize(reader);
+            object? obj = serializer.Deserialize(reader);
+            if (obj == null)
+                throw new Exception("Failed to deserialize VisualState from file");
+
+            return (VisualState)obj;
         }
 
         #endregion
@@ -217,7 +221,7 @@ namespace TestCentric.Gui
 
         public void Save(string fileName)
         {
-            string path = Path.GetDirectoryName(fileName);
+            string? path = Path.GetDirectoryName(fileName);
 
             try
             {
@@ -354,7 +358,7 @@ namespace TestCentric.Gui
                                 case "Node":
                                     lastNodeRead = new VisualTreeNode();
 
-                                    lastNodeRead.Name = reader.GetAttribute("Name");
+                                    lastNodeRead.Name = reader.GetAttribute("Name") ?? string.Empty;
                                     lastNodeRead.Expanded = reader.GetAttribute("Expanded") == "True";
                                     lastNodeRead.Checked = reader.GetAttribute("Checked") == "True";
                                     lastNodeRead.Selected = reader.GetAttribute("Selected") == "True";
@@ -470,7 +474,7 @@ namespace TestCentric.Gui
             return $"Name={Name},Expanded={Expanded},Checked={Checked},Selected={Selected},IsTopNode={IsTopNode}";
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             var other = obj as VisualTreeNode;
 

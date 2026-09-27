@@ -158,9 +158,10 @@ namespace TestCentric.Gui.Elements
             }
         }
 
-        void menuItem_Click(object sender, System.EventArgs e)
+        void menuItem_Click(object? sender, System.EventArgs e)
         {
-            ToolStripMenuItem clicked = (ToolStripMenuItem)sender;
+            if (sender is not ToolStripMenuItem clicked)
+                return;
 
             // If user clicks selected item, ignore it
             if (!clicked.Checked)

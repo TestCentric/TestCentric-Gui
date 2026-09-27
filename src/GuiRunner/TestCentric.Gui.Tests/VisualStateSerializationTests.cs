@@ -57,21 +57,22 @@ namespace TestCentric.Gui
             var doc = new XmlDocument();
             doc.LoadXml(writer.ToString());
             var docElement = doc.DocumentElement;
-            var firstChild = docElement.FirstChild;
-            var topNodes = firstChild.SelectNodes("Node");
+            var firstChild = docElement?.FirstChild;
+            var topNodes = firstChild?.SelectNodes("Node");
+            Assert.That(topNodes, Is.Not.Null, "Nodes element is missing");
 
             Assert.Multiple(() =>
             {
-                Assert.That(docElement.Name, Is.EqualTo("VisualState"));
+                Assert.That(docElement!.Name, Is.EqualTo("VisualState"));
                 Assert.That(docElement.GetAttribute("DisplayStrategy"), Is.EqualTo(vs.DisplayStrategy));
                 Assert.That(docElement.GetAttribute("ShowCheckBoxes"), Is.EqualTo(vs.ShowCheckBoxes ? "True" : "False"));
                 Assert.That(docElement.GetAttribute("ShowNamespaces"), Is.EqualTo(!vs.ShowNamespaces ? "False" : ""));
                 Assert.That(docElement.GetAttribute("ShowFixtures"), Is.EqualTo(!vs.ShowFixtures ? "False" : ""));
                 Assert.That(docElement.GetAttribute("ShowAssemblies"), Is.EqualTo(!vs.ShowAssemblies ? "False" : ""));
-                Assert.That(firstChild.Name, Is.EqualTo("Nodes"));
-                Assert.That(topNodes.Count, Is.EqualTo(vs.Nodes.Count));
+                Assert.That(firstChild!.Name, Is.EqualTo("Nodes"));
+                Assert.That(topNodes!.Count, Is.EqualTo(vs.Nodes.Count));
                 for (int i = 0; i < topNodes.Count; i++)
-                    CheckVisualTreeNode(topNodes[i], vs.Nodes[i]);
+                    CheckVisualTreeNode(topNodes[i]!, vs.Nodes[i]);
             });
 
             void CheckVisualTreeNode(XmlNode xmlNode, VisualTreeNode vsNode)
@@ -85,12 +86,12 @@ namespace TestCentric.Gui
                 int expectedCount = vsNode.Nodes.Count;
                 if (expectedCount > 0)
                 {
-                    Assert.That(xmlNode.FirstChild.Name, Is.EqualTo("Nodes"));
+                    Assert.That(xmlNode.FirstChild!.Name, Is.EqualTo("Nodes"));
                     var childNodes = xmlNode.FirstChild.SelectNodes("Node");
-                    Assert.That(childNodes.Count, Is.EqualTo(expectedCount));
+                    Assert.That(childNodes!.Count, Is.EqualTo(expectedCount));
 
                     for (int i = 0; i < expectedCount; i++)
-                        CheckVisualTreeNode(childNodes[i], vsNode.Nodes[i]);
+                        CheckVisualTreeNode(childNodes[i]!, vsNode.Nodes[i]);
                 }
             }
         }

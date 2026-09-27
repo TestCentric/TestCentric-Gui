@@ -42,7 +42,8 @@ namespace TestCentric.Gui.Presenters
             Assert.That(filter.ChildNodes.Count, Is.EqualTo(1));
 
             filter = filter.ChildNodes[0];
-            Assert.That(filter.Name, Is.EqualTo("or"));
+            Assert.That(filter, Is.Not.Null);
+            Assert.That(filter!.Name, Is.EqualTo("or"));
             Assert.That(filter.ChildNodes.Count, Is.EqualTo(2));
 
             var ids = new List<string>();

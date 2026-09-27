@@ -47,13 +47,7 @@ namespace TestCentric.Gui.Model.Filter
             string xpathExpression = "ancestor-or-self::*/properties/property[@name='Category']";
 
             // 1. Get list of available categories at TestNode
-            IList<string> categories = new List<string>();
-            foreach (XmlNode node in testNode.Xml.SelectNodes(xpathExpression))
-            {
-                var groupName = node.Attributes["value"].Value;
-                if (!string.IsNullOrEmpty(groupName))
-                    categories.Add(groupName);
-            }
+            IList<string> categories = GetCategoriesFromNode(testNode, xpathExpression);
 
             if (categories.Any() == false)
                 categories.Add(NoCategory);
@@ -78,6 +72,23 @@ namespace TestCentric.Gui.Model.Filter
             var items = TestModel.AvailableCategories;
             var allCategories = items.Concat(new[] { NoCategory });
             return allCategories.ToList();
+        }
+
+        private static IList<string> GetCategoriesFromNode(TestNode testNode, string xpathExpression)
+        {
+            IList<string> categories = new List<string>();
+            XmlNodeList? nodes = testNode.Xml.SelectNodes(xpathExpression);
+            if (nodes == null)
+                return categories;
+
+            foreach (XmlNode node in nodes)
+            {
+                string? groupName = node.Attributes?["value"]?.Value;
+                if (!string.IsNullOrEmpty(groupName))
+                    categories.Add(groupName);
+            }
+
+            return categories;
         }
     }
 }

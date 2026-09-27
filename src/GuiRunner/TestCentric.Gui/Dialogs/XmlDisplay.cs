@@ -81,7 +81,7 @@ namespace TestCentric.Gui.Dialogs
                 foreach (TestNode child in testNode.Children)
                 {
                     XmlNode childXml = GetFullXml(child);
-                    XmlNode importedChildXml = currentXml.OwnerDocument.ImportNode(childXml, true);
+                    XmlNode importedChildXml = GetXmlDocument(currentXml).ImportNode(childXml, true);
                     currentXml.AppendChild(importedChildXml);
                 }
             }
@@ -91,7 +91,7 @@ namespace TestCentric.Gui.Dialogs
                 foreach (TestNode child in testNode.Children)
                 {
                     XmlNode childXml = GetFullXml(child);
-                    XmlNode importedChildXml = currentXml.OwnerDocument.ImportNode(childXml, true);
+                    XmlNode importedChildXml = GetXmlDocument(currentXml).ImportNode(childXml, true);
                     var oldChild = FindXmlNode(currentXml, child);
                     if (oldChild != null)
                         currentXml.ReplaceChild(importedChildXml, oldChild);
@@ -107,10 +107,19 @@ namespace TestCentric.Gui.Dialogs
             foreach (XmlNode child in currentXml.ChildNodes)
             {
                 if ((child.LocalName == "test-case" || child.LocalName == "test-suite")
-                    && testNodeChild.FullName == child.Attributes["fullname"].Value)
+                    && testNodeChild.FullName == child.Attributes?["fullname"]?.Value)
                     return child;
             }
             return null;
+        }
+
+        private static XmlDocument GetXmlDocument(XmlNode node)
+        {
+            var xmlDocument = node.OwnerDocument;
+            if (xmlDocument == null)
+                throw new InvalidOperationException("The provided XML node does not belong to a document.");
+
+            return xmlDocument;
         }
     }
 }

@@ -172,7 +172,11 @@ namespace TestCentric.Gui.Model
         {
             var items = new List<string>();
 
-            foreach (XmlNode propNode in this.Xml.SelectNodes("properties/property"))
+            XmlNodeList? propNodes = this.Xml.SelectNodes("properties/property");
+            if (propNodes == null)
+                return items.ToArray();
+
+            foreach (XmlNode propNode in propNodes)
             {
                 var name = propNode.GetAttribute("name");
                 var val = propNode.GetAttribute("value");

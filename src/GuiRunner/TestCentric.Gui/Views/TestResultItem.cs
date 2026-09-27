@@ -52,7 +52,7 @@ namespace TestCentric.Gui.Views
 
                 try
                 {
-                    string line;
+                    string? line;
                     while ((line = sr.ReadLine()) != null)
                     {
                         if (!FilterLine(line))

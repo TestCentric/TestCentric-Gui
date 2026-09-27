@@ -5,6 +5,7 @@
 
 using System;
 using System.Configuration;
+using System.Reflection;
 using Castle.Core.Internal;
 using NUnit.Framework;
 
@@ -43,10 +44,10 @@ namespace TestCentric.Gui.Model.Settings
             UserSettings.Changed += (sender, args) => { changedSetting = args.SettingName; };
 
             Type settingGroupType = SettingGroup.GetType();
-            var propInfo = settingGroupType.GetProperty(propertyName);
+            PropertyInfo? propInfo = settingGroupType.GetProperty(propertyName);
 
             // Act
-            propInfo.SetValue(SettingGroup, value);
+            propInfo?.SetValue(SettingGroup, value);
 
             // Assert
             Assert.That(changedSetting, Contains.Substring(propertyName));

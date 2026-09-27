@@ -80,7 +80,7 @@ namespace TestCentric.Gui.Controls
             InitializeControl(listbox);
 
             ItemBounds = listbox.GetItemRectangle(index);
-            TipText = listbox.Items[index].ToString();
+            TipText = listbox.Items[index]?.ToString() ?? string.Empty;
         }
 
         public TipWindow(TestCentricTreeView treeView)

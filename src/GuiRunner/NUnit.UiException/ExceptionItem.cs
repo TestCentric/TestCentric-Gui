@@ -88,7 +88,7 @@ namespace NUnit.UiException
         /// </summary>
         public string FileName 
         {
-            get { return (System.IO.Path.GetFileName(_path)); }
+            get { return System.IO.Path.GetFileName(_path) ?? string.Empty; }
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace NUnit.UiException
             return ("TraceItem: {'" + _path + "', " + _fullyQualifiedMethodName + ", " + _line + "}");
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             ErrorItem? item = obj as ErrorItem;
 

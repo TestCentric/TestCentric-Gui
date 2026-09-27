@@ -116,7 +116,7 @@ namespace TestCentric.Gui.Dialogs
 
             public SettingsPage this[int index]
             {
-                get { return (SettingsPage)InnerList[index]; }
+                get { return (SettingsPage)InnerList[index]!; }
             }
 
             public SettingsPage this[string key]

@@ -222,7 +222,7 @@ namespace TestCentric.Gui.Views
                 Clipboard.SetDataObject(detailList.SelectedItem.ToString());
         }
 
-        private void OnMouseHover(object sender, System.EventArgs e)
+        private void OnMouseHover(object? sender, System.EventArgs e)
         {
             if (_tipWindow != null) _tipWindow.Close();
 
@@ -231,7 +231,7 @@ namespace TestCentric.Gui.Views
                 Graphics g = Graphics.FromHwnd(detailList.Handle);
 
                 Rectangle itemRect = detailList.GetItemRectangle(_hoverIndex);
-                string text = detailList.Items[_hoverIndex].ToString();
+                string text = detailList.Items[_hoverIndex]?.ToString() ?? string.Empty;
 
                 SizeF sizeNeeded = g.MeasureString(text, detailList.Font);
                 bool expansionNeeded =
@@ -256,7 +256,7 @@ namespace TestCentric.Gui.Views
             }
         }
 
-        private void tipWindow_Closed(object sender, System.EventArgs e)
+        private void tipWindow_Closed(object? sender, System.EventArgs e)
         {
             _tipWindow = null;
             _hoverIndex = -1;

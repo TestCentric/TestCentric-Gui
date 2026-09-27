@@ -164,9 +164,9 @@ namespace TestCentric.Gui.Tests
 
         private static PropertyInfo GetPropertyInfo(string propertyName)
         {
-            PropertyInfo property = typeof(GuiOptions).GetProperty(propertyName);
+            PropertyInfo? property = typeof(GuiOptions).GetProperty(propertyName);
             Assert.That(property, Is.Not.Null, $"The property '{propertyName}' is not defined");
-            return property;
+            return property!;
         }
     }
 }

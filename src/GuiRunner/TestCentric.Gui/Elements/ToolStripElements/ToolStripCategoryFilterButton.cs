@@ -65,7 +65,7 @@ namespace TestCentric.Gui.Elements
             _dialog?.Close();
         }
 
-        protected void OnButtonClicked(object sender, EventArgs e)
+        protected void OnButtonClicked(object? sender, EventArgs e)
         {
             // Dialog is already opened => just set the focus
             if (_dialog != null)

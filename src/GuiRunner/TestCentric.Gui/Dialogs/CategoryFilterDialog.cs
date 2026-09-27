@@ -43,9 +43,12 @@ namespace TestCentric.Gui.Dialogs
             get
             {
                 var selectedItems = new List<string>();
+
                 foreach (var item in checkedListBoxCategory.CheckedItems)
                 {
-                    selectedItems.Add(item.ToString());
+                    string? category = item.ToString();
+                    if (category != null)
+                        selectedItems.Add(category);
                 }
 
                 return selectedItems;
@@ -71,7 +74,7 @@ namespace TestCentric.Gui.Dialogs
             checkedListBoxCategory.SuspendLayout();
             for (int i = 0; i < checkedListBoxCategory.Items.Count; i++)
             {
-                string category = checkedListBoxCategory.Items[i].ToString();
+                string? category = checkedListBoxCategory.Items[i]?.ToString();
                 bool isChecked = selectedCategories.Contains(category);
                 checkedListBoxCategory.SetItemChecked(i, isChecked);
             }

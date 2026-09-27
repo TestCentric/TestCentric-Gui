@@ -23,14 +23,24 @@ namespace TestCentric
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml("<" + name + "/>");
-            return doc.FirstChild;
+
+            XmlNode? firstChildNode = doc.FirstChild;
+            if (firstChildNode == null)
+                throw new InvalidOperationException("The provided XML does not contain any nodes.");
+
+            return firstChildNode;
         }
 
         public static XmlNode CreateXmlNode(string xml)
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xml);
-            return doc.FirstChild;
+
+            XmlNode? firstChildNode = doc.FirstChild;
+            if (firstChildNode == null)
+                throw new InvalidOperationException("The provided XML does not contain any nodes.");
+
+            return firstChildNode;
         }
 
         /// <summary>
@@ -41,9 +51,9 @@ namespace TestCentric
         /// <param name="value">The value of the attribute.</param>
         public static void AddAttribute(this XmlNode node, string name, string value)
         {
-            XmlAttribute attr = node.OwnerDocument.CreateAttribute(name);
+            XmlAttribute attr = GetXmlDocument(node).CreateAttribute(name);
             attr.Value = value;
-            node.Attributes.Append(attr);
+            node.Attributes?.Append(attr);
         }
 
         /// <summary>
@@ -54,7 +64,7 @@ namespace TestCentric
         /// <returns>The newly created child element</returns>
         public static XmlNode AddElement(this XmlNode node, string name)
         {
-            XmlNode childNode = node.OwnerDocument.CreateElement(name);
+            XmlNode childNode = GetXmlDocument(node).CreateElement(name);
             node.AppendChild(childNode);
             return childNode;
         }
@@ -70,7 +80,7 @@ namespace TestCentric
         public static XmlNode AddElementWithCDataSection(this XmlNode node, string name, string data)
         {
             XmlNode childNode = node.AddElement(name);
-            childNode.AppendChild(node.OwnerDocument.CreateCDataSection(data));
+            childNode.AppendChild(GetXmlDocument(node).CreateCDataSection(data));
             return childNode;
         }
 
@@ -84,7 +94,7 @@ namespace TestCentric
         /// <returns></returns>
         public static string? GetAttribute(this XmlNode result, string name)
         {
-            XmlAttribute attr = result.Attributes[name];
+            XmlAttribute? attr = result.Attributes?[name];
 
             return attr == null ? null : attr.Value;
         }
@@ -98,7 +108,7 @@ namespace TestCentric
         /// <returns></returns>
         public static int GetAttribute(this XmlNode result, string name, int defaultValue)
         {
-            XmlAttribute attr = result.Attributes[name];
+            XmlAttribute? attr = result.Attributes?[name];
 
             return attr == null
                 ? defaultValue
@@ -114,7 +124,7 @@ namespace TestCentric
         /// <returns></returns>
         public static double GetAttribute(this XmlNode result, string name, double defaultValue)
         {
-            XmlAttribute attr = result.Attributes[name];
+            XmlAttribute? attr = result.Attributes?[name];
 
             return attr == null
                 ? defaultValue
@@ -142,5 +152,14 @@ namespace TestCentric
         }
 
         #endregion
+
+        private static XmlDocument GetXmlDocument(XmlNode node)
+        {
+            var xmlDocument = node.OwnerDocument;
+            if (xmlDocument == null)
+                throw new InvalidOperationException("The provided XML node does not belong to a document.");
+
+            return xmlDocument;
+        }
     }
 }

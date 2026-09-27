@@ -266,7 +266,7 @@ namespace TestCentric.Gui.Presenters
 
         private static void AssertTreeNodeAndTestGroup(List<TreeNode> treeNodes, string testGroupName, int expectedInGroup)
         {
-            TreeNode treeNode = treeNodes.Find(x => (x.Tag as TestGroup)?.Name == testGroupName);
+            TreeNode? treeNode = treeNodes.Find(x => (x.Tag as TestGroup)?.Name == testGroupName);
             if (expectedInGroup == 0)
             {
                 Assert.That(treeNode, Is.Null, $"TreeNode {testGroupName} exists in tree");
@@ -276,7 +276,7 @@ namespace TestCentric.Gui.Presenters
             Assert.That(treeNode, Is.Not.Null, $"Failed to find node {testGroupName} in tree");
 
             // Assert treeNodes
-            Assert.That(treeNode.Nodes.Count, Is.EqualTo(expectedInGroup));
+            Assert.That(treeNode!.Nodes.Count, Is.EqualTo(expectedInGroup));
             Assert.That(treeNode.Text, Does.StartWith(testGroupName));
 
             // Assert testGroup

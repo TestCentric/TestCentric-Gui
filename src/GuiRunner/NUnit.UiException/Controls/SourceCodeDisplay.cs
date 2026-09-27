@@ -66,13 +66,13 @@ namespace NUnit.UiException.Controls
             return;
         }
 
-        void _splitter_DistanceChanged(object sender, EventArgs e)
+        void _splitter_DistanceChanged(object? sender, EventArgs e)
         {
             if (SplitterDistanceChanged != null)
                 SplitterDistanceChanged(sender, e);
         }
 
-        void _splitter_OrientationChanged(object sender, EventArgs e)
+        void _splitter_OrientationChanged(object? sender, EventArgs e)
         {
             if (SplitOrientationChanged != null)
                 SplitOrientationChanged(sender, e);
@@ -124,7 +124,7 @@ namespace NUnit.UiException.Controls
             set { _splitter.SplitterDistance = value; }
         }
 
-        private void OnClick(object sender, EventArgs e)
+        private void OnClick(object? sender, EventArgs e)
         {
             ListOrderPolicy = ListOrderPolicy == ErrorListOrderPolicy.InitialOrder ?
                 ErrorListOrderPolicy.ReverseOrder :
@@ -133,7 +133,7 @@ namespace NUnit.UiException.Controls
             return;
         }
 
-        protected void SelectedItemChanged(object sender, EventArgs e)
+        protected void SelectedItemChanged(object? sender, EventArgs e)
         {
             ErrorItem? item;
             IFormatterCatalog formatter;

@@ -372,7 +372,7 @@ namespace TestCentric.Gui.Presenters
                 string? projectPath = _model.TestCentricProject.ProjectPath;
                 if (projectPath is not null)
                 {
-                    initialDirectory = Path.GetDirectoryName(projectPath);
+                    initialDirectory = Path.GetDirectoryName(projectPath) ?? _model.WorkDirectory;
                     suggestedFileName = Path.GetFileName(projectPath);
                 }
 

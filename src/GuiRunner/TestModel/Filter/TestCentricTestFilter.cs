@@ -105,7 +105,7 @@ namespace TestCentric.Gui.Model.Filter
         private IEnumerable<string> GetFilterCondition(string filterId)
         {
             var testFilter = _filters.FirstOrDefault(f => f.FilterId == filterId);
-            return testFilter.Condition ?? Enumerable.Empty<string>();
+            return testFilter?.Condition ?? Enumerable.Empty<string>();
         }
 
         private void SetFilterCondition(string filterId, IEnumerable<string> filter)

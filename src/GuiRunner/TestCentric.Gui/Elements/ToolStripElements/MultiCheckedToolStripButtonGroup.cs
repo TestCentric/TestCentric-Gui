@@ -88,7 +88,7 @@ namespace TestCentric.Gui.Elements
             throw new System.NotImplementedException();
         }
 
-        protected virtual void OnButtonClicked(object sender, EventArgs e)
+        protected virtual void OnButtonClicked(object? sender, EventArgs e)
         {
             if (SelectionChanged != null)
                 SelectionChanged();

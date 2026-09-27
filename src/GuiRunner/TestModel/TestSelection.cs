@@ -54,7 +54,7 @@ namespace TestCentric.Gui.Model
         /// <param name="id"></param>
         public void RemoveId(string id)
         {
-            TestNode testNode = this.FirstOrDefault(x => x.Id == id);
+            TestNode? testNode = this.FirstOrDefault(x => x.Id == id);
             if (testNode != null)
                 _nodes.Remove(testNode);
         }

@@ -102,7 +102,7 @@ namespace NUnit.UiException.Tests
             Assert.That(item.HasSourceAttachment, Is.True);
 
             item = new ErrorItem();
-            Assert.That(item.FileName, Is.Null);
+            Assert.That(item.FileName, Is.Empty);
             Assert.That(item.FileExtension, Is.Null);
             Assert.That(item.Path, Is.Null);
             Assert.That(item.LineNumber, Is.EqualTo(0));

@@ -27,7 +27,7 @@ namespace TestCentric.Gui
             Guard.ArgumentValid(IsValidImageSetDirectory(imageSetDir), $"Directory {imageSetDir} does not contain an image set.", nameof(imageSetDir));
 
             _imageSetDir = imageSetDir;
-            _commonImageDir = Path.GetDirectoryName(imageSetDir);
+            _commonImageDir = Path.GetDirectoryName(imageSetDir)!;
             
             Name = Path.GetFileName(imageSetDir);
         }

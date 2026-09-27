@@ -244,7 +244,7 @@ namespace TestCentric.Gui.Model
             object[] args = new object[] { e };
             foreach (Delegate handler in handlerList.GetInvocationList())
             {
-                object target = handler.Target;
+                object? target = handler.Target;
                 System.Windows.Forms.Control? control
                     = target as System.Windows.Forms.Control;
 
