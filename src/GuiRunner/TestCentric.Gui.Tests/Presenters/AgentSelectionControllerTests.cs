@@ -17,8 +17,8 @@ namespace TestCentric.Gui.Presenters
     [TestFixture]
     internal class AgentSelectionControllerTests : PresenterTestBase<IMainView>
     {
-        private ToolStripMenuItem _selectAgentMenuItem;
-        private AgentSelectionController _controller;
+        private ToolStripMenuItem _selectAgentMenuItem = null!;
+        private AgentSelectionController _controller = null!;
 
         [SetUp]
         public void SetUp()
@@ -64,7 +64,7 @@ namespace TestCentric.Gui.Presenters
         public void AllowAgentSelection_ProjectLoadedWithNoAgents_ReturnsFalse()
         {
             // 1. Arrange
-            _model.GetAgentsForPackage(null).ReturnsForAnyArgs(new List<string>());
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string>());
 
             // 2. Act
             bool result = _controller.AllowAgentSelection();
@@ -77,7 +77,7 @@ namespace TestCentric.Gui.Presenters
         public void AllowAgentSelection_ProjectLoadedWithOneAgent_ReturnsFalse()
         {
             // 1. Arrange
-            _model.GetAgentsForPackage(null).ReturnsForAnyArgs(new List<string> { "Agent1" });
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> { "Agent1" });
 
             // 2. Act
             bool result = _controller.AllowAgentSelection();
@@ -90,7 +90,7 @@ namespace TestCentric.Gui.Presenters
         public void AllowAgentSelection_ProjectLoadedWithMultipleAgents_ReturnsTrue()
         {
             // 1. Arrange
-            _model.GetAgentsForPackage(null).ReturnsForAnyArgs(new List<string> { "Agent1", "Agent2" });
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> { "Agent1", "Agent2" });
 
             // 2. Act
             bool result = _controller.AllowAgentSelection();
@@ -116,7 +116,7 @@ namespace TestCentric.Gui.Presenters
             Assert.That(_view.SelectAgentMenu.MenuItems.Count, Is.EqualTo(1));
 
             var defaultMenuItem = _view.SelectAgentMenu.MenuItems[0] as ToolStripMenuItem;
-            Assert.That(defaultMenuItem.Enabled, Is.True);
+            Assert.That(defaultMenuItem!.Enabled, Is.True);
             Assert.That(defaultMenuItem.Tag, Is.EqualTo("DEFAULT"));
             Assert.That(defaultMenuItem.Checked, Is.True);
             Assert.That(defaultMenuItem.Text, Is.EqualTo("Default"));
@@ -140,19 +140,19 @@ namespace TestCentric.Gui.Presenters
             Assert.That(_view.SelectAgentMenu.MenuItems.Count, Is.EqualTo(4)); // Default + 3 agents
 
             var defaultMenuItem = _view.SelectAgentMenu.MenuItems[0] as ToolStripMenuItem;
-            Assert.That(defaultMenuItem.Text, Is.EqualTo("Default"));
+            Assert.That(defaultMenuItem!.Text, Is.EqualTo("Default"));
             Assert.That(defaultMenuItem.Tag, Is.EqualTo("DEFAULT"));
 
             var agent1MenuItem = _view.SelectAgentMenu.MenuItems[1] as ToolStripMenuItem;
-            Assert.That(agent1MenuItem.Text, Is.EqualTo("Agent1"));
+            Assert.That(agent1MenuItem!.Text, Is.EqualTo("Agent1"));
             Assert.That(agent1MenuItem.Tag, Is.EqualTo("NUnit.TestAdapter.Agent1"));
 
             var agent2MenuItem = _view.SelectAgentMenu.MenuItems[2] as ToolStripMenuItem;
-            Assert.That(agent2MenuItem.Text, Is.EqualTo("Agent2"));
+            Assert.That(agent2MenuItem!.Text, Is.EqualTo("Agent2"));
             Assert.That(agent2MenuItem.Tag, Is.EqualTo("NUnit.TestAdapter.Agent2"));
 
             var agent3MenuItem = _view.SelectAgentMenu.MenuItems[3] as ToolStripMenuItem;
-            Assert.That(agent3MenuItem.Text, Is.EqualTo("Agent3"));
+            Assert.That(agent3MenuItem!.Text, Is.EqualTo("Agent3"));
             Assert.That(agent3MenuItem.Tag, Is.EqualTo("NUnit.TestAdapter.Agent3"));
         }
 
@@ -169,7 +169,7 @@ namespace TestCentric.Gui.Presenters
             Assert.That(_view.SelectAgentMenu.MenuItems.Count, Is.EqualTo(2));
 
             var agentMenuItem = _view.SelectAgentMenu.MenuItems[1] as ToolStripMenuItem;
-            Assert.That(agentMenuItem.Text, Is.EqualTo("SimpleAgent"));
+            Assert.That(agentMenuItem!.Text, Is.EqualTo("SimpleAgent"));
             Assert.That(agentMenuItem.Tag, Is.EqualTo("SimpleAgent"));
         }
 
@@ -189,13 +189,13 @@ namespace TestCentric.Gui.Presenters
             Assert.That(_view.SelectAgentMenu.MenuItems.Count, Is.EqualTo(3)); // Default + 2 new agents
 
             var defaultMenuItem = _view.SelectAgentMenu.MenuItems[0] as ToolStripMenuItem;
-            Assert.That(defaultMenuItem.Text, Is.EqualTo("Default"));
+            Assert.That(defaultMenuItem!.Text, Is.EqualTo("Default"));
 
             var agent2MenuItem = _view.SelectAgentMenu.MenuItems[1] as ToolStripMenuItem;
-            Assert.That(agent2MenuItem.Text, Is.EqualTo("Agent2"));
+            Assert.That(agent2MenuItem!.Text, Is.EqualTo("Agent2"));
 
             var agent3MenuItem = _view.SelectAgentMenu.MenuItems[2] as ToolStripMenuItem;
-            Assert.That(agent3MenuItem.Text, Is.EqualTo("Agent3"));
+            Assert.That(agent3MenuItem!.Text, Is.EqualTo("Agent3"));
         }
 
         #endregion
@@ -206,7 +206,7 @@ namespace TestCentric.Gui.Presenters
         public void UpdateMenuItems_NoProject_DisablesMenu()
         {
             // 1. Arrange
-            _model.GetAgentsForPackage(null).ReturnsForAnyArgs(new List<string>());
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string>());
             _controller.PopulateMenu();
 
             // 2. Act
@@ -220,7 +220,7 @@ namespace TestCentric.Gui.Presenters
         public void UpdateMenuItems_OneAgentAvailable_DisablesMenu()
         {
             // 1. Arrange
-            _model.GetAgentsForPackage(null).ReturnsForAnyArgs(new List<string> { "Agent1" });
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> { "Agent1" });
             _controller.PopulateMenu();
 
             // 2. Act
@@ -234,7 +234,7 @@ namespace TestCentric.Gui.Presenters
         public void UpdateMenuItems_MultipleAgentsAvailable_EnablesMenu()
         {
             // 1. Arrange
-            _model.GetAgentsForPackage(null).ReturnsForAnyArgs(new List<string> 
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> 
             { 
                 "NUnit.TestAdapter.Agent1",
                 "NUnit.TestAdapter.Agent2" 
@@ -259,7 +259,7 @@ namespace TestCentric.Gui.Presenters
         public void UpdateMenuItems_NoSpecificAgentIsSelected_ChecksDefaultAgentMenuItem()
         {
             // 1. Arrange
-            _model.GetAgentsForPackage(null).ReturnsForAnyArgs(new List<string> 
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> 
             { 
                 "NUnit.TestAdapter.Agent1",
                 "NUnit.TestAdapter.Agent2" 
@@ -278,7 +278,7 @@ namespace TestCentric.Gui.Presenters
 
             // 3. Assert
             var defaultMenuItem = _view.SelectAgentMenu.MenuItems[0] as ToolStripMenuItem;
-            Assert.That(defaultMenuItem.Checked, Is.True);
+            Assert.That(defaultMenuItem!.Checked, Is.True);
             Assert.That(defaultMenuItem.Enabled, Is.True);
         }
 
@@ -286,13 +286,13 @@ namespace TestCentric.Gui.Presenters
         public void UpdateMenuItems_SpecificAgentIsSelected_ChecksAgentMenuItem()
         {
             // 1. Arrange
-            _model.GetAgentsForPackage(null).ReturnsForAnyArgs(new List<string> 
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> 
             { 
                 "NUnit.TestAdapter.Agent1",
                 "NUnit.TestAdapter.Agent2" 
             });
             
-            _model.TopLevelPackage.Settings.Add(SettingDefinitions.SelectedAgentName.WithValue("NUnit.TestAdapter.Agent2"));
+            _model.TopLevelPackage!.Settings.Add(SettingDefinitions.SelectedAgentName.WithValue("NUnit.TestAdapter.Agent2"));
             
             _model.AvailableAgents.Returns(new List<string> 
             { 
@@ -307,13 +307,13 @@ namespace TestCentric.Gui.Presenters
 
             // 3. Assert
             var defaultMenuItem = _view.SelectAgentMenu.MenuItems[0] as ToolStripMenuItem;
-            Assert.That(defaultMenuItem.Checked, Is.False);
+            Assert.That(defaultMenuItem!.Checked, Is.False);
 
             var agent1MenuItem = _view.SelectAgentMenu.MenuItems[1] as ToolStripMenuItem;
-            Assert.That(agent1MenuItem.Checked, Is.False);
+            Assert.That(agent1MenuItem!.Checked, Is.False);
 
             var agent2MenuItem = _view.SelectAgentMenu.MenuItems[2] as ToolStripMenuItem;
-            Assert.That(agent2MenuItem.Checked, Is.True);
+            Assert.That(agent2MenuItem!.Checked, Is.True);
         }
 
         [Test]
@@ -322,7 +322,7 @@ namespace TestCentric.Gui.Presenters
             // 1. Arrange
             var project = new TestCentricProject("MyProject");
             _model.TestCentricProject.Returns(project);
-            _model.GetAgentsForPackage(null).ReturnsForAnyArgs(new List<string> 
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> 
             { 
                 "NUnit.TestAdapter.Agent1",
                 "NUnit.TestAdapter.Agent2"
@@ -343,16 +343,16 @@ namespace TestCentric.Gui.Presenters
 
             // 3. Assert
             var defaultMenuItem = _view.SelectAgentMenu.MenuItems[0] as ToolStripMenuItem;
-            Assert.That(defaultMenuItem.Enabled, Is.True);
+            Assert.That(defaultMenuItem!.Enabled, Is.True);
 
             var agent1MenuItem = _view.SelectAgentMenu.MenuItems[1] as ToolStripMenuItem;
-            Assert.That(agent1MenuItem.Enabled, Is.True);
+            Assert.That(agent1MenuItem!.Enabled, Is.True);
 
             var agent2MenuItem = _view.SelectAgentMenu.MenuItems[2] as ToolStripMenuItem;
-            Assert.That(agent2MenuItem.Enabled, Is.True);
+            Assert.That(agent2MenuItem!.Enabled, Is.True);
 
             var agent3MenuItem = _view.SelectAgentMenu.MenuItems[3] as ToolStripMenuItem;
-            Assert.That(agent3MenuItem.Enabled, Is.False);
+            Assert.That(agent3MenuItem!.Enabled, Is.False);
         }
 
         [Test]
@@ -361,7 +361,7 @@ namespace TestCentric.Gui.Presenters
             // 1. Arrange
             var project = new TestCentricProject("MyProject");
             _model.TestCentricProject.Returns(project);
-            _model.GetAgentsForPackage(null).ReturnsForAnyArgs(new List<string>()); // No agents supported
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string>()); // No agents supported
             
             _model.AvailableAgents.Returns(new List<string> 
             { 
@@ -376,7 +376,7 @@ namespace TestCentric.Gui.Presenters
 
             // 3. Assert
             var defaultMenuItem = _view.SelectAgentMenu.MenuItems[0] as ToolStripMenuItem;
-            Assert.That(defaultMenuItem.Enabled, Is.True);
+            Assert.That(defaultMenuItem!.Enabled, Is.True);
         }
 
         #endregion
@@ -389,7 +389,7 @@ namespace TestCentric.Gui.Presenters
             // 1. Arrange
             var project = new TestCentricProject("MyProject");
             _model.TestCentricProject.Returns(project);
-            _model.GetAgentsForPackage(null).ReturnsForAnyArgs(new List<string> 
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> 
             { 
                 "NUnit.TestAdapter.Agent1",
                 "NUnit.TestAdapter.Agent2" 
@@ -408,11 +408,11 @@ namespace TestCentric.Gui.Presenters
             var agent1MenuItem = _view.SelectAgentMenu.MenuItems[1] as ToolStripMenuItem;
 
             // 2. Act
-            agent1MenuItem.PerformClick();
+            agent1MenuItem!.PerformClick();
 
             // 3. Assert
-            Assert.That(defaultMenuItem.Checked, Is.False);
-            Assert.That(agent1MenuItem.Checked, Is.True);
+            Assert.That(defaultMenuItem!.Checked, Is.False);
+            Assert.That(agent1MenuItem!.Checked, Is.True);
         }
 
         [Test]
@@ -421,7 +421,7 @@ namespace TestCentric.Gui.Presenters
             // 1. Arrange
             var project = new TestCentricProject("MyProject");
             _model.TestCentricProject.Returns(project);
-            _model.GetAgentsForPackage(null).ReturnsForAnyArgs(new List<string> 
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> 
             { 
                 "NUnit.TestAdapter.Agent1",
                 "NUnit.TestAdapter.Agent2" 
@@ -438,7 +438,7 @@ namespace TestCentric.Gui.Presenters
             var agent1MenuItem = _view.SelectAgentMenu.MenuItems[1] as ToolStripMenuItem;
 
             // 2. Act
-            agent1MenuItem.PerformClick();
+            agent1MenuItem!.PerformClick();
 
             // 3. Assert
             Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.SelectedAgentName.Name), Is.True);
@@ -454,7 +454,7 @@ namespace TestCentric.Gui.Presenters
             project.AddSetting(SettingDefinitions.SelectedAgentName.WithValue("SomeAgent"));
             project.AddSetting(SettingDefinitions.RequestedAgentName.WithValue("SomeAgent"));
             
-            _model.GetAgentsForPackage(null).ReturnsForAnyArgs(new List<string> 
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> 
             { 
                 "NUnit.TestAdapter.Agent1",
                 "NUnit.TestAdapter.Agent2" 
@@ -464,7 +464,7 @@ namespace TestCentric.Gui.Presenters
             _controller.PopulateMenu();
 
             var defaultMenuItem = _view.SelectAgentMenu.MenuItems[0] as ToolStripMenuItem;
-            defaultMenuItem.Checked = false; // Simulate it's not checked
+            defaultMenuItem!.Checked = false; // Simulate it's not checked
 
             // 2. Act
             defaultMenuItem.PerformClick();
@@ -480,13 +480,13 @@ namespace TestCentric.Gui.Presenters
             // 1. Arrange
             var project = new TestCentricProject("MyProject");
             _model.TestCentricProject.Returns(project);
-            _model.GetAgentsForPackage(null).ReturnsForAnyArgs(new List<string>());
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string>());
             _model.AvailableAgents.Returns(new List<string>());
             
             _controller.PopulateMenu();
 
             var defaultMenuItem = _view.SelectAgentMenu.MenuItems[0] as ToolStripMenuItem;
-            Assert.That(defaultMenuItem.Checked, Is.True);
+            Assert.That(defaultMenuItem!.Checked, Is.True);
 
             // 2. Act
             defaultMenuItem.PerformClick();

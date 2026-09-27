@@ -44,8 +44,8 @@ namespace TestCentric.Gui.Presenters.TestTree
 
             // Assert
             _view.TextFilter.Received().Text = "";
-            _view.OutcomeFilter.ReceivedWithAnyArgs().SelectedItems = null;
-            _view.CategoryFilter.ReceivedWithAnyArgs().SelectedItems = null;
+            _view.OutcomeFilter.ReceivedWithAnyArgs().SelectedItems = null!;
+            _view.CategoryFilter.ReceivedWithAnyArgs().SelectedItems = null!;
         }
     }
 }

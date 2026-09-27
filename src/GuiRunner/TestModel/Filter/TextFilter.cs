@@ -21,7 +21,7 @@ namespace TestCentric.Gui.Model.Filter
         public IEnumerable<string> Condition
         {
             get { return new List<string>() { _condition }; }
-            set { _condition = value.FirstOrDefault(); }
+            set { _condition = value.FirstOrDefault() ?? string.Empty; }
         }
 
         public bool IsActive => string.IsNullOrEmpty( _condition) == false;

@@ -95,13 +95,14 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        private void OnMenuItemClicked(object sender, EventArgs e)
+        private void OnMenuItemClicked(object? sender, EventArgs e)
         {
-            string fileName = (string)((ToolStripMenuItem)sender).Tag;
-            Model.OpenExistingFile(fileName);
+            string? fileName = ((ToolStripMenuItem?)sender)?.Tag as string;
+            if (fileName != null)
+                Model.OpenExistingFile(fileName);
         }
 
-        private void RemoveRecentFileEntry(object sender, EventArgs e)
+        private void RemoveRecentFileEntry(object? sender, EventArgs e)
         {
             // Remove entry from settings
             MenuItem? contextMenuItem = sender as MenuItem;

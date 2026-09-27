@@ -38,8 +38,12 @@ namespace TestCentric.Gui.Model
         /// </summary>
         public static ResultNode Create(XmlNode xmlNode, string newId)
         {
-            var attribute = xmlNode.Attributes["id"];
-            attribute.Value = newId;
+            var attribute = xmlNode.Attributes?["id"];
+            if (attribute == null)
+                xmlNode.AddAttribute("id", newId);
+            else
+                attribute.Value = newId;
+
             return new ResultNode(xmlNode) { IsLatestRun = false };
         }
 
@@ -48,12 +52,15 @@ namespace TestCentric.Gui.Model
         /// </summary>
         public static ResultNode Create(XmlNode xmlNode, ResultState resultState)
         {
-            var attribute = xmlNode.Attributes["result"];
-            attribute.Value = GetStatusString(resultState.Status);
+            var attribute = xmlNode.Attributes?["result"];
+            if (attribute == null)
+                xmlNode.AddAttribute("result", GetStatusString(resultState.Status));
+            else
+                attribute.Value = GetStatusString(resultState.Status);
 
             if (!string.IsNullOrEmpty(resultState.Label))
             {
-                attribute = xmlNode.Attributes["label"];
+                attribute = xmlNode.Attributes?["label"];
                 if (attribute == null)
                     xmlNode.AddAttribute("label", resultState.Label);
                 else
@@ -107,8 +114,12 @@ namespace TestCentric.Gui.Model
                 {
                     _assertions = new List<AssertionResult>();
 
-                    foreach (XmlNode assertion in Xml.SelectNodes("assertions/assertion"))
-                        _assertions.Add(new AssertionResult(assertion));
+                    XmlNode? assertionsNode = Xml.SelectSingleNode("assertions");
+                    if (assertionsNode == null)
+                        return _assertions;
+
+                    foreach (XmlNode assertion in assertionsNode)
+                            _assertions.Add(new AssertionResult(assertion));
                 }
 
                 return _assertions;
@@ -176,7 +187,7 @@ namespace TestCentric.Gui.Model
 
         private static readonly char[] EOL_CHARS = new char[] { '\r', '\n' };
 
-        private static string? GetTrimmedInnerText(XmlNode node)
+        private static string? GetTrimmedInnerText(XmlNode? node)
         {
             // In order to control the format, we trim any line-end chars
             // from end of the strings we write and supply them via calls

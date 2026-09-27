@@ -38,7 +38,7 @@ namespace TestCentric.Gui.Tests
         [TestCase("InternalTraceLevel", null)]
         [TestCase("DebugAgent", false)]
         [TestCase("Unattended", false)]
-        public void DefaultOptionValues(string propertyName, object val)
+        public void DefaultOptionValues(string propertyName, object? val)
         {
             var property = GetPropertyInfo(propertyName);
             var options = new GuiOptions();
@@ -67,7 +67,7 @@ namespace TestCentric.Gui.Tests
 #if DEBUG
         [TestCase("DebugAgent", "--debug-agent", true)]
 #endif
-        public void ValidOptionsAreRecognized(string propertyName, string option, object expected = null)
+        public void ValidOptionsAreRecognized(string propertyName, string option, object? expected = null)
         {
             var property = GetPropertyInfo(propertyName);
             var options = new GuiOptions(option);
@@ -164,9 +164,9 @@ namespace TestCentric.Gui.Tests
 
         private static PropertyInfo GetPropertyInfo(string propertyName)
         {
-            PropertyInfo property = typeof(GuiOptions).GetProperty(propertyName);
+            PropertyInfo? property = typeof(GuiOptions).GetProperty(propertyName);
             Assert.That(property, Is.Not.Null, $"The property '{propertyName}' is not defined");
-            return property;
+            return property!;
         }
     }
 }

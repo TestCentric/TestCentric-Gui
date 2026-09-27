@@ -71,7 +71,7 @@ namespace TestCentric.Gui.Presenters.Main
             _presenter = new TestCentricPresenter(_view, _model);
 
             // 3. Assert
-            (runSelectedTestsButton as IToolTip).Received().ToolTipText = expectedTooltip;
+            (runSelectedTestsButton as IToolTip)!.Received().ToolTipText = expectedTooltip;
         }
     }
 }

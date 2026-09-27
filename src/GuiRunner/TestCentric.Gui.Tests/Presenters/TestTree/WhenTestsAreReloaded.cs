@@ -43,8 +43,8 @@ namespace TestCentric.Gui.Presenters.TestTree
 
             // Assert
             _view.TextFilter.Received().Text = "";
-            _view.OutcomeFilter.ReceivedWithAnyArgs().SelectedItems = null;
-            _view.CategoryFilter.ReceivedWithAnyArgs().SelectedItems = null;
+            _view.OutcomeFilter.ReceivedWithAnyArgs().SelectedItems = null!;
+            _view.CategoryFilter.ReceivedWithAnyArgs().SelectedItems = null!;
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         {
             // Arrange
             ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
-            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+            _treeDisplayStrategyFactory.Create(null!, null!, null!).ReturnsForAnyArgs(strategy);
 
             var project = new TestCentricProject(projectName, "dummy.dll");
             TestNode testNode = new TestNode("<test-suite id='1' name='TestA' type='TestFixture'/>");

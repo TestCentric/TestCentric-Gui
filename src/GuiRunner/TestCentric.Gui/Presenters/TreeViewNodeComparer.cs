@@ -49,7 +49,7 @@ namespace TestCentric.Gui.Presenters
                 _ascending = ascending;
             }
 
-            public int Compare(object x, object y)
+            public int Compare(object? x, object? y)
             {
                 TreeNode node1 = (x as TreeNode).ShouldNotBeNull();
                 TreeNode node2 = (y as TreeNode).ShouldNotBeNull();
@@ -79,7 +79,7 @@ namespace TestCentric.Gui.Presenters
                 _ascending = ascending;
             }
 
-            public int Compare(object x, object y)
+            public int Compare(object? x, object? y)
             {
                 TreeNode node1 = (x as TreeNode).ShouldNotBeNull();
                 TreeNode node2 = (y as TreeNode).ShouldNotBeNull();

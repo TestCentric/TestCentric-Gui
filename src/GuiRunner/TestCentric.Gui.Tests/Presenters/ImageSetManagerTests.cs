@@ -15,9 +15,9 @@ namespace TestCentric.Gui.Presenters
 
     public class ImageSetManagerTests
     {
-        private ImageSetManager _manager;
-        private ITestModel _model;
-        private IMainView _mainView;
+        private ImageSetManager _manager = null!;
+        private ITestModel _model = null!;
+        private IMainView _mainView = null!;
 
         [SetUp]
         public void CreateManager()

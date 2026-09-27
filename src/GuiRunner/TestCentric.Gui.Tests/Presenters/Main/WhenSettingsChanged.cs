@@ -46,7 +46,7 @@ namespace TestCentric.Gui.Presenters.Main
             _view.TreeView.ShowCheckBoxes.CheckedChanged += Raise.Event<CommandHandler>();
 
             // 3. Assert
-            (runSelectedTestsButton as IToolTip).Received().ToolTipText = expectedTooltip;
+            (runSelectedTestsButton as IToolTip)!.Received().ToolTipText = expectedTooltip;
         }
     }
 }

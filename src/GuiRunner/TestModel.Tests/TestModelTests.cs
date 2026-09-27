@@ -48,7 +48,7 @@ namespace TestCentric.Gui.Model
             model.Events.TestCentricProjectLoaded += (t) => projectLoadedCalled = true;
 
             // Act
-            var subPackage = model.TopLevelPackage.SubPackages[1];
+            var subPackage = model.TopLevelPackage!.SubPackages[1];
             model.RemoveTestPackage(subPackage);
 
             // Assert
@@ -65,14 +65,14 @@ namespace TestCentric.Gui.Model
 
             // Arrange project: Open a test assembly, apply a setting, and close project to save tcproj file
             model.OpenExistingFile("dummy.dll");
-            model.TestCentricProject.ApplySetting(SettingDefinitions.RunAsX86.WithValue(true));
+            model.TestCentricProject!.ApplySetting(SettingDefinitions.RunAsX86.WithValue(true));
             model.CloseProject();
 
             // Act: Open file should load tcproj file with the stored setting
             model.OpenExistingFile("dummy.dll");
 
             // Assert: Setting is loaded from tcproj file
-            Assert.That(model.TopLevelPackage.Settings.GetValueOrDefault(SettingDefinitions.RunAsX86), Is.True);
+            Assert.That(model.TopLevelPackage!.Settings.GetValueOrDefault(SettingDefinitions.RunAsX86), Is.True);
         }
 
         [Test]
@@ -83,9 +83,9 @@ namespace TestCentric.Gui.Model
             var testNode = new TestNode(xmlNode);
 
             var runner = Substitute.For<ITestRunner>();
-            runner.Explore(null).ReturnsForAnyArgs(xmlNode);
+            runner.Explore(null!).ReturnsForAnyArgs(xmlNode);
             var engine = Substitute.For<ITestEngine>();
-            engine.GetRunner(null).ReturnsForAnyArgs(runner);
+            engine.GetRunner(null!).ReturnsForAnyArgs(runner);
             var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
@@ -108,9 +108,9 @@ namespace TestCentric.Gui.Model
             var testNode = new TestNode(xmlNode);
 
             var runner = Substitute.For<ITestRunner>();
-            runner.Explore(null).ReturnsForAnyArgs(xmlNode);
+            runner.Explore(null!).ReturnsForAnyArgs(xmlNode);
             var engine = Substitute.For<ITestEngine>();
-            engine.GetRunner(null).ReturnsForAnyArgs(runner);
+            engine.GetRunner(null!).ReturnsForAnyArgs(runner);
             var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
@@ -139,9 +139,9 @@ namespace TestCentric.Gui.Model
             TestSelection tests = new TestSelection(new[] { testNode1, testNode2 });
 
             var runner = Substitute.For<ITestRunner>();
-            runner.Explore(null).ReturnsForAnyArgs(xmlNode);
+            runner.Explore(null!).ReturnsForAnyArgs(xmlNode);
             var engine = Substitute.For<ITestEngine>();
-            engine.GetRunner(null).ReturnsForAnyArgs(runner);
+            engine.GetRunner(null!).ReturnsForAnyArgs(runner);
             var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
@@ -166,9 +166,9 @@ namespace TestCentric.Gui.Model
             var testNode = new TestNode(xmlNode);
 
             var runner = Substitute.For<ITestRunner>();
-            runner.Explore(null).ReturnsForAnyArgs(xmlNode);
+            runner.Explore(null!).ReturnsForAnyArgs(xmlNode);
             var engine = Substitute.For<ITestEngine>();
-            engine.GetRunner(null).ReturnsForAnyArgs(runner);
+            engine.GetRunner(null!).ReturnsForAnyArgs(runner);
             var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
@@ -196,9 +196,9 @@ namespace TestCentric.Gui.Model
             var testNode = new TestNode(xmlNode);
 
             var runner = Substitute.For<ITestRunner>();
-            runner.Explore(null).ReturnsForAnyArgs(xmlNode);
+            runner.Explore(null!).ReturnsForAnyArgs(xmlNode);
             var engine = Substitute.For<ITestEngine>();
-            engine.GetRunner(null).ReturnsForAnyArgs(runner);
+            engine.GetRunner(null!).ReturnsForAnyArgs(runner);
             var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
@@ -221,9 +221,9 @@ namespace TestCentric.Gui.Model
             var testNode = new TestNode(xmlNode);
 
             var runner = Substitute.For<ITestRunner>();
-            runner.Explore(null).ReturnsForAnyArgs(xmlNode);
+            runner.Explore(null!).ReturnsForAnyArgs(xmlNode);
             var engine = Substitute.For<ITestEngine>();
-            engine.GetRunner(null).ReturnsForAnyArgs(runner);
+            engine.GetRunner(null!).ReturnsForAnyArgs(runner);
             var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
@@ -246,9 +246,9 @@ namespace TestCentric.Gui.Model
             var xmlNode = XmlHelper.CreateXmlNode($"<test-case id='1' name='TestA' />");
 
             var runner = Substitute.For<ITestRunner>();
-            runner.Explore(null).ReturnsForAnyArgs(xmlNode);
+            runner.Explore(null!).ReturnsForAnyArgs(xmlNode);
             var engine = Substitute.For<ITestEngine>();
-            engine.GetRunner(null).ReturnsForAnyArgs(runner);
+            engine.GetRunner(null!).ReturnsForAnyArgs(runner);
             var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
@@ -268,9 +268,9 @@ namespace TestCentric.Gui.Model
             var xmlNode = XmlHelper.CreateXmlNode($"<test-case id='1' name='TestA' />");
 
             var runner = Substitute.For<ITestRunner>();
-            runner.Explore(null).ReturnsForAnyArgs(xmlNode);
+            runner.Explore(null!).ReturnsForAnyArgs(xmlNode);
             var engine = Substitute.For<ITestEngine>();
-            engine.GetRunner(null).ReturnsForAnyArgs(runner);
+            engine.GetRunner(null!).ReturnsForAnyArgs(runner);
             var options = new GuiOptions();
             var model = TestModel.CreateTestModel(engine, options);
 
@@ -289,9 +289,9 @@ namespace TestCentric.Gui.Model
             var xmlNode = XmlHelper.CreateXmlNode($"<test-case id='1' name='TestA' />");
 
             var runner = Substitute.For<ITestRunner>();
-            runner.Explore(null).ReturnsForAnyArgs(xmlNode);
+            runner.Explore(null!).ReturnsForAnyArgs(xmlNode);
             var engine = Substitute.For<ITestEngine>();
-            engine.GetRunner(null).ReturnsForAnyArgs(runner);
+            engine.GetRunner(null!).ReturnsForAnyArgs(runner);
             var options = new GuiOptions();
 
             // Arrange a project file on disc for opening

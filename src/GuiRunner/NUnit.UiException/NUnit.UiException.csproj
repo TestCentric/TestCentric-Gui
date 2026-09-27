@@ -7,14 +7,6 @@
 		<UseWindowsForms>true</UseWindowsForms>
     </PropertyGroup>
 
-  <PropertyGroup>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Nullable" PrivateAssets="all" />
-  </ItemGroup>
-    
     <ItemGroup>
         <Compile Remove="data\TextCode.cs" />
     </ItemGroup>

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -12,8 +12,8 @@ namespace NUnit.UiException.Tests.CodeFormatters
     [TestFixture]
     public class TestTokenDictionary
     {
-        private TestingTokenDictionary _emptyDictionary;
-        private TokenDictionary _filledDictionary;
+        private TestingTokenDictionary _emptyDictionary = null!;
+        private TokenDictionary _filledDictionary = null!;
 
         [SetUp]
         public void SetUp()

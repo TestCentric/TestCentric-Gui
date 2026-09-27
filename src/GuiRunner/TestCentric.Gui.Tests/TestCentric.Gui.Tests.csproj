@@ -9,7 +9,8 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AssemblyTitle>TestCentric GUI Tests</AssemblyTitle>
     </PropertyGroup>
-	
+
+
 	<ItemGroup>
         <ProjectReference Include="..\TestModel\TestCentric.Gui.Model.csproj" />
         <ProjectReference Include="..\TestCentric.Gui\TestCentric.Gui.csproj" />

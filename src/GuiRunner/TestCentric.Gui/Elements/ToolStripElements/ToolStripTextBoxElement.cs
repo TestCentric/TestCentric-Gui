@@ -40,7 +40,7 @@ namespace TestCentric.Gui.Elements
 
         private bool IsPlaceHolderTextShown { get; set; }
 
-        private void OnTextBoxGotFocus(object sender, EventArgs e)
+        private void OnTextBoxGotFocus(object? sender, EventArgs e)
         {
             // If the PlaceHolderText is shown, replace it with an empty text
             if (IsPlaceHolderTextShown)
@@ -51,7 +51,7 @@ namespace TestCentric.Gui.Elements
             }
         }
 
-        private void OnTextBoxLostFocus(object sender, EventArgs e)
+        private void OnTextBoxLostFocus(object? sender, EventArgs e)
         {
             // If there's no text input, show the PlaceHolderText instead
             string searchText = TextBox.Text;
@@ -83,7 +83,7 @@ namespace TestCentric.Gui.Elements
             _typingTimer.Start();
         }
 
-        private void TypingTimerTimeout(object sender, EventArgs e)
+        private void TypingTimerTimeout(object? sender, EventArgs e)
         {
             var timer = sender as Timer;
             if (timer == null)

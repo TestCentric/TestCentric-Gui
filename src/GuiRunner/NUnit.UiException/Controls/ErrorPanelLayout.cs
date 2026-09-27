@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -76,12 +76,12 @@ namespace NUnit.UiException.Controls
             return;
         }
 
-        void ErrorPanelLayout_ControlAddedOrRemoved(object sender, ControlEventArgs e)
+        void ErrorPanelLayout_ControlAddedOrRemoved(object? sender, ControlEventArgs e)
         {
             doLayout();
         }
 
-        void ErrorPanelLayout_SizeChanged(object sender, EventArgs e)
+        void ErrorPanelLayout_SizeChanged(object? sender, EventArgs e)
         {
             doLayout();
         }

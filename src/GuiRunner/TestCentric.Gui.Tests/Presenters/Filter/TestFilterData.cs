@@ -5,6 +5,7 @@
 
 namespace TestCentric.Gui.Presenters.Filter
 {
+    using System;
     using System.Collections.Generic;
     using TestCentric.Gui.Model;
 
@@ -42,7 +43,7 @@ namespace TestCentric.Gui.Presenters.Filter
                     return foundNode;
             }
 
-            return null;
+            return null!;
         }
 
         private static string CreateTestcaseXml(string testId, string testName)

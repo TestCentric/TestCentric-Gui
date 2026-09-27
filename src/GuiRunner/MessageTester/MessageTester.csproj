@@ -11,7 +11,7 @@
         <Description>Utility for visually verifying message display</Description>
         <ApplicationIcon>..\..\..\testcentric.ico</ApplicationIcon>
     </PropertyGroup>
-    
+  
 	<ItemGroup>
         <ProjectReference Include="..\TestCentric.Gui\TestCentric.Gui.csproj" />
     </ItemGroup>

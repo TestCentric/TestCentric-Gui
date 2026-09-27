@@ -121,7 +121,7 @@ namespace NUnit.UiException.Controls
             return;
         }
 
-        void Toolbar_SelectedRendererChanged(object sender, EventArgs e)
+        void Toolbar_SelectedRendererChanged(object? sender, EventArgs e)
         {
             LayoutPanel.Content = Toolbar.SelectedDisplay!.Content;
 

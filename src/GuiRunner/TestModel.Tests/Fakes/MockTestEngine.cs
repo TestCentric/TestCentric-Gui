@@ -14,9 +14,8 @@ namespace TestCentric.Gui.Model.Fakes
     public class MockTestEngine : ITestEngine
     {
         private ServiceLocator _services = new ServiceLocator();
-        private AvailableRuntimesService _availableRuntimes = new AvailableRuntimesService();
         //private TestAgentService _testAgentService = new TestAgentService();
-
+        private string _workDirectory = null!;
         #region Constructor
 
         public MockTestEngine()
@@ -61,7 +60,11 @@ namespace TestCentric.Gui.Model.Fakes
 
         NUnit.Engine.IServiceLocator ITestEngine.Services { get { return _services; } }
 
-        string ITestEngine.WorkDirectory { get; set; }
+        string ITestEngine.WorkDirectory 
+        {
+            get => _workDirectory;
+            set => _workDirectory = value;
+        }
 
         ITestRunner ITestEngine.GetRunner(NUnit.Engine.TestPackage package)
         {
@@ -110,12 +113,12 @@ namespace TestCentric.Gui.Model.Fakes
                 throw new NotImplementedException();
             }
 
-            XmlNode ITestRunner.Run(NUnit.Engine.ITestEventListener listener, NUnit.Engine.TestFilter filter)
+            XmlNode ITestRunner.Run(NUnit.Engine.ITestEventListener? listener, NUnit.Engine.TestFilter filter)
             {
                 throw new NotImplementedException();
             }
 
-            NUnit.Engine.ITestRun ITestRunner.RunAsync(NUnit.Engine.ITestEventListener listener, NUnit.Engine.TestFilter filter)
+            NUnit.Engine.ITestRun ITestRunner.RunAsync(NUnit.Engine.ITestEventListener? listener, NUnit.Engine.TestFilter filter)
             {
                 throw new NotImplementedException();
             }

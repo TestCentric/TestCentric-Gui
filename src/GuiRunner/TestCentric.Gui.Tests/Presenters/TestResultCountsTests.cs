@@ -75,7 +75,7 @@ namespace TestCentric.Gui.Presenters
             // 1. Arrange
             TestNode testNode = new TestNode("<test-case id='1' name='TestA'/>");
             ITestModel model = Substitute.For<ITestModel>();
-            model.TestResultManager.GetResultForTest("1").Returns((ResultNode)null);
+            model.TestResultManager.GetResultForTest("1").Returns((ResultNode)null!);
 
             // 2. Act
             TestResultCounts resultCounts = TestResultCounts.GetResultCounts(model, testNode);
@@ -162,7 +162,7 @@ namespace TestCentric.Gui.Presenters
             TestGroup testGroup = new TestGroup("TestGroup");
             testGroup.TestNodes.Add(testNode);
             ITestModel model = Substitute.For<ITestModel>();
-            model.TestResultManager.GetResultForTest("1").Returns((ResultNode)null);
+            model.TestResultManager.GetResultForTest("1").Returns((ResultNode)null!);
 
             // 2. Act
             TestResultCounts resultCounts = TestResultCounts.GetResultCounts(model, testGroup);

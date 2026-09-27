@@ -86,8 +86,8 @@ namespace TestCentric.Gui.Presenters
             grouping.LoadGroups(tests);
 
             // 3. Assert
-            var expectedGroup = grouping.Groups.FirstOrDefault(g => g.Name == expectedGroupName);
-            Assert.That(expectedGroup.TestNodes, Contains.Item(testNode));
+            TestGroup? expectedGroup = grouping.Groups.FirstOrDefault(g => g.Name == expectedGroupName);
+            Assert.That(expectedGroup?.TestNodes, Contains.Item(testNode));
         }
 
         //[Test]
@@ -135,15 +135,15 @@ namespace TestCentric.Gui.Presenters
             var testNode = new TestNode($"<test-case id='1' name='TestA'/>");
             var tests = new List<TestNode> { testNode };
 
-            model.TestResultManager.GetResultForTest("1").Returns((ResultNode)null);
+            model.TestResultManager.GetResultForTest("1").Returns((ResultNode)null!);
 
             // 2. Act
             OutcomeGrouping grouping = new OutcomeGrouping(strategy);
             grouping.LoadGroups(tests);
 
             // 3. Assert
-            var expectedGroup = grouping.Groups.FirstOrDefault(g => g.Name == "Not Run");
-            Assert.That(expectedGroup.TestNodes, Contains.Item(testNode));
+            TestGroup? expectedGroup = grouping.Groups.FirstOrDefault(g => g.Name == "Not Run");
+            Assert.That(expectedGroup?.TestNodes, Contains.Item(testNode));
         }
 
         [Test]

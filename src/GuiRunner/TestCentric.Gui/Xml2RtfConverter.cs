@@ -82,17 +82,17 @@ namespace TestCentric.Gui
             }
 
             var cdata = node as XmlCDataSection;
-            if (cdata != null)
+            if (cdata != null && cdata.Value != null)
             {
-                AddXmlCDataSection(sb, cdata);
+                AddXmlCDataSection(sb, cdata.Value);
                 return;
             }
         }
 
-        private static void AddXmlCDataSection(StringBuilder sb, XmlCDataSection cdata)
+        private static void AddXmlCDataSection(StringBuilder sb, string cdataValue)
         {
             sb.Append(string.Format(@"\cf{0}<![CDATA[\par ", (int)ColorKinds.CData));
-            var cdataLines = cdata.Value.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            var cdataLines = cdataValue.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             var res = new List<string>(cdataLines.Length);
             foreach (var cdataLine in cdataLines)
             {
@@ -152,7 +152,7 @@ namespace TestCentric.Gui
         {
             if (HasSingleTextNode(element))
             {
-                sb.Append(string.Format(@"\cf{0}{1}", (int)ColorKinds.Value, XmlEncode(element.FirstChild.Value)));
+                sb.Append(string.Format(@"\cf{0}{1}", (int)ColorKinds.Value, XmlEncode(element.FirstChild?.Value)));
             }
             else if (element.HasChildNodes)
             {
@@ -180,10 +180,10 @@ namespace TestCentric.Gui
             return (element.ChildNodes.Count == 1) && (element.FirstChild is XmlText);
         }
 
-        private static string XmlEncode(string value)
+        private static string XmlEncode(string? value)
         {
             var sb = new StringBuilder();
-            foreach (char c in value)
+            foreach (char c in value ?? string.Empty)
             {
                 switch (c)
                 {

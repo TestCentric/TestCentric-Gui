@@ -79,7 +79,7 @@ namespace TestCentric.Gui.Model.Filter
             filter.Condition = outcomeFilter;
 
             TestNode testNode = new TestNode($"<test-case id='1' name='TestA' />");
-            testModel.TestResultManager.GetResultForTest(testNode.Id).Returns((ResultNode)null);
+            testModel.TestResultManager.GetResultForTest(testNode.Id).Returns((ResultNode)null!);
 
             // 2. Act
             bool isMatch = filter.IsMatching(testNode);

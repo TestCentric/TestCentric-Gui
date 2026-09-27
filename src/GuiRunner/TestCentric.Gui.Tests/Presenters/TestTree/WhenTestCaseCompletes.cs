@@ -27,7 +27,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             new object[] { ResultState.Cancelled, TestTreeView.FailureIndex }
         };
 
-        private TreeViewPresenter _presenter;
+        private TreeViewPresenter _presenter = null!;
 
         [SetUp]
         public void Setup()

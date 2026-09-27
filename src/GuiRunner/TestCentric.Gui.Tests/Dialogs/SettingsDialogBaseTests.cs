@@ -7,7 +7,6 @@ namespace TestCentric.Gui.Dialogs
 {
     using NSubstitute;
     using NUnit.Common;
-    using NUnit.Engine;
     using NUnit.Framework;
     using TestCentric.Gui.Model;
 
@@ -22,7 +21,7 @@ namespace TestCentric.Gui.Dialogs
             TestCentricProject project = new TestCentricProject("MyProject");
             model.TestCentricProject.Returns(project);
 
-            SettingsDialogBase settingsDialog = new SettingsDialogBase(null, model);
+            SettingsDialogBase settingsDialog = new SettingsDialogBase(null!, model);
             settingsDialog.SubPackageSettingChanges.Add(SettingDefinitions.DebugTests.WithValue(true));
 
             // 2. Act
@@ -41,7 +40,7 @@ namespace TestCentric.Gui.Dialogs
             project.AddSetting(SettingDefinitions.DebugTests.WithValue(false));
             model.TestCentricProject.Returns(project);
 
-            SettingsDialogBase settingsDialog = new SettingsDialogBase(null, model);
+            SettingsDialogBase settingsDialog = new SettingsDialogBase(null!, model);
             settingsDialog.SubPackageSettingChanges.Add(SettingDefinitions.DebugTests.WithValue(true));
 
             // 2. Act
@@ -59,7 +58,7 @@ namespace TestCentric.Gui.Dialogs
             TestCentricProject project = new TestCentricProject("MyProject");
             model.TestCentricProject.Returns(project);
 
-            SettingsDialogBase settingsDialog = new SettingsDialogBase(null, model);
+            SettingsDialogBase settingsDialog = new SettingsDialogBase(null!, model);
             settingsDialog.TopLevelPackageSettingChanges.Add(SettingDefinitions.DebugTests.WithValue(true));
 
             // 2. Act
@@ -75,9 +74,9 @@ namespace TestCentric.Gui.Dialogs
         {
             // 1. Arrange
             ITestModel model = Substitute.For<ITestModel>();
-            model.TestCentricProject.Returns((TestCentricProject)null);
+            model.TestCentricProject.Returns((TestCentricProject)null!);
 
-            SettingsDialogBase settingsDialog = new SettingsDialogBase(null, model);
+            SettingsDialogBase settingsDialog = new SettingsDialogBase(null!, model);
             settingsDialog.TopLevelPackageSettingChanges.Add(SettingDefinitions.DebugTests.WithValue(true));
             settingsDialog.SubPackageSettingChanges.Add(SettingDefinitions.DebugTests.WithValue(true));
 

@@ -66,11 +66,11 @@ namespace TestCentric.Gui.Presenters
             if (!_model.IsProjectLoaded)
                 return string.Empty;
                         
-            TestPackage package = _model.TopLevelPackage.SubPackages.FirstOrDefault();
+            TestPackage? package = _model.TopLevelPackage.SubPackages?.FirstOrDefault();
             return package?.Settings.GetValueOrDefault(SettingDefinitions.ActiveConfig) ?? string.Empty;
         }
 
-        private void OnConfigurationMenuItemClicked(object sender, EventArgs e)
+        private void OnConfigurationMenuItemClicked(object? sender, EventArgs e)
         {
             Guard.OperationValid(_model.IsProjectLoaded, "No project is loaded");
 

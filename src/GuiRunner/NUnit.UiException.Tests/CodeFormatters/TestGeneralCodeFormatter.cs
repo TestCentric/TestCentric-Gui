@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -14,7 +14,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
     [TestFixture]
     public class TestGeneralCodeFormatter
     {
-        private GeneralCodeFormatter _formatter;
+        private GeneralCodeFormatter _formatter = null!;
 
         [SetUp]
         public void SetUp()
@@ -289,7 +289,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
                 txtFormatter = new PlainTextCodeFormatter();
                 exp = txtFormatter.Format(itemHelloTxt.ReadFile());
                 Assert.That(
-                    _formatter.FormatFromExtension(itemHelloTxt.ReadFile(), itemHelloTxt.FileExtension),
+                    _formatter.FormatFromExtension(itemHelloTxt.ReadFile(), itemHelloTxt.FileExtension!),
                     Is.EqualTo(exp));
                 FormattedCode.CheckData(exp);
             }
@@ -300,7 +300,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
                 csFormatter = new CSharpCodeFormatter();
                 exp = csFormatter.Format(itemBasicCs.ReadFile());
                 Assert.That(
-                    _formatter.FormatFromExtension(itemBasicCs.ReadFile(), itemBasicCs.FileExtension),
+                    _formatter.FormatFromExtension(itemBasicCs.ReadFile(), itemBasicCs.FileExtension!),
                     Is.EqualTo(exp));
                 FormattedCode.CheckData(exp);
             }

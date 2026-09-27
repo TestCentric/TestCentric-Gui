@@ -13,7 +13,7 @@ namespace NUnit.UiException.Tests
     [TestFixture]
     public class TestPaintLineLocation
     {
-        private PaintLineLocation _line;
+        private PaintLineLocation _line = null!;
 
         [SetUp]
         public void SetUp()
@@ -43,8 +43,8 @@ namespace NUnit.UiException.Tests
         [Test]
         public void Test_Equals()
         {
-            Assert.That(_line.Equals(null), Is.False);
-            Assert.That(_line.Equals("hello"), Is.False);
+            Assert.That(_line.Equals(null!), Is.False);
+            Assert.That(_line!.Equals("hello"), Is.False);
             Assert.That(_line.Equals(new PaintLineLocation(0, "", new PointF(0, 0))), Is.False);
 
             Assert.That(

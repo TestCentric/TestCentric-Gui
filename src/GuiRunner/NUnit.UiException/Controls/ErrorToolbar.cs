@@ -202,7 +202,7 @@ namespace NUnit.UiException.Controls
             return (-1);
         }
 
-        private void item_Click(object sender, EventArgs e)
+        private void item_Click(object? sender, EventArgs e)
         {
             ToolStripItem? item = sender as ToolStripItem;
             IErrorDisplay? renderer;

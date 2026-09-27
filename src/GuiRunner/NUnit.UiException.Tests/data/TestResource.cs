@@ -5,6 +5,7 @@
 
 using System;
 using System.IO;
+using NUnit.Framework;
 
 namespace NUnit.UiException.Tests.data
 {
@@ -20,7 +21,7 @@ namespace NUnit.UiException.Tests.data
     {
         string path;
 
-        public TempResourceFile(Type type, string name) : this(type, name, null) { }
+        public TempResourceFile(Type type, string name) : this(type, name, null!) { }
 
         public TempResourceFile(Type type, string name, string filePath)
         {
@@ -32,11 +33,12 @@ namespace NUnit.UiException.Tests.data
 
             this.path = filePath;
 
-            Stream stream = type.Assembly.GetManifestResourceStream(type, name);
-            byte[] buffer = new byte[(int)stream.Length];
+            Stream? stream = type.Assembly.GetManifestResourceStream(type, name);
+            Assert.That(stream, Is.Not.Null, "Unable to find resource '{0}' in assembly '{1}'", name, type.Assembly.FullName ?? string.Empty);
+            byte[] buffer = new byte[(int)stream!.Length];
             stream.Read(buffer, 0, buffer.Length);
 
-            string dir = System.IO.Path.GetDirectoryName(this.path);
+            string? dir = System.IO.Path.GetDirectoryName(this.path);
             if (dir != null && dir.Length != 0)
             {
                 Directory.CreateDirectory(dir);
@@ -52,7 +54,7 @@ namespace NUnit.UiException.Tests.data
         {
             File.Delete(this.path);
 
-            string path = this.path;
+            string? path = this.path;
             while (true)
             {
                 path = System.IO.Path.GetDirectoryName(path);

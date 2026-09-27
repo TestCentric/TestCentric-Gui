@@ -442,7 +442,7 @@ namespace TestCentric.Gui.Model
         public void OpenMostRecentFile()
         {
             // Find the most recent file loaded, which still exists
-            foreach (string entry in RecentFiles.Entries)
+            foreach (string? entry in RecentFiles.Entries)
             {
                 if (entry != null && File.Exists(entry))
                 {
@@ -564,9 +564,10 @@ namespace TestCentric.Gui.Model
 
             // TODO: Should we throw an exception if project path is null?
             var projectPath = TestCentricProject.ProjectPath;
-            if (projectPath is not null)
+            string? directoryName = Path.GetDirectoryName(projectPath);
+            if (projectPath is not null && directoryName is not null)
                 RecentFiles.Latest = IsWrapperProjectPath(projectPath)
-                    ? Path.Combine(Path.GetDirectoryName(projectPath), Path.GetFileNameWithoutExtension(projectPath))
+                    ? Path.Combine(directoryName, Path.GetFileNameWithoutExtension(projectPath))
                     : projectPath;
         }
 
@@ -667,7 +668,7 @@ namespace TestCentric.Gui.Model
             if (tests == null)
                 throw new ArgumentNullException(nameof(tests));
 
-            log.Info($"Running test: {string.Join(", ", tests.Select(node => node.GetAttribute("name").ToArray()))}");
+            log.Info($"Running test: {string.Join(", ", tests.Select(node => node.GetAttribute("name")?.ToArray()))}");
             RunTests(new TestRunSpecification(tests, CategoryFilter, false));
         }
 
@@ -676,7 +677,7 @@ namespace TestCentric.Gui.Model
             if (_lastTestRun == null)
                 throw new InvalidOperationException("RepeatLastRun called before any tests were run");
 
-            log.Info($"Running test: {string.Join(", ", _lastTestRun.SelectedTests.Select(node => node.GetAttribute("name").ToArray()))}");
+            log.Info($"Running test: {string.Join(", ", _lastTestRun.SelectedTests.Select(node => node.GetAttribute("name")?.ToArray()))}");
             RunTests(_lastTestRun);
         }
 
@@ -694,7 +695,7 @@ namespace TestCentric.Gui.Model
             if (tests == null)
                 throw new ArgumentNullException(nameof(tests));
 
-            log.Info($"Debugging test: {string.Join(", ", tests.Select(node => node.GetAttribute("name").ToArray()))}");
+            log.Info($"Debugging test: {string.Join(", ", tests.Select(node => node.GetAttribute("name")?.ToArray()))}");
             RunTests(new TestRunSpecification(tests, CategoryFilter, true));
         }
 

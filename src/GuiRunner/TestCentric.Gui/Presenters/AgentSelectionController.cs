@@ -85,7 +85,7 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        private void OnAgentMenuItemClicked(object sender, EventArgs e)
+        private void OnAgentMenuItemClicked(object? sender, EventArgs e)
         {
             Guard.OperationValid(_model.IsProjectLoaded, "No project is loaded");
             if (sender is ToolStripMenuItem item && !item.Checked)

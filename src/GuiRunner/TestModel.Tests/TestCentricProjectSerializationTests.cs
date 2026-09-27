@@ -29,8 +29,8 @@ namespace TestCentric.Gui.Model
         private static readonly string NEW_FILE1_PATH = Path.Combine(NEW_PROJ_DIR, "test1.dll");
         private static readonly string NEW_FILE2_PATH = Path.Combine(NEW_PROJ_DIR, "bin", "test2.dll");
 
-        private TestCentricProject _testProject;
-        private string _testProjectXml;
+        private TestCentricProject _testProject = null!;
+        private string _testProjectXml = string.Empty;
 
         [OneTimeSetUp]
         public void CreateProjectData()
@@ -210,7 +210,7 @@ namespace TestCentric.Gui.Model
             Assert.That(newProject.TopLevelPackage.HasSubPackages, Is.False);
         }
 
-        private static string RandomDirectory(string parent = null)
+        private static string RandomDirectory(string? parent = null)
         {
             if (parent == null) parent = Path.GetTempPath();
             return Directory.CreateDirectory(Path.Combine(parent, Path.GetRandomFileName())).FullName;

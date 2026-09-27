@@ -17,11 +17,12 @@ namespace TestCentric.Gui.Presenters
     [TestFixture]
     internal class TestListDisplayStrategyTests
     {
-        ITestTreeView _view;
-        ITestModel _model;
+        ITestTreeView _view = null!;
+        ITestModel _model = null!;
 
-        TreeView _treeView;
-        List<TreeNode> _treeNodes;
+        TreeView _treeView = null!;
+        List<TreeNode> _treeNodes = null!;
+
         private List<TreeNode> TreeNodes
         {
             get
@@ -44,7 +45,7 @@ namespace TestCentric.Gui.Presenters
             _view.TreeView.Returns(_treeView);
             _view.Nodes.Returns(_treeView.Nodes);
 
-            _treeNodes = null;
+            _treeNodes = null!;
         }
 
         [TestCase(true)]
@@ -265,7 +266,7 @@ namespace TestCentric.Gui.Presenters
 
         private static void AssertTreeNodeAndTestGroup(List<TreeNode> treeNodes, string testGroupName, int expectedInGroup)
         {
-            TreeNode treeNode = treeNodes.Find(x => (x.Tag as TestGroup)?.Name == testGroupName);
+            TreeNode? treeNode = treeNodes.Find(x => (x.Tag as TestGroup)?.Name == testGroupName);
             if (expectedInGroup == 0)
             {
                 Assert.That(treeNode, Is.Null, $"TreeNode {testGroupName} exists in tree");
@@ -275,11 +276,11 @@ namespace TestCentric.Gui.Presenters
             Assert.That(treeNode, Is.Not.Null, $"Failed to find node {testGroupName} in tree");
 
             // Assert treeNodes
-            Assert.That(treeNode.Nodes.Count, Is.EqualTo(expectedInGroup));
+            Assert.That(treeNode!.Nodes.Count, Is.EqualTo(expectedInGroup));
             Assert.That(treeNode.Text, Does.StartWith(testGroupName));
 
             // Assert testGroup
-            TestGroup testGroup = treeNode.Tag as TestGroup;
+            TestGroup testGroup = (treeNode.Tag as TestGroup)!;
             Assert.That(testGroup, Is.Not.Null);
             Assert.That(testGroup.TestNodes.Count(), Is.EqualTo(expectedInGroup));
         }

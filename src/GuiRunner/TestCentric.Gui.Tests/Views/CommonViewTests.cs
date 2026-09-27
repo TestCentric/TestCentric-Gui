@@ -9,6 +9,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Views
 {
+    using System.Diagnostics.CodeAnalysis;
     using Elements;
 
     [TestFixture(typeof(TestCentricMainView))]
@@ -16,7 +17,7 @@ namespace TestCentric.Gui.Views
     [Platform(Exclude = "Linux", Reason = "Uninitialized form causes an error in Travis-CI")]
     public class CommonViewTests<T> where T : new()
     {
-        protected T View { get; private set; }
+        protected T View { get; private set; } = default!;
 
         [SetUp]
         public void CreateView()

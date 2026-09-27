@@ -17,8 +17,8 @@ namespace TestCentric.Gui.Presenters.TestTree
 
     public class TreeViewPresenterTestBase : PresenterTestBase<ITestTreeView>
     {
-        protected TreeViewPresenter _presenter;
-        protected ITreeDisplayStrategyFactory _treeDisplayStrategyFactory;
+        protected TreeViewPresenter _presenter = null!;
+        protected ITreeDisplayStrategyFactory _treeDisplayStrategyFactory = null!;
 
         [SetUp]
         public void CreatePresenter()
@@ -44,7 +44,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         [TearDown]
         public void RemovePresenter()
         {
-            _presenter = null;
+            _presenter = null!;
         }
 
         protected IViewElement ViewElement(string propName)
@@ -53,11 +53,11 @@ namespace TestCentric.Gui.Presenters.TestTree
             if (prop == null)
                 Assert.Fail($"View has no property named {propName}.");
 
-            var element = prop.GetValue(_view) as IViewElement;
+            var element = prop!.GetValue(_view) as IViewElement;
             if (element == null)
                 Assert.Fail($"Property {propName} is not an IViewElement. It is declared as {prop.PropertyType}.");
 
-            return element;
+            return element!;
         }
     }
 }

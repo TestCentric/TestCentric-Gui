@@ -12,16 +12,12 @@
       <DefineConstants>$(DefineConstants);DISABLE_MINI_GUI</DefineConstants>
     </PropertyGroup>
 
-    <PropertyGroup>
-       <Nullable>enable</Nullable>
-    </PropertyGroup>
-	
-    <ItemGroup>
-      <PackageReference Include="Nullable" PrivateAssets="all" />
-	    <PackageReference Include="NUnit.Common" />
-	    <PackageReference Include="NUnit.Engine" />
-	    <PackageReference Include="NUnit.Extensibility" />
-    </ItemGroup>
+	<ItemGroup>
+
+		<PackageReference Include="NUnit.Common" />
+		<PackageReference Include="NUnit.Engine" />
+		<PackageReference Include="NUnit.Extensibility" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="TestCentric.Gui.Model.Tests, PublicKey=$(TestCentricPublicKey)" />

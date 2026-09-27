@@ -84,17 +84,17 @@ namespace TestCentric.Gui.Presenters
 
             // Events that arise in the view
 
-            _view.SplitterPositionChanged += (object sender, EventArgs e) =>
+            _view.SplitterPositionChanged += (object? sender, EventArgs e) =>
             {
                 _model.Settings.Gui.ErrorDisplay.SplitterPosition = _view.SplitterPosition;
             };
 
-            _view.SourceCodeSplitOrientationChanged += (object sender, EventArgs e) =>
+            _view.SourceCodeSplitOrientationChanged += (object? sender, EventArgs e) =>
             {
                 _settings.Gui.ErrorDisplay.SourceCodeSplitterOrientation = _view.SourceCodeSplitOrientation;
             };
 
-            _view.SourceCodeSplitterDistanceChanged += (object sender, EventArgs e) =>
+            _view.SourceCodeSplitterDistanceChanged += (object? sender, EventArgs e) =>
             {
                 if (_view.SourceCodeSplitOrientation == Orientation.Vertical)
                     _settings.Gui.ErrorDisplay.SourceCodeVerticalSplitterPosition = _view.SourceCodeSplitterDistance;
@@ -102,7 +102,7 @@ namespace TestCentric.Gui.Presenters
                     _settings.Gui.ErrorDisplay.SourceCodeHorizontalSplitterPosition = _view.SourceCodeSplitterDistance;
             };
 
-            _view.SourceCodeDisplayChanged += (object sender, EventArgs e) =>
+            _view.SourceCodeDisplayChanged += (object? sender, EventArgs e) =>
             {
                 _settings.Gui.ErrorDisplay.SourceCodeDisplay = _view.SourceCodeDisplay;
             };

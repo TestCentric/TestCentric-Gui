@@ -16,10 +16,10 @@ namespace TestCentric.Gui.Presenters
     [TestFixture]
     internal class ConfigurationSelectionControllerTests
     {
-        private ITestModel _model;
-        private IMainView _view;
-        private ToolStripMenuItem _selectConfigurationMenuItem;
-        private TestPackage _subPackage;
+        private ITestModel _model = null!;
+        private IMainView _view = null!;
+        private ToolStripMenuItem _selectConfigurationMenuItem = null!;
+        private TestPackage _subPackage = null!;
 
         [SetUp]
         public void SetUp()
@@ -39,7 +39,7 @@ namespace TestCentric.Gui.Presenters
             _model.TopLevelPackage.Returns(new TestPackage());
 
             _subPackage = new TestPackage("SubPackage");
-            _model.TopLevelPackage.AddSubPackage(_subPackage);
+            _model.TopLevelPackage!.AddSubPackage(_subPackage);
         }
 
         [TearDown]
@@ -115,7 +115,7 @@ namespace TestCentric.Gui.Presenters
             var controller = new ConfigurationSelectionController(_model, _view);
 
             var subPackage2 = new TestPackage("SubPackage2");
-            _model.TopLevelPackage.AddSubPackage(subPackage2);
+            _model.TopLevelPackage!.AddSubPackage(subPackage2);
 
             _subPackage.Settings.Add(SettingDefinitions.ConfigNames.WithValue("Debug;Release"));
             subPackage2.Settings.Add(SettingDefinitions.ConfigNames.WithValue("Debug;CustomConfig"));

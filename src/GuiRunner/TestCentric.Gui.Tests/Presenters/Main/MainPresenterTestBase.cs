@@ -14,7 +14,7 @@ namespace TestCentric.Gui.Presenters.Main
 
     public class MainPresenterTestBase : PresenterTestBase<IMainView>
     {
-        protected TestCentricPresenter _presenter;
+        protected TestCentricPresenter _presenter = null!;
 
         [SetUp]
         public void CreatePresenter()
@@ -26,7 +26,7 @@ namespace TestCentric.Gui.Presenters.Main
         [TearDown]
         public void RemovePresenter()
         {
-            _presenter = null;
+            _presenter = null!;
         }
 
         protected IViewElement ViewElement(string propName)
@@ -35,11 +35,11 @@ namespace TestCentric.Gui.Presenters.Main
             if (prop == null)
                 Assert.Fail($"View has no property named {propName}.");
 
-            var element = prop.GetValue(_view) as IViewElement;
+            var element = prop!.GetValue(_view) as IViewElement;
             if (element == null)
                 Assert.Fail($"Property {propName} is not an IViewElement. It is declared as {prop.PropertyType}.");
 
-            return element;
+            return element!;
         }
     }
 }

@@ -70,14 +70,14 @@ namespace TestCentric.Gui.Model
             if (string.IsNullOrEmpty(id))
                 return null;
 
-            return Results.TryGetValue(id, out ResultNode result) ? result : null;
+            return Results.TryGetValue(id, out ResultNode? result) ? result : null;
         }
 
 
         /// <inheritdoc />
         public ResultNode AddResult(ResultNode resultNode)
         {
-            if (Results.TryGetValue(resultNode.Id, out ResultNode oldResult))
+            if (Results.TryGetValue(resultNode.Id, out ResultNode? oldResult))
             {
                 if (resultNode.Outcome.Equals(ResultState.Explicit))
                     return oldResult;

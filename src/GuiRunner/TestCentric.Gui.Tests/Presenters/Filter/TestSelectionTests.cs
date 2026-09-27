@@ -14,8 +14,8 @@ namespace TestCentric.Gui.Presenters.Filter
     [TestFixture]
     internal class TestSelectionTests
     {
-        private ITestCentricTestFilter _guiFilter;
-        private TestNode _loadedTests;
+        private ITestCentricTestFilter _guiFilter = null!;
+        private TestNode _loadedTests = null!;
 
         [SetUp]
         public void Setup()

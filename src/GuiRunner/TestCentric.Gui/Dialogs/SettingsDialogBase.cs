@@ -13,6 +13,7 @@ namespace TestCentric.Gui.Dialogs
     using System.Reflection;
     using Model;
     using Model.Settings;
+    using NUnit;
     using NUnit.Engine;
     using Presenters;
 
@@ -116,7 +117,7 @@ namespace TestCentric.Gui.Dialogs
 
             public SettingsPage this[int index]
             {
-                get { return (SettingsPage)InnerList[index]; }
+                get { return (SettingsPage)InnerList[index].ShouldNotBeNull(); }
             }
 
             public SettingsPage this[string key]

@@ -46,17 +46,21 @@ namespace TestCentric.Gui.Presenters
             if (_includeAncestors)
                 xpathExpression = "ancestor-or-self::*/" + xpathExpression;
 
-            foreach (XmlNode node in testNode.Xml.SelectNodes(xpathExpression))
+            XmlNodeList? nodes = testNode.Xml.SelectNodes(xpathExpression);
+            if (nodes == null)
+                return groups.ToArray();
+
+            foreach (XmlNode node in nodes)
             {
-                var groupName = node.Attributes["value"].Value;
+                string? groupName = node.Attributes?["value"]?.Value;
                 var group = Groups.Find((g) => g.Name == groupName);//GetGroup(groupName);
-                if (group == null)
+                if (group == null && !string.IsNullOrEmpty(groupName))
                 {
                     group = new TestGroup(groupName);
                     Groups.Add(group);
                 }
 
-                if (!groups.Contains(group))
+                if (group != null && !groups.Contains(group))
                     groups.Add(group);
             }
 

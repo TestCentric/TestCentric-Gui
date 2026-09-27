@@ -66,7 +66,7 @@ namespace TestCentric.Gui.Model.Settings
             }
         }
 
-        private void OnSettingChanged(object sender, PropertyChangedEventArgs args)
+        private void OnSettingChanged(object? sender, PropertyChangedEventArgs args)
         {
             string prefix = string.Empty;
             if (sender is ApplicationSettingsBase settingsBase)

@@ -11,7 +11,7 @@ namespace NUnit.UiException.Tests
     [TestFixture]
     public class TestDefaultTextManager
     {
-        private DefaultTextManager _textBlocks;
+        private DefaultTextManager _textBlocks = null!;
 
         [SetUp]
         public void SetUp()
@@ -60,7 +60,7 @@ namespace NUnit.UiException.Tests
             Assert.That(lst[0], Is.EqualTo(_textBlocks.GetTextAt(0)));
             Assert.That(lst[1], Is.EqualTo(_textBlocks.GetTextAt(1)));
 
-            _textBlocks.Text = null;
+            _textBlocks.Text = null!;
             Assert.That(_textBlocks.Text, Is.EqualTo(""));
 
             return;
@@ -69,7 +69,7 @@ namespace NUnit.UiException.Tests
         [Test]
         public void Test_MaxLength()
         {
-            _textBlocks.Text = null;
+            _textBlocks.Text = null!;
             Assert.That(_textBlocks.MaxLength, Is.EqualTo(0));
 
             _textBlocks.Text = "a\r\nabc\r\nab";

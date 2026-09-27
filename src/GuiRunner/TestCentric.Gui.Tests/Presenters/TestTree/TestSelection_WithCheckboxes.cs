@@ -53,7 +53,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void WhenSelectedNodeChanges_SelectedTestsAreNotSet(TreeNode treeNode, TestNode testNode)
         {
             _view.SelectedNodeChanged += Raise.Event<TreeNodeActionHandler>(treeNode);
-            _model.DidNotReceiveWithAnyArgs().SelectedTests = null;
+            _model.DidNotReceiveWithAnyArgs().SelectedTests = null!;
         }
 
         public void WhenCheckedNodesChange_SelectedTestsAreSet()

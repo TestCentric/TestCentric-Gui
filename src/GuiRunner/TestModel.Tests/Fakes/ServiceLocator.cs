@@ -15,14 +15,15 @@ namespace TestCentric.Gui.Model.Fakes
 
         public void AddService<T>(T service)
         {
-            _services.Add(typeof(T), service);
+            _services.Add(typeof(T), service!);
         }
 
         public object GetService(Type serviceType)
         {
-            return _services.ContainsKey(serviceType)
-                ? _services[serviceType]
-                : null;
+            if (_services.ContainsKey(serviceType))
+                return _services[serviceType];
+            
+            throw new NUnitEngineException($"Service not found: {serviceType.FullName}");
         }
 
         public T GetService<T>() where T : class

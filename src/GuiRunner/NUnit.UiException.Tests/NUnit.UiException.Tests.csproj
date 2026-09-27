@@ -6,7 +6,7 @@
 	    <TargetFramework>net462</TargetFramework>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
-    
+
 	<ItemGroup>
         <Reference Include="System.Windows.Forms" />
     </ItemGroup>

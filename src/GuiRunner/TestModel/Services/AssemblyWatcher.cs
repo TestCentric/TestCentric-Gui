@@ -99,7 +99,7 @@ namespace TestCentric.Gui.Model.Services
 
         public event AssemblyChangedHandler? AssemblyChanged;
 
-        protected void OnTimer(Object source, ElapsedEventArgs e)
+        protected void OnTimer(Object? source, ElapsedEventArgs e)
         {
             lock (this)
             {

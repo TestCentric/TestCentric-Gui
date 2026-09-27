@@ -506,7 +506,7 @@ namespace TestCentric.Gui.Presenters
 
         public List<TreeNode> GetTreeNodesForTest(string id)
         {
-            List<TreeNode> treeNodes;
+            List<TreeNode>? treeNodes;
             if (!_nodeIndex.TryGetValue(id, out treeNodes))
                 treeNodes = new List<TreeNode>();
 
@@ -518,7 +518,7 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         public void RemoveTreeNode(TreeNode treeNode)
         {
-            if (treeNode.Tag is TestNode testNode && _nodeIndex.TryGetValue(testNode.Id, out List<TreeNode> treeNodeList))
+            if (treeNode.Tag is TestNode testNode && _nodeIndex.TryGetValue(testNode.Id, out List<TreeNode>? treeNodeList))
                 treeNodeList.Remove(treeNode);
 
             treeNode.Remove();

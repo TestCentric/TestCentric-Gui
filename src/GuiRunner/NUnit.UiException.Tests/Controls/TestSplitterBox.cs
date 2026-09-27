@@ -14,8 +14,8 @@ namespace NUnit.UiException.Tests.Controls
     [TestFixture]
     public class TestSplitterBox
     {
-        private TestingSplitterBox _vertical;
-        private TestingSplitterBox _horizontal;
+        private TestingSplitterBox _vertical = null!;
+        private TestingSplitterBox _horizontal = null!;
 
         [SetUp]
         public void SetUp()
@@ -165,12 +165,12 @@ namespace NUnit.UiException.Tests.Controls
             Assert.That(_vertical.Controls.Contains(panel), Is.True);
             CheckVerticalLayout(_vertical, 0.5f);
 
-            _vertical.Control1 = null;
+            _vertical.Control1 = null!;
             Assert.That(_vertical.Controls.Contains(control1), Is.True);
             Assert.That(_vertical.Controls.Contains(panel), Is.False);
             CheckVerticalLayout(_vertical, 0.5f);
 
-            _vertical.Control1 = null;
+            _vertical.Control1 = null!;
             Assert.That(_vertical.Controls.Contains(control1), Is.True);
             Assert.That(_vertical.Controls.Contains(panel), Is.False);
             CheckVerticalLayout(_vertical, 0.5f);
@@ -189,12 +189,12 @@ namespace NUnit.UiException.Tests.Controls
             Assert.That(_vertical.Controls.Contains(panel), Is.True);
             CheckVerticalLayout(_vertical, 0.5f);
 
-            _vertical.Control2 = null;
+            _vertical.Control2 = null!;
             Assert.That(_vertical.Controls.Contains(control2), Is.True);
             Assert.That(_vertical.Controls.Contains(panel), Is.False);
             CheckVerticalLayout(_vertical, 0.5f);
 
-            _vertical.Control2 = null;
+            _vertical.Control2 = null!;
             Assert.That(_vertical.Controls.Contains(control2), Is.True);
             Assert.That(_vertical.Controls.Contains(panel), Is.False);
             CheckVerticalLayout(_vertical, 0.5f);

@@ -24,7 +24,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         static readonly string VISUAL_STATE_FILE_NAME = VisualState.GetVisualStateFileName(TEST_FILE_NAME);
         static readonly TestNode TEST_NODE = new TestNode("<test-suite id='1'/>");
 
-        private TreeViewPresenter _presenter;
+        private TreeViewPresenter _presenter = null!;
 
         [SetUp]
         public void SimulateTestLoad()

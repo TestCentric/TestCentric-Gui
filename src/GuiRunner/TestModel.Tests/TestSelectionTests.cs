@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -10,7 +10,7 @@ namespace TestCentric.Gui.Model
 {
     public class TestSelectionTests
     {
-        private TestSelection _selection;
+        private TestSelection _selection = null!;
 
         [SetUp]
         public void CreateSelection()

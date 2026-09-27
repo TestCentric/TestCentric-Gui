@@ -21,7 +21,7 @@ namespace TestCentric.Gui.Views
         [OneTimeTearDown]
         public void CloseForm()
         {
-            this.Control.Dispose();
+            this.Control?.Dispose();
         }
 
         [Test]

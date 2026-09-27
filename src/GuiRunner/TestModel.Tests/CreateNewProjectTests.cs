@@ -18,7 +18,7 @@ namespace TestCentric.Gui.Model
 
     public class CreateNewProjectTests
     {
-        private TestModel _model;
+        private TestModel _model = null!;
 
         [SetUp]
         public void CreateModel()
@@ -31,6 +31,8 @@ namespace TestCentric.Gui.Model
         {
             if (File.Exists("temp.tcproj"))
                 File.Delete("temp.tcproj");
+
+            _model.Dispose();
         }
 
         [TestCase("my.test.assembly.dll")]
@@ -40,7 +42,7 @@ namespace TestCentric.Gui.Model
         {
             _model.CreateNewProject("MyProject", testFiles);
 
-            Assert.That(_model.TestCentricProject.TestFiles, Is.EqualTo(testFiles));
+            Assert.That(_model.TestCentricProject?.TestFiles, Is.EqualTo(testFiles));
         }
 
         private static TestCaseData[] PackageSettingTestCases = new TestCaseData[]
@@ -77,8 +79,8 @@ namespace TestCentric.Gui.Model
 
             Assert.That(parms, Contains.Key("parm1"));
             Assert.That(parms, Contains.Key("parm2"));
-            Assert.That(parms["parm1"], Is.EqualTo("value1"));
-            Assert.That(parms["parm2"], Is.EqualTo("value2"));
+            Assert.That(parms!["parm1"], Is.EqualTo("value1"));
+            Assert.That(parms!["parm2"], Is.EqualTo("value2"));
         }
 
         [Test]
@@ -106,9 +108,9 @@ namespace TestCentric.Gui.Model
             _model.CreateNewProject("MyProject", files);
             string skipKey = SettingDefinitions.SkipNonTestAssemblies.Name;
 
-            foreach (var subpackage in _model.TopLevelPackage.SubPackages)
+            foreach (var subpackage in _model.TopLevelPackage!.SubPackages)
             {
-                if (subpackage.Name.EndsWith(".sln"))
+                if (subpackage.Name!.EndsWith(".sln"))
                 {
                     Assert.That(subpackage.Settings.HasSetting(skipKey));
                     Assert.That(subpackage.Settings.GetSetting(skipKey), Is.True);

@@ -15,7 +15,7 @@ namespace TestCentric.Gui
     {
         private VisualStateTestData _data;
         private string DisplayStrategy;
-        private string Grouping;
+        private string? Grouping;
         private TreeView ExpandedTreeView;
         private VisualState ExpectedVisualState;
 
@@ -85,15 +85,15 @@ namespace TestCentric.Gui
             // Add NewFixture, SomeTest, NewTest, FixtureB, Test1
             if (_data.DisplayStrategy == "TEST_LIST") // Just add the test cases
             {
-                treeView.Search("Test1").AddSibling(TN("SomeTest"));
-                treeView.Search("Test1").AddSibling(TN("NewTest"));
-                treeView.Search("Test4").AddSibling(TN("Test7"));
+                treeView.Search("Test1")!.AddSibling(TN("SomeTest"));
+                treeView.Search("Test1")!.AddSibling(TN("NewTest"));
+                treeView.Search("Test4")!.AddSibling(TN("Test7"));
             }
             else // Add both fixtures and cases
             {
-                treeView.Search("MyFixture").AddSibling(TN("New Fixture", TN("SomeTest")));
-                treeView.Search("MyFixture").Nodes.Add(TN("NewTest"));
-                treeView.Search("FixtureA").AddSibling(TN("FixtureB", TN("Test7")));
+                treeView.Search("MyFixture")!.AddSibling(TN("New Fixture", TN("SomeTest")));
+                treeView.Search("MyFixture")!.Nodes.Add(TN("NewTest"));
+                treeView.Search("FixtureA")!.AddSibling(TN("FixtureB", TN("Test7")));
             }
         }
 
@@ -166,7 +166,7 @@ namespace TestCentric.Gui
 
         #region Helper method to handle common asserts
 
-        private void VerifyTreeView(TreeView treeView, string selectedNode = null)
+        private void VerifyTreeView(TreeView treeView, string? selectedNode = null)
         {
             var expectedTopNode = treeView.Nodes[0].Text;
 
@@ -186,12 +186,12 @@ namespace TestCentric.Gui
                 switch (_data.DisplayStrategy)
                 {
                     case "NUNIT_TREE":
-                        Assert.That(treeView.Search("Assembly1").IsExpanded, "Assembly1 not expanded");
-                        Assert.That(treeView.Search("Assembly2").IsExpanded, "Assembly2 not expanded");
-                        Assert.That(treeView.Search("NUnit").IsExpanded, "NUnit namespace not expanded");
-                        Assert.That(treeView.Search("Tests").IsExpanded, "NUnit/Tests namespace not expanded");
-                        Assert.That(treeView.Search("UnitTests").IsExpanded, "UnitTests namespace not expanded");
-                        Assert.That(treeView.Search("MyFixture").IsExpanded, "MyFixture not expanded");
+                        Assert.That(treeView.Search("Assembly1")!.IsExpanded, "Assembly1 not expanded");
+                        Assert.That(treeView.Search("Assembly2")!.IsExpanded, "Assembly2 not expanded");
+                        Assert.That(treeView.Search("NUnit")!.IsExpanded, "NUnit namespace not expanded");
+                        Assert.That(treeView.Search("Tests")!.IsExpanded, "NUnit/Tests namespace not expanded");
+                        Assert.That(treeView.Search("UnitTests")!.IsExpanded, "UnitTests namespace not expanded");
+                        Assert.That(treeView.Search("MyFixture")!.IsExpanded, "MyFixture not expanded");
                         if (fixtureA != null) // In case it was deleted
                         {
                             Assert.That(fixtureA.IsExpanded, "MyFixture not expanded");
@@ -203,11 +203,11 @@ namespace TestCentric.Gui
                         switch (_data.Grouping)
                         {
                             case "Assembly":
-                                Assert.That(treeView.Search("Assembly1").IsExpanded, "Assembly1 not expanded");
-                                Assert.That(treeView.Search("Assembly2").IsExpanded, "Assembly2 not expanded");
+                                Assert.That(treeView.Search("Assembly1")!.IsExpanded, "Assembly1 not expanded");
+                                Assert.That(treeView.Search("Assembly2")!.IsExpanded, "Assembly2 not expanded");
                                 break;
                             case "FIXTURE":
-                                Assert.That(treeView.Search("MyFixture").IsExpanded, "MyFixture not expanded");
+                                Assert.That(treeView.Search("MyFixture")!.IsExpanded, "MyFixture not expanded");
                                 if (fixtureA != null) // In case it was deleted
                                 {
                                     Assert.That(fixtureA.IsExpanded, "MyFixture not expanded");
@@ -215,18 +215,18 @@ namespace TestCentric.Gui
                                 }
                                 break;
                             case "CATEGORY":
-                                Assert.That(treeView.Search("None").IsExpanded, "Category 'None' not expanded");
+                                Assert.That(treeView.Search("None")!.IsExpanded, "Category 'None' not expanded");
                                 break;
                             case "OUTCOME":
                             case "DURATION":
-                                Assert.That(treeView.Search("Not Run").IsExpanded, "'Not Run' not expanded");
+                                Assert.That(treeView.Search("Not Run")!.IsExpanded, "'Not Run' not expanded");
                                 break;
                         }
                         break;
 
                 }
 
-                Assert.That(treeView.Search("Test1").Checked, "Test1 not checked");
+                Assert.That(treeView.Search("Test1")!.Checked, "Test1 not checked");
                 var test3 = treeView.Search("Test3");
                 if (test3 != null) // Removed in some scenarios
                     Assert.That(test3.Checked, "Test3 not checked");

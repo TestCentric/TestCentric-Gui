@@ -17,7 +17,7 @@ namespace TestCentric.Gui.Presenters.Main
     public class ProjectEventTests : MainPresenterTestBase
     {
         private string[] _testFiles;
-        private TestCentricProject _project;
+        private TestCentricProject _project = null!;
 
         private const string DEFAULT_TITLE_BAR = "TestCentric Runner for NUnit";
 
@@ -47,7 +47,7 @@ namespace TestCentric.Gui.Presenters.Main
         public void WhenProjectIsClosed_TitleBarIsSetToDefault()
         {
             // Simulate closed project
-            _model.TestCentricProject.Returns((TestCentricProject)null);
+            _model.TestCentricProject.Returns((TestCentricProject)null!);
 
             FireProjectUnloadedEvent();
 

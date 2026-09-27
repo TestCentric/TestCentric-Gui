@@ -15,7 +15,7 @@ namespace TestCentric.Gui.Model.Filter
     [TestFixture]
     internal class TestCentricTestFilterTests
     {
-        private ITestModel _model;
+        private ITestModel _model = null!;
 
         [SetUp]
         public void Setup()
@@ -203,8 +203,8 @@ namespace TestCentric.Gui.Model.Filter
             // Assert
             foreach (string testId in expectedVisibleNodes)
             {
-                TestNode node = GetTestNode(testNode, testId);
-                Assert.That(node.FilteredOut, Is.True);
+                TestNode? node = GetTestNode(testNode, testId);
+                Assert.That(node!.FilteredOut, Is.True);
             }
         }
 
@@ -252,8 +252,8 @@ namespace TestCentric.Gui.Model.Filter
             // Assert
             foreach (string testId in expectedVisibleNodes)
             {
-                TestNode node = GetTestNode(testNode, testId);
-                Assert.That(node.FilteredOut, Is.True);
+                TestNode? node = GetTestNode(testNode, testId);
+                Assert.That(node!.FilteredOut, Is.True);
             }
         }
 
@@ -301,8 +301,8 @@ namespace TestCentric.Gui.Model.Filter
             // Assert
             foreach (string testId in expectedVisibleNodes)
             {
-                TestNode node = GetTestNode(testNode, testId);
-                Assert.That(node.FilteredOut, Is.True);
+                TestNode? node = GetTestNode(testNode, testId);
+                Assert.That(node!.FilteredOut, Is.True);
             }
         }
 
@@ -404,8 +404,8 @@ namespace TestCentric.Gui.Model.Filter
             // Assert
             foreach (string testId in expectedVisibleNodes)
             {
-                TestNode node = GetTestNode(testNode, testId);
-                Assert.That(node.FilteredOut, Is.True);
+                TestNode? node = GetTestNode(testNode, testId);
+                Assert.That(node!.FilteredOut, Is.True);
             }
         }
 
@@ -502,14 +502,14 @@ namespace TestCentric.Gui.Model.Filter
                 AssertTestNodeIsInvisible(child);
         }
 
-        private TestNode GetTestNode(TestNode testNode, string testId)
+        private TestNode? GetTestNode(TestNode testNode, string testId)
         {
             if (testNode.Id == testId)
                 return testNode;
 
             foreach (TestNode child in testNode.Children)
             {
-                TestNode n = GetTestNode(child, testId);
+                TestNode? n = GetTestNode(child, testId);
                 if (n != null)
                     return n;
             }

@@ -154,7 +154,7 @@ namespace TestCentric.Gui.Controls
 
         #region Event Handlers
 
-        private void tipWindow_Closed(object sender, EventArgs e)
+        private void tipWindow_Closed(object? sender, EventArgs e)
         {
             _tipWindow = null;
         }
@@ -179,7 +179,7 @@ namespace TestCentric.Gui.Controls
         /// <summary>
         /// Copy contents to clipboard
         /// </summary>
-        private void CopyToClipboard(object sender, EventArgs e)
+        private void CopyToClipboard(object? sender, EventArgs e)
         {
             Clipboard.SetDataObject(this.Text);
         }

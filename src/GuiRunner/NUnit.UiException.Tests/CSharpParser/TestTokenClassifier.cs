@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -13,7 +13,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
     [TestFixture]
     public class TestTokenClassifier
     {
-        private TestingClassifier _classifier;
+        private TestingClassifier _classifier = null!;
 
         [SetUp]
         public void SetUp()
