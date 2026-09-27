@@ -53,7 +53,9 @@ namespace TestCentric.Gui.Model
         public static ResultNode Create(XmlNode xmlNode, ResultState resultState)
         {
             var attribute = xmlNode.Attributes?["result"];
-            if (attribute != null)
+            if (attribute == null)
+                xmlNode.AddAttribute("result", GetStatusString(resultState.Status));
+            else
                 attribute.Value = GetStatusString(resultState.Status);
 
             if (!string.IsNullOrEmpty(resultState.Label))

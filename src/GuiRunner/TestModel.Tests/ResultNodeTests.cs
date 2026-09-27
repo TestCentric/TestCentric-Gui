@@ -83,6 +83,23 @@ namespace TestCentric.Gui.Model
         }
 
         [Test]
+        [TestCaseSource(nameof(ReplaceResultStateTestCases))]
+        public void CreateResultNode_FromTestNodeWithoutResult_ResultStateIsApplied(ResultState resultState, TestStatus expectedTestStatus)
+        {
+            // Act
+            var testNode = new TestNode("<test-case id='1' fullname='Assembly.Folder1.TestB' name='TestB'/>");
+
+            // Arrange
+            ResultNode newResultNode = ResultNode.Create(testNode.Xml, resultState);
+
+            // Assert
+            Assert.That(newResultNode.Id, Is.EqualTo("1"));
+            Assert.That(newResultNode.FullName, Is.EqualTo(testNode.FullName));
+            Assert.That(newResultNode.Status, Is.EqualTo(expectedTestStatus));
+            Assert.That(newResultNode.IsLatestRun, Is.EqualTo(false));
+        }
+
+        [Test]
         public void IsLatestRun_NewResultNode_IsTrue()
         {
             var resultNode = new ResultNode("<test-case id='1' name='TestA'/>");
