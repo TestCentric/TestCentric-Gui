@@ -119,6 +119,7 @@ TestResult.xml
 *.tcproj
 packages/
 bundled-agents/
+build-results/
 
 # Tools pulled from nuget
 tools
