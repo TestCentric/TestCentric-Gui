@@ -59,7 +59,7 @@ public static class PackageTests
             MockAssemblyExpectedResult("Net90AgentLauncher")));
 
         GuiTests.Add(new PackageTest(1, "Net60X86Test",
-            "Run net6.0/mock-assembly-x86.dll under .NET 6.0",
+            "Run net6.0/mock-assembly-x86.dll under .NET 8.0",
             "net6.0/mock-assembly-x86.dll",
             MockAssemblyX86ExpectedResult("Net80AgentLauncher")));
 
@@ -93,7 +93,7 @@ public static class PackageTests
                 }));
 
             GuiTests.Add(new PackageTest(1, "AspNetCore50Test",
-                "   .0",
+                "Run net5.0/aspnetcore-test.dll under .NET 8.0",
                 "net5.0/aspnetcore-test.dll",
                 new ExpectedResult("Passed")
                 {
@@ -139,7 +139,7 @@ public static class PackageTests
         //        }));
 
         GuiTests.Add(new PackageTest(1, "Net60WindowsFormsTest",
-            "Run net6.0-windows/windows-forms-test.dll under .NET 6.0",
+            "Run net6.0-windows/windows-forms-test.dll under .NET 8.0",
             "net6.0-windows/windows-forms-test.dll",
             new ExpectedResult("Passed")
             {
