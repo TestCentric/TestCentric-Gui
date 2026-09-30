@@ -5,11 +5,15 @@
     <assembly path="bin/Release/netcoreapp3.1/mock-assembly.dll" />
 	<assembly path="bin/Release/net5.0/mock-assembly.dll" />
 	<assembly path="bin/Release/net8.0/mock-assembly.dll" />
+	<assembly path="bin/Release/net9.0/mock-assembly.dll" />
+	<assembly path="bin/Release/net10.0/mock-assembly.dll" />
   </Config>
   <Config name="Debug">
     <assembly path="bin/Debug/net462/mock-assembly.dll" />
     <assembly path="bin/Debug/netcoreapp3.1/mock-assembly.dll" />
 	<assembly path="bin/Debug/net5.0/mock-assembly.dll" />
 	<assembly path="bin/Debug/net8.0/mock-assembly.dll" />
+	<assembly path="bin/Debug/net9.0/mock-assembly.dll" />
+	<assembly path="bin/Debug/net10.0/mock-assembly.dll" />
   </Config>
 </NUnitProject>

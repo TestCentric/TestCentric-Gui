@@ -16,12 +16,12 @@ public static class PackageTests
         //////////////////////////////////////////////////////////////////////
 
         GuiTests.Add(new PackageTest(1, "Net462Test",
-            "Run net462 mock-assembly.dll under .NET 4.6.2",
+            "Run net462/mock-assembly.dll under .NET 4.6.2",
             "net462/mock-assembly.dll",
             MockAssemblyExpectedResult("Net462AgentLauncher")));
 
         GuiTests.Add(new PackageTest(1, "Net462X86Test",
-            "Run net462 mock-assembly-x86.dll under .NET 4.6.2",
+            "Run net462/mock-assembly-x86.dll under .NET 4.6.2",
             "net462/mock-assembly-x86.dll",
             MockAssemblyX86ExpectedResult("Net462AgentLauncher")));
 
@@ -58,6 +58,11 @@ public static class PackageTests
             "net9.0/mock-assembly.dll",
             MockAssemblyExpectedResult("Net90AgentLauncher")));
 
+        GuiTests.Add(new PackageTest(1, "Net10Test",
+            "Run net10.0/mock-assembly.dll under .NET 10.0",
+            "net10.0/mock-assembly.dll",
+            MockAssemblyExpectedResult("Net10AgentLauncher")));
+
         GuiTests.Add(new PackageTest(1, "Net60X86Test",
             "Run net6.0/mock-assembly-x86.dll under .NET 8.0",
             "net6.0/mock-assembly-x86.dll",
@@ -73,10 +78,19 @@ public static class PackageTests
             "net8.0/mock-assembly-x86.dll",
             MockAssemblyX86ExpectedResult("Net80AgentLauncher")));
 
-        //GuiTests.Add(new PackageTest(1, "Net90X86Test",
-        //    "Run net9.0/mock-assembly-x86.dll under .NET 9.0",
-        //    "net9.0/mock-assembly-x86.dll",
-        //    MockAssemblyX86ExpectedResult("Net90AgentLauncher")));
+        // TODO: Why doesn't this work on GitHub?
+        if (BuildSettings.IsLocalBuild)
+        {
+            GuiTests.Add(new PackageTest(1, "Net90X86Test",
+                "Run net9.0/mock-assembly-x86.dll under .NET 9.0",
+                "net9.0/mock-assembly-x86.dll",
+                MockAssemblyX86ExpectedResult("Net90AgentLauncher")));
+        }
+
+        GuiTests.Add(new PackageTest(1, "Net10X86Test",
+            "Run net10.0/mock-assembly-x86.dll under .NET 10.0",
+            "net10.0/mock-assembly-x86.dll",
+            MockAssemblyX86ExpectedResult("Net10AgentLauncher")));
 
         //////////////////////////////////////////////////////////////////////
         // AspNetCore tests
@@ -125,18 +139,35 @@ public static class PackageTests
                 Assemblies = new[] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net80AgentLauncher") }
             }));
 
+
+        GuiTests.Add(new PackageTest(1, "AspNetCore90Test",
+            "Run net9.0/aspnetcore-test.dll under .NET 9.0",
+            "net9.0/aspnetcore-test.dll",
+            new ExpectedResult("Passed")
+            {
+                Assemblies = new[] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net90AgentLauncher") }
+            }));
+
+        GuiTests.Add(new PackageTest(1, "AspNetCore10Test",
+            "Run net10.0/aspnetcore-test.dll under .NET 10.0",
+            "net10.0/aspnetcore-test.dll",
+            new ExpectedResult("Passed")
+            {
+                Assemblies = new[] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net10AgentLauncher") }
+            }));
+
         //////////////////////////////////////////////////////////////////////
         // Windows Forms Tests
         //////////////////////////////////////////////////////////////////////
 
-        //if (BuildSettings.IsLocalBuild)
-        //    GuiTests.Add(new PackageTest(1, "Net50WindowsFormsTest",
-        //        "Run net5.0-windows/windows-forms-test.dll under .NET 5.0",
-        //        "net5.0-windows/windows-forms-test.dll",
-        //        new ExpectedResult("Passed")
-        //        {
-        //            Assemblies = new[] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net80AgentLauncher") }
-        //        }));
+        if (BuildSettings.IsLocalBuild)
+            GuiTests.Add(new PackageTest(1, "Net50WindowsFormsTest",
+                "Run net5.0-windows/windows-forms-test.dll under .NET 8.0",
+                "net5.0-windows/windows-forms-test.dll",
+                new ExpectedResult("Passed")
+                {
+                    Assemblies = new[] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net80AgentLauncher") }
+                }));
 
         GuiTests.Add(new PackageTest(1, "Net60WindowsFormsTest",
             "Run net6.0-windows/windows-forms-test.dll under .NET 8.0",
@@ -162,14 +193,30 @@ public static class PackageTests
                 Assemblies = new[] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net80AgentLauncher") }
             }));
 
+        GuiTests.Add(new PackageTest(1, "Net90WindowsFormsTest",
+            "Run net9.0-windows/windows-forms-test.dll under .NET 9.0",
+            "net9.0-windows/windows-forms-test.dll",
+            new ExpectedResult("Passed")
+            {
+                Assemblies = new[] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net90AgentLauncher") }
+            }));
+
+        GuiTests.Add(new PackageTest(1, "Net10WindowsFormsTest",
+            "Run net10.0-windows/windows-forms-test.dll under .NET 10.0",
+            "net10.0-windows/windows-forms-test.dll",
+            new ExpectedResult("Passed")
+            {
+                Assemblies = new[] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net10AgentLauncher") }
+            }));
+
         //////////////////////////////////////////////////////////////////////
         // Multiple assembly tests
         //////////////////////////////////////////////////////////////////////
 
-        GuiTests.Add(new PackageTest(1, "Net462PlusNet60Test",
-            "Run .NET 4.6.2 and .NET 6.0 builds of mock-assembly.dll together",
-            "net462/mock-assembly.dll net6.0/mock-assembly.dll",
-            MockAssemblyExpectedResult("Net462AgentLauncher", "Net80AgentLauncher")));
+        GuiTests.Add(new PackageTest(1, "Net462PlusNet10Test",
+            "Run .NET 4.6.2 and .NET 10.0 builds of mock-assembly.dll together",
+            "net462/mock-assembly.dll net10.0/mock-assembly.dll",
+            MockAssemblyExpectedResult("Net462AgentLauncher", "Net10AgentLauncher")));
 
         //////////////////////////////////////////////////////////////////////
         // Tests that use extensions
@@ -206,7 +253,8 @@ public static class PackageTests
                 "Run an NUnit project",
                 "../../TestProject.nunit",
                 MockAssemblyExpectedResult(
-                    "Net462AgentLauncher", "Net80AgentLauncher", "Net80AgentLauncher", "Net80AgentLauncher"),
+                    "Net462AgentLauncher", "Net80AgentLauncher", "Net80AgentLauncher",
+                    "Net80AgentLauncher", "Net90AgentLauncher", "Net10AgentLauncher"),
                 KnownExtensions.NUnitProjectLoader));
         //}
 
