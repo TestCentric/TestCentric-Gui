@@ -139,13 +139,6 @@ public static class PackageTests
                 Assemblies = new[] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net80AgentLauncher") }
             }));
 
-        GuiTests.Add(new PackageTest(1, "AspNetCore80Test",
-            "Run net8.0/aspnetcore-test.dll under .NET 8.0",
-            "net8.0/aspnetcore-test.dll",
-            new ExpectedResult("Passed")
-            {
-                Assemblies = new[] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net80AgentLauncher") }
-            }));
 
         GuiTests.Add(new PackageTest(1, "AspNetCore90Test",
             "Run net9.0/aspnetcore-test.dll under .NET 9.0",
