@@ -16,15 +16,11 @@ namespace TestCentric.Gui.Model.Settings
 
         IRecentFiles RecentFiles { get; }
 
-        IMiniFormSettings MiniForm { get; }
-
         IMainFormSettings MainForm { get; }
 
         IErrorDisplaySettings ErrorDisplay { get; }
 
         ITextOutputSettings TextOutput { get; }
-
-        string GuiLayout { get; set; }
 
         bool LoadLastProject { get; set; }
 
@@ -45,26 +41,11 @@ namespace TestCentric.Gui.Model.Settings
 
         public IRecentFiles RecentFiles { get; } = new RecentFiles();
 
-        public IMiniFormSettings MiniForm { get; } = new MiniFormSettings();
-
         public IMainFormSettings MainForm { get; } = new MainFormSettings();
 
         public IErrorDisplaySettings ErrorDisplay { get; } = new ErrorDisplaySettings();
 
         public ITextOutputSettings TextOutput { get; } = new TextOutputSettings();
-
-        [UserScopedSetting]
-        [DefaultSettingValue("Full")]
-        public string GuiLayout
-        {
-#if !DISABLE_MINI_GUI
-            get { return (string)this[nameof(GuiLayout)]; }
-            set { this[nameof(GuiLayout)] = value; }
-#else
-            get { return "MAIN"; }
-            set { }
-#endif
-        }
 
         [UserScopedSetting]
         [DefaultSettingValue("true")]

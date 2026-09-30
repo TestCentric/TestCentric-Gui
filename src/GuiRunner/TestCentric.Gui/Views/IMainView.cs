@@ -49,7 +49,6 @@ namespace TestCentric.Gui.Views
         ICommand ExitCommand { get; }
 
         // View Menu Items
-        ISelection GuiLayout { get; }
         ICommand IncreaseFontCommand { get; }
         ICommand DecreaseFontCommand { get; }
         ICommand ChangeFontCommand { get; }
@@ -97,9 +96,6 @@ namespace TestCentric.Gui.Views
 
         // Dialog Manager
         IDialogManager DialogManager { get; }
-
-        // Methods used by Presenter
-        void Configure(bool useFullGui);
 
         // Form methods that we have to use
         void Close();

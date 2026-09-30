@@ -51,7 +51,6 @@ namespace TestCentric.Gui.Views
             ExitCommand = new CommandMenuElement(exitMenuItem);
 
             // Initialize View Menu Commands
-            GuiLayout = new CheckedToolStripMenuGroup("", fullGuiMenuItem, miniGuiMenuItem);
             IncreaseFontCommand = new CommandMenuElement(increaseFontMenuItem);
             DecreaseFontCommand = new CommandMenuElement(decreaseFontMenuItem);
             ChangeFontCommand = new CommandMenuElement(fontChangeMenuItem);
@@ -64,11 +63,7 @@ namespace TestCentric.Gui.Views
             guiFontMenuItem.Visible = fixedFontMenuItem.Visible = false;
 #endif
 
-#if DISABLE_MINI_GUI
-            miniGuiMenuItem.Visible = fullGuiMenuItem.Visible = toolStripSeparator8.Visible = false;
-#endif
-
-#if DISABLE_FONT_SETTING && DISABLE_MINI_GUI
+#if DISABLE_FONT_SETTING
             viewMenu.Visible = false;
 #endif
 
@@ -155,7 +150,6 @@ namespace TestCentric.Gui.Views
         public ICommand ExitCommand { get; }
 
         // View Menu Items
-        public ISelection GuiLayout { get; }
         public ICommand IncreaseFontCommand { get; }
         public ICommand DecreaseFontCommand { get; }
         public ICommand ChangeFontCommand { get; }
@@ -210,37 +204,6 @@ namespace TestCentric.Gui.Views
         public ErrorsAndFailuresView ErrorsAndFailuresView { get { return errorsAndFailuresView1; } }
 
         public ITextOutputView TextOutputView { get { return textOutputView; } }
-
-        #endregion
-
-        #endregion
-
-        #region Menu Handlers
-
-        #region View Menu
-
-        public void Configure(bool useFullGui)
-        {
-            leftPanel.Visible = true;
-            leftPanel.Dock = useFullGui
-                ? DockStyle.Left
-                : DockStyle.Fill;
-            treeSplitter.Visible = useFullGui;
-            rightPanel.Visible = useFullGui;
-
-            if (useFullGui)
-            {
-                // Move progress bar from left to right
-                leftPanel.Controls.Remove(progressPanel);
-                rightPanel.Controls.Add(progressPanel);
-            }
-            else
-            {
-                // Move progress bar from right to left
-                rightPanel.Controls.Remove(progressPanel);
-                leftPanel.Controls.Add(progressPanel);
-            }
-        }
 
         #endregion
 

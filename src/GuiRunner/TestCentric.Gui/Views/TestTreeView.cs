@@ -89,7 +89,6 @@ namespace TestCentric.Gui.Views
             ExpandAllCommand = new CommandMenuElement(expandAllMenuItem);
             CollapseAllCommand = new CommandMenuElement(collapseAllMenuItem);
             CollapseToFixturesCommand = new CommandMenuElement(collapseToFixturesMenuItem);
-            TestPropertiesCommand = new CommandMenuElement(testPropertiesMenuItem);
             ViewAsXmlCommand = new CommandMenuElement(viewAsXmlMenuItem);
             RemoveTestPackageCommand = new CommandMenuElement(removeTestPackageMenuItem);
             TreeViewDeleteKeyCommand = new KeyCommand(treeView, new[] { Keys.Delete, Keys.Back }, null);
@@ -257,7 +256,6 @@ namespace TestCentric.Gui.Views
         public IKeyCommand TreeViewDeleteKeyCommand { get; private set; }
         
         public ICommand CollapseToFixturesCommand { get; private set; }
-        public ICommand TestPropertiesCommand { get; private set; }
         public ICommand ViewAsXmlCommand { get; private set; }
 
         public TestCentricTreeView TreeView { get; private set; }

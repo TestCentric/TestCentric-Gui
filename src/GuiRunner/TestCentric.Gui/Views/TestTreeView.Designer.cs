@@ -38,7 +38,6 @@ namespace TestCentric.Gui.Views
             this.debugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearResultsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.testPropertiesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewAsXmlMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeTestPackageMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.activeConfigMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,7 +80,6 @@ namespace TestCentric.Gui.Views
             this.debugMenuItem,
             this.clearResultsMenuItem,
             this.contextMenuSeparator1,
-            this.testPropertiesMenuItem,
             this.viewAsXmlMenuItem,
             this.removeTestPackageMenuItem,
             this.activeConfigMenuItem,
@@ -119,12 +117,6 @@ namespace TestCentric.Gui.Views
             // 
             this.contextMenuSeparator1.Name = "contextMenuSeparator1";
             this.contextMenuSeparator1.Size = new System.Drawing.Size(172, 6);
-            // 
-            // testPropertiesMenuItem
-            // 
-            this.testPropertiesMenuItem.Name = "testPropertiesMenuItem";
-            this.testPropertiesMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.testPropertiesMenuItem.Text = "Properties...";
             // 
             // viewAsXmlMenuItem
             // 
@@ -411,7 +403,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripMenuItem clearResultsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem activeConfigMenuItem;
         private System.Windows.Forms.ToolStripSeparator contextMenuSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem testPropertiesMenuItem;
         private System.Windows.Forms.ToolStripSeparator contextMenuSeparator1;
         private System.Windows.Forms.ToolStripSeparator contextMenuSeparator3;
         private System.Windows.Forms.ToolStripSeparator contextMenuSeparator4;

@@ -145,8 +145,6 @@ public class GuiSelfTester : TestRunner, IPackageTestRunner
             arguments += " --run";
         if (!arguments.Contains(" --unattended"))
             arguments += " --unattended";
-        if (!arguments.Contains(" --full-gui"))
-            arguments += " --full-gui";
 
         if (_executablePath == null)
             _executablePath = BuildSettings.OutputDirectory + "testcentric.exe";
