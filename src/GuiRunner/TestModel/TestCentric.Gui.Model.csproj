@@ -8,10 +8,6 @@
         <UseWindowsForms>true</UseWindowsForms>
     </PropertyGroup>
 	
-    <PropertyGroup>
-      <DefineConstants>$(DefineConstants);DISABLE_MINI_GUI</DefineConstants>
-    </PropertyGroup>
-
 	<ItemGroup>
 
 		<PackageReference Include="NUnit.Common" />

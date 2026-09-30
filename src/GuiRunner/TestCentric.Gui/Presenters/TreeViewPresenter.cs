@@ -77,7 +77,6 @@ namespace TestCentric.Gui.Presenters
 
                 _view.CategoryFilter.Init(_model);
                 Strategy.OnTestLoaded(ea.Test, visualState);
-                CheckPropertiesDisplay();
                 CheckXmlDisplay();
             };
 
@@ -109,7 +108,6 @@ namespace TestCentric.Gui.Presenters
             {
                 SaveVisualState();
 
-                ClosePropertiesDisplay();
                 CloseXmlDisplay();
             };
 
@@ -120,7 +118,6 @@ namespace TestCentric.Gui.Presenters
                 SaveVisualState();
 
                 Strategy.OnTestRunStarting();
-                CheckPropertiesDisplay();
                 CheckXmlDisplay();
             };
 
@@ -202,8 +199,6 @@ namespace TestCentric.Gui.Presenters
                 Strategy.Reload();
             };
 
-            _view.TestPropertiesCommand.Execute += () => ShowPropertiesDisplay();
-
             _view.ViewAsXmlCommand.Execute += () => ShowXmlDisplayDialog();
 
             _view.SelectedNodeChanged += (treeNode) =>
@@ -224,14 +219,6 @@ namespace TestCentric.Gui.Presenters
                         if (selection == null && node != null)
                             selection = new TestSelection() { node };
                         _model.SelectedTests = selection!;
-                    }
-
-                    if (_propertiesDisplay != null)
-                    {
-                        if (_propertiesDisplay.Pinned)
-                            _propertiesDisplay.Display(treeNode);
-                        else
-                            ClosePropertiesDisplay();
                     }
 
                     if (_xmlDisplay != null)
@@ -309,12 +296,6 @@ namespace TestCentric.Gui.Presenters
         {
             switch (e.SettingName)
             {
-
-                case "TestCentric.Gui.GuiLayout":
-                    if (_model.Settings.Gui.GuiLayout == "Full")
-                        ClosePropertiesDisplay();
-                    break;
-
                 case "TestCentric.Gui.TestTree.ShowFilter":
                     _view.SetTestFilterVisibility(_model.Settings.Gui.TestTree.ShowFilter);
                     break;
@@ -453,7 +434,6 @@ namespace TestCentric.Gui.Presenters
         {
             Strategy.OnTestFinished(args.Result);
 
-            _propertiesDisplay?.OnTestFinished(args.Result);
             _xmlDisplay?.OnTestFinished(args.Result);
         }
 
@@ -482,52 +462,6 @@ namespace TestCentric.Gui.Presenters
             visualState.Save(visualStatePath);
         }
 
-        TestPropertiesDialog? _propertiesDisplay;
-
-        private void ShowPropertiesDisplay()
-        {
-            if (_propertiesDisplay == null)
-            {
-                var mainForm = ((Control)_view).FindForm();
-
-                _propertiesDisplay = new TestPropertiesDialog(_model, _view)
-                {
-                    Owner = mainForm,
-                    Font = mainForm.Font,
-                    StartPosition = FormStartPosition.Manual
-                };
-
-                var midScreen = Screen.FromHandle(mainForm.Handle).WorkingArea.Width / 2;
-                var midForm = (mainForm.Left + mainForm.Right) / 2;
-
-                _propertiesDisplay.Left = midForm < midScreen
-                    ? mainForm.Right
-                    : Math.Max(0, mainForm.Left - _propertiesDisplay.Width);
-
-                _propertiesDisplay.Top = mainForm.Top;
-
-                _propertiesDisplay.Closed += (s, e) => _propertiesDisplay = null;
-            }
-
-            if (_view.ContextNode != null)
-            _propertiesDisplay.Display(_view.ContextNode);
-        }
-
-        private void ClosePropertiesDisplay()
-        {
-            if (_propertiesDisplay != null)
-            {
-                _propertiesDisplay.InvokeIfRequired(() => _propertiesDisplay.Close());
-                _propertiesDisplay = null;
-            }
-        }
-
-        private void CheckPropertiesDisplay()
-        {
-            if (_propertiesDisplay != null && !_propertiesDisplay.Pinned)
-                ClosePropertiesDisplay();
-        }
-
         private XmlDisplay? _xmlDisplay;
 
         private void ShowXmlDisplayDialog()
@@ -549,12 +483,6 @@ namespace TestCentric.Gui.Presenters
 
                 var myLeft = mainForm.Left;
                 var myRight = mainForm.Right;
-
-                if (_propertiesDisplay != null)
-                {
-                    myLeft = Math.Min(myLeft, _propertiesDisplay.Left);
-                    myRight = Math.Max(myRight, _propertiesDisplay.Right);
-                }
 
                 _xmlDisplay.Left = myLeft > screenArea.Width - myRight
                     ? Math.Max(0, myLeft - _xmlDisplay.Width)
@@ -611,9 +539,6 @@ namespace TestCentric.Gui.Presenters
             //}
 
             _view.ActiveConfiguration.Visible = displayConfigMenu;
-
-            var layout = _model.Settings.Gui.GuiLayout;
-            _view.TestPropertiesCommand.Visible = layout == "Mini";
 
             var selectedNode = _view.ContextNode?.Tag as TestNode;
             _view.ViewAsXmlCommand.Enabled = selectedNode != null;

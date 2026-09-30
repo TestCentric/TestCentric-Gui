@@ -72,8 +72,6 @@ namespace TestCentric.Gui.Views
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.fullGuiMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.miniGuiMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.guiFontMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.increaseFontMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -418,30 +416,12 @@ namespace TestCentric.Gui.Views
             // viewMenu
             // 
             this.viewMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fullGuiMenuItem,
-            this.miniGuiMenuItem,
             this.toolStripSeparator8,
             this.guiFontMenuItem,
             this.fixedFontMenuItem});
             this.viewMenu.Name = "viewMenu";
             this.viewMenu.Size = new System.Drawing.Size(44, 20);
             this.viewMenu.Text = "&View";
-            // 
-            // fullGuiMenuItem
-            // 
-            this.fullGuiMenuItem.Checked = true;
-            this.fullGuiMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.fullGuiMenuItem.Name = "fullGuiMenuItem";
-            this.fullGuiMenuItem.Size = new System.Drawing.Size(129, 22);
-            this.fullGuiMenuItem.Tag = "Full";
-            this.fullGuiMenuItem.Text = "&Full GUI";
-            // 
-            // miniGuiMenuItem
-            // 
-            this.miniGuiMenuItem.Name = "miniGuiMenuItem";
-            this.miniGuiMenuItem.Size = new System.Drawing.Size(129, 22);
-            this.miniGuiMenuItem.Tag = "Mini";
-            this.miniGuiMenuItem.Text = "&Mini GUI";
             // 
             // toolStripSeparator8
             // 
@@ -858,8 +838,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparator1;
         private System.Windows.Forms.ToolStripMenuItem aboutMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewMenu;
-        private System.Windows.Forms.ToolStripMenuItem miniGuiMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fullGuiMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fontChangeMenuItem;
         private System.Windows.Forms.ToolStripMenuItem defaultFontMenuItem;
         private System.Windows.Forms.ToolStripMenuItem decreaseFontMenuItem;

@@ -50,9 +50,6 @@ namespace TestCentric.Gui.Presenters
 
         private readonly IUserSettings _settings;
 
-        private string _guiLayout;
-
-
         private AgentSelectionController _agentSelectionController;
         private RecentFileMenuController _recentProjectController;
         private RecentFileMenuController _recentFileController;
@@ -80,7 +77,6 @@ namespace TestCentric.Gui.Presenters
             ImageSetManager = new ImageSetManager(_model, _view);
 
             _view.Font = _settings.Gui.Font;
-            _guiLayout = _settings.Gui.GuiLayout;
 
             UpdateViewCommands();
             UpdateRunSelectedTestsTooltip();
@@ -208,28 +204,6 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.SelectedTestsChanged += (e) => UpdateViewCommands();
 
-            _settings.Changed += (s, e) =>
-            {
-                switch (e.SettingName)
-                {
-                    case "TestCentric.Gui.GuiLayout":
-                        // Settings have changed (from settings dialog)
-                        // so we want to update the GUI to match.
-                        var newLayout = _settings.Gui.GuiLayout;
-                        var oldLayout = _view.GuiLayout.SelectedItem;
-                        // Make sure it hasn't already been changed
-                        if (oldLayout != newLayout)
-                        {
-                            // Save position of form for old layout
-                            SaveFormLocationAndSize(oldLayout);
-                            // Update the GUI itself
-                            SetGuiLayout(newLayout);
-                            _view.GuiLayout.SelectedItem = newLayout;
-                        }
-                        break;
-                }
-            };
-
             _model.Events.UnhandledException += (TestCentric.Gui.Model.UnhandledExceptionEventArgs e) =>
             {
                 _view.MessageDisplay.Error($"{e.Message}\n\n{e.StackTrace}", "TestCentric - Internal Error");
@@ -241,10 +215,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.Load += (s, e) =>
             {
-                _guiLayout = _options.GuiLayout ?? _settings.Gui.GuiLayout;
-                _view.GuiLayout.SelectedItem = _guiLayout;
-                SetGuiLayout(_guiLayout);
-
+                SetGuiLayout();
                 _view.RunAsX86.Checked = _options.RunAsX86;
             };
 
@@ -304,7 +275,7 @@ namespace TestCentric.Gui.Presenters
 
                 _model.CloseProject();
 
-                SaveFormLocationAndSize(_guiLayout);
+                SaveFormLocationAndSize();
             };
 
             _view.FileMenu.Popup += () =>
@@ -396,22 +367,6 @@ namespace TestCentric.Gui.Presenters
             _view.RunAsX86.CheckedChanged += OnRunAsX86Changed;
 
             _view.ExitCommand.Execute += () => _view.Close();
-
-            _view.GuiLayout.SelectionChanged += () =>
-            {
-                // Selection menu item has changed, so we want
-                // to update both the display and the settings
-                var oldSetting = _settings.Gui.GuiLayout;
-                var newSetting = _view.GuiLayout.SelectedItem;
-                if (oldSetting != newSetting)
-                {
-                    SaveFormLocationAndSize(oldSetting);
-                    SetGuiLayout(newSetting);
-                }
-
-                _guiLayout = newSetting;
-                _settings.Gui.GuiLayout = _view.GuiLayout.SelectedItem;
-            };
 
             _view.IncreaseFontCommand.Execute += () =>
             {
@@ -557,18 +512,10 @@ namespace TestCentric.Gui.Presenters
                 _model.OpenExistingProject(file!);
         }
 
-        private void SaveFormLocationAndSize(string guiLayout)
+        private void SaveFormLocationAndSize()
         {
-            if (guiLayout == "Mini")
-            {
-                _settings.Gui.MiniForm.Location = _view.Location;
-                _settings.Gui.MiniForm.Size = _view.Size;
-            }
-            else
-            {
-                _settings.Gui.MainForm.Location = _view.Location;
-                _settings.Gui.MainForm.Size = _view.Size;
-            }
+            _settings.Gui.MainForm.Location = _view.Location;
+            _settings.Gui.MainForm.Size = _view.Size;
         }
 
         private void ExecuteNormalStop()
@@ -797,28 +744,13 @@ namespace TestCentric.Gui.Presenters
             _settings.Gui.Font = _view.Font = font;
         }
 
-        private void SetGuiLayout(string guiLayout)
+        private void SetGuiLayout()
         {
-            Point location;
-            Size size;
-            bool isMaximized = false;
-            bool useFullGui = guiLayout != "Mini";
-
             // Configure the GUI
-            _view.Configure(useFullGui);
+            Point location = _settings.Gui.MainForm.Location;
+            Size size = _settings.Gui.MainForm.Size;
+            bool isMaximized = _settings.Gui.MainForm.Maximized;
 
-            if (useFullGui)
-            {
-                location = _settings.Gui.MainForm.Location;
-                size = _settings.Gui.MainForm.Size;
-                isMaximized = _settings.Gui.MainForm.Maximized;
-            }
-            else
-            {
-                location = _settings.Gui.MiniForm.Location;
-                size = _settings.Gui.MiniForm.Size;
-                isMaximized = _settings.Gui.MiniForm.Maximized;
-            }
 
             if (!IsValidLocation(location, size))
                 location = new Point(10, 10);
@@ -826,11 +758,7 @@ namespace TestCentric.Gui.Presenters
             _view.Location = location;
             _view.Size = size;
             _view.Maximized = isMaximized;
-
-            if (useFullGui)
-                _view.SplitterPosition = _settings.Gui.MainForm.SplitPosition;
-
-            _view.StatusBarView.Visible = useFullGui;
+            _view.SplitterPosition = _settings.Gui.MainForm.SplitPosition;
         }
 
         private static bool IsValidLocation(Point location, Size size)
