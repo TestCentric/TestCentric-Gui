@@ -44,6 +44,10 @@ namespace TestCentric.Gui.SettingsPages
             principalPolicyCheckBox.Checked = principalPolicyListBox.Enabled =
                 principalPolicy != nameof(PrincipalPolicy.UnauthenticatedPrincipal);
             principalPolicyListBox.SelectedItem = principalPolicy;
+
+            int currentSeed = PackageSettings.GetValueOrDefault(SettingDefinitions.RandomSeed);
+            if (currentSeed > 0)
+                currentRandomSeedTextBox.Text = currentSeed.ToString();
         }
 
         public override void ApplySettings()
@@ -60,6 +64,12 @@ namespace TestCentric.Gui.SettingsPages
                 : nameof(PrincipalPolicy.UnauthenticatedPrincipal);
             if (principalPolicy != PackageSettings.GetValueOrDefault(SettingDefinitions.PrincipalPolicy))
                 SubPackageSettingChanges.Add(SettingDefinitions.PrincipalPolicy.WithValue(principalPolicy));
+
+            if (randomSeedCheckBox.Checked)
+            {
+                if (int.TryParse(randomSeedTextBox.Text, out int seed))
+                    SubPackageSettingChanges.Add(SettingDefinitions.RandomSeed.WithValue(seed));
+            }
         }
 
         private void numberOfAgentsCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -72,6 +82,16 @@ namespace TestCentric.Gui.SettingsPages
             principalPolicyListBox.Enabled = principalPolicyCheckBox.Checked;
             if (!principalPolicyCheckBox.Checked)
                 principalPolicyListBox.SelectedItem = nameof(PrincipalPolicy.UnauthenticatedPrincipal);
+        }
+
+        private void randomSeedCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            randomSeedTextBox.Enabled = randomSeedCheckBox.Checked;
+        }
+
+        private void randomSeedTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
         }
     }
 }
