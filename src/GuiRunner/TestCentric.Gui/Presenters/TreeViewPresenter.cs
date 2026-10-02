@@ -265,14 +265,13 @@ namespace TestCentric.Gui.Presenters
 
             _view.ResetFilterCommand.Execute += () => ResetTestFilter();
 
-#if USE_TIPWINDOW
             // Some of our tests don't set the TreeView. Events requiring
             // the TreeView control should be placed after this test.
             if (_view.TreeView == null)
                 return;
 
             _view.TreeNodeMouseHover += OnTreeNodeMouseHover;
-#endif
+
             #endregion
         }
 
@@ -306,7 +305,6 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-#if USE_TIPWINDOW
         private void OnTreeNodeMouseHover(TreeNode treeNode)
         {
             log.Debug($"OnTreeNodeMouseHover with node {treeNode.Text}");
@@ -321,7 +319,6 @@ namespace TestCentric.Gui.Presenters
         {
             throw new NotImplementedException();
         }
-#endif
 
         private void OnTreeConfigurationChanged(object sender, SettingsEventArgs e)
         {
@@ -510,9 +507,7 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeContextMenu()
         {
-#if USE_TIPWINDOW
             _view.TipWindow?.Hide();
-#endif
 
             // TODO: Config Menu is hidden until changing the config actually works
             bool displayConfigMenu = false;

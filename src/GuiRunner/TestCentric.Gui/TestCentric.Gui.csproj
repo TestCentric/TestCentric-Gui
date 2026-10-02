@@ -10,12 +10,8 @@
         <UseWindowsForms>true</UseWindowsForms>
     </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	<PropertyGroup>
 	  <DefineConstants>$(DefineConstants);DISABLE_FONT_SETTING</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <DefineConstants>$(DefineConstants);USE_TIPWINDOW;DISABLE_FONT_SETTING</DefineConstants>
 	</PropertyGroup>
 
   <ItemGroup>
