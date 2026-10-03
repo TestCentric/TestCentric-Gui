@@ -64,6 +64,14 @@ namespace TestCentric.Gui.Views
 
         public TipWindow TipWindow { get; }
 
+        /// <summary>
+        /// Initializes the test tree, its commands, and the hover tip window.
+        /// </summary>
+        /// <remarks>
+        /// Uses <see cref="MouseHoverDelay"/> in milliseconds as the delay before raising
+        /// <see cref="TreeNodeMouseHover"/>. Hover notifications are suppressed while
+        /// the context menu is visible.
+        /// </remarks>
         public TestTreeView()
         {
             InitializeComponent();

@@ -63,6 +63,10 @@ namespace TestCentric.Gui.Presenters
             WireUpEvents();
         }
 
+        /// <summary>
+        /// Connects model, settings, and view events to presenter actions.
+        /// Subscribes to hover notifications only when the view has a tree control.
+        /// </summary>
         private void WireUpEvents()
         {
             #region Model Events
@@ -505,6 +509,10 @@ namespace TestCentric.Gui.Presenters
                 CloseXmlDisplay();
         }
 
+        /// <summary>
+        /// Hides any hover tip and updates context menu visibility, enabled states,
+        /// and check marks from the context node, model state, and tree configuration.
+        /// </summary>
         private void InitializeContextMenu()
         {
             _view.TipWindow?.Hide();
