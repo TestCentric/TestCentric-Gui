@@ -544,6 +544,8 @@ namespace TestCentric.Gui.Model
             if (!TopLevelPackage.Settings.HasSetting(SettingDefinitions.RandomSeed))
                 TopLevelPackage.AddSetting(SettingDefinitions.RandomSeed.WithValue(new Random().Next()));
             LoadedTests = TestCentricRunner.Explore(TopLevelPackage);
+            if (!TopLevelPackage.Settings.HasSetting(SettingDefinitions.RandomSeed))
+                TopLevelPackage.AddSetting(SettingDefinitions.RandomSeed.WithValue(new Random().Next()));
 
             if (LoadedTests == null)
             {

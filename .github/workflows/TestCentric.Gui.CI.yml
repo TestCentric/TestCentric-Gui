@@ -40,8 +40,8 @@ jobs:
       - name: 🔧 Install dotnet tools
         run: dotnet tool restore
 
-      - name: 🍰 Build, Test and Package
-        run: dotnet cake --target=Test --target=Package --configuration=Release
+      - name: 🍰 Build, Test, Package and Publish (Cake script decides)
+        run: dotnet cake --target=ContinuousIntegration --configuration=Release
 
       # Disabled for now
       #- name: 🧪 Test Report
