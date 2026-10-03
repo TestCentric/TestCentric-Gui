@@ -48,15 +48,6 @@ namespace TestCentric.Gui.Views
         IPopup RecentFilesMenu { get; }
         ICommand ExitCommand { get; }
 
-        // View Menu Items
-        ICommand IncreaseFontCommand { get; }
-        ICommand DecreaseFontCommand { get; }
-        ICommand ChangeFontCommand { get; }
-        ICommand RestoreFontCommand { get; }
-        ICommand IncreaseFixedFontCommand { get; }
-        ICommand DecreaseFixedFontCommand { get; }
-        ICommand RestoreFixedFontCommand { get; }
-
         // Tools Menu Items
         IPopup ToolsMenu { get; }
         IPopup SaveResultsCommand { get; }

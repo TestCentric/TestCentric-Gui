@@ -10,14 +10,10 @@
         <UseWindowsForms>true</UseWindowsForms>
     </PropertyGroup>
 
-	<PropertyGroup>
-	  <DefineConstants>$(DefineConstants);DISABLE_FONT_SETTING</DefineConstants>
-	</PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\TestModel\TestCentric.Gui.Model.csproj" />
-    <ProjectReference Include="..\NUnit.UiException\NUnit.UiException.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\TestModel\TestCentric.Gui.Model.csproj" />
+        <ProjectReference Include="..\NUnit.UiException\NUnit.UiException.csproj" />
+    </ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="NUnit.Common" />

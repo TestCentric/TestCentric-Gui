@@ -28,10 +28,6 @@ namespace TestCentric.Gui.Model.Settings
 
         bool RerunOnChange { get; set; }
 
-        Font Font { get; set; }
-
-        Font FixedFont { get; set; }
-
         InternalTraceLevel InternalTraceLevel { get; set; }
     }
 
