@@ -211,7 +211,6 @@ namespace TestCentric.Gui.Controls
 
             AdjustLocation();
 
-            Graphics g = Graphics.FromHwnd(Handle);
             Screen screen = Screen.FromControl(_control);
             SizeF layoutArea = new SizeF(screen.WorkingArea.Width - SCREEN_MARGIN, screen.WorkingArea.Height - SCREEN_MARGIN);
             if (Expansion == ExpansionStyle.Vertical)
@@ -219,7 +218,9 @@ namespace TestCentric.Gui.Controls
             else if (Expansion == ExpansionStyle.Horizontal)
                 layoutArea.Height = ItemBounds.Height;
 
-            Size sizeNeeded = Size.Ceiling(g.MeasureString(TipText, Font, layoutArea));
+            Size sizeNeeded;
+            using (Graphics g = Graphics.FromHwnd(Handle))
+                sizeNeeded = Size.Ceiling(g.MeasureString(TipText, Font, layoutArea));
 
             // When used with a label, if the needed width is smaller than that of the
             // label, it can be visually confusing, so we adjust. This can only happen

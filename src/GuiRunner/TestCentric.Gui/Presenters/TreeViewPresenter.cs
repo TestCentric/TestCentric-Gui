@@ -63,6 +63,10 @@ namespace TestCentric.Gui.Presenters
             WireUpEvents();
         }
 
+        /// <summary>
+        /// Connects model, settings, and view events to presenter actions.
+        /// Subscribes to hover notifications only when the view has a tree control.
+        /// </summary>
         private void WireUpEvents()
         {
             #region Model Events
@@ -265,14 +269,13 @@ namespace TestCentric.Gui.Presenters
 
             _view.ResetFilterCommand.Execute += () => ResetTestFilter();
 
-#if USE_TIPWINDOW
             // Some of our tests don't set the TreeView. Events requiring
             // the TreeView control should be placed after this test.
             if (_view.TreeView == null)
                 return;
 
             _view.TreeNodeMouseHover += OnTreeNodeMouseHover;
-#endif
+
             #endregion
         }
 
@@ -306,7 +309,6 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-#if USE_TIPWINDOW
         private void OnTreeNodeMouseHover(TreeNode treeNode)
         {
             log.Debug($"OnTreeNodeMouseHover with node {treeNode.Text}");
@@ -321,7 +323,6 @@ namespace TestCentric.Gui.Presenters
         {
             throw new NotImplementedException();
         }
-#endif
 
         private void OnTreeConfigurationChanged(object sender, SettingsEventArgs e)
         {
@@ -508,11 +509,13 @@ namespace TestCentric.Gui.Presenters
                 CloseXmlDisplay();
         }
 
+        /// <summary>
+        /// Hides any hover tip and updates context menu visibility, enabled states,
+        /// and check marks from the context node, model state, and tree configuration.
+        /// </summary>
         private void InitializeContextMenu()
         {
-#if USE_TIPWINDOW
             _view.TipWindow?.Hide();
-#endif
 
             // TODO: Config Menu is hidden until changing the config actually works
             bool displayConfigMenu = false;
@@ -579,8 +582,6 @@ namespace TestCentric.Gui.Presenters
 
         private bool NeedsExpansion(TreeNode treeNode)
         {
-            Graphics g = Graphics.FromHwnd(_view.TreeView.Handle);
-            int widthNeeded = (int)g.MeasureString(treeNode.Text, _view.TreeView.Font).Width - 4;
             return treeNode.Bounds.Right > _view.TreeView.ClientRectangle.Right;
         }
 

@@ -58,19 +58,24 @@ namespace TestCentric.Gui.Views
 
         private bool _suppressAfterCheckEvent = false;
 
-#if USE_TIPWINDOW
         public event TreeNodeActionHandler? TreeNodeMouseHover;
         private Timer? _mouseHoverDelayTimer = new Timer();
         private TreeNode? _lastNodeHovered;
 
         public TipWindow TipWindow { get; }
-#endif
 
+        /// <summary>
+        /// Initializes the test tree, its commands, and the hover tip window.
+        /// </summary>
+        /// <remarks>
+        /// Uses <see cref="MouseHoverDelay"/> in milliseconds as the delay before raising
+        /// <see cref="TreeNodeMouseHover"/>. Hover notifications are suppressed while
+        /// the context menu is visible.
+        /// </remarks>
         public TestTreeView()
         {
             InitializeComponent();
 
-#if USE_TIPWINDOW
             TipWindow = new TipWindow(treeView)
             {
                 Expansion = TipWindow.ExpansionStyle.Horizontal,
@@ -78,7 +83,6 @@ namespace TestCentric.Gui.Views
                 WantClicks = true,
                 MouseLeaveDelay = 500
             };
-#endif
 
             RunContextCommand = new CommandMenuElement(this.runMenuItem);
             DebugContextCommand = new CommandMenuElement(this.debugMenuItem);
@@ -100,7 +104,6 @@ namespace TestCentric.Gui.Views
             ResetFilterCommand = new ToolStripButtonElement(filterResetButton);
             TreeView = treeView;
 
-#if USE_TIPWINDOW
             _mouseHoverDelayTimer.Tick += (s, e) =>
             {
                 // If the timer fires, we have been hovering over the
@@ -161,7 +164,6 @@ namespace TestCentric.Gui.Views
                 _mouseHoverDelayTimer.Interval = MouseHoverDelay;
                 _mouseHoverDelayTimer.Start();
             }
-#endif
 
             // NOTE: We use MouseDown here rather than MouseUp because
             // the menu strip Opening event occurs before MouseUp.
