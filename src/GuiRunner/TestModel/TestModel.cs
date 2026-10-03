@@ -541,8 +541,9 @@ namespace TestCentric.Gui.Model
 
             _lastTestRun = TestRunSpecification.Empty;
 
+            if (!TopLevelPackage.Settings.HasSetting(SettingDefinitions.RandomSeed))
+                TopLevelPackage.AddSetting(SettingDefinitions.RandomSeed.WithValue(new Random().Next()));
             LoadedTests = TestCentricRunner.Explore(TopLevelPackage);
-            TestCentricProject.InitRandomSeed();
 
             if (LoadedTests == null)
             {
