@@ -582,8 +582,6 @@ namespace TestCentric.Gui.Presenters
 
         private bool NeedsExpansion(TreeNode treeNode)
         {
-            Graphics g = Graphics.FromHwnd(_view.TreeView.Handle);
-            int widthNeeded = (int)g.MeasureString(treeNode.Text, _view.TreeView.Font).Width - 4;
             return treeNode.Bounds.Right > _view.TreeView.ClientRectangle.Right;
         }
 
