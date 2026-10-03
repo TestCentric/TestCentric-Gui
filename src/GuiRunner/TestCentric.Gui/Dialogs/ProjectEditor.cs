@@ -51,8 +51,6 @@ namespace TestCentric.Gui.Dialogs
             _newProject = true;
 
             InitializeComponent();
-
-            Font = _model.Settings.Gui.Font;
         }
 
         public string ProjectName => projectNameTextBox.Text;

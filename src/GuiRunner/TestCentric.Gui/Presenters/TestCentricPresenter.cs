@@ -76,8 +76,6 @@ namespace TestCentric.Gui.Presenters
 
             ImageSetManager = new ImageSetManager(_model, _view);
 
-            _view.Font = _settings.Gui.Font;
-
             UpdateViewCommands();
             UpdateRunSelectedTestsTooltip();
             UpdateSaveResultFormatsMenuItem();
@@ -368,46 +366,6 @@ namespace TestCentric.Gui.Presenters
 
             _view.ExitCommand.Execute += () => _view.Close();
 
-            _view.IncreaseFontCommand.Execute += () =>
-            {
-                applyFont(IncreaseFont(_settings.Gui.Font));
-            };
-
-            _view.DecreaseFontCommand.Execute += () =>
-            {
-                applyFont(DecreaseFont(_settings.Gui.Font));
-            };
-
-            _view.ChangeFontCommand.Execute += () =>
-            {
-                Font currentFont = _settings.Gui.Font;
-                Font newFont = _view.DialogManager.SelectFont(currentFont);
-                if (newFont != _settings.Gui.Font)
-                    applyFont(newFont);
-            };
-
-            _view.DialogManager.ApplyFont += (font) => applyFont(font);
-
-            _view.RestoreFontCommand.Execute += () =>
-            {
-                applyFont(Form.DefaultFont);
-            };
-
-            _view.IncreaseFixedFontCommand.Execute += () =>
-            {
-                _settings.Gui.FixedFont = IncreaseFont(_settings.Gui.FixedFont);
-            };
-
-            _view.DecreaseFixedFontCommand.Execute += () =>
-            {
-                _settings.Gui.FixedFont = DecreaseFont(_settings.Gui.FixedFont);
-            };
-
-            _view.RestoreFixedFontCommand.Execute += () =>
-            {
-                _settings.Gui.FixedFont = new Font(FontFamily.GenericMonospace, 8.0f);
-            };
-
             _view.RunAllButton.Execute += RunAllTests;
 
             _view.RunSelectedButton.Execute += RunSelectedTests;
@@ -437,7 +395,6 @@ namespace TestCentric.Gui.Presenters
             {
                 using (var extensionsDialog = new ExtensionDialog(_model.Services.GetService<IExtensionService>()))
                 {
-                    extensionsDialog.Font = _settings.Gui.Font;
                     extensionsDialog.ShowDialog();
                 }
             };
@@ -542,7 +499,6 @@ namespace TestCentric.Gui.Presenters
 
             using (var dlg = new TestParametersDialog())
             {
-                dlg.Font = _settings.Gui.Font;
                 dlg.StartPosition = FormStartPosition.CenterParent;
 
                 if (_model.TopLevelPackage.Settings.HasSetting(SettingDefinitions.TestParametersDictionary))
@@ -739,11 +695,6 @@ namespace TestCentric.Gui.Presenters
             _model.TestCentricProject.SetTopLevelSetting(SettingDefinitions.RunAsX86.WithValue(_view.RunAsX86.Checked));
         }
 
-        private void applyFont(Font font)
-        {
-            _settings.Gui.Font = _view.Font = font;
-        }
-
         private void SetGuiLayout()
         {
             // Configure the GUI
@@ -770,16 +721,6 @@ namespace TestCentric.Gui.Presenters
                 intersect |= myArea.IntersectsWith(screen.WorkingArea);
             }
             return intersect;
-        }
-
-        private static Font IncreaseFont(Font font)
-        {
-            return new Font(font.FontFamily, font.SizeInPoints * 1.2f, font.Style);
-        }
-
-        private static Font DecreaseFont(Font font)
-        {
-            return new Font(font.FontFamily, font.SizeInPoints / 1.2f, font.Style);
         }
 
         private LongRunningOperationDisplay? _longRunningOperation;

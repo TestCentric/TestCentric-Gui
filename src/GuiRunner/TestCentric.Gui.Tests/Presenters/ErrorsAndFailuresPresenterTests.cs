@@ -115,13 +115,6 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
-        public void WhenPresenterIsCreated_FontIsSetToDefault()
-        {
-            var font = _settings.Gui.FixedFont;
-            _view.Received().SetFixedFont(font);
-        }
-
-        [Test]
         public void WhenPresenterIsCreated_SplitterPositionIsSet()
         {
             int split = _settings.Gui.ErrorDisplay.SplitterPosition;
@@ -157,17 +150,6 @@ namespace TestCentric.Gui.Presenters
         {
             bool enabled = _settings.Gui.ErrorDisplay.ToolTipsEnabled;
             _view.Received().EnableToolTips = enabled;
-        }
-
-        [Test]
-        public void WhenFixedFontSettingChanges_ViewIsUpdated()
-        {
-            _view.ClearReceivedCalls();
-            var newFont = new Font(FontFamily.GenericMonospace, 12.0f);
-            _settings.Gui.FixedFont.Returns(newFont);
-            _settings.Changed += Raise.Event<SettingsEventHandler>(this, new SettingsEventArgs("TestCentric.Gui.FixedFont"));
-
-            _view.Received().SetFixedFont(newFont);
         }
 
         [Test]
