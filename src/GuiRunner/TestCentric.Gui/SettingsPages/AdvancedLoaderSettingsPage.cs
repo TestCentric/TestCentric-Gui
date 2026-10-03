@@ -93,6 +93,15 @@ namespace TestCentric.Gui.SettingsPages
         {
             e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
         }
+
+        private void randomSeedTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (randomSeedCheckBox.Checked && !int.TryParse(randomSeedTextBox.Text, out _))
+            {
+                MessageDisplay.Error("Random Seed must be a valid integer.");
+                e.Cancel = true;
+            }
+        }
     }
 }
 

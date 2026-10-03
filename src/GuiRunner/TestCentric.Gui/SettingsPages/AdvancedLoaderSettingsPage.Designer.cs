@@ -42,6 +42,7 @@ namespace TestCentric.Gui.SettingsPages
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.principalPolicyCheckBox = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -57,7 +58,9 @@ namespace TestCentric.Gui.SettingsPages
             this.randomSeedTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.currentRandomSeedTextBox = new System.Windows.Forms.TextBox();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numberOfAgentsUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // principalPolicyCheckBox
@@ -187,6 +190,7 @@ namespace TestCentric.Gui.SettingsPages
             this.randomSeedTextBox.Size = new System.Drawing.Size(66, 20);
             this.randomSeedTextBox.TabIndex = 48;
             this.randomSeedTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.randomSeedTextBox_KeyPress);
+            this.randomSeedTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.randomSeedTextBox_Validating);
             // 
             // label3
             // 
@@ -204,6 +208,10 @@ namespace TestCentric.Gui.SettingsPages
             this.currentRandomSeedTextBox.Name = "currentRandomSeedTextBox";
             this.currentRandomSeedTextBox.Size = new System.Drawing.Size(66, 20);
             this.currentRandomSeedTextBox.TabIndex = 51;
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
             // 
             // AdvancedLoaderSettingsPage
             // 
@@ -224,6 +232,7 @@ namespace TestCentric.Gui.SettingsPages
             this.Controls.Add(this.groupBox1);
             this.Name = "AdvancedLoaderSettingsPage";
             ((System.ComponentModel.ISupportInitialize)(this.numberOfAgentsUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -236,5 +245,6 @@ namespace TestCentric.Gui.SettingsPages
         private TextBox randomSeedTextBox;
         private Label label3;
         private TextBox currentRandomSeedTextBox;
+        private ErrorProvider errorProvider1;
     }
 }
