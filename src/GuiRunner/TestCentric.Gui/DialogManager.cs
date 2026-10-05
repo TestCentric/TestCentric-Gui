@@ -109,24 +109,6 @@ namespace TestCentric.Gui.Views
                 : null;
         }
 
-        public Font SelectFont(Font currentFont)
-        {
-            FontDialog dlg = new FontDialog();
-            dlg.FontMustExist = true;
-            dlg.Font = currentFont;
-            dlg.MinSize = 6;
-            dlg.MaxSize = 12;
-            dlg.AllowVectorFonts = false;
-            dlg.ScriptsOnly = true;
-            dlg.ShowEffects = false;
-            dlg.ShowApply = true;
-            dlg.Apply += (s, e) => ApplyFont?.Invoke(currentFont = dlg.Font);
-
-            return dlg.ShowDialog() == DialogResult.OK ? dlg.Font : currentFont;
-        }
-
-        public event ApplyFontHandler? ApplyFont;
-
         #endregion
 
         #region Helper Methods

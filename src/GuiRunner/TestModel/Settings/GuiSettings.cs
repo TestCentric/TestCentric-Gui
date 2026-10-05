@@ -68,22 +68,6 @@ namespace TestCentric.Gui.Model.Settings
         }
 
         [UserScopedSetting]
-        [DefaultSettingValue("Microsoft Sans Serif, 8.25pt")]
-        public Font Font
-        {
-            get { return (Font)this[nameof(Font)]; }
-            set { this[nameof(Font)] = value; }
-        }
-
-        [UserScopedSetting]
-        [DefaultSettingValue("Courier New, 8.0pt")]
-        public Font FixedFont
-        {
-            get { return (Font)this[nameof(FixedFont)]; }
-            set { this[nameof(FixedFont)] = value; }
-        }
-
-        [UserScopedSetting]
         [DefaultSettingValue("Off")]
         public InternalTraceLevel InternalTraceLevel
         {
