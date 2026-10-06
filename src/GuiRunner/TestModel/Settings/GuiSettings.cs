@@ -28,10 +28,6 @@ namespace TestCentric.Gui.Model.Settings
 
         bool RerunOnChange { get; set; }
 
-        Font Font { get; set; }
-
-        Font FixedFont { get; set; }
-
         InternalTraceLevel InternalTraceLevel { get; set; }
     }
 
@@ -69,22 +65,6 @@ namespace TestCentric.Gui.Model.Settings
         {
             get { return (bool)this[nameof(RerunOnChange)]; }
             set { this[nameof(RerunOnChange)] = value; }
-        }
-
-        [UserScopedSetting]
-        [DefaultSettingValue("Microsoft Sans Serif, 8.25pt")]
-        public Font Font
-        {
-            get { return (Font)this[nameof(Font)]; }
-            set { this[nameof(Font)] = value; }
-        }
-
-        [UserScopedSetting]
-        [DefaultSettingValue("Courier New, 8.0pt")]
-        public Font FixedFont
-        {
-            get { return (Font)this[nameof(FixedFont)]; }
-            set { this[nameof(FixedFont)] = value; }
         }
 
         [UserScopedSetting]

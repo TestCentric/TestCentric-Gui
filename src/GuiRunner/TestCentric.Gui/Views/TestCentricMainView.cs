@@ -50,23 +50,6 @@ namespace TestCentric.Gui.Views
             RecentFilesMenu = new PopupMenuElement(recentFilesMenu);
             ExitCommand = new CommandMenuElement(exitMenuItem);
 
-            // Initialize View Menu Commands
-            IncreaseFontCommand = new CommandMenuElement(increaseFontMenuItem);
-            DecreaseFontCommand = new CommandMenuElement(decreaseFontMenuItem);
-            ChangeFontCommand = new CommandMenuElement(fontChangeMenuItem);
-            RestoreFontCommand = new CommandMenuElement(defaultFontMenuItem);
-            IncreaseFixedFontCommand = new CommandMenuElement(increaseFixedFontMenuItem);
-            DecreaseFixedFontCommand = new CommandMenuElement(decreaseFixedFontMenuItem);
-            RestoreFixedFontCommand = new CommandMenuElement(restoreFixedFontMenuItem);
-
-#if DISABLE_FONT_SETTING
-            guiFontMenuItem.Visible = fixedFontMenuItem.Visible = false;
-#endif
-
-#if DISABLE_FONT_SETTING
-            viewMenu.Visible = false;
-#endif
-
             // Initialize Tools Menu Comands
             ToolsMenu = new PopupMenuElement(toolsMenu);
             SaveResultsCommand = new PopupMenuElement(saveResultsMenuItem);
@@ -148,15 +131,6 @@ namespace TestCentric.Gui.Views
         public IPopup RecentProjectsMenu { get; }
         public IPopup RecentFilesMenu { get; }
         public ICommand ExitCommand { get; }
-
-        // View Menu Items
-        public ICommand IncreaseFontCommand { get; }
-        public ICommand DecreaseFontCommand { get; }
-        public ICommand ChangeFontCommand { get; }
-        public ICommand RestoreFontCommand { get; }
-        public ICommand IncreaseFixedFontCommand { get; }
-        public ICommand DecreaseFixedFontCommand { get; }
-        public ICommand RestoreFixedFontCommand { get; }
 
         // Tools Menu Items
         public IPopup ToolsMenu { get; }

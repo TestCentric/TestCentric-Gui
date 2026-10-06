@@ -17,7 +17,6 @@ namespace TestCentric.Gui.Dialogs
         {
             using (TreeBasedSettingsDialog dialog = new TreeBasedSettingsDialog(presenter, model))
             {
-                dialog.Font = model.Settings.Gui.Font;
                 dialog.SettingsPages.AddRange(pages);
                 dialog.ShowDialog();
             }

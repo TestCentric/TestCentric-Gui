@@ -29,6 +29,5 @@ namespace TestCentric.Gui.Views
 
         void Clear();
         void AddResult(string status, string testName, string? message, string? stackTrace);
-        void SetFixedFont(Font font);
     }
 }

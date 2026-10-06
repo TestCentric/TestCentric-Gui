@@ -33,7 +33,6 @@ namespace TestCentric.Gui.Presenters
             _model = model;
             _settings = model.Settings;
 
-            _view.SetFixedFont(_settings.Gui.FixedFont);
             _view.SplitterPosition = _settings.Gui.ErrorDisplay.SplitterPosition;
             _view.EnableToolTips = _settings.Gui.ErrorDisplay.ToolTipsEnabled;
 
@@ -74,12 +73,6 @@ namespace TestCentric.Gui.Presenters
 
                 _view.Header = e.TestItem.Name;
                 UpdateDisplay();
-            };
-
-            _model.Settings.Changed += (object sender, SettingsEventArgs e) =>
-            {
-                if (e.SettingName == "TestCentric.Gui.FixedFont")
-                    _view.SetFixedFont(_settings.Gui.FixedFont);
             };
 
             // Events that arise in the view

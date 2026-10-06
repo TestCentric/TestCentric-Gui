@@ -77,20 +77,6 @@ namespace TestCentric.Gui.Views
 
         public bool EnableToolTips { get; set; }
 
-        public void SetFixedFont(Font font)
-        {
-            if (detailList.Font == font)
-                return;
-
-            InvokeIfRequired(() =>
-            {
-                detailList.Font = font;
-                stackTraceDisplay.Font = font;
-                sourceCode.CodeDisplayFont = font;
-                RefillDetailList();
-            });
-        }
-
         public int SplitterPosition
         {
             get { return tabSplitter.SplitPosition; }

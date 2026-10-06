@@ -8,8 +8,6 @@ using System.Drawing;
 
 namespace TestCentric.Gui.Views
 {
-    public delegate void ApplyFontHandler(Font font);
-
     public interface IDialogManager
     {
         string[] SelectMultipleFiles(string title, string filter);
@@ -23,9 +21,5 @@ namespace TestCentric.Gui.Views
         string? GetFileSavePath(string title, string filter, string initialDirectory, string? suggestedName, out int selectedFilterIndex);
 
         string? GetFolderPath(string message, string initialPath);
-
-        Font SelectFont(Font currentFont);
-
-        event ApplyFontHandler ApplyFont;
     }
 }
