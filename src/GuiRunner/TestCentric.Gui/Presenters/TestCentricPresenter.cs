@@ -509,7 +509,7 @@ namespace TestCentric.Gui.Presenters
                 }
 
                 if (dlg.ShowDialog(_view as IWin32Window) == DialogResult.OK)
-                    _model.TestCentricProject.SetTopLevelSetting(SettingDefinitions.TestParametersDictionary.WithValue(dlg.Parameters));
+                    _model.TestCentricProject.ApplySetting(SettingDefinitions.TestParametersDictionary.WithValue(dlg.Parameters));
             }
         }
 
