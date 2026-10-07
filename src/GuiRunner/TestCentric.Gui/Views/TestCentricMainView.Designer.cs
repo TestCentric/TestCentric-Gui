@@ -508,8 +508,8 @@ namespace TestCentric.Gui.Views
             // rightPanel
             // 
             this.rightPanel.BackColor = System.Drawing.SystemColors.Control;
-            this.rightPanel.Controls.Add(this.progressPanel);
             this.rightPanel.Controls.Add(this.resultTabs);
+            this.rightPanel.Controls.Add(this.progressPanel);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightPanel.Location = new System.Drawing.Point(246, 48);
             this.rightPanel.Name = "rightPanel";
