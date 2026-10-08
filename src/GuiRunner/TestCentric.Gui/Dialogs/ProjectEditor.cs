@@ -6,7 +6,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using TestCentric.Gui.Model;
 using TestCentric.Gui.Views;
@@ -26,12 +25,13 @@ namespace TestCentric.Gui.Dialogs
             : this(view, model)
         {
             _newProject = false;
+            Text = "Edit Project";              // Text in the title bar
 
             var projectPath = project?.ProjectPath;
 
             if (projectPath is not null)
             {
-                if (!_model.IsWrapperProjectPath(projectPath))
+                if (TestCentricProject.IsProjectFile(projectPath))
                     projectNameTextBox.Text = Path.GetFileNameWithoutExtension(projectPath);
                 projectDirectoryTextBox.Text = Path.GetDirectoryName(projectPath);
             }
@@ -121,7 +121,7 @@ namespace TestCentric.Gui.Dialogs
         private void createProjectButton_Click(object sender, EventArgs e)
         {
             // Validate the project name
-            if (_model.IsWrapperProjectPath(ProjectPath))
+            if (!TestCentricProject.IsProjectFile(ProjectPath))
             {
                 var ext = Path.GetExtension(ProjectName);
                 _view.MessageDisplay.Error($"Project names ending in {ext} are reserved for internal use.");

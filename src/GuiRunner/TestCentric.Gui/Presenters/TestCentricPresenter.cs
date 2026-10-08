@@ -110,10 +110,8 @@ namespace TestCentric.Gui.Presenters
             void UpdateTitleBar()
             {
                 var projectPath = _model.TestCentricProject?.ProjectPath;
-                _view.Title = projectPath is not null
-                    ? projectPath is not null && _model.IsWrapperProjectPath(projectPath)
-                        ? $"TestCentric - {Path.GetFileNameWithoutExtension(projectPath)}"
-                        : $"TestCentric - {Path.GetFileName(projectPath)}"
+                _view.Title = projectPath is not null ?
+                    $"TestCentric - {Path.GetFileName(projectPath)}"
                     : "TestCentric Runner for NUnit";
             }
 
@@ -235,7 +233,7 @@ namespace TestCentric.Gui.Presenters
                         if (TestCentricProject.IsProjectFile(file))
                             _model.OpenExistingProject(file);
                         else
-                            _model.OpenOrCreateWrapperProject(_options);
+                            _model.CreateNewProject(_options.InputFiles[0], [_options.InputFiles[0]]);
                         break;
                     default: // Command-line with multiple input files
                         _model.CreateNewProject("TestProject.tcproj", _options);
@@ -286,9 +284,9 @@ namespace TestCentric.Gui.Presenters
 
                 var projectPath = _model.TestCentricProject?.ProjectPath;
                 _view.EditProjectCommand.Enabled = projectPath is not null;
-                _view.EditProjectCommand.Text = projectPath is not null && _model.IsWrapperProjectPath(projectPath)
-                    ? "Add Test Files..."
-                    : "Edit Project...";
+                _view.EditProjectCommand.Text = projectPath is not null && TestCentricProject.IsProjectFile(projectPath)
+                    ? "Edit Project..."
+                    : "Add Test Files...";
 
                 _view.ReloadTestsCommand.Enabled = isPackageLoaded && !isTestRunning;
 
@@ -312,7 +310,7 @@ namespace TestCentric.Gui.Presenters
             {
                 string? file = _view.DialogManager.GetFileOpenPath("Open Test File", _view.DialogManager.CreateOpenTestFileFilter(_model.NUnitProjectSupport, _model.VisualStudioSupport));
                 if (file != null)
-                    _model.OpenOrCreateWrapperProject(file);
+                    _model.CreateNewProject(file, [file]);
             };
 
             _view.SaveProjectCommand.Execute += () =>
@@ -320,19 +318,15 @@ namespace TestCentric.Gui.Presenters
                 Guard.OperationValid(_model.IsProjectLoaded, "No project is currently loaded");
                 var projectPath = _model.TestCentricProject.ProjectPath;
 
-                if (string.IsNullOrEmpty(projectPath))
-                    projectPath = _model.TestCentricProject.TestFiles.Count == 1
-                        ? _model.TestCentricProject.TestFiles[0] + ".tcproj"
-                        : _view.DialogManager.GetFileSavePath(
-                            "Save TestCentric Project",
-                            "TestCentric Project(*.tcproj) | *.tcproj",
-                            _model.WorkDirectory, null);
-
-                if (projectPath is not null)
+                if (string.IsNullOrEmpty(projectPath) || !TestCentricProject.IsProjectFile(projectPath))
+                    SaveAs();
+                else
                     _model.SaveProject(projectPath);
             };
 
-            _view.SaveAsCommand.Execute += () =>
+            _view.SaveAsCommand.Execute += SaveAs;
+
+            void SaveAs()
             {
                 Guard.OperationValid(_model.IsProjectLoaded, "No project is currently loaded");
 
@@ -354,7 +348,7 @@ namespace TestCentric.Gui.Presenters
                     _model.Settings.Gui.RecentFiles.Latest = projectPath;
                     UpdateTitleBar();
                 }
-            };
+            }
 
             _view.CloseProjectCommand.Execute += () => _model.CloseProject();
 

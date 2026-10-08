@@ -355,53 +355,6 @@ namespace TestCentric.Gui.Model
             return TestCentricProject;
         }
 
-        public void OpenOrCreateWrapperProject(string filePath)
-        {
-            var wrapperProjectPath = filePath + ".tcproj";
-            if (File.Exists(wrapperProjectPath))
-                OpenExistingProject(wrapperProjectPath);
-            else
-                CreateNewProject(wrapperProjectPath, [filePath]);
-        }
-
-        public void OpenOrCreateWrapperProject(GuiOptions options)
-        {
-            int count = options.InputFiles.Count;
-            Guard.ArgumentValid(count == 1, $"Cannot create a wrapper project with {count} input files", nameof(options));
-
-            var wrapperProjectPath = options.InputFiles[0] + ".tcproj";
-            var project = File.Exists(wrapperProjectPath)
-                ? OpenExistingProject(wrapperProjectPath, options)
-                : CreateNewProject(wrapperProjectPath, options);
-        }
-
-        private HashSet<string>?_knownTestFileExtensions;
-        private HashSet<string> KnownTestFileExtensions
-        {
-            get
-            {
-                // NUnit and VisualStudio projects are considered "known" even if the
-                // extensions are not installed to avoid conflicts if installed later.
-                if (_knownTestFileExtensions == null)
-                {
-                    _knownTestFileExtensions = new HashSet<string>(
-                        [".dll", ".exe", ".nunit", ".sln", ".csproj", ".vbproj", ".fsproj", ".vjsproj", ".vcproj"]);
-                    foreach (string ext in SupportedProjectExtensions)
-                        _knownTestFileExtensions.Add(ext);
-                }
-
-                return _knownTestFileExtensions;
-            }
-        }
-
-        public bool IsWrapperProjectPath(string projectPath)
-        {
-            if (projectPath == null) return false;
-
-            var ext = Path.GetExtension(Path.GetFileNameWithoutExtension(projectPath));
-            return ext is not null && KnownTestFileExtensions.Contains(ext.ToLower());
-        }
-
         public void AddTests(IEnumerable<string> fileNames)
         {
             if (!IsProjectLoaded)
@@ -469,13 +422,7 @@ namespace TestCentric.Gui.Model
             if (TestCentricProject.IsProjectFile(filePath))
                 OpenExistingProject(filePath);
             else if (IsSupportedTestFile(filePath))
-            {
-                string projectFilePath = filePath + ".tcproj";
-                if (File.Exists(projectFilePath))
-                    OpenExistingProject(projectFilePath);
-                else
-                    OpenOrCreateWrapperProject(filePath);
-            }
+                CreateNewProject(filePath, [filePath]);
             else
                 throw new Exception("Invalid Test File type: {filename}");
         }
@@ -510,11 +457,10 @@ namespace TestCentric.Gui.Model
 
             if (filename is not null)
                 TestCentricProject.SaveAs(filename);
-            else
+            else if (TestCentricProject.IsProjectFile(TestCentricProject.ProjectPath))
                 TestCentricProject.Save();
 
-            if (!IsWrapperProjectPath(TestCentricProject.ProjectPath))
-                RecentFiles.Latest = TestCentricProject.ProjectPath;
+            RecentFiles.Latest = TestCentricProject.ProjectPath;
         }
 
         public void CloseProject()
@@ -567,11 +513,8 @@ namespace TestCentric.Gui.Model
 
             // TODO: Should we throw an exception if project path is null?
             var projectPath = TestCentricProject.ProjectPath;
-            string? directoryName = Path.GetDirectoryName(projectPath);
-            if (projectPath is not null && directoryName is not null)
-                RecentFiles.Latest = IsWrapperProjectPath(projectPath)
-                    ? Path.Combine(directoryName, Path.GetFileNameWithoutExtension(projectPath))
-                    : projectPath;
+            if (projectPath is not null)
+                RecentFiles.Latest = projectPath;
         }
 
         private Dictionary<string, TestNode> _testsById = new Dictionary<string, TestNode>();

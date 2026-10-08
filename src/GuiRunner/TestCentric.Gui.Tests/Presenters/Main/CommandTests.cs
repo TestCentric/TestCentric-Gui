@@ -111,7 +111,8 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void OpenTestFileCommand_NoFileSelected_DoesNotCreateProject()
         {
-            _view.DialogManager.SelectMultipleFiles(null!, null!).ReturnsForAnyArgs(NO_FILES_SELECTED);
+            string? selectedFile = null;
+            _view.DialogManager.GetFileOpenPath(null!, null!).ReturnsForAnyArgs(selectedFile);
 
             _view.OpenTestFileCommand.Execute += Raise.Event<CommandHandler>();
 
