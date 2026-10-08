@@ -342,12 +342,15 @@ namespace TestCentric.Gui.Presenters
 
                 projectPath = _view.DialogManager.GetFileSavePath(
                         "Save As TestCentric Project", "TestCentric Project(*.tcproj) | *.tcproj", initialDirectory, suggestedFileName);
-                if (projectPath is not null)
-                {
-                    _model.SaveProject(projectPath);
-                    _model.Settings.Gui.RecentFiles.Latest = projectPath;
-                    UpdateTitleBar();
-                }
+                if (string.IsNullOrEmpty(projectPath))
+                    return;
+
+                if (!TestCentricProject.IsProjectFile(projectPath))
+                    projectPath += ".tcproj";
+
+                _model.SaveProject(projectPath);
+                _model.Settings.Gui.RecentFiles.Latest = projectPath;
+                UpdateTitleBar();
             }
 
             _view.CloseProjectCommand.Execute += () => _model.CloseProject();
