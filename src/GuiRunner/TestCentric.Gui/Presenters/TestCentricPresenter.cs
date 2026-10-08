@@ -346,7 +346,10 @@ namespace TestCentric.Gui.Presenters
                     return;
 
                 if (!TestCentricProject.IsProjectFile(projectPath))
-                    projectPath += ".tcproj";
+                {
+                    _view.MessageDisplay.Info("The project filename must end in .tcproj. Please select a valid filename.");
+                    return;
+                }
 
                 _model.SaveProject(projectPath);
                 _model.Settings.Gui.RecentFiles.Latest = projectPath;
