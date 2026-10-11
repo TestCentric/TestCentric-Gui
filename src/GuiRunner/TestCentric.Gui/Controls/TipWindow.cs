@@ -9,7 +9,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using NUnit;
-using TestCentric.Gui.Views;
 
 namespace TestCentric.Gui.Controls
 {
@@ -320,16 +319,23 @@ namespace TestCentric.Gui.Controls
 
         protected override void WndProc(ref Message m)
         {
-            if (_control is Label)
-                if (m.Msg == WM_LBUTTONDOWN ||
-                    m.Msg == WM_RBUTTONDOWN ||
-                    m.Msg == WM_MBUTTONDOWN)
-                {
-                    if (m.Msg != WM_LBUTTONDOWN)
-                        Hide();
-                    SendMessage(_control.Handle, m.Msg, m.WParam, m.LParam);
-                    return;
-                }
+            if (_control is Label && (m.Msg == WM_LBUTTONDOWN || m.Msg == WM_RBUTTONDOWN || m.Msg == WM_MBUTTONDOWN))
+            {
+                if (m.Msg != WM_LBUTTONDOWN)
+                    Hide();
+                SendMessage(_control.Handle, m.Msg, m.WParam, m.LParam);
+                return;
+            }
+            else if (_control is TreeView && (m.Msg == WM_LBUTTONDOWN || m.Msg == WM_RBUTTONDOWN || m.Msg == WM_MBUTTONDOWN))
+            {
+                // Forward the mouse click to the TreeView and transforming coordinates to the TreeView's client coordinates
+                Point screenPoint = Cursor.Position;
+                Point treeViewPoint = _control.PointToClient(screenPoint);
+                IntPtr lParam = (IntPtr)((treeViewPoint.Y << 16) | (treeViewPoint.X & 0xFFFF));
+
+                SendMessage(_control.Handle, m.Msg, m.WParam, lParam);
+                return;
+            }
 
             base.WndProc(ref m);
         }
