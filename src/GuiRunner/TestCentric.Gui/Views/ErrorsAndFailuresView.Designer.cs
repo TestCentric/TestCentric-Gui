@@ -54,7 +54,7 @@ namespace TestCentric.Gui.Views
             this.header.Location = new System.Drawing.Point(0, 0);
             this.header.Margin = new System.Windows.Forms.Padding(0);
             this.header.Name = "header";
-            this.header.Padding = new System.Windows.Forms.Padding(2);
+            this.header.Padding = new System.Windows.Forms.Padding(1);
             this.header.Size = new System.Drawing.Size(496, 18);
             this.header.TabIndex = 0;
             this.header.Text = "Test name";
@@ -126,7 +126,6 @@ namespace TestCentric.Gui.Views
             this.errorBrowser.Location = new System.Drawing.Point(0, 0);
             this.errorBrowser.Name = "errorBrowser";
             this.errorBrowser.SelectedDisplay = null;
-            this.errorBrowser.Size = new System.Drawing.Size(496, 270);
             this.errorBrowser.StackTraceSource = null;
             this.errorBrowser.TabIndex = 4;
             // 
@@ -136,9 +135,8 @@ namespace TestCentric.Gui.Views
             this.panel1.Controls.Add(this.errorBrowser);
             this.panel1.Controls.Add(this.tabSplitter);
             this.panel1.Controls.Add(this.flowLayoutPanel);
-            this.panel1.Location = new System.Drawing.Point(0, 120);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(496, 230);
+            this.panel1.Size = new System.Drawing.Size(490, 275);
             this.panel1.TabIndex = 2;
             this.panel1.Visible = false;
             // 

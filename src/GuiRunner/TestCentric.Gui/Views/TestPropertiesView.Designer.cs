@@ -43,7 +43,7 @@ namespace TestCentric.Gui.Views
             this.header.Location = new System.Drawing.Point(0, 0);
             this.header.Margin = new System.Windows.Forms.Padding(0);
             this.header.Name = "header";
-            this.header.Padding = new System.Windows.Forms.Padding(2);
+            this.header.Padding = new System.Windows.Forms.Padding(1);
             this.header.Size = new System.Drawing.Size(525, 18);
             this.header.TabIndex = 0;
             // 

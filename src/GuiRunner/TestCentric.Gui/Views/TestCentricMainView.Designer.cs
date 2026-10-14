@@ -508,8 +508,8 @@ namespace TestCentric.Gui.Views
             // rightPanel
             // 
             this.rightPanel.BackColor = System.Drawing.SystemColors.Control;
-            this.rightPanel.Controls.Add(this.resultTabs);
             this.rightPanel.Controls.Add(this.progressPanel);
+            this.rightPanel.Controls.Add(this.resultTabs);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightPanel.Location = new System.Drawing.Point(246, 48);
             this.rightPanel.Name = "rightPanel";
@@ -545,14 +545,15 @@ namespace TestCentric.Gui.Views
             // resultTabs
             // 
             this.resultTabs.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.resultTabs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.resultTabs.Controls.Add(this.propertiesTab);
             this.resultTabs.Controls.Add(this.errorTab);
             this.resultTabs.Controls.Add(this.outputTab);
-            this.resultTabs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.resultTabs.Location = new System.Drawing.Point(0, 0);
+            this.resultTabs.Location = new System.Drawing.Point(0, 30);
             this.resultTabs.Name = "resultTabs";
             this.resultTabs.SelectedIndex = 0;
-            this.resultTabs.Size = new System.Drawing.Size(498, 359);
+            this.resultTabs.Size = new System.Drawing.Size(498, 329);
             this.resultTabs.TabIndex = 2;
             // 
             // propertiesTab
