@@ -37,6 +37,18 @@ jobs:
             9.0.x
             10.0.x
   
+      # Local dotnet tools are restored into the NuGet global packages folder,
+      # so a single cache covers both the project packages and the tools.
+      # An exact key hit means nothing new to download; on a partial hit the
+      # restore only fetches what changed and the cache is saved under the new key.
+      - name: 📦 Cache NuGet packages and dotnet tools
+        uses: actions/cache@v6.1.0
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('NuGet.config', 'Directory.Packages.props', '**/*.csproj', '.config/dotnet-tools.json') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
       - name: 🔧 Install dotnet tools
         run: dotnet tool restore
 
