@@ -39,13 +39,14 @@ jobs:
   
       # Local dotnet tools are restored into the NuGet global packages folder,
       # so a single cache covers both the project packages and the tools.
-      # An exact key hit means nothing new to download; on a partial hit the
+      # This workflow is part of the key because the SDKs installed above decide
+      # which reference packs NuGet has to download. An exact key hit means nothing new to download; on a partial hit the
       # restore only fetches what changed and the cache is saved under the new key.
       - name: 📦 Cache NuGet packages and dotnet tools
         uses: actions/cache@v6.1.0
         with:
           path: ~/.nuget/packages
-          key: nuget-${{ runner.os }}-${{ hashFiles('NuGet.config', '**/*.props', '**/*.csproj', '.config/dotnet-tools.json') }}
+          key: nuget-${{ runner.os }}-${{ hashFiles('.github/workflows/TestCentric.Gui.CI.yml', 'NuGet.config', '**/*.props', '**/*.csproj', '.config/dotnet-tools.json') }}
           restore-keys: |
             nuget-${{ runner.os }}-
 
