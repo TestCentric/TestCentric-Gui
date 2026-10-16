@@ -45,7 +45,7 @@ jobs:
         uses: actions/cache@v6.1.0
         with:
           path: ~/.nuget/packages
-          key: nuget-${{ runner.os }}-${{ hashFiles('NuGet.config', 'Directory.Packages.props', '**/*.csproj', '.config/dotnet-tools.json') }}
+          key: nuget-${{ runner.os }}-${{ hashFiles('NuGet.config', '**/*.props', '**/*.csproj', '.config/dotnet-tools.json') }}
           restore-keys: |
             nuget-${{ runner.os }}-
 
