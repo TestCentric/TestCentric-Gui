@@ -52,6 +52,37 @@ namespace TestCentric.Gui.Presenters
             Assert.That(ids, Is.EqualTo(new string[] { "1", "3" }));
         }
 
+        [TestCase("Explicit", "Explicit", ExpectedResult = "Explicit")]
+        [TestCase("Explicit", "Ignored", ExpectedResult = null)]
+        [TestCase("Explicit", null, ExpectedResult = null)]
+        public string? GetCommonSkippedLabel(string? label1, string? label2)
+        {
+            var group = new TestGroup("FIXTURE");
+            group.Add(MakeTestNode("1", "Tom", "Explicit"));
+            group.Add(MakeTestNode("2", "Dick", "Explicit"));
+
+            var resultManager = Substitute.For<ITestResultManager>();
+            resultManager.GetResultForTest("1").Returns(MakeSkippedResult("1", label1));
+            resultManager.GetResultForTest("2").Returns(MakeSkippedResult("2", label2));
+
+            return group.GetCommonSkippedLabel(resultManager);
+        }
+
+        [Test]
+        public void GetCommonSkippedLabel_EmptyGroup_ReturnsNull()
+        {
+            var resultManager = Substitute.For<ITestResultManager>();
+
+            Assert.That(new TestGroup("EMPTY").GetCommonSkippedLabel(resultManager), Is.Null);
+        }
+
+        private ResultNode? MakeSkippedResult(string id, string? label)
+        {
+            return label != null
+                ? new ResultNode($"<test-case id='{id}' name='Test{id}' result='Skipped' label='{label}'/>")
+                : null;
+        }
+
         private TestNode MakeTestNode(string id, string name, string runState)
         {
             return new TestNode(string.Format("<test-case id='{0}' name='{1}' runstate='{2}'/>", id, name, runState));

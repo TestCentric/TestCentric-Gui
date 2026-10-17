@@ -601,7 +601,9 @@ namespace TestCentric.Gui.Presenters
                     ? testNode?.RunState.ToString()
                     : treeNode.ImageIndex > 0
                         ? _groupImageDescriptions[treeNode.ImageIndex]
-                        : null;
+                        // SkippedIndex is the same as InitIndex, so a group of skipped tests (e.g. an
+                        // Explicit fixture under the TestList strategy) has to be recognized by its results
+                        : (treeNode.Tag as TestGroup)?.GetCommonSkippedLabel(_model.TestResultManager);
 
             if (isPreviousRun)
             {
