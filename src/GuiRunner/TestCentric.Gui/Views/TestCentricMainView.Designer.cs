@@ -207,7 +207,7 @@ namespace TestCentric.Gui.Views
             this.displayFormatButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.displayFormatButton.Name = "displayFormatButton";
             this.displayFormatButton.Size = new System.Drawing.Size(23, 21);
-            this.displayFormatButton.ToolTipText = "Display Strategy";
+            this.displayFormatButton.ToolTipText = "Change Tree Layout";
             // 
             // showFilterButton
             // 
