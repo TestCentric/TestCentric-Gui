@@ -126,5 +126,28 @@ namespace TestCentric.Gui.Presenters
         }
 
         public void RemoveId(string id) => TestNodes.RemoveId(id);
+
+        /// <summary>
+        /// Returns the label shared by the results of all tests in the group, if all
+        /// of them were skipped with the same label (e.g. "Explicit"), otherwise null.
+        /// </summary>
+        public string? GetCommonSkippedLabel(ITestResultManager resultManager)
+        {
+            string? label = null;
+
+            foreach (TestNode test in this)
+            {
+                ResultNode? result = resultManager.GetResultForTest(test.Id);
+                if (result == null || result.Status != TestStatus.Skipped || string.IsNullOrEmpty(result.Label))
+                    return null;
+
+                if (label == null)
+                    label = result.Label;
+                else if (label != result.Label)
+                    return null;
+            }
+
+            return label;
+        }
     }
 }
