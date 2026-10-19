@@ -47,7 +47,7 @@ CodeRabbit reads this file as review guidance.
 
 - Work on a branch named `issue-NNNN` after the GitHub issue, and reference the issue in the PR.
 - Every issue closed by a PR goes in the milestone of the next release.
-- Every issue needs one of the labels listed in `GitReleaseManager.yaml`, which is the source;
-  release notes fail to build otherwise. Today these are Breaking Change, Feature, Enhancement,
-  Bug, Build and Documentation, which appear in the release notes, and Refactor, which does not.
+- Every issue needs one of the labels under `issue-labels-include` or `issue-labels-exclude` in
+  `GitReleaseManager.yaml`, or the release notes fail to build. Included labels, Build among
+  them, appear in the release notes; excluded ones, such as Refactor, do not.
 - One human review is expected before merging.
