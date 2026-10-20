@@ -488,10 +488,10 @@ namespace TestCentric.Gui.Model
             _lastTestRun = TestRunSpecification.Empty;
 
             if (!TopLevelPackage.Settings.HasSetting(SettingDefinitions.RandomSeed))
-                TopLevelPackage.AddSetting(SettingDefinitions.RandomSeed.WithValue(new Random().Next()), true);
+                TopLevelPackage.ApplySetting(SettingDefinitions.RandomSeed.WithValue(new Random().Next()), true);
             LoadedTests = TestCentricRunner.Explore(TopLevelPackage);
             if (!TopLevelPackage.Settings.HasSetting(SettingDefinitions.RandomSeed))
-                TopLevelPackage.AddSetting(SettingDefinitions.RandomSeed.WithValue(new Random().Next()), true);
+                TopLevelPackage.ApplySetting(SettingDefinitions.RandomSeed.WithValue(new Random().Next()), true);
 
             if (LoadedTests == null)
             {

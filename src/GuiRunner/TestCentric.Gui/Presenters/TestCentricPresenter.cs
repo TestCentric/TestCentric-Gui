@@ -681,7 +681,7 @@ namespace TestCentric.Gui.Presenters
         private void OnRunAsX86Changed()
         {
             Guard.OperationValid(_model.IsProjectLoaded, "No project is currently loaded");
-            _model.TopLevelPackage.ApplySetting(SettingDefinitions.RunAsX86.WithValue(_view.RunAsX86.Checked), recursive: false);
+            _model.TopLevelPackage.ApplySetting(SettingDefinitions.RunAsX86.WithValue(_view.RunAsX86.Checked), recursive: true);
         }
 
         private void SetGuiLayout()

@@ -9,15 +9,9 @@
     </PropertyGroup>
 	
 	<ItemGroup>
-
-		<PackageReference Include="NUnit.Common">
-		  <NoWarn></NoWarn>
-		</PackageReference>
+		<PackageReference Include="NUnit.Common" />
 		<PackageReference Include="NUnit.Engine" />
-		<PackageReference Include="NUnit.Extensibility">
-		  <NoWarn></NoWarn>
-		  <PrivateAssets>NU1603</PrivateAssets>
-		</PackageReference>
+		<PackageReference Include="NUnit.Extensibility" />
 	</ItemGroup>
 
 	<ItemGroup>
