@@ -60,7 +60,7 @@ namespace TestCentric.Gui
             if (parent != null)
                 parent.Nodes.Add(sibling);
             else
-                treeNode.TreeView.Nodes.Add(sibling);
+                treeNode.TreeView!.Nodes.Add(sibling);
         }
 
         #endregion
