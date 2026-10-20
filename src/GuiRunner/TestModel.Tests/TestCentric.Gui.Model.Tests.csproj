@@ -8,6 +8,14 @@
         <TargetFramework>net462</TargetFramework>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
+	
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <NoWarn>1701;1702;NU1603</NoWarn>
+    </PropertyGroup>
+	
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <NoWarn>1701;1702;NU1603</NoWarn>
+    </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\TestData\mock-assembly\mock-assembly.csproj" />
@@ -18,7 +26,10 @@
         <PackageReference Include="NSubstitute" />
         <PackageReference Include="NUnit" />
         <PackageReference Include="NUnitLite" />
-        <PackageReference Include="NUnit.Extensibility" />
+        <PackageReference Include="NUnit.Extensibility">
+          <PrivateAssets></PrivateAssets>
+          <NoWarn>NU1603</NoWarn>
+        </PackageReference>
 	    <PackageReference Include="XmlUnit.NUnit4.Constraints" />
     </ItemGroup>
 	

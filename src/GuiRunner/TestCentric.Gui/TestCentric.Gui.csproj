@@ -16,7 +16,9 @@
     </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NUnit.Common" />
+		<PackageReference Include="NUnit.Common">
+		  <NoWarn>NU1603</NoWarn>
+		</PackageReference>
 	</ItemGroup>
   
 	<ItemGroup>

@@ -84,10 +84,10 @@ namespace TestCentric.Gui.Dialogs
                     page.ApplySettings();
 
             foreach(PackageSetting setting in SubPackageSettingChanges)
-                Model.TestCentricProject?.ApplySetting(setting);
+                Model.TopLevelPackage?.ApplySetting(setting, recursive: true);
 
             foreach (PackageSetting setting in TopLevelPackageSettingChanges)
-                Model.TestCentricProject?.SetTopLevelSetting(setting);
+                Model.TopLevelPackage?.ApplySetting(setting, recursive: false);
         }
         #endregion
 

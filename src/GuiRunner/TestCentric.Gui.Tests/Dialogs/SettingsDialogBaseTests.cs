@@ -7,6 +7,7 @@ namespace TestCentric.Gui.Dialogs
 {
     using NSubstitute;
     using NUnit.Common;
+    using NUnit.Engine;
     using NUnit.Framework;
     using TestCentric.Gui.Model;
 
@@ -18,8 +19,8 @@ namespace TestCentric.Gui.Dialogs
         {
             // 1. Arrange
             ITestModel model = Substitute.For<ITestModel>();
-            TestCentricProject project = new TestCentricProject("MyProject");
-            model.TestCentricProject.Returns(project);
+            TestPackage package = new TestPackage();
+            model.TopLevelPackage.Returns(package);
 
             SettingsDialogBase settingsDialog = new SettingsDialogBase(null!, model);
             settingsDialog.SubPackageSettingChanges.Add(SettingDefinitions.DebugTests.WithValue(true));
@@ -28,26 +29,7 @@ namespace TestCentric.Gui.Dialogs
             settingsDialog.ApplySettings();
 
             // 3. Assert
-            Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.DebugTests.Name), Is.True);
-        }
-
-        [Test]
-        public void ApplySettings_SettingValueIsChanged_IsAppliedToProject()
-        {
-            // 1. Arrange
-            ITestModel model = Substitute.For<ITestModel>();
-            TestCentricProject project = new TestCentricProject("MyProject");
-            project.AddSetting(SettingDefinitions.DebugTests.WithValue(false));
-            model.TestCentricProject.Returns(project);
-
-            SettingsDialogBase settingsDialog = new SettingsDialogBase(null!, model);
-            settingsDialog.SubPackageSettingChanges.Add(SettingDefinitions.DebugTests.WithValue(true));
-
-            // 2. Act
-            settingsDialog.ApplySettings();
-
-            // 3. Assert
-            Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.DebugTests.Name), Is.True);
+            Assert.That(package.Settings.HasSetting(SettingDefinitions.DebugTests.Name), Is.True);
         }
 
         [Test]
@@ -55,8 +37,8 @@ namespace TestCentric.Gui.Dialogs
         {
             // 1. Arrange
             ITestModel model = Substitute.For<ITestModel>();
-            TestCentricProject project = new TestCentricProject("MyProject");
-            model.TestCentricProject.Returns(project);
+            TestPackage package = new TestPackage();
+            model.TopLevelPackage.Returns(package);
 
             SettingsDialogBase settingsDialog = new SettingsDialogBase(null!, model);
             settingsDialog.TopLevelPackageSettingChanges.Add(SettingDefinitions.DebugTests.WithValue(true));
@@ -65,7 +47,7 @@ namespace TestCentric.Gui.Dialogs
             settingsDialog.ApplySettings();
 
             // 3. Assert
-            Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.DebugTests.Name), Is.True);
+            Assert.That(package.Settings.HasSetting(SettingDefinitions.DebugTests.Name), Is.True);
         }
 
 

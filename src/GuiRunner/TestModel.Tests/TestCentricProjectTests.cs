@@ -181,126 +181,6 @@ namespace TestCentric.Gui.Model
 
         #endregion
 
-        #region AddSetting and RemoveSetting Tests
-
-        [Test]
-        public void AddSetting_AddsSettingToProject()
-        {
-            // 1. Arrange
-            TestCentricProject project = new TestCentricProject("MyProject");
-
-            // 2. Act
-            project.AddSetting(SettingDefinitions.DebugTests.Name, true);
-
-            // 3. Assert
-            Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.DebugTests.Name), Is.True);
-            Assert.That(project.TopLevelPackage.Settings.GetSetting(SettingDefinitions.DebugTests.Name), Is.EqualTo(true));
-        }
-
-        [Test]
-        public void SetTopLevelSetting_Setting_IsSetInProject()
-        {
-            // 1. Arrange
-            TestCentricProject project = new TestCentricProject("MyProject");
-
-            // 2. Act
-            project.SetTopLevelSetting(SettingDefinitions.DebugTests.WithValue(true));
-
-            // 3. Assert
-            Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.DebugTests.Name), Is.True);
-            Assert.That(project.TopLevelPackage.Settings.GetSetting(SettingDefinitions.DebugTests.Name), Is.EqualTo(true));
-        }
-
-        [Test]
-        public void SetSubPackageSetting_Setting_IsSetInProject()
-        {
-            // 1. Arrange
-            TestCentricProject project = new TestCentricProject("MyProject");
-
-            // 2. Act
-            project.AddSetting(SettingDefinitions.DebugTests.WithValue(true));
-
-            // 3. Assert
-            Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.DebugTests.Name), Is.True);
-            Assert.That(project.TopLevelPackage.Settings.GetSetting(SettingDefinitions.DebugTests.Name), Is.EqualTo(true));
-        }
-
-        [Test]
-        public void AddSetting_WithVariousTypes_StoresCorrectly()
-        {
-            // 1. Arrange
-            TestCentricProject project = new TestCentricProject("MyProject");
-
-            // 2. Act
-            project.AddSetting("BoolSetting", true);
-            project.AddSetting("IntSetting", 42);
-            project.AddSetting("StringSetting", "TestValue");
-
-            // 3. Assert
-            Assert.That(project.TopLevelPackage.Settings.GetSetting("BoolSetting"), Is.EqualTo(true));
-            Assert.That(project.TopLevelPackage.Settings.GetSetting("IntSetting"), Is.EqualTo(42));
-            Assert.That(project.TopLevelPackage.Settings.GetSetting("StringSetting"), Is.EqualTo("TestValue"));
-        }
-
-        [Test]
-        public void ApplySetting_Setting_IsStore()
-        {
-            // 1. Arrange
-            TestCentricProject project = new TestCentricProject("MyProject");
-
-            // 2. Act
-            project.ApplySetting(SettingDefinitions.PrincipalPolicy.WithValue(PrincipalPolicy.WindowsPrincipal.ToString()));
-
-            // 3. Assert
-            Assert.That(project.TopLevelPackage.Settings.GetSetting(SettingDefinitions.PrincipalPolicy.Name), Is.EqualTo(PrincipalPolicy.WindowsPrincipal.ToString()));
-        }
-
-        [Test]
-        public void ApplySetting_SettingWasSetPreviouslySet_SettingsIsUpdated()
-        {
-            // 1. Arrange
-            TestCentricProject project = new TestCentricProject("MyProject");
-
-            // 2. Act
-            project.ApplySetting(SettingDefinitions.DebugTests.WithValue(true));
-            project.ApplySetting(SettingDefinitions.DebugTests.WithValue(false));
-
-            // 3. Assert
-            Assert.That(project.TopLevelPackage.Settings.GetSetting(SettingDefinitions.DebugTests.Name), Is.EqualTo(false));
-        }
-
-        [Test]
-        public void RemoveSetting_ByName_RemovesSettingFromProject()
-        {
-            // 1. Arrange
-            TestCentricProject project = new TestCentricProject("MyProject");
-            project.SetTopLevelSetting(SettingDefinitions.DebugTests.WithValue(true));
-            Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.DebugTests.Name), Is.True);
-
-            // 2. Act
-            project.RemoveSetting(SettingDefinitions.DebugTests.Name);
-
-            // 3. Assert
-            Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.DebugTests.Name), Is.False);
-        }
-
-        [Test]
-        public void RemoveSetting_ByDefinition_RemovesSettingFromProject()
-        {
-            // 1. Arrange
-            TestCentricProject project = new TestCentricProject("MyProject");
-            project.SetTopLevelSetting(SettingDefinitions.DebugTests.WithValue(true));
-            Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.DebugTests.Name), Is.True);
-
-            // 2. Act
-            project.RemoveSetting(SettingDefinitions.DebugTests);
-
-            // 3. Assert
-            Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.DebugTests.Name), Is.False);
-        }
-
-        #endregion
-
         #region SubPackage Management Tests
 
         [Test]
@@ -365,7 +245,6 @@ namespace TestCentric.Gui.Model
         {
             // 1. Arrange
             TestCentricProject project = new TestCentricProject("MyProject");
-            project.SetTopLevelSetting(SettingDefinitions.DebugTests.WithValue(true));
 
             // 2. Act
             project.SaveAs("TestCentricTestProject.tcproj");
@@ -383,7 +262,6 @@ namespace TestCentric.Gui.Model
             project.SaveAs("TestCentricTestProject.tcproj");
             
             // 2. Act
-            project.SetTopLevelSetting(SettingDefinitions.MaxAgents.WithValue(5));
             project.Save();
 
             // 3. Assert
@@ -395,7 +273,7 @@ namespace TestCentric.Gui.Model
         {
             // 1. Arrange
             TestCentricProject project = new TestCentricProject("MyProject");
-            project.SetTopLevelSetting(SettingDefinitions.DebugTests.WithValue(true));
+            project.TopLevelPackage.Settings.Set(SettingDefinitions.DebugTests.WithValue(true));
             project.SaveAs("TestCentricTestProject.tcproj");
 
             // 2. Act

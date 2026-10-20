@@ -93,13 +93,13 @@ namespace TestCentric.Gui.Presenters
                 EnsureSingleItemChecked(item);
 
                 // TODO: We currently need to use both settings. Investigate.
-                _model.TestCentricProject.RemoveSetting(SettingDefinitions.SelectedAgentName);
-                _model.TestCentricProject.RemoveSetting(SettingDefinitions.RequestedAgentName);
+                _model.TopLevelPackage.RemoveSetting(SettingDefinitions.SelectedAgentName, recursive: true);
+                _model.TopLevelPackage.RemoveSetting(SettingDefinitions.RequestedAgentName, recursive: true);
 
                 if (item.Tag is string itemTag && itemTag != "DEFAULT")
                 {
-                    _model.TestCentricProject.AddSetting(SettingDefinitions.SelectedAgentName.WithValue(itemTag));
-                    _model.TestCentricProject.AddSetting(SettingDefinitions.RequestedAgentName.WithValue(itemTag));
+                    _model.TopLevelPackage.AddSetting(SettingDefinitions.SelectedAgentName.WithValue(itemTag), recursive: true);
+                    _model.TopLevelPackage.AddSetting(SettingDefinitions.RequestedAgentName.WithValue(itemTag), recursive: true);
                 }
             }
 

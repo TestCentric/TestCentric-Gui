@@ -81,7 +81,7 @@ namespace TestCentric.Gui.Presenters
 
             if (item.Tag is string config)
             {
-                _model.TestCentricProject.ApplySetting(SettingDefinitions.ActiveConfig.WithValue(config));
+                _model.TopLevelPackage.ApplySetting(SettingDefinitions.ActiveConfig.WithValue(config), recursive: true);
                 _model.ReloadTests();
             }
         }
