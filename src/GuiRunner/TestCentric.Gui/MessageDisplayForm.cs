@@ -75,10 +75,10 @@ namespace TestCentric.Gui
             System.Reflection.Assembly assembly = GetType().Assembly;
             iconPictureBox.Image = icon switch
             {
-                MessageBoxIcon.Information => (new Bitmap(assembly.GetManifestResourceStream("TestCentric.Gui.Resources.Information.png"))),
-                MessageBoxIcon.Warning => (new Bitmap(assembly.GetManifestResourceStream("TestCentric.Gui.Resources.Warning.png"))),   
-                MessageBoxIcon.Error => (new Bitmap(assembly.GetManifestResourceStream("TestCentric.Gui.Resources.Error.png"))),
-                MessageBoxIcon.Question => (new Bitmap(assembly.GetManifestResourceStream("TestCentric.Gui.Resources.Question.png"))),
+                MessageBoxIcon.Information => (new Bitmap(assembly.GetManifestResourceStream("TestCentric.Gui.Resources.Information.png")!)),
+                MessageBoxIcon.Warning => (new Bitmap(assembly.GetManifestResourceStream("TestCentric.Gui.Resources.Warning.png")!)),   
+                MessageBoxIcon.Error => (new Bitmap(assembly.GetManifestResourceStream("TestCentric.Gui.Resources.Error.png")!)),
+                MessageBoxIcon.Question => (new Bitmap(assembly.GetManifestResourceStream("TestCentric.Gui.Resources.Question.png")!)),
                 _ => null // Includes MessageBoxIcon.None
             };
 

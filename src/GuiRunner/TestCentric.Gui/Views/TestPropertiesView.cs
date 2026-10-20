@@ -29,7 +29,7 @@ namespace TestCentric.Gui.Views
             flowLayoutPanel1.Layout += FlowLayoutPanel1_Layout;
         }
 
-        private void FlowLayoutPanel1_Layout(object sender, LayoutEventArgs e)
+        private void FlowLayoutPanel1_Layout(object? sender, LayoutEventArgs e)
         {
             var subViewWidth = flowLayoutPanel1.ClientRectangle.Width - 4;
             header.Width = subViewWidth;

@@ -37,7 +37,7 @@ namespace TestCentric.Gui.Elements
 
         public string SelectedItem
         {
-            get { return _tabControl.SelectedTab.Text; }
+            get { return _tabControl.SelectedTab!.Text; }
             set
             {
                 foreach (TabPage tab in _tabControl.TabPages)

@@ -69,7 +69,7 @@ namespace TestCentric.Gui.Elements
             get { return _control.ContextMenu; }
         }
 
-        public ContextMenuStrip ContextMenuStrip
+        public ContextMenuStrip? ContextMenuStrip
         {
             get { return _control.ContextMenuStrip; }
         }

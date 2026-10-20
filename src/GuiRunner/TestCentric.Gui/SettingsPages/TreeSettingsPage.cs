@@ -40,7 +40,7 @@ namespace TestCentric.Gui.SettingsPages
             Settings.Gui.TestTree.DisplayFormat = displayFormat;
 
             if (imageSetListBox.SelectedIndex >= 0)
-                Settings.Gui.TestTree.AlternateImageSet = (string)imageSetListBox.SelectedItem;
+                Settings.Gui.TestTree.AlternateImageSet = (string)imageSetListBox.SelectedItem!;
         }
 
         private void imageSetListBox_SelectedIndexChanged(object sender, EventArgs e)

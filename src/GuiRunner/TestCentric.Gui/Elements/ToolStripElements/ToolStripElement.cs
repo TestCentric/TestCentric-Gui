@@ -33,13 +33,13 @@ namespace TestCentric.Gui.Elements
 
         public string Text
         {
-            get { return _toolStripItem.Text; }
+            get { return _toolStripItem.Text ?? string.Empty; }
             set { InvokeIfRequired(() => { _toolStripItem.Text = value; }); }
         }
 
         public string ToolTipText
         {
-            get { return _toolStripItem.ToolTipText; }
+            get { return _toolStripItem.ToolTipText ?? string.Empty; }
             set { InvokeIfRequired(() => { _toolStripItem.ToolTipText = value; }); }
         }
 

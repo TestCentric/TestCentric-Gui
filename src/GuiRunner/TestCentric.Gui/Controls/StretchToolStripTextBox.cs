@@ -19,6 +19,9 @@ namespace TestCentric.Gui.Controls
     {
         public override Size GetPreferredSize(Size constrainingSize)
         {
+            if (Owner is null)
+                return base.GetPreferredSize(constrainingSize);
+
             // Get width of the owning ToolStrip
             int textBoxMargin = 2;
             Int32 width = Owner.DisplayRectangle.Width - textBoxMargin;
