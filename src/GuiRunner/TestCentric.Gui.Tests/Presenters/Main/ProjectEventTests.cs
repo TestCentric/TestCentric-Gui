@@ -58,7 +58,7 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase(false)]
         public void WhenProjectIsLoaded_RunAsX86Command_IsUpdatedFromProjectSetting(bool runAsX86)
         {
-            _project.SetTopLevelSetting(SettingDefinitions.RunAsX86.WithValue(runAsX86));
+            _project.TopLevelPackage.Settings.Set(SettingDefinitions.RunAsX86.WithValue(runAsX86));
             _model.IsProjectLoaded.Returns(true);
 
             FireProjectLoadedEvent();

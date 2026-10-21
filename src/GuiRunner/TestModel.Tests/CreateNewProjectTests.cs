@@ -45,44 +45,6 @@ namespace TestCentric.Gui.Model
             Assert.That(_model.TestCentricProject?.TestFiles, Is.EqualTo(testFiles));
         }
 
-        private static TestCaseData[] PackageSettingTestCases = new TestCaseData[]
-        {
-            new TestCaseData(SettingDefinitions.RequestedFrameworkName.WithValue("net-2.0")),
-            new TestCaseData(SettingDefinitions.MaxAgents.WithValue(8)),
-            new TestCaseData(SettingDefinitions.ShadowCopyFiles.WithValue(false)),
-        };
-
-        [TestCaseSource(nameof(PackageSettingTestCases))]
-        public void PackageReflectsPackageSettings(PackageSetting setting)
-        {
-            var package = _model.CreateNewProject("MyProject", "my.dll");
-            package.SetTopLevelSetting(setting);
-
-            Assert.That(package.TopLevelPackage.Settings.HasSetting(setting.Name));
-            Assert.That(package.TopLevelPackage.Settings.GetSetting(setting.Name), Is.EqualTo(setting.Value));
-        }
-
-        // TODO: Remove? Use and test fluent methods?
-        [Test]
-        public void PackageReflectsTestParameters()
-        {
-            var testParms = new Dictionary<string, string>
-            {
-                { "parm1", "value1" },
-                { "parm2", "value2" }
-            };
-            var package = _model.CreateNewProject("MyProject", "my.dll");
-            package.SetTopLevelSetting(SettingDefinitions.TestParametersDictionary.WithValue(testParms));
-            Assert.That(package.TopLevelPackage.Settings.HasSetting("TestParametersDictionary"));
-            var parms = package.TopLevelPackage.Settings.GetSetting("TestParametersDictionary") as IDictionary<string, string>;
-            Assert.That(parms, Is.Not.Null);
-
-            Assert.That(parms, Contains.Key("parm1"));
-            Assert.That(parms, Contains.Key("parm2"));
-            Assert.That(parms!["parm1"], Is.EqualTo("value1"));
-            Assert.That(parms!["parm2"], Is.EqualTo("value2"));
-        }
-
         [Test]
         public void DisplayShadowCopySettings()
         {

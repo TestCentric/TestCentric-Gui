@@ -488,10 +488,10 @@ namespace TestCentric.Gui.Model
             _lastTestRun = TestRunSpecification.Empty;
 
             if (!TopLevelPackage.Settings.HasSetting(SettingDefinitions.RandomSeed))
-                TopLevelPackage.AddSetting(SettingDefinitions.RandomSeed.WithValue(new Random().Next()));
+                TopLevelPackage.ApplySetting(SettingDefinitions.RandomSeed.WithValue(new Random().Next()), true);
             LoadedTests = TestCentricRunner.Explore(TopLevelPackage);
             if (!TopLevelPackage.Settings.HasSetting(SettingDefinitions.RandomSeed))
-                TopLevelPackage.AddSetting(SettingDefinitions.RandomSeed.WithValue(new Random().Next()));
+                TopLevelPackage.ApplySetting(SettingDefinitions.RandomSeed.WithValue(new Random().Next()), true);
 
             if (LoadedTests == null)
             {
@@ -558,8 +558,7 @@ namespace TestCentric.Gui.Model
                 return new List<string>();
 
             return new List<string>(
-                //Services.GetService<TestAgentService>().GetAgentsForPackage(package).Select(a => a.AgentName));
-                Services.GetService<TestAgency>().GetAgentsForPackage(package).Select(a => a.AgentName));
+                Services.GetService<ITestAgentInfo>().GetAgentsForPackage(package).Select(a => a.AgentName));
         }
 
         public void UnloadTests()
@@ -588,14 +587,7 @@ namespace TestCentric.Gui.Model
 
         public void ReloadPackage(NUnit.Engine.TestPackage package, string config)
         {
-            //var originalSubPackages = new List<TestPackage>(package.SubPackages);
-            //package.SubPackages.Clear();
-            package.AddSetting(SettingDefinitions.DebugTests.WithValue(config));
-
-            //foreach (var subPackage in package.SubPackages)
-            //    foreach (var original in originalSubPackages)
-            //        if (subPackage.Name == original.Name)
-            //            subPackage.SetID(original.ID);
+            package.AddSetting(SettingDefinitions.DebugTests.WithValue(config), true);
 
             ReloadTests();
         }

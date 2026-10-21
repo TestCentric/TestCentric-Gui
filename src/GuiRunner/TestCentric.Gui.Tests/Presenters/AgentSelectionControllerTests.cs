@@ -10,6 +10,7 @@ namespace TestCentric.Gui.Presenters
     using System.Windows.Forms;
     using NSubstitute;
     using NUnit.Common;
+    using NUnit.Engine;
     using NUnit.Framework;
     using TestCentric.Gui.Model;
     using TestCentric.Gui.Views;
@@ -419,8 +420,6 @@ namespace TestCentric.Gui.Presenters
         public void ClickingAgentMenuItem_SetsProjectSettings()
         {
             // 1. Arrange
-            var project = new TestCentricProject("MyProject");
-            _model.TestCentricProject.Returns(project);
             _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> 
             { 
                 "NUnit.TestAdapter.Agent1",
@@ -441,18 +440,16 @@ namespace TestCentric.Gui.Presenters
             agent1MenuItem!.PerformClick();
 
             // 3. Assert
-            Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.SelectedAgentName.Name), Is.True);
-            Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.RequestedAgentName.Name), Is.True);
+            Assert.That(_model?.TopLevelPackage?.Settings.HasSetting(SettingDefinitions.SelectedAgentName.Name), Is.True);
+            Assert.That(_model?.TopLevelPackage?.Settings.HasSetting(SettingDefinitions.RequestedAgentName.Name), Is.True);
         }
 
         [Test]
         public void ClickingDefaultMenuItem_RemovesAgentSettings()
         {
             // 1. Arrange
-            var project = new TestCentricProject("MyProject");
-            _model.TestCentricProject.Returns(project);
-            project.AddSetting(SettingDefinitions.SelectedAgentName.WithValue("SomeAgent"));
-            project.AddSetting(SettingDefinitions.RequestedAgentName.WithValue("SomeAgent"));
+            _model.TopLevelPackage?.AddSetting(SettingDefinitions.SelectedAgentName.WithValue("SomeAgent"), recursive: true);
+            _model.TopLevelPackage?.AddSetting(SettingDefinitions.RequestedAgentName.WithValue("SomeAgent"), recursive: true);
             
             _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> 
             { 
@@ -470,8 +467,8 @@ namespace TestCentric.Gui.Presenters
             defaultMenuItem.PerformClick();
 
             // 3. Assert
-            Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.SelectedAgentName.Name), Is.False);
-            Assert.That(project.TopLevelPackage.Settings.HasSetting(SettingDefinitions.RequestedAgentName.Name), Is.False);
+            Assert.That(_model.TopLevelPackage?.Settings?.HasSetting(SettingDefinitions.SelectedAgentName.Name), Is.False);
+            Assert.That(_model.TopLevelPackage?.Settings?.HasSetting(SettingDefinitions.RequestedAgentName.Name), Is.False);
         }
 
         [Test]

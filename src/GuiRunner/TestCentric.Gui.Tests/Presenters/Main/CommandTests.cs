@@ -182,7 +182,7 @@ namespace TestCentric.Gui.Presenters.Main
         public void CloseProjectCommand_CallsCloseProject(bool dirty)
         {
             var project = new TestCentricProject("MyProject", "dummy.dll");
-            if (dirty) project.AddSetting("SomeSetting", "VALUE");
+            if (dirty) project.TopLevelPackage.AddSetting("SomeSetting", "VALUE", recursive: true);
             _model.TestCentricProject.Returns(project);
             _view.MessageDisplay.YesNo(Arg.Any<string>()).Returns(false);
 
@@ -284,6 +284,7 @@ namespace TestCentric.Gui.Presenters.Main
             // 1. Arrange
             var project = new TestCentricProject("MyProject", "FILE1", "FILE2");
             _model.TestCentricProject.Returns(project);
+            _model.TopLevelPackage.Returns(project.TopLevelPackage);
             _model.IsProjectLoaded.Returns(true);
             _view.RunAsX86.Checked.Returns(isChecked);
 

@@ -48,12 +48,12 @@ namespace TestCentric.Gui.Model
 
             // Add settings intended for top level and both subpackages.
             // All these settings are non-standard, defined by the user.
-            package.AddSetting("foo", "bar");
-            package.AddSetting("num", 42);
-            package.AddSetting("critical", true);
+            package.AddSetting("foo", "bar", recursive: true);
+            package.AddSetting("num", 42, recursive: true);
+            package.AddSetting("critical", true, recursive: true);
 
             // Add a setting to the first subpackage only
-            subPackages[0].AddSetting("cpu", "x86");
+            subPackages[0].AddSetting("cpu", "x86", recursive: true);
 
             // Multi-line for ease of editing only, CR & LF removed
             _testProjectXml = $"""

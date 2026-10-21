@@ -61,7 +61,7 @@ namespace TestCentric.Gui.Model
 
             var workDir = options?.WorkDirectory;
             if (workDir != null)
-                project.ApplySetting(SettingDefinitions.WorkDirectory.WithValue(workDir));
+                project.TopLevelPackage.ApplySetting(SettingDefinitions.WorkDirectory.WithValue(workDir), recursive: true);
 
             return project;
         }
@@ -70,13 +70,13 @@ namespace TestCentric.Gui.Model
         {
             TestPackage package = new TestPackage(options.InputFiles);
 
-            package.AddSetting(SettingDefinitions.InternalTraceLevel.WithValue(options.InternalTraceLevel ?? "Off"));
-            package.AddSetting(SettingDefinitions.WorkDirectory.WithValue(options.WorkDirectory ?? Environment.CurrentDirectory));
+            package.AddSetting(SettingDefinitions.InternalTraceLevel.WithValue(options.InternalTraceLevel ?? "Off"), recursive: true);
+            package.AddSetting(SettingDefinitions.WorkDirectory.WithValue(options.WorkDirectory ?? Environment.CurrentDirectory), recursive: true);
 
             if (options.MaxAgents >= 0)
                 package.Settings.Set(SettingDefinitions.MaxAgents.WithValue(options.MaxAgents));
             if (options.RunAsX86)
-                package.AddSetting(SettingDefinitions.RunAsX86.WithValue(true));
+                package.AddSetting(SettingDefinitions.RunAsX86.WithValue(true), recursive: true);
             if (options.DebugAgent)
                 package.Settings.Set(SettingDefinitions.DebugAgent.WithValue(true));
             if (options.TestParameters.Count > 0)
@@ -90,7 +90,7 @@ namespace TestCentric.Gui.Model
                 switch (Path.GetExtension(subpackage.Name))
                 {
                     case ".sln":
-                        subpackage.AddSetting(SettingDefinitions.SkipNonTestAssemblies.WithValue(true));
+                        subpackage.AddSetting(SettingDefinitions.SkipNonTestAssemblies.WithValue(true), true);
                         break;
                     case ".tcproj":
                         throw new InvalidOperationException("A TestCentric project may not contain another TestCentric project.");
@@ -225,42 +225,9 @@ namespace TestCentric.Gui.Model
             }
         }
 
-        public void AddSetting(PackageSetting setting) => TopLevelPackage.AddSetting(setting);
-
-        public void AddSetting(string key, string value) => TopLevelPackage.AddSetting(key, value);
-
-        public void AddSetting(string key, bool value) => TopLevelPackage.AddSetting(key, value);
-
-        public void AddSetting(string key, int value) => TopLevelPackage.AddSetting(key, value);
-
-        public void ApplySetting(PackageSetting setting)
-        {
-            RemoveSetting(setting.Name);
-            TopLevelPackage.AddSetting(setting);
-        }
-
-        public void RemoveSetting(string key)
-        {
-            RemoveSettingFromPackage(key, TopLevelPackage);
-            //TopLevelPackage.Settings.Remove(key);
-            //foreach (var subPackage in TopLevelPackage.SubPackages)
-            //    subPackage.Settings.Remove(key);
-        }
-
-        public void RemoveSetting(SettingDefinition setting) => RemoveSetting(setting.Name);
-
-        private void RemoveSettingFromPackage(string Key, TestPackage package)
-        {
-            package.Settings.Remove(Key);
-            foreach (var subPackage in package.SubPackages)
-                RemoveSettingFromPackage(Key, subPackage);
-        }
-
-        public void SetTopLevelSetting(PackageSetting setting) => TopLevelPackage.Settings.Set(setting);
-
         #region NUnit TestPackage Load Helpers
 
-        // These two methods are private in NUnit and have been extracted for temporary use.
+        // TODO: These two methods are private in NUnit and have been extracted for temporary use.
         // If NUnit can support their public use we'll be able to remove them.
 
         private static TestPackage ReadXml(XmlReader xmlReader)

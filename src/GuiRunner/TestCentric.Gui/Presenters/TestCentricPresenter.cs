@@ -509,7 +509,7 @@ namespace TestCentric.Gui.Presenters
                 }
 
                 if (dlg.ShowDialog(_view as IWin32Window) == DialogResult.OK)
-                    _model.TestCentricProject.ApplySetting(SettingDefinitions.TestParametersDictionary.WithValue(dlg.Parameters));
+                    _model.TopLevelPackage.ApplySetting(SettingDefinitions.TestParametersDictionary.WithValue(dlg.Parameters), recursive: true);
             }
         }
 
@@ -678,21 +678,10 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        private static bool CanWriteProjectFile(string path)
-        {
-            return !File.Exists(path) ||
-                (File.GetAttributes(path) & FileAttributes.ReadOnly) == 0;
-        }
-
-        private static string Quoted(string s)
-        {
-            return "\"" + s + "\"";
-        }
-
         private void OnRunAsX86Changed()
         {
             Guard.OperationValid(_model.IsProjectLoaded, "No project is currently loaded");
-            _model.TestCentricProject.SetTopLevelSetting(SettingDefinitions.RunAsX86.WithValue(_view.RunAsX86.Checked));
+            _model.TopLevelPackage.ApplySetting(SettingDefinitions.RunAsX86.WithValue(_view.RunAsX86.Checked), recursive: true);
         }
 
         private void SetGuiLayout()
