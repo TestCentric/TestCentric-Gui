@@ -46,4 +46,11 @@ CodeRabbit reads this file as review guidance.
 ## Pull requests
 
 - Work on a branch named `issue-NNNN` after the GitHub issue, and reference the issue in the PR.
+- Labels and milestones are set by team members, not by agents. An issue gets its label when
+  it is created. When its PR is approved, the team decides whether to add it to the next
+  release's milestone.
+- Every closed issue in a milestone needs one of the labels under `issue-labels-include` or
+  `issue-labels-exclude` in `GitReleaseManager.yaml`, or the release notes fail to build.
+  Included labels, Build among them, appear in the release notes; excluded ones, such as
+  Refactor, do not.
 - One human review is expected before merging.
