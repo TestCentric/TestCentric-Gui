@@ -236,6 +236,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             TreeNode? treeNode = null;
             foreach (string testId in testIds)
             {
+                treeNode = null;
                 foreach (TreeNode node in nodes)
                 {
                     string id = (node.Tag as TestNode)?.Id ?? (node.Tag as TestGroup)?.RootTestNode?.Id ?? string.Empty;
