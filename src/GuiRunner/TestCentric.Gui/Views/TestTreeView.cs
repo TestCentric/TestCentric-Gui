@@ -113,8 +113,8 @@ namespace TestCentric.Gui.Views
                 CancelTimer();
 
                 // Null TreeNode should not be possible but the context
-                // menu might display while the delay is underway.
-                if (currentNode is not null && !TreeContextMenu.Visible)
+                // menu might display while the delay is underway or node was removed due to grouping
+                if (currentNode is not null && currentNode.TreeView is not null && !TreeContextMenu.Visible)
                     TreeNodeMouseHover?.Invoke(currentNode);
             };
 

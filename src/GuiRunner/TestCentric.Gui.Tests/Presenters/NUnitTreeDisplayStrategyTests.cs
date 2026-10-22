@@ -4,12 +4,16 @@
 // ***********************************************************************
 
 using System.Windows.Forms;
-using NUnit.Framework;
 using NSubstitute;
+using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using Model;
+    using NUnit;
+    using NUnit.Framework.Internal;
     using TestCentric.Gui.Controls;
     using Views;
 
@@ -172,6 +176,46 @@ namespace TestCentric.Gui.Presenters.TestTree
             Assert.That(NodeCollectionContainsTestNode(_view.Nodes, "1-1030"), Is.True);
         }
 
+        [TestCase("Passed", "Passed", true, true, TestTreeView.SuccessIndex)]
+        [TestCase("Passed", "Failed", true, true, TestTreeView.FailureIndex)]
+        [TestCase("Passed", "", true, true, TestTreeView.SuccessIndex)]
+        [TestCase("Warning", "Passed", true, true, TestTreeView.WarningIndex)]
+        [TestCase("", "", true, true, TestTreeView.SkippedIndex)]
+        [TestCase("Passed", "Passed", false, false, TestTreeView.SuccessIndex_NotLatestRun)]
+        [TestCase("Passed", "Failed", true, false, TestTreeView.FailureIndex)]
+        [TestCase("Passed", "Warning", false, true, TestTreeView.WarningIndex)]
+        [TestCase("Warning", "Passed", false, false, TestTreeView.WarningIndex_NotLatestRun)]
+        public void OnTestLoaded_TestResult_AreAppliedToTreeNodes(string child1Result, string child2Result, bool child1ResultFromLatestRun, bool child2ResultFromLatestRun, int expectedImageIndex)
+        {
+            // Arrange
+            _model.HasResults.Returns(true);
+            string xml =
+                "<test-run id='0'> <test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                    "<test-suite type='TestSuite' id='1-1031' name='Library'>" +
+                        "<test-suite type='TestFixture' id='1-1032' name='FixtureA'>" +
+                            "<test-case id='1-1040' name='TestA' /> " +
+                            "<test-case id='1-1041' name='TestB' /> " +
+                        "</test-suite>" +
+                    "</test-suite>" +
+                "</test-suite> </test-run>";
+
+            var result1 = new ResultNode("<test-case id='1-1040' name='TestA' result='" + child1Result + "' />") { IsLatestRun = child1ResultFromLatestRun };
+            var result2 = new ResultNode("<test-case id='1-1041' name='TestB' result='" + child2Result + "' />") { IsLatestRun = child2ResultFromLatestRun };
+            if (!string.IsNullOrEmpty(child1Result))
+                _model.TestResultManager.GetResultForTest("1-1040").Returns(result1);
+
+            if (!string.IsNullOrEmpty(child2Result))
+                _model.TestResultManager.GetResultForTest("1-1041").Returns(result2);
+
+            // Act
+            _strategy.OnTestLoaded(new TestNode(xml), null);
+
+            // Assert
+            var treeNode = GetTreeNode(_view.Nodes, new[] { "1-1030", "1-1031", "1-1032" });
+            _view.Received().SetImageIndex(treeNode, expectedImageIndex, false);
+
+        }
+
         private bool NodeCollectionContainsTestNode(TreeNodeCollection nodes, string testNodeId)
         {
             foreach (TreeNode treeNode in nodes)
@@ -185,6 +229,28 @@ namespace TestCentric.Gui.Presenters.TestTree
             }
 
             return false;
+        }
+
+        private TreeNode GetTreeNode(TreeNodeCollection nodes, IEnumerable<string> testIds)
+        {
+            TreeNode? treeNode = null;
+            foreach (string testId in testIds)
+            {
+                foreach (TreeNode node in nodes)
+                {
+                    string id = (node.Tag as TestNode)?.Id ?? (node.Tag as TestGroup)?.RootTestNode?.Id ?? string.Empty;
+                    if (id == testId)
+                    {
+                        treeNode = node;
+                        break;
+                    }
+                }
+
+                Assert.That(treeNode, Is.Not.Null, $"TreeNode with name '{testId}' not found.");
+                nodes = treeNode!.Nodes;
+            }
+
+            return treeNode.ShouldNotBeNull();
         }
 
         // TODO: FIX
