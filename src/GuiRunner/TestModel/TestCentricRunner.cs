@@ -96,15 +96,19 @@ namespace TestCentric.Gui.Model
             ResetActiveTestRun();
         }
 
+        /// <summary>
+        /// Requests cooperative cancellation without releasing the runner before the run finishes.
+        /// </summary>
+        /// <remarks>
+        /// A stop request may return while tests are still completing and reporting results.
+        /// OnTestRunFinished releases the runner after those completion events have arrived.
+        /// </remarks>
         public void RequestStop()
         {
-            if (ActiveTestRun is not null)
+            var runner = ActiveTestRun;
+            if (runner is not null)
                 // Async to avoid blocking the main thread for incoming test events in between
-                Task.Run(() =>
-                {
-                    ActiveTestRun?.RequestStop();
-                    ResetActiveTestRun();
-                });
+                Task.Run(() => runner.RequestStop());
         }
 
         public void ForcedStop()
