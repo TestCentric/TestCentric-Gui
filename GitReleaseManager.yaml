@@ -8,10 +8,10 @@ issue-labels-include:
 - Feature
 - Enhancement
 - Bug
-- Build
 - Documentation
 # The labels that will NOT be used when including issues in release notes.
 issue-labels-exclude:
+- Build
 - Refactor
 # Overrides default pluralization and header names for specific labels.
 issue-labels-alias:
