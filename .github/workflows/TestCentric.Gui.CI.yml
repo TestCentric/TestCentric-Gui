@@ -26,13 +26,13 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
+      # Older targets (netcoreapp3.1 to net7.0) are compiled by the latest SDK
+      # using reference packs from NuGet, and the package tests run them under
+      # .NET 8.0 or later, so only the SDKs whose runtimes are used are installed.
       - name: 🛠️ Setup .NET
         uses: actions/setup-dotnet@v5.2.0
         with:
           dotnet-version: |
-            3.1.x
-            6.0.x 
-            7.0.x
             8.0.x
             9.0.x
             10.0.x
