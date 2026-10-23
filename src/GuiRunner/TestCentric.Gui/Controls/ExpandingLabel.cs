@@ -90,6 +90,7 @@ namespace TestCentric.Gui.Controls
         /// Override Text property to set up copy menu if
         /// the value is non-empty.
         /// </summary>
+        [AllowNull]
         public override string Text
         {
             get { return base.Text; }

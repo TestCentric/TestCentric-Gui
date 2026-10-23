@@ -102,7 +102,7 @@ namespace TestCentric.Gui
 
         void ProcessTreeNode(TreeNode treeNode, List<VisualTreeNode> visualNodes)
         {
-            bool isSelectedNode = treeNode == treeNode.TreeView.SelectedNode;
+            bool isSelectedNode = treeNode == treeNode.TreeView!.SelectedNode;
             bool isTopNode = treeNode == treeNode.TreeView.TopNode;
 
             var visualNode = new VisualTreeNode()

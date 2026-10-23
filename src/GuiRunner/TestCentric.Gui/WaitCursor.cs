@@ -23,7 +23,7 @@ namespace TestCentric.Gui
     /// </summary>
     public class WaitCursor : IDisposable
     {
-        private Cursor cursor;
+        private Cursor? cursor;
         private Control? control;
 
         public WaitCursor()

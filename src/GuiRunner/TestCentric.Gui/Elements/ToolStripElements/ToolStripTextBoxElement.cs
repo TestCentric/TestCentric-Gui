@@ -67,7 +67,7 @@ namespace TestCentric.Gui.Elements
         /// Use KeyUp event instead of TextChanged event
         /// If the Text property is set from client programmatically, a TextChanged event would be triggered => that's not intended
         /// </summary>
-        private void OnKeyUp(object sender, KeyEventArgs e)
+        private void OnKeyUp(object? sender, KeyEventArgs e)
         {
             if (IsPlaceHolderTextShown)
                 return;

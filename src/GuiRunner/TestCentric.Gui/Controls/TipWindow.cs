@@ -122,7 +122,7 @@ namespace TestCentric.Gui.Controls
 
             // At this point, further changes to the properties
             // of the label will have no effect on the tip.
-            Point origin = _control.Parent.PointToScreen(_control.Location);
+            Point origin = _control.Parent!.PointToScreen(_control.Location);
             origin.Offset(ItemBounds.Left, ItemBounds.Top);
             if (!Overlay) origin.Offset(0, ItemBounds.Height);
             Location = origin;
@@ -153,7 +153,7 @@ namespace TestCentric.Gui.Controls
                 _control.MouseLeave += (s, e) => Close();
 
             // Catch the form that holds the control closing
-            _control.FindForm().Closing += (s, e) => Close();
+            _control.FindForm()!.Closing += (s, e) => Close();
 
             if (Right > screen.WorkingArea.Right)
             {
@@ -203,7 +203,7 @@ namespace TestCentric.Gui.Controls
             Hide();
 
             ItemBounds = treeNode.Bounds;
-            Font = treeNode.NodeFont ?? treeNode.TreeView.Font;
+            Font = treeNode.NodeFont ?? treeNode.TreeView!.Font;
             TipText = treeNode.Text;
             if (resultText != null)
                 TipText += " " + resultText;
@@ -346,7 +346,7 @@ namespace TestCentric.Gui.Controls
 
         private void AdjustLocation()
         {
-            Point origin = _control.Parent.PointToScreen(_control.Location);
+            Point origin = _control.Parent!.PointToScreen(_control.Location);
             origin.Offset(ItemBounds.Left, ItemBounds.Top);
             if (!Overlay) origin.Offset(0, ItemBounds.Height);
             Location = origin;

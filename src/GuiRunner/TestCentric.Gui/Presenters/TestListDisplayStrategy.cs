@@ -283,7 +283,7 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        private void RemoveParentIfEmpty(TreeNode parent)
+        private void RemoveParentIfEmpty(TreeNode? parent)
         {
             while (parent != null && parent.Nodes.Count == 0)
             {

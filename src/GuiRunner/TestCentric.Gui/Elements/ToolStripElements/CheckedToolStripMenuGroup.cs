@@ -120,11 +120,11 @@ namespace TestCentric.Gui.Elements
 
         public string SelectedItem
         {
-            get { return (string)MenuItems[SelectedIndex].Tag; }
+            get { return (string)MenuItems[SelectedIndex].Tag!; }
             set
             {
                 for (int i = 0; i < MenuItems.Count; i++)
-                    if ((string)MenuItems[i].Tag == value)
+                    if ((string?)MenuItems[i].Tag == value)
                     {
                         SelectedIndex = i;
                         break;
@@ -189,7 +189,7 @@ namespace TestCentric.Gui.Elements
         public void EnableItem(string tag, bool enabled)
         {
             foreach (ToolStripMenuItem item in MenuItems)
-                if ((string)item.Tag == tag)
+                if ((string?)item.Tag == tag)
                     item.Enabled = enabled;
         }
 

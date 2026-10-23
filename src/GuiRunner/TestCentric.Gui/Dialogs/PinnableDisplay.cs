@@ -23,8 +23,8 @@ namespace TestCentric.Gui.Dialogs
             // ease of testing. However, it's really just boilerplate
             // funcionality and it's simpler to keep it all in the dialog.
             // serving as a proof of concept;
-            _pinnedImage = new Bitmap(GetType().Assembly.GetManifestResourceStream("TestCentric.Gui.Images.pinned.gif"));
-            _unpinnedImage = new Bitmap(GetType().Assembly.GetManifestResourceStream("TestCentric.Gui.Images.unpinned.gif"));
+            _pinnedImage = new Bitmap(GetType().Assembly.GetManifestResourceStream("TestCentric.Gui.Images.pinned.gif")!);
+            _unpinnedImage = new Bitmap(GetType().Assembly.GetManifestResourceStream("TestCentric.Gui.Images.unpinned.gif")!);
 
             pinButton.Image = _unpinnedImage;
             pinButton.CheckedChanged += (s, e) =>

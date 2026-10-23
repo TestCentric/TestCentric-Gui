@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -30,6 +31,7 @@ namespace TestCentric.Gui.Views
             });
         }
 
+        [AllowNull]
         public override string Text
         {
             set { InvokeIfRequired(() => StatusLabel.Text = value); }

@@ -139,7 +139,7 @@ namespace TestCentric.Gui.Dialogs
 
         private void treeView1_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
         {
-            string key = e.Node.FullPath;
+            string key = e.Node!.FullPath;
             SettingsPage page = SettingsPages[key];
             Settings.Gui.InitialSettingsPage = key;
 
@@ -155,12 +155,12 @@ namespace TestCentric.Gui.Dialogs
 
         private void treeView1_AfterExpand(object sender, System.Windows.Forms.TreeViewEventArgs e)
         {
-            e.Node.ImageIndex = e.Node.SelectedImageIndex = 1;
+            e.Node!.ImageIndex = e.Node.SelectedImageIndex = 1;
         }
 
         private void treeView1_AfterCollapse(object sender, System.Windows.Forms.TreeViewEventArgs e)
         {
-            e.Node.ImageIndex = e.Node.SelectedImageIndex = 0;
+            e.Node!.ImageIndex = e.Node.SelectedImageIndex = 0;
         }
     }
 }
