@@ -169,8 +169,10 @@ namespace TestCentric.Gui.Presenters
                 OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
-                _agentSelectionController.UpdateMenuItems();
 
+                // A reload triggered by the assembly watcher arrives on a timer thread,
+                // while UpdateMenuItems changes the menu items directly.
+                _view.ResultTabs.InvokeIfRequired(() => _agentSelectionController.UpdateMenuItems());
             };
 
             _model.Events.TestChanged += (e) =>

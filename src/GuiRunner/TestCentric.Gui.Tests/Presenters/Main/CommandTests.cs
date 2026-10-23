@@ -356,6 +356,31 @@ namespace TestCentric.Gui.Presenters.Main
         }
 
         [Test]
+        public void TestReloaded_RunOnButtonIsRefreshedOnTheUIThread()
+        {
+            // 1. Arrange
+            var project = new TestCentricProject("MyProject", "FILE1");
+            project.TopLevelPackage.AddSetting(SettingDefinitions.RequestedAgentName.WithValue("NUnit.Agents.Net80AgentLauncher"), recursive: true);
+            _model.TestCentricProject.Returns(project);
+            _model.TopLevelPackage.Returns(project.TopLevelPackage);
+            _model.IsProjectLoaded.Returns(true);
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string>());
+
+            System.Windows.Forms.MethodInvoker? dispatched = null;
+            _view.ResultTabs.InvokeIfRequired(Arg.Do<System.Windows.Forms.MethodInvoker>(x => dispatched = x));
+
+            // 2. Act
+            FireTestReloadedEvent(new TestNode("<test-suite id='1' name='TestA' type='TestFixture'/>"));
+
+            // 3. Assert
+            Assert.That(dispatched, Is.Not.Null, "The refresh was not dispatched through InvokeIfRequired");
+            Assert.That(_view.RunOnButton.Text, Is.Not.EqualTo("Run on: Net80AgentLauncher"), "The refresh ran before being dispatched");
+
+            dispatched!.Invoke();
+            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Net80AgentLauncher"));
+        }
+
+        [Test]
         public void RunOnButton_IsDisabledWhileTestsAreRunning()
         {
             // 1. Arrange
