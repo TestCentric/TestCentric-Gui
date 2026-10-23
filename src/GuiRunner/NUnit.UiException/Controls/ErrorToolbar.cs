@@ -84,7 +84,7 @@ namespace NUnit.UiException.Controls
             {
                 if (_selection == -1)
                     return (null);
-                return ((IErrorDisplay)Items[_selection].Tag);
+                return ((IErrorDisplay?)Items[_selection].Tag);
             }
             set
             {

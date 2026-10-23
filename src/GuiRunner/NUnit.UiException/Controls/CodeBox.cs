@@ -42,6 +42,7 @@ namespace NUnit.UiException.Controls
 
         #region ICodeView Members
 
+        [AllowNull]
         public override string Text
         {
             get { return (_formattedCode.Text); }
