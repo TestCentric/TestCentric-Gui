@@ -58,6 +58,10 @@ namespace TestCentric.Gui.Presenters
                 if (group.TestNodes.Count() > 0)
                     _view.Nodes.Add(group.TreeNode = MakeTreeNode(group, true));
 
+            // Add mapping (TestNode to TreeNode) for all groups and subgroups
+            foreach (var subGroup in _topLevelGrouping.Groups)
+                AddTestNodeMapping(subGroup);
+
             _view.TreeView.ExpandAll();
 
             visualState?.ApplyTo(_view.TreeView);
@@ -144,27 +148,34 @@ namespace TestCentric.Gui.Presenters
 
             if (ShowAssemblies || ShowFixtures)
             {
-                string? assemblyName = null;
-                string? fixtureName = null;
+                TestNode? assemblyNode = null;
+                TestNode? fixtureNode = null;
 
                 // Find assembly and fixture names for this node
                 for (TestNode? parent = _model.GetTestById(result.Id)?.Parent; parent != null; parent = parent.Parent)
                 {
                     if (ShowAssemblies && parent.IsAssembly)
-                        assemblyName = parent.Name;
+                        assemblyNode = parent;
                     if (ShowFixtures && parent.IsFixture)
-                        fixtureName = parent.Name;
+                        fixtureNode = parent;
                 }
 
                 // Create the subGroups
-                if (ShowAssemblies)
+                if (assemblyNode != null)
                 {
-                    newGroup = topLevelGroup.GetOrAddSubGroup(assemblyName!);
-                    if (ShowFixtures)
-                        newGroup = newGroup.GetOrAddSubGroup(fixtureName!);
+                    newGroup = topLevelGroup.GetOrAddSubGroup(assemblyNode.Name);
+                    newGroup.RootTestNode = assemblyNode;
+                    if (fixtureNode != null)
+                    {
+                        newGroup = newGroup.GetOrAddSubGroup(fixtureNode.Name);
+                        newGroup.RootTestNode = fixtureNode;
+                    }
                 }
-                else // ShowFixtures only
-                    newGroup = topLevelGroup.GetOrAddSubGroup(fixtureName!);
+                else if (fixtureNode != null)
+                {
+                    newGroup = topLevelGroup.GetOrAddSubGroup(fixtureNode.Name);
+                    newGroup.RootTestNode = fixtureNode;
+                }
             }
 
             // If the group didn't change, we can get out of here
@@ -173,6 +184,7 @@ namespace TestCentric.Gui.Presenters
 
             TestNode testNode = _model.GetTestById(result.Id).ShouldNotBeNull();
             AddTestToGroups(newGroup, testNode);
+            AddTestNodeMapping(topLevelGroup);
             RemoveTestFromGroups(oldGroup, testNode);
             var newParent = newGroup.TreeNode;
 
@@ -192,6 +204,11 @@ namespace TestCentric.Gui.Presenters
         public override void OnTestRunFinished()
         {
             SetTestDurationOfGroups();
+
+            // Update treeNode icon of all top level groups (category, outcome or duration)
+            foreach (TreeNode treeNode in GetTreeNodesForTest(_model.LoadedTests.ShouldNotBeNull()))
+                _view.InvokeIfRequired(() => _view.SetImageIndex(treeNode, CalcImageIndex(treeNode)));
+
             base.OnTestRunFinished();
         }
 
@@ -199,6 +216,17 @@ namespace TestCentric.Gui.Presenters
         {
             foreach (var node in _treeView.Nodes)
                 SetTestDurationOfGroups((node as TreeNode)!);
+        }
+
+        public override void OnTestFinished(ResultNode result)
+        {
+            // In case of a TestGroup, we need to determine the ImageIndex based on all child nodes,
+            // Since the TestGroup might represent only a subset of the TestNodes from the reported NUnit result
+            if (result.IsSuite)
+                foreach (TreeNode treeNode in GetTreeNodesForTest(result))
+                    _view.InvokeIfRequired(() => _view.SetImageIndex(treeNode, CalcImageIndex(treeNode)));
+            else
+                base.OnTestFinished(result);
         }
 
         private double SetTestDurationOfGroups(TreeNode treeNode)
@@ -247,6 +275,7 @@ namespace TestCentric.Gui.Presenters
                 _topLevelGrouping = CreateTestGrouping(GroupBy);
 
             _topLevelGrouping.LoadGroups(GetTestCases(testNode));
+            _topLevelGrouping.Groups.ForEach(g => g.RootTestNode = testNode);
 
             if (ShowAssemblies)
             {
@@ -261,6 +290,19 @@ namespace TestCentric.Gui.Presenters
             }
 
             return _topLevelGrouping.Groups;
+        }
+
+        private void AddTestNodeMapping(TestGroup group)
+        {
+            TestNode? testNode = group.RootTestNode;
+            if (testNode != null && group.TreeNode != null)
+            {
+                if (!_nodeIndex.ContainsKey(testNode.Id) || !_nodeIndex[testNode.Id].Contains(group.TreeNode))
+                    AddTestNodeMapping(testNode, group.TreeNode);
+            }
+
+            foreach (var subGroup in group.SubGroups)
+                AddTestNodeMapping(subGroup);
         }
 
         private void CreateSubGroups(IList<TestGroup> groupsToSubGroup, string groupBy)
@@ -290,7 +332,7 @@ namespace TestCentric.Gui.Presenters
                 // NOTE: parent.Parent will be null after removal of parent
                 var grandParent = parent.Parent;
 
-                parent.Remove();
+                RemoveTreeNode(parent);
 
                 parent = grandParent;
             }

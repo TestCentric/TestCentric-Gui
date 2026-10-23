@@ -29,7 +29,7 @@ namespace TestCentric.Gui.Presenters
                         if (group.Name == parent.Name)
                             return [group];
 
-                    var newGroup = new TestGroup(parent.Name);
+                    var newGroup = new TestGroup(parent.Name) { RootTestNode = parent };
                     Groups.Add(newGroup);
                     return [newGroup];
                 }

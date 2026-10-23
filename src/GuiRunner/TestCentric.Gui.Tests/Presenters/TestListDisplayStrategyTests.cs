@@ -10,6 +10,7 @@ namespace TestCentric.Gui.Presenters
     using System.Windows.Forms;
     using NSubstitute;
     using NUnit.Framework;
+    using NUnit.Framework.Interfaces;
     using TestCentric.Gui.Controls;
     using TestCentric.Gui.Model;
     using TestCentric.Gui.Views;
@@ -44,6 +45,7 @@ namespace TestCentric.Gui.Presenters
             _treeView = new TestCentricTreeView();
             _view.TreeView.Returns(_treeView);
             _view.Nodes.Returns(_treeView.Nodes);
+            _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
 
             _treeNodes = null!;
         }
@@ -262,6 +264,91 @@ namespace TestCentric.Gui.Presenters
             {
                 AssertTreeNodeAndTestGroup(TreeNodes, exp.Key, exp.Value);
             }
+        }
+
+        [TestCase("Passed", "Passed", true, true, TestTreeView.SuccessIndex)]
+        [TestCase("Passed", "Failed", true, true, TestTreeView.FailureIndex)]
+        [TestCase("Passed", "", true, true, TestTreeView.SuccessIndex)]
+        [TestCase("Warning", "Passed", true, true, TestTreeView.WarningIndex)]
+        [TestCase("", "", true, true, TestTreeView.SkippedIndex)]
+        [TestCase("Passed", "Passed", false, false, TestTreeView.SuccessIndex_NotLatestRun)]
+        [TestCase("Passed", "Failed", true, false, TestTreeView.FailureIndex)]
+        [TestCase("Passed", "Warning", false, true, TestTreeView.WarningIndex)]
+        [TestCase("Warning", "Passed", false, false, TestTreeView.WarningIndex_NotLatestRun)]
+        public void OnTestFinished_SuiteResult_UpdatesGroupImageIndex(string child1Result, string child2Result, bool child1ResultFromLatestRun, bool child2ResultFromLatestRun, int expectedImageIndex)
+        {
+            // 1. Arrange
+            _model.TreeConfiguration.TestListGroupBy = "UNGROUPED";
+            _view.When(v => v.SetImageIndex(Arg.Any<TreeNode>(), Arg.Any<int>(), Arg.Any<bool>())).Do(args => args.ArgAt<TreeNode>(0).ImageIndex = args.ArgAt<int>(1));
+
+            TestNode testNode = new TestNode(
+                "<test-suite id='0' type='TestSuite' name='Suite1'>" +
+                    CreateTestcaseXml("3-1000", "") +
+                    CreateTestcaseXml("3-1001", "") +
+                "</test-suite>");
+
+            ResultNode? resultNode1 = string.IsNullOrEmpty(child1Result) ? null : new ResultNode("<test-case id='3-1000' name='TestA' result='" + child1Result + "' />") { IsLatestRun = child1ResultFromLatestRun };
+            ResultNode? resultNode2 = string.IsNullOrEmpty(child2Result) ? null : new ResultNode("<test-case id='3-1001' name='TestB' result='" + child2Result + "' />") { IsLatestRun = child2ResultFromLatestRun };
+            _model.TestResultManager.GetResultForTest("3-1000").Returns(resultNode1);
+            _model.TestResultManager.GetResultForTest("3-1001").Returns(resultNode2);
+
+            TestListDisplayStrategy strategy = new TestListDisplayStrategy(_view, _model);
+            strategy.OnTestLoaded(testNode, null);
+            TreeNode groupNode = TreeNodes.Single();
+
+            // 2. Act
+            if (resultNode1 != null)
+                strategy.OnTestFinished(resultNode1);
+            if (resultNode2 != null)
+                strategy.OnTestFinished(resultNode2);
+            strategy.OnTestFinished(new ResultNode("<test-suite id='0' name='Suite1' result='Passed' type='TestFixture' />"));
+
+            // 3. Assert
+            Assert.That(groupNode.ImageIndex, Is.EqualTo(expectedImageIndex));
+        }
+
+        [TestCase("Passed", "Passed", true, true, TestTreeView.SuccessIndex)]
+        [TestCase("Passed", "Failed", true, true, TestTreeView.FailureIndex)]
+        [TestCase("Passed", "", true, true, TestTreeView.SuccessIndex)]
+        [TestCase("Warning", "Passed", true, true, TestTreeView.WarningIndex)]
+        [TestCase("", "", true, true, TestTreeView.SkippedIndex)]
+        [TestCase("Failed", "Failed", false, false, TestTreeView.FailureIndex_NotLatestRun)]
+        [TestCase("Passed", "Failed", false, true, TestTreeView.FailureIndex)]
+        [TestCase("Passed", "Warning", false, true, TestTreeView.WarningIndex)]
+        [TestCase("Warning", "Passed", false, false, TestTreeView.WarningIndex_NotLatestRun)]
+        public void OnTestRunFinished_UpdatesTopLevelGroupImageIndex(string child1Result, string child2Result, bool child1ResultFromLatestRun, bool child2ResultFromLatestRun, int expectedImageIndex)
+        {
+            // 1. Arrange
+            _model.TreeConfiguration.TestListGroupBy = "UNGROUPED";
+            _view.When(v => v.InvokeIfRequired(Arg.Any<MethodInvoker>())).Do(args => args.Arg<MethodInvoker>()());
+            _view.When(v => v.SetImageIndex(Arg.Any<TreeNode>(), Arg.Any<int>(), Arg.Any<bool>()))
+                .Do(args => args.ArgAt<TreeNode>(0).ImageIndex = args.ArgAt<int>(1));
+
+            TestNode testNode = new TestNode(
+                "<test-suite id='0' type='TestSuite' name='Suite1'>" +
+                    CreateTestcaseXml("3-1000", "") +
+                    CreateTestcaseXml("3-1001", "") +
+                "</test-suite>");
+
+            _model.LoadedTests.Returns(testNode);
+            ResultNode? resultNode1 = string.IsNullOrEmpty(child1Result) ? null : new ResultNode("<test-case id='3-1000' name='TestA' result='" + child1Result + "' />") { IsLatestRun = child1ResultFromLatestRun };
+            ResultNode? resultNode2 = string.IsNullOrEmpty(child2Result) ? null : new ResultNode("<test-case id='3-1001' name='TestB' result='" + child2Result + "' />") { IsLatestRun = child2ResultFromLatestRun };
+            _model.TestResultManager.GetResultForTest("3-1000").Returns(resultNode1);
+            _model.TestResultManager.GetResultForTest("3-1001").Returns(resultNode2);
+
+            TestListDisplayStrategy strategy = new TestListDisplayStrategy(_view, _model);
+            strategy.OnTestLoaded(testNode, null);
+            TreeNode groupNode = TreeNodes.Single();
+
+            // 2. Act
+            if (resultNode1 != null)
+                strategy.OnTestFinished(resultNode1);
+            if (resultNode2 != null)
+                strategy.OnTestFinished(resultNode2);
+            strategy.OnTestRunFinished();
+
+            // 3. Assert
+            Assert.That(groupNode.ImageIndex, Is.EqualTo(expectedImageIndex));
         }
 
         private static void AssertTreeNodeAndTestGroup(List<TreeNode> treeNodes, string testGroupName, int expectedInGroup)
