@@ -305,7 +305,7 @@ namespace TestCentric.Gui.Presenters.Main
         {
             // 1. Arrange
             var project = new TestCentricProject("MyProject", "FILE1");
-            project.TopLevelPackage.AddSetting(SettingDefinitions.SelectedAgentName.WithValue("NUnit.Agents.Net80AgentLauncher"), recursive: true);
+            project.TopLevelPackage.AddSetting(SettingDefinitions.RequestedAgentName.WithValue("NUnit.Agents.Net80AgentLauncher"), recursive: true);
             _model.TestCentricProject.Returns(project);
             _model.TopLevelPackage.Returns(project.TopLevelPackage);
             _model.IsProjectLoaded.Returns(true);
@@ -323,7 +323,7 @@ namespace TestCentric.Gui.Presenters.Main
         {
             // 1. Arrange
             var project = new TestCentricProject("MyProject", "FILE1");
-            project.TopLevelPackage.AddSetting(SettingDefinitions.SelectedAgentName.WithValue("NUnit.Agents.Net80AgentLauncher"), recursive: true);
+            project.TopLevelPackage.AddSetting(SettingDefinitions.RequestedAgentName.WithValue("NUnit.Agents.Net80AgentLauncher"), recursive: true);
             _model.TestCentricProject.Returns(project);
             _model.TopLevelPackage.Returns(project.TopLevelPackage);
             _model.IsProjectLoaded.Returns(true);
@@ -353,6 +353,50 @@ namespace TestCentric.Gui.Presenters.Main
             // 3. Assert
             _view.RunOnButton.Received().Enabled = true;
             Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default"));
+        }
+
+        [Test]
+        public void RunOnButton_IsDisabledWhileTestsAreRunning()
+        {
+            // 1. Arrange
+            SimulateLoadedProjectWithSeveralAgents();
+
+            // 2. Act
+            _model.IsTestRunning.Returns(true);
+            FireRunStartingEvent(1);
+
+            // 3. Assert
+            Assert.That(_view.RunOnButton.Enabled, Is.False);
+        }
+
+        [Test]
+        public void RunOnButton_IsEnabledAgainWhenTheRunFinishes()
+        {
+            // 1. Arrange
+            SimulateLoadedProjectWithSeveralAgents();
+            _model.IsTestRunning.Returns(true);
+            FireRunStartingEvent(1);
+
+            // 2. Act
+            _model.IsTestRunning.Returns(false);
+            FireRunFinishedEvent(new ResultNode("<test-run id='1' result='Passed' />"));
+
+            // 3. Assert
+            Assert.That(_view.RunOnButton.Enabled, Is.True);
+        }
+
+        private void SimulateLoadedProjectWithSeveralAgents()
+        {
+            var project = new TestCentricProject("MyProject", "FILE1");
+            _model.TestCentricProject.Returns(project);
+            _model.TopLevelPackage.Returns(project.TopLevelPackage);
+            _model.IsProjectLoaded.Returns(true);
+            _model.HasTests.Returns(true);
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> { "Agent1", "Agent2" });
+            _view.RunOnButton.MenuItems.Returns(new System.Windows.Forms.ToolStripDropDownButton().DropDownItems);
+
+            FireTestLoadedEvent(new TestNode("<test-suite id='1' name='TestA' type='TestFixture'/>"));
+            Assume.That(_view.RunOnButton.Enabled, Is.True);
         }
 
         [Test]

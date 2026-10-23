@@ -284,7 +284,7 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
-        public void UpdateMenuItems_SpecificAgentIsSelected_ChecksAgentMenuItem()
+        public void UpdateMenuItems_SpecificAgentIsRequested_ChecksAgentMenuItem()
         {
             // 1. Arrange
             _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> 
@@ -293,7 +293,7 @@ namespace TestCentric.Gui.Presenters
                 "NUnit.TestAdapter.Agent2" 
             });
             
-            _model.TopLevelPackage!.Settings.Add(SettingDefinitions.SelectedAgentName.WithValue("NUnit.TestAdapter.Agent2"));
+            _model.TopLevelPackage!.Settings.Add(SettingDefinitions.RequestedAgentName.WithValue("NUnit.TestAdapter.Agent2"));
             
             _model.AvailableAgents.Returns(new List<string> 
             { 
@@ -440,8 +440,8 @@ namespace TestCentric.Gui.Presenters
             agent1MenuItem!.PerformClick();
 
             // 3. Assert
-            Assert.That(_model?.TopLevelPackage?.Settings.HasSetting(SettingDefinitions.SelectedAgentName.Name), Is.True);
-            Assert.That(_model?.TopLevelPackage?.Settings.HasSetting(SettingDefinitions.RequestedAgentName.Name), Is.True);
+            Assert.That(_model?.TopLevelPackage?.Settings.GetValueOrDefault(SettingDefinitions.RequestedAgentName), Is.EqualTo("NUnit.TestAdapter.Agent1"));
+            Assert.That(_model?.TopLevelPackage?.Settings.HasSetting(SettingDefinitions.SelectedAgentName.Name), Is.False);
         }
 
         [Test]
@@ -587,7 +587,7 @@ namespace TestCentric.Gui.Presenters
 
         [TestCase("NUnit.TestAdapter.Agent2", "Run on: Agent2")]
         [TestCase("SimpleAgent", "Run on: SimpleAgent")]
-        public void UpdateMenuItems_SpecificAgentIsSelected_SetsButtonText(string selectedAgent, string expectedText)
+        public void UpdateMenuItems_SpecificAgentIsRequested_SetsButtonText(string selectedAgent, string expectedText)
         {
             // 1. Arrange
             _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string>
@@ -596,7 +596,7 @@ namespace TestCentric.Gui.Presenters
                 selectedAgent
             });
 
-            _model.TopLevelPackage!.Settings.Add(SettingDefinitions.SelectedAgentName.WithValue(selectedAgent));
+            _model.TopLevelPackage!.Settings.Add(SettingDefinitions.RequestedAgentName.WithValue(selectedAgent));
 
             _model.AvailableAgents.Returns(new List<string>
             {
@@ -614,11 +614,11 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
-        public void UpdateMenuItems_OnlyOneAgentAvailable_ButtonTextStillShowsSelectedAgent()
+        public void UpdateMenuItems_OnlyOneAgentAvailable_ButtonTextStillShowsRequestedAgent()
         {
             // 1. Arrange
             _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> { "NUnit.TestAdapter.Agent1" });
-            _model.TopLevelPackage!.Settings.Add(SettingDefinitions.SelectedAgentName.WithValue("NUnit.TestAdapter.Agent1"));
+            _model.TopLevelPackage!.Settings.Add(SettingDefinitions.RequestedAgentName.WithValue("NUnit.TestAdapter.Agent1"));
             _model.AvailableAgents.Returns(new List<string> { "NUnit.TestAdapter.Agent1" });
 
             _controller.PopulateMenu();
@@ -670,6 +670,98 @@ namespace TestCentric.Gui.Presenters
             // 3. Assert
             Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default"));
             Assert.That(_model.TopLevelPackage?.Settings?.HasSetting(SettingDefinitions.SelectedAgentName.Name), Is.False);
+        }
+
+
+        [Test]
+        public void ClickingAgentMenuItem_RemovesStaleSelectedAgentName()
+        {
+            // 1. Arrange
+            _model.TopLevelPackage?.AddSetting(SettingDefinitions.SelectedAgentName.WithValue("Net90AgentLauncher"), recursive: true);
+            _model.AvailableAgents.Returns(new List<string> { "NUnit.TestAdapter.Agent1" });
+            _controller.PopulateMenu();
+
+            var agent1MenuItem = _view.RunOnButton.MenuItems[1] as ToolStripMenuItem;
+
+            // 2. Act
+            agent1MenuItem!.PerformClick();
+
+            // 3. Assert
+            Assert.That(_model.TopLevelPackage?.Settings?.HasSetting(SettingDefinitions.SelectedAgentName.Name), Is.False);
+        }
+
+        [Test]
+        public void UpdateMenuItems_ShowsRequestedAgentRatherThanTheOneTheEngineSelected()
+        {
+            // 1. Arrange
+            var agents = new List<string>
+            {
+                "NUnit.TestAdapter.Net80AgentLauncher",
+                "NUnit.TestAdapter.Net90AgentLauncher"
+            };
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(agents);
+            _model.AvailableAgents.Returns(agents);
+
+            // The engine records the launcher it used, by its short name
+            _model.TopLevelPackage!.Settings.Add(SettingDefinitions.RequestedAgentName.WithValue("NUnit.TestAdapter.Net80AgentLauncher"));
+            _model.TopLevelPackage!.Settings.Add(SettingDefinitions.SelectedAgentName.WithValue("Net90AgentLauncher"));
+
+            _controller.PopulateMenu();
+
+            // 2. Act
+            _controller.UpdateMenuItems();
+
+            // 3. Assert
+            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Net80AgentLauncher"));
+            var net80MenuItem = _view.RunOnButton.MenuItems[1] as ToolStripMenuItem;
+            Assert.That(net80MenuItem!.Checked, Is.True);
+        }
+
+        [Test]
+        public void UpdateMenuItems_TestsRunning_DisablesButton()
+        {
+            // 1. Arrange
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> { "Agent1", "Agent2" });
+            _model.IsTestRunning.Returns(true);
+            _controller.PopulateMenu();
+
+            // 2. Act
+            _controller.UpdateMenuItems();
+
+            // 3. Assert
+            Assert.That(_view.RunOnButton.Enabled, Is.False);
+        }
+
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        public void UpdateButtonState_SeveralAgentsAvailable_EnabledOnlyWhenNoTestsAreRunning(bool testRunning, bool expectedEnabled)
+        {
+            // 1. Arrange
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> { "Agent1", "Agent2" });
+            _controller.PopulateMenu();
+            _controller.UpdateMenuItems();
+            _model.IsTestRunning.Returns(testRunning);
+
+            // 2. Act
+            _controller.UpdateButtonState();
+
+            // 3. Assert
+            Assert.That(_view.RunOnButton.Enabled, Is.EqualTo(expectedEnabled));
+        }
+
+        [Test]
+        public void UpdateButtonState_OnlyOneAgentAvailable_StaysDisabled()
+        {
+            // 1. Arrange
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> { "Agent1" });
+            _controller.PopulateMenu();
+            _controller.UpdateMenuItems();
+
+            // 2. Act
+            _controller.UpdateButtonState();
+
+            // 3. Assert
+            Assert.That(_view.RunOnButton.Enabled, Is.False);
         }
 
         #endregion

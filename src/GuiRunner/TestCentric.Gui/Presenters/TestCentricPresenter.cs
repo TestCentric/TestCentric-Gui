@@ -653,6 +653,7 @@ namespace TestCentric.Gui.Presenters
             _view.ForcedStopButton.Enabled = displayForcedStop && !_forcedStopRequested;
             _view.RequestStopButton.Visible = !displayForcedStop;
             _view.RequestStopButton.Enabled = testRunning && !_stopRequested;
+            _agentSelectionController.UpdateButtonState();
 
             _view.OpenProjectCommand.Enabled = _view.OpenProjectCommand.Enabled = _view.OpenTestFileCommand.Enabled = !testLoading && !testRunning;
             _view.SaveProjectCommand.Enabled = testLoaded && !testRunning;

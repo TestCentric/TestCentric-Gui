@@ -26,6 +26,9 @@ namespace TestCentric.Gui.Presenters
         private ITestModel _model;
         private IMainView _view;
 
+        // True when the loaded package can run on more than one agent
+        private bool _canSelectAgent;
+
         public AgentSelectionController(ITestModel model, IMainView view)
         {
             _model = model;
@@ -66,6 +69,7 @@ namespace TestCentric.Gui.Presenters
         public void UpdateMenuItems()
         {
             IPopup agentMenu = _view.RunOnButton;
+            _canSelectAgent = false;
             agentMenu.Enabled = false;
             if (!_model.IsProjectLoaded)
             {
@@ -74,24 +78,38 @@ namespace TestCentric.Gui.Presenters
             }
 
             IList<string> agentsToEnable = _model.GetAgentsForPackage(_model.TopLevelPackage);
-            string selectedAgent = _model.TopLevelPackage.Settings.GetValueOrDefault(SettingDefinitions.SelectedAgentName);
-            if (string.IsNullOrEmpty(selectedAgent))
-                selectedAgent = DEFAULT;
 
-            UpdateButtonText(selectedAgent);
+            // The engine reads RequestedAgentName and records the launcher it actually
+            // used in SelectedAgentName, so the button shows what the user asked for.
+            string requestedAgent = _model.TopLevelPackage.Settings.GetValueOrDefault(SettingDefinitions.RequestedAgentName);
+            if (string.IsNullOrEmpty(requestedAgent))
+                requestedAgent = DEFAULT;
 
-            agentMenu.Enabled = agentsToEnable.Count > 1;
-            if (agentMenu.Enabled)
+            UpdateButtonText(requestedAgent);
+
+            _canSelectAgent = agentsToEnable.Count > 1;
+            UpdateButtonState();
+            if (_canSelectAgent)
             {
                 foreach (ToolStripMenuItem item in agentMenu.MenuItems)
                 {
                     if (item.Tag is string itemTag)
                     {
                         item.Enabled = itemTag == DEFAULT || agentsToEnable.Contains(itemTag);
-                        item.Checked = itemTag == selectedAgent;
+                        item.Checked = itemTag == requestedAgent;
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Enables the button only when an agent can be chosen and no tests are running.
+        /// It only sets the button's Enabled state, so it is cheap and may be called
+        /// from any thread.
+        /// </summary>
+        public void UpdateButtonState()
+        {
+            _view.RunOnButton.Enabled = _canSelectAgent && !_model.IsTestRunning;
         }
 
         private void UpdateButtonText(string selectedAgent)
@@ -116,17 +134,15 @@ namespace TestCentric.Gui.Presenters
             {
                 EnsureSingleItemChecked(item);
 
-                // TODO: We currently need to use both settings. Investigate.
+                // Only RequestedAgentName is read by the engine. SelectedAgentName is
+                // written by the engine itself, so a stale value is simply removed.
                 _model.TopLevelPackage.RemoveSetting(SettingDefinitions.SelectedAgentName, recursive: true);
                 _model.TopLevelPackage.RemoveSetting(SettingDefinitions.RequestedAgentName, recursive: true);
 
                 if (item.Tag is string itemTag)
                 {
                     if (itemTag != DEFAULT)
-                    {
-                        _model.TopLevelPackage.AddSetting(SettingDefinitions.SelectedAgentName.WithValue(itemTag), recursive: true);
                         _model.TopLevelPackage.AddSetting(SettingDefinitions.RequestedAgentName.WithValue(itemTag), recursive: true);
-                    }
 
                     UpdateButtonText(itemTag);
                 }
