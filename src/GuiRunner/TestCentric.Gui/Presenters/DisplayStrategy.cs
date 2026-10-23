@@ -283,7 +283,12 @@ namespace TestCentric.Gui.Presenters
                     treeNodeName += $" [{testGroup.Duration.Value:0.000}s]";
             }
 
-            _view.InvokeIfRequired(() => treeNode.Text = treeNodeName);
+            SetTreeNodeText(treeNode, treeNodeName);
+        }
+
+        protected virtual void SetTreeNodeText(TreeNode treeNode, string text)
+        {
+            _view.InvokeIfRequired(() => treeNode.Text = text);
         }
 
         private static int CalcImageIndex(TestNode testNode)

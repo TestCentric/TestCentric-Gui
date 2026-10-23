@@ -184,7 +184,7 @@ namespace TestCentric.Gui.Presenters
 
                 // Add the test back to the tree in it's new position
                 newParent!.Nodes.Add(treeNode);
-                newParent.Text = GroupDisplayName(newGroup);
+                SetTreeNodeText(newParent, GroupDisplayName(newGroup));
                 ExpandNewParentNodes(newParent);
             });
         }

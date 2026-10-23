@@ -264,6 +264,46 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
+        [Test]
+        public void OnTestFinished_DuringRun_GroupNamesAreUpdatedWhenRunFinishes()
+        {
+            // 1. Arrange
+            _model.TreeConfiguration.TestListGroupBy = "OUTCOME";
+            _view.When(v => v.InvokeIfRequired(Arg.Any<MethodInvoker>())).Do(c => c.Arg<MethodInvoker>()());
+
+            TestNode testNode = new TestNode(
+                "<test-suite id='0' type='TestSuite' name='Suite1'> " +
+                    "<test-suite id='0' type='TestFixture' name='Fixture1'>" +
+                        CreateTestcaseXml("3-1000", "") +
+                        CreateTestcaseXml("3-1001", "") +
+                    "</test-suite>" +
+                "</test-suite>");
+            TestNode testCase = testNode.Children[0].Children[0];
+            _model.GetTestById("3-1000").Returns(testCase);
+            _model.LoadedTests.Returns(testNode);
+
+            TestListDisplayStrategy strategy = new TestListDisplayStrategy(_view, _model);
+            strategy.OnTestLoaded(testNode, null);
+            TreeNode notRunNode = TreeNodes.Single(n => (n.Tag as TestGroup)?.Name == "Not Run");
+            Assert.That(notRunNode.Text, Is.EqualTo("Not Run (2 tests)"));
+
+            // 2. Act
+            strategy.OnTestRunStarting();
+            strategy.OnTestFinished(new ResultNode("<test-case id='3-1000' name='3-1000' result='Passed' />"));
+
+            // 3. Assert: the test has moved, but the group names are still the old ones
+            TreeNode passedNode = TreeNodes.Single(n => (n.Tag as TestGroup)?.Name == "Passed");
+            Assert.That(passedNode.Nodes.Count, Is.EqualTo(1));
+            Assert.That(notRunNode.Nodes.Count, Is.EqualTo(1));
+            Assert.That(notRunNode.Text, Is.EqualTo("Not Run (2 tests)"));
+            Assert.That(passedNode.Text, Is.EqualTo("Passed"));
+
+            strategy.OnTestRunFinished();
+
+            Assert.That(notRunNode.Text, Is.EqualTo("Not Run (1 test)"));
+            Assert.That(passedNode.Text, Is.EqualTo("Passed (1 test)"));
+        }
+
         private static void AssertTreeNodeAndTestGroup(List<TreeNode> treeNodes, string testGroupName, int expectedInGroup)
         {
             TreeNode? treeNode = treeNodes.Find(x => (x.Tag as TestGroup)?.Name == testGroupName);
