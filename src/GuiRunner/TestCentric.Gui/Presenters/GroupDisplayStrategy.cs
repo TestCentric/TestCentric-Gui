@@ -4,6 +4,8 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
@@ -47,6 +49,53 @@ namespace TestCentric.Gui.Presenters
             });
         }
 
+        /// <summary>
+        /// During a run the tree is repainted at intervals rather than after every
+        /// result: moving a test between groups renames the group nodes, and each
+        /// repaint of the owner-drawn TreeView measures every expanded node. The
+        /// interval grows with the cost of a repaint, so that large trees spend
+        /// most of the run processing results rather than repainting.
+        /// </summary>
+        public override void OnTestRunStarting()
+        {
+            base.OnTestRunStarting();
+
+            _view.InvokeIfRequired(() =>
+            {
+                if (_runRefreshTimer != null)
+                    return;
+
+                _treeView.BeginUpdate();
+                var timer = new Timer { Interval = RunRefreshInterval };
+                timer.Tick += (s, e) =>
+                {
+                    // Covers a run that finishes after this strategy has been replaced
+                    if (!_model.IsTestRunning)
+                    {
+                        StopRunRefresh();
+                        return;
+                    }
+
+                    var repaint = Stopwatch.StartNew();
+                    ApplyPendingNodeTexts();
+                    _treeView.EndUpdate();
+                    // Paint now: while results keep arriving, a queued WM_PAINT is not processed
+                    _treeView.Update();
+                    _treeView.BeginUpdate();
+                    timer.Interval = Math.Max(RunRefreshInterval, (int)repaint.ElapsedMilliseconds * RepaintCostFactor);
+                };
+                _runRefreshTimer = timer;
+                timer.Start();
+            });
+        }
+
+        public override void OnTestRunFinished()
+        {
+            _view.InvokeIfRequired(StopRunRefresh);
+
+            base.OnTestRunFinished();
+        }
+
         public void Add(TreeNode treeNode)
         {
             _view.Add(treeNode);
@@ -65,6 +114,17 @@ namespace TestCentric.Gui.Presenters
         #region Protected Members
 
         protected abstract string GroupBy { get; }
+
+        protected override void SetTreeNodeText(TreeNode treeNode, string text)
+        {
+            _view.InvokeIfRequired(() =>
+            {
+                if (_runRefreshTimer == null)
+                    treeNode.Text = text;
+                else
+                    _pendingNodeTexts[treeNode] = text;
+            });
+        }
 
         protected TreeNode MakeTreeNode(TestGroup group, bool recursive)
         {
@@ -130,6 +190,42 @@ namespace TestCentric.Gui.Presenters
                 if (topNode != null)
                     topNode.EnsureVisible();
             }
+        }
+
+        #endregion
+
+        #region Private Members
+
+        private const int RunRefreshInterval = 250; // milliseconds
+
+        // Minimum interval between repaints, as a multiple of the last repaint's duration
+        private const int RepaintCostFactor = 4;
+
+        private Timer? _runRefreshTimer;
+
+        private void StopRunRefresh()
+        {
+            if (_runRefreshTimer == null)
+                return;
+
+            _runRefreshTimer.Stop();
+            _runRefreshTimer.Dispose();
+            _runRefreshTimer = null;
+            ApplyPendingNodeTexts();
+            _treeView.EndUpdate();
+        }
+
+        // Renaming a node makes the TreeView measure it again, even inside an update
+        // block. During a run, group names change with every result, so only the
+        // latest text of each node is kept and applied when the tree is repainted.
+        private readonly Dictionary<TreeNode, string> _pendingNodeTexts = new Dictionary<TreeNode, string>();
+
+        private void ApplyPendingNodeTexts()
+        {
+            foreach (var entry in _pendingNodeTexts)
+                entry.Key.Text = entry.Value;
+
+            _pendingNodeTexts.Clear();
         }
 
         #endregion
