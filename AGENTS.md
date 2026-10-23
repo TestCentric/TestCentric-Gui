@@ -53,4 +53,4 @@ CodeRabbit reads this file as review guidance.
   `issue-labels-exclude` in `GitReleaseManager.yaml`, or the release notes fail to build.
   Included labels appear in the release notes; excluded ones, such as Build and Refactor,
   do not.
-- One human review is expected before merging.
+- One human review is expected before merging. Request it from the `TestCentric/gui-team` team.
