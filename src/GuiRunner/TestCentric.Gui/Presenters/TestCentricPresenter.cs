@@ -103,9 +103,14 @@ namespace TestCentric.Gui.Presenters
                 _view.RunAsX86.CheckedChanged += OnRunAsX86Changed;
 
                 UpdateTitleBar();
+                _agentSelectionController.UpdateMenuItems();
             };
 
-            _model.Events.TestCentricProjectUnloaded += (TestEventArgs e) => UpdateTitleBar();
+            _model.Events.TestCentricProjectUnloaded += (TestEventArgs e) =>
+            {
+                UpdateTitleBar();
+                _agentSelectionController.UpdateMenuItems();
+            };
 
             void UpdateTitleBar()
             {
@@ -131,6 +136,7 @@ namespace TestCentric.Gui.Presenters
                 OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
+                _agentSelectionController.UpdateMenuItems();
 
                 _view.ResultTabs.InvokeIfRequired(() => _view.ResultTabs.SelectedIndex = 0);
             };
@@ -163,6 +169,7 @@ namespace TestCentric.Gui.Presenters
                 OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
+                _agentSelectionController.UpdateMenuItems();
 
             };
 
@@ -293,7 +300,6 @@ namespace TestCentric.Gui.Presenters
                 var configSelectionController = new ConfigurationSelectionController(_model, _view);
                 configSelectionController.PopulateMenu();
 
-                _agentSelectionController.UpdateMenuItems();
                 _recentFileController.PopulateMenu();
                 _recentProjectController.PopulateMenu();
 
@@ -301,6 +307,8 @@ namespace TestCentric.Gui.Presenters
 
                 _view.RecentProjectsMenu.Enabled = _view.RecentFilesMenu.Enabled = !isTestRunning;
             };
+
+            _view.RunOnButton.Popup += () => _agentSelectionController.UpdateMenuItems();
 
             _view.NewProjectCommand.Execute += () => CreateNewProject();
 

@@ -298,6 +298,80 @@ namespace TestCentric.Gui.Presenters.Main
 
         #endregion
 
+        #region RunOnButton
+
+        [Test]
+        public void RunOnButtonPopup_ShowsSelectedAgent()
+        {
+            // 1. Arrange
+            var project = new TestCentricProject("MyProject", "FILE1");
+            project.TopLevelPackage.AddSetting(SettingDefinitions.SelectedAgentName.WithValue("NUnit.Agents.Net80AgentLauncher"), recursive: true);
+            _model.TestCentricProject.Returns(project);
+            _model.TopLevelPackage.Returns(project.TopLevelPackage);
+            _model.IsProjectLoaded.Returns(true);
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string>());
+
+            // 2. Act
+            _view.RunOnButton.Popup += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Net80AgentLauncher"));
+        }
+
+        [Test]
+        public void ProjectLoaded_RunOnButtonShowsSelectedAgent()
+        {
+            // 1. Arrange
+            var project = new TestCentricProject("MyProject", "FILE1");
+            project.TopLevelPackage.AddSetting(SettingDefinitions.SelectedAgentName.WithValue("NUnit.Agents.Net80AgentLauncher"), recursive: true);
+            _model.TestCentricProject.Returns(project);
+            _model.TopLevelPackage.Returns(project.TopLevelPackage);
+            _model.IsProjectLoaded.Returns(true);
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string>());
+
+            // 2. Act
+            FireProjectLoadedEvent();
+
+            // 3. Assert
+            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Net80AgentLauncher"));
+        }
+
+        [Test]
+        public void TestLoaded_RunOnButtonIsEnabledWhenSeveralAgentsCanRunThePackage()
+        {
+            // 1. Arrange
+            var project = new TestCentricProject("MyProject", "FILE1");
+            _model.TestCentricProject.Returns(project);
+            _model.TopLevelPackage.Returns(project.TopLevelPackage);
+            _model.IsProjectLoaded.Returns(true);
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> { "Agent1", "Agent2" });
+            _view.RunOnButton.MenuItems.Returns(new System.Windows.Forms.ToolStripDropDownButton().DropDownItems);
+
+            // 2. Act
+            FireTestLoadedEvent(new TestNode("<test-suite id='1' name='TestA' type='TestFixture'/>"));
+
+            // 3. Assert
+            _view.RunOnButton.Received().Enabled = true;
+            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default"));
+        }
+
+        [Test]
+        public void ProjectUnloaded_RunOnButtonIsDisabledAndShowsDefault()
+        {
+            // 1. Arrange
+            _model.IsProjectLoaded.Returns(false);
+            _view.RunOnButton.Text = "Run on: Net80AgentLauncher";
+
+            // 2. Act
+            FireProjectUnloadedEvent();
+
+            // 3. Assert
+            _view.RunOnButton.Received().Enabled = false;
+            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default"));
+        }
+
+        #endregion
+
         #region SelectRuntimeCommand
 
         public void SelectRuntimeCommand_PopsUpMenu()

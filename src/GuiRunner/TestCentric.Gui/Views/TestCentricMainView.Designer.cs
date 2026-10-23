@@ -44,6 +44,7 @@ namespace TestCentric.Gui.Views
             this.runFailedButton = new System.Windows.Forms.ToolStripButton();
             this.stopRunButton = new System.Windows.Forms.ToolStripButton();
             this.forceStopButton = new System.Windows.Forms.ToolStripButton();
+            this.runOnButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.displayFormatButton = new System.Windows.Forms.ToolStripButton();
             this.showFilterButton = new System.Windows.Forms.ToolStripButton();
@@ -62,7 +63,6 @@ namespace TestCentric.Gui.Views
             this.reloadTestsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.testRunSettingsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.selectAgentMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.selectAgentDummyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectConfigurationMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.runAsX86MenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -130,6 +130,7 @@ namespace TestCentric.Gui.Views
             this.runFailedButton,
             this.stopRunButton,
             this.forceStopButton,
+            this.runOnButton,
             this.toolStripSeparator5,
             this.displayFormatButton,
             this.showFilterButton,
@@ -195,6 +196,14 @@ namespace TestCentric.Gui.Views
             this.forceStopButton.Text = "Force Stop";
             this.forceStopButton.ToolTipText = "Force the test run to stop";
             // 
+            // runOnButton
+            // 
+            this.runOnButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.runOnButton.Name = "runOnButton";
+            this.runOnButton.Size = new System.Drawing.Size(105, 21);
+            this.runOnButton.Text = "Run on: Default";
+            this.runOnButton.ToolTipText = "Select the agent used to run the tests";
+            // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
@@ -254,7 +263,6 @@ namespace TestCentric.Gui.Views
             this.reloadTestsMenuItem,
             this.toolStripSeparator2,
             this.testRunSettingsMenuItem,
-            this.selectAgentMenu,
             this.selectConfigurationMenu,
             this.runAsX86MenuItem,
             this.toolStripSeparator3,
@@ -342,12 +350,6 @@ namespace TestCentric.Gui.Views
             this.testRunSettingsMenuItem.Name = "testRunSettingsMenuItem";
             this.testRunSettingsMenuItem.Size = new System.Drawing.Size(182, 22);
             this.testRunSettingsMenuItem.Text = "&Test Run Settings...";
-            // 
-            // selectAgentMenu
-            // 
-            this.selectAgentMenu.Name = "selectAgentMenu";
-            this.selectAgentMenu.Size = new System.Drawing.Size(182, 22);
-            this.selectAgentMenu.Text = "Select Agent";
             // 
             // selectAgentDummyMenuItem
             // 
@@ -750,11 +752,11 @@ namespace TestCentric.Gui.Views
         private ToolStripSeparator toolStripSeparator12;
         private ToolStripMenuItem runAsX86MenuItem;
         private ToolStripMenuItem selectConfigurationMenu;
-        private ToolStripMenuItem selectAgentMenu;
         private ToolStripMenuItem selectAgentDummyMenuItem;
         private ToolStripButton runSelectedButton;
         private ToolStripButton stopRunButton;
         private ToolStripButton forceStopButton;
+        private ToolStripDropDownButton runOnButton;
         private ProgressBarView progressBar;
         private ToolStripButton runAllButton;
         private ToolStripButton showFilterButton;
