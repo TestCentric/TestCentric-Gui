@@ -44,6 +44,7 @@ namespace TestCentric.Gui.Views
             this.runFailedButton = new System.Windows.Forms.ToolStripButton();
             this.stopRunButton = new System.Windows.Forms.ToolStripButton();
             this.forceStopButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.runOnButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.displayFormatButton = new System.Windows.Forms.ToolStripButton();
@@ -130,6 +131,7 @@ namespace TestCentric.Gui.Views
             this.runFailedButton,
             this.stopRunButton,
             this.forceStopButton,
+            this.toolStripSeparator8,
             this.runOnButton,
             this.toolStripSeparator5,
             this.displayFormatButton,
@@ -196,12 +198,17 @@ namespace TestCentric.Gui.Views
             this.forceStopButton.Text = "Force Stop";
             this.forceStopButton.ToolTipText = "Force the test run to stop";
             // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 24);
+            // 
             // runOnButton
             // 
             this.runOnButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.runOnButton.Name = "runOnButton";
-            this.runOnButton.Size = new System.Drawing.Size(105, 21);
-            this.runOnButton.Text = "Run on: Default";
+            this.runOnButton.Size = new System.Drawing.Size(178, 21);
+            this.runOnButton.Text = "Run on: Default (local process)";
             this.runOnButton.ToolTipText = "Select the agent used to run the tests";
             // 
             // toolStripSeparator5
@@ -756,6 +763,7 @@ namespace TestCentric.Gui.Views
         private ToolStripButton runSelectedButton;
         private ToolStripButton stopRunButton;
         private ToolStripButton forceStopButton;
+        private ToolStripSeparator toolStripSeparator8;
         private ToolStripDropDownButton runOnButton;
         private ProgressBarView progressBar;
         private ToolStripButton runAllButton;

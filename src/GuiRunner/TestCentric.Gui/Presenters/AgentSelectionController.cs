@@ -104,8 +104,8 @@ namespace TestCentric.Gui.Presenters
 
         /// <summary>
         /// Enables the button only when an agent can be chosen and no tests are running.
-        /// It only sets the button's Enabled state, so it is cheap and may be called
-        /// from any thread.
+        /// It only sets the button's Enabled state, so it is cheap. It is called on engine
+        /// events too: the view element marshals the change to the UI thread.
         /// </summary>
         public void UpdateButtonState()
         {
@@ -114,7 +114,7 @@ namespace TestCentric.Gui.Presenters
 
         private void UpdateButtonText(string selectedAgent)
         {
-            string displayName = selectedAgent == DEFAULT ? "Default" : GetDisplayName(selectedAgent);
+            string displayName = selectedAgent == DEFAULT ? "Default (local process)" : GetDisplayName(selectedAgent);
             _view.RunOnButton.Text = $"Run on: {displayName}";
         }
 

@@ -507,7 +507,7 @@ namespace TestCentric.Gui.Presenters
             _controller.PopulateMenu();
 
             // 3. Assert
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default"));
+            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default (local process)"));
         }
 
         [Test]
@@ -557,7 +557,7 @@ namespace TestCentric.Gui.Presenters
             _controller.UpdateMenuItems();
 
             // 3. Assert
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default"));
+            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default (local process)"));
         }
 
         [Test]
@@ -582,7 +582,7 @@ namespace TestCentric.Gui.Presenters
             _controller.UpdateMenuItems();
 
             // 3. Assert
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default"));
+            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default (local process)"));
         }
 
         [TestCase("NUnit.TestAdapter.Agent2", "Run on: Agent2")]
@@ -668,7 +668,7 @@ namespace TestCentric.Gui.Presenters
             defaultMenuItem!.PerformClick();
 
             // 3. Assert
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default"));
+            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default (local process)"));
             Assert.That(_model.TopLevelPackage?.Settings?.HasSetting(SettingDefinitions.SelectedAgentName.Name), Is.False);
         }
 

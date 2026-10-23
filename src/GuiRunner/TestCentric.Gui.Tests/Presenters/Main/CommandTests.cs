@@ -352,7 +352,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             // 3. Assert
             _view.RunOnButton.Received().Enabled = true;
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default"));
+            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default (local process)"));
         }
 
         [Test]
@@ -411,7 +411,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             // 3. Assert
             _view.RunOnButton.Received().Enabled = false;
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default"));
+            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default (local process)"));
         }
 
         #endregion
