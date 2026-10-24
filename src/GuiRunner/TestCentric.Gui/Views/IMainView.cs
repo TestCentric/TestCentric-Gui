@@ -41,7 +41,6 @@ namespace TestCentric.Gui.Views
         ICommand CloseProjectCommand { get; }
         ICommand EditProjectCommand { get; }
         ICommand ReloadTestsCommand { get; }
-        IPopup SelectAgentMenu { get; }
         IPopup SelectConfigurationMenu { get; }
         IChecked RunAsX86 { get; }
         IPopup RecentProjectsMenu { get; }
@@ -68,6 +67,7 @@ namespace TestCentric.Gui.Views
         ICommand RunSelectedButton { get; }
         ICommand RerunButton { get; }
         ICommand RunFailedButton { get; }
+        IPopup RunOnButton { get; }
 
         ICommand RequestStopButton { get; }
         ICommand ForcedStopButton { get; }
