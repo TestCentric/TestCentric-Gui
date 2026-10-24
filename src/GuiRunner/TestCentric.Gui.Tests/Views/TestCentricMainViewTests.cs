@@ -30,6 +30,25 @@ namespace TestCentric.Gui.Views
             Assert.That(displayFormatButton, Is.Not.Null);
         }
 
+        [Test]
+        public void RunOnButtonShowsOnlyAnIconWithADropDownArrow()
+        {
+            var runOnButton = GetToolStripItem<ToolStripDropDownButton>("runOnButton");
+            Assert.That(runOnButton, Is.Not.Null);
+            Assert.That(runOnButton!.DisplayStyle, Is.EqualTo(ToolStripItemDisplayStyle.Image));
+            Assert.That(runOnButton.Image, Is.Not.Null);
+            Assert.That(runOnButton.Image!.Size, Is.EqualTo(new System.Drawing.Size(16, 16)));
+            Assert.That(runOnButton.ShowDropDownArrow, Is.True);
+        }
+
+        [Test]
+        public void RunOnButtonHasAnAccessibleName()
+        {
+            var runOnButton = GetToolStripItem<ToolStripDropDownButton>("runOnButton");
+            Assert.That(runOnButton, Is.Not.Null);
+            Assert.That(runOnButton!.AccessibleName, Is.EqualTo("Run on"));
+        }
+
         T? GetToolStripItem<T>(string name) where T : ToolStripItem
         {
             ToolStrip? toolStrip = GetToolStrip();

@@ -63,7 +63,7 @@ namespace TestCentric.Gui.Presenters
                 agentItem.Click += OnAgentMenuItemClicked;
             }
 
-            UpdateButtonText(DEFAULT);
+            UpdateToolTip(DEFAULT);
         }
 
         public void UpdateMenuItems()
@@ -73,19 +73,20 @@ namespace TestCentric.Gui.Presenters
             agentMenu.Enabled = false;
             if (!_model.IsProjectLoaded)
             {
-                UpdateButtonText(DEFAULT);
+                UpdateToolTip(DEFAULT);
                 return;
             }
 
             IList<string> agentsToEnable = _model.GetAgentsForPackage(_model.TopLevelPackage);
 
-            // The engine reads RequestedAgentName and records the launcher it actually
-            // used in SelectedAgentName, so the button shows what the user asked for.
+            // "Requested" here only means what the user picked in the GUI, saved as
+            // RequestedAgentName: that is all the GUI knows. It is not the engine's
+            // distinction between the requested and the selected agent.
             string requestedAgent = _model.TopLevelPackage.Settings.GetValueOrDefault(SettingDefinitions.RequestedAgentName);
             if (string.IsNullOrEmpty(requestedAgent))
                 requestedAgent = DEFAULT;
 
-            UpdateButtonText(requestedAgent);
+            UpdateToolTip(requestedAgent);
 
             _canSelectAgent = agentsToEnable.Count > 1;
             UpdateButtonState();
@@ -112,10 +113,10 @@ namespace TestCentric.Gui.Presenters
             _view.RunOnButton.Enabled = _canSelectAgent && !_model.IsTestRunning;
         }
 
-        private void UpdateButtonText(string selectedAgent)
+        private void UpdateToolTip(string requestedAgent)
         {
-            string displayName = selectedAgent == DEFAULT ? "Default (local process)" : GetDisplayName(selectedAgent);
-            _view.RunOnButton.Text = $"Run on: {displayName}";
+            string displayName = requestedAgent == DEFAULT ? "Default (local process)" : GetDisplayName(requestedAgent);
+            _view.RunOnButton.ToolTipText = $"Run on: {displayName}";
         }
 
         private static string GetDisplayName(string agentFullName)
@@ -144,7 +145,7 @@ namespace TestCentric.Gui.Presenters
                     if (itemTag != DEFAULT)
                         _model.TopLevelPackage.AddSetting(SettingDefinitions.RequestedAgentName.WithValue(itemTag), recursive: true);
 
-                    UpdateButtonText(itemTag);
+                    UpdateToolTip(itemTag);
                 }
             }
 

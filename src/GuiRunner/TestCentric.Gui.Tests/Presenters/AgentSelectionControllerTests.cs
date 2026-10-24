@@ -215,6 +215,7 @@ namespace TestCentric.Gui.Presenters
 
             // 3. Assert
             _view.RunOnButton.Received().Enabled = false;
+            _view.RunOnButton.DidNotReceive().Visible = false;
         }
 
         [Test]
@@ -498,7 +499,7 @@ namespace TestCentric.Gui.Presenters
         #region Button Text and ToolTip Tests
 
         [Test]
-        public void PopulateMenu_SetsButtonTextToDefault()
+        public void PopulateMenu_SetsToolTipToDefault()
         {
             // 1. Arrange
             _model.AvailableAgents.Returns(new List<string> { "NUnit.TestAdapter.Agent1" });
@@ -507,7 +508,24 @@ namespace TestCentric.Gui.Presenters
             _controller.PopulateMenu();
 
             // 3. Assert
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default (local process)"));
+            Assert.That(_view.RunOnButton.ToolTipText, Is.EqualTo("Run on: Default (local process)"));
+        }
+
+        [Test]
+        public void ButtonText_IsNeverChanged()
+        {
+            // 1. Arrange
+            _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> { "NUnit.TestAdapter.Agent1", "NUnit.TestAdapter.Agent2" });
+            _model.AvailableAgents.Returns(new List<string> { "NUnit.TestAdapter.Agent1", "NUnit.TestAdapter.Agent2" });
+
+            // 2. Act
+            _controller.PopulateMenu();
+            _controller.UpdateMenuItems();
+            (_view.RunOnButton.MenuItems[1] as ToolStripMenuItem)!.PerformClick();
+
+            // 3. Assert
+            // The button only shows an icon: the requested agent is in the tool tip
+            _view.RunOnButton.DidNotReceive().Text = Arg.Any<string>();
         }
 
         [Test]
@@ -546,22 +564,22 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
-        public void UpdateMenuItems_NoProject_SetsButtonTextToDefault()
+        public void UpdateMenuItems_NoProject_SetsToolTipToDefault()
         {
             // 1. Arrange
             _model.IsProjectLoaded.Returns(false);
             _controller.PopulateMenu();
-            _view.RunOnButton.Text = "Run on: Agent1";
+            _view.RunOnButton.ToolTipText = "Run on: Agent1";
 
             // 2. Act
             _controller.UpdateMenuItems();
 
             // 3. Assert
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default (local process)"));
+            Assert.That(_view.RunOnButton.ToolTipText, Is.EqualTo("Run on: Default (local process)"));
         }
 
         [Test]
-        public void UpdateMenuItems_NoSpecificAgentIsSelected_SetsButtonTextToDefault()
+        public void UpdateMenuItems_NoSpecificAgentIsSelected_SetsToolTipToDefault()
         {
             // 1. Arrange
             _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string>
@@ -582,12 +600,12 @@ namespace TestCentric.Gui.Presenters
             _controller.UpdateMenuItems();
 
             // 3. Assert
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default (local process)"));
+            Assert.That(_view.RunOnButton.ToolTipText, Is.EqualTo("Run on: Default (local process)"));
         }
 
         [TestCase("NUnit.TestAdapter.Agent2", "Run on: Agent2")]
         [TestCase("SimpleAgent", "Run on: SimpleAgent")]
-        public void UpdateMenuItems_SpecificAgentIsRequested_SetsButtonText(string selectedAgent, string expectedText)
+        public void UpdateMenuItems_SpecificAgentIsRequested_SetsToolTip(string selectedAgent, string expectedText)
         {
             // 1. Arrange
             _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string>
@@ -610,11 +628,11 @@ namespace TestCentric.Gui.Presenters
             _controller.UpdateMenuItems();
 
             // 3. Assert
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo(expectedText));
+            Assert.That(_view.RunOnButton.ToolTipText, Is.EqualTo(expectedText));
         }
 
         [Test]
-        public void UpdateMenuItems_OnlyOneAgentAvailable_ButtonTextStillShowsRequestedAgent()
+        public void UpdateMenuItems_OnlyOneAgentAvailable_ToolTipStillShowsRequestedAgent()
         {
             // 1. Arrange
             _model.GetAgentsForPackage(null!).ReturnsForAnyArgs(new List<string> { "NUnit.TestAdapter.Agent1" });
@@ -628,11 +646,11 @@ namespace TestCentric.Gui.Presenters
 
             // 3. Assert
             _view.RunOnButton.Received().Enabled = false;
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Agent1"));
+            Assert.That(_view.RunOnButton.ToolTipText, Is.EqualTo("Run on: Agent1"));
         }
 
         [Test]
-        public void ClickingAgentMenuItem_SetsButtonText()
+        public void ClickingAgentMenuItem_SetsToolTip()
         {
             // 1. Arrange
             _model.AvailableAgents.Returns(new List<string>
@@ -649,11 +667,11 @@ namespace TestCentric.Gui.Presenters
             agent2MenuItem!.PerformClick();
 
             // 3. Assert
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Agent2"));
+            Assert.That(_view.RunOnButton.ToolTipText, Is.EqualTo("Run on: Agent2"));
         }
 
         [Test]
-        public void ClickingDefaultMenuItem_SetsButtonTextToDefault()
+        public void ClickingDefaultMenuItem_SetsToolTipToDefault()
         {
             // 1. Arrange
             _model.AvailableAgents.Returns(new List<string> { "NUnit.TestAdapter.Agent1" });
@@ -668,7 +686,7 @@ namespace TestCentric.Gui.Presenters
             defaultMenuItem!.PerformClick();
 
             // 3. Assert
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default (local process)"));
+            Assert.That(_view.RunOnButton.ToolTipText, Is.EqualTo("Run on: Default (local process)"));
             Assert.That(_model.TopLevelPackage?.Settings?.HasSetting(SettingDefinitions.SelectedAgentName.Name), Is.False);
         }
 
@@ -712,7 +730,7 @@ namespace TestCentric.Gui.Presenters
             _controller.UpdateMenuItems();
 
             // 3. Assert
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Net80AgentLauncher"));
+            Assert.That(_view.RunOnButton.ToolTipText, Is.EqualTo("Run on: Net80AgentLauncher"));
             var net80MenuItem = _view.RunOnButton.MenuItems[1] as ToolStripMenuItem;
             Assert.That(net80MenuItem!.Checked, Is.True);
         }
@@ -762,6 +780,7 @@ namespace TestCentric.Gui.Presenters
 
             // 3. Assert
             Assert.That(_view.RunOnButton.Enabled, Is.False);
+            _view.RunOnButton.DidNotReceive().Visible = false;
         }
 
         #endregion

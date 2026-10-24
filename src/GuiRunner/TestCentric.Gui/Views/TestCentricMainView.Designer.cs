@@ -205,11 +205,14 @@ namespace TestCentric.Gui.Views
             // 
             // runOnButton
             // 
-            this.runOnButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.runOnButton.AccessibleName = "Run on";
+            this.runOnButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.runOnButton.Image = ((System.Drawing.Image)(resources.GetObject("runOnButton.Image")));
+            this.runOnButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.runOnButton.Name = "runOnButton";
-            this.runOnButton.Size = new System.Drawing.Size(178, 21);
-            this.runOnButton.Text = "Run on: Default (local process)";
-            this.runOnButton.ToolTipText = "Select the agent used to run the tests";
+            this.runOnButton.Size = new System.Drawing.Size(29, 21);
+            this.runOnButton.Text = "Run on";
+            this.runOnButton.ToolTipText = "Run on: Default (local process)";
             // 
             // toolStripSeparator5
             // 

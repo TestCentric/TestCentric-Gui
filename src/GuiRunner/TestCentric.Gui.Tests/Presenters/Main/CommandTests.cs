@@ -301,7 +301,7 @@ namespace TestCentric.Gui.Presenters.Main
         #region RunOnButton
 
         [Test]
-        public void RunOnButtonPopup_ShowsSelectedAgent()
+        public void RunOnButtonPopup_ToolTipShowsRequestedAgent()
         {
             // 1. Arrange
             var project = new TestCentricProject("MyProject", "FILE1");
@@ -315,11 +315,11 @@ namespace TestCentric.Gui.Presenters.Main
             _view.RunOnButton.Popup += Raise.Event<CommandHandler>();
 
             // 3. Assert
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Net80AgentLauncher"));
+            Assert.That(_view.RunOnButton.ToolTipText, Is.EqualTo("Run on: Net80AgentLauncher"));
         }
 
         [Test]
-        public void ProjectLoaded_RunOnButtonShowsSelectedAgent()
+        public void ProjectLoaded_RunOnButtonToolTipShowsRequestedAgent()
         {
             // 1. Arrange
             var project = new TestCentricProject("MyProject", "FILE1");
@@ -333,7 +333,7 @@ namespace TestCentric.Gui.Presenters.Main
             FireProjectLoadedEvent();
 
             // 3. Assert
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Net80AgentLauncher"));
+            Assert.That(_view.RunOnButton.ToolTipText, Is.EqualTo("Run on: Net80AgentLauncher"));
         }
 
         [Test]
@@ -352,7 +352,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             // 3. Assert
             _view.RunOnButton.Received().Enabled = true;
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default (local process)"));
+            Assert.That(_view.RunOnButton.ToolTipText, Is.EqualTo("Run on: Default (local process)"));
         }
 
         [Test]
@@ -374,10 +374,10 @@ namespace TestCentric.Gui.Presenters.Main
 
             // 3. Assert
             Assert.That(dispatched, Is.Not.Null, "The refresh was not dispatched through InvokeIfRequired");
-            Assert.That(_view.RunOnButton.Text, Is.Not.EqualTo("Run on: Net80AgentLauncher"), "The refresh ran before being dispatched");
+            Assert.That(_view.RunOnButton.ToolTipText, Is.Not.EqualTo("Run on: Net80AgentLauncher"), "The refresh ran before being dispatched");
 
             dispatched!.Invoke();
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Net80AgentLauncher"));
+            Assert.That(_view.RunOnButton.ToolTipText, Is.EqualTo("Run on: Net80AgentLauncher"));
         }
 
         [Test]
@@ -429,14 +429,14 @@ namespace TestCentric.Gui.Presenters.Main
         {
             // 1. Arrange
             _model.IsProjectLoaded.Returns(false);
-            _view.RunOnButton.Text = "Run on: Net80AgentLauncher";
+            _view.RunOnButton.ToolTipText = "Run on: Net80AgentLauncher";
 
             // 2. Act
             FireProjectUnloadedEvent();
 
             // 3. Assert
             _view.RunOnButton.Received().Enabled = false;
-            Assert.That(_view.RunOnButton.Text, Is.EqualTo("Run on: Default (local process)"));
+            Assert.That(_view.RunOnButton.ToolTipText, Is.EqualTo("Run on: Default (local process)"));
         }
 
         #endregion

@@ -150,7 +150,7 @@ namespace TestCentric.Gui.Views
         public ICommand RunSelectedButton { get; private set; }
         public ICommand RerunButton { get; private set; }
         public ICommand RunFailedButton { get; private set; }
-        public IPopup RunOnButton { get; private set; }
+        public IDropDownButton RunOnButton { get; private set; }
 
         public ICommand RequestStopButton { get; private set; }
         public ICommand ForcedStopButton { get; private set; }
