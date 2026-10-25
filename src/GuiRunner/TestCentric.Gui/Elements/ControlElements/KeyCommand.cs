@@ -30,13 +30,13 @@ namespace TestCentric.Gui.Elements
             control.KeyUp += OnKeyDown;
         }
 
-        private void OnKeyUp(object sender, KeyEventArgs e)
+        private void OnKeyUp(object? sender, KeyEventArgs e)
         {
             if (_upKeys.Contains(e.KeyCode))
                 KeyUp?.Invoke();
         }
 
-        private void OnKeyDown(object sender, KeyEventArgs e)
+        private void OnKeyDown(object? sender, KeyEventArgs e)
         {
             if (_downKeys.Contains(e.KeyCode))
                 KeyDown?.Invoke();

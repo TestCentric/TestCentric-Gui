@@ -11,12 +11,12 @@ namespace TestCentric.Gui.Elements
     /// <summary>
     /// DropDownButtonElement extends ToolStripElement for use with a DropDownButton.
     /// </summary>
-    public class DropDownButtonElement : ToolStripElement, IPopup
+    public class DropDownButtonElement : ToolStripElement, IDropDownButton
     {
         public DropDownButtonElement(ToolStripDropDownButton button) : base(button)
         {
-            button.Click += (s, e) => Popup?.Invoke();
-            MenuItems = null!;
+            button.DropDownOpening += (s, e) => Popup?.Invoke();
+            MenuItems = button.DropDownItems;
         }
 
         public ToolStripItemCollection MenuItems { get; }

@@ -88,7 +88,7 @@ namespace TestCentric.Gui.Presenters
 
         void EnsureSingleItemChecked(ToolStripMenuItem itemToCheck)
         {
-            foreach (ToolStripMenuItem item in _view.SelectAgentMenu.MenuItems)
+            foreach (ToolStripMenuItem item in _view.SelectConfigurationMenu.MenuItems)
                 item.Checked = false;
             itemToCheck.Checked = true;
         }

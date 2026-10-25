@@ -52,7 +52,7 @@ namespace TestCentric.Gui.Views
 
         OutcomeImageSet OutcomeImages { set; }
         int VisibleNodeCount { get; }
-        TreeNode TopNode { get; set; }
+        TreeNode? TopNode { get; set; }
 
         TestCentricTreeView TreeView { get; }
         TreeNodeCollection Nodes { get; }

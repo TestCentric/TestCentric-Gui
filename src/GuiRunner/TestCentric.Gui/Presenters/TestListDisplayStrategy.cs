@@ -196,7 +196,7 @@ namespace TestCentric.Gui.Presenters
 
                 // Add the test back to the tree in it's new position
                 newParent!.Nodes.Add(treeNode);
-                newParent.Text = GroupDisplayName(newGroup);
+                SetTreeNodeText(newParent, GroupDisplayName(newGroup));
                 ExpandNewParentNodes(newParent);
             });
         }
@@ -325,7 +325,7 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        private void RemoveParentIfEmpty(TreeNode parent)
+        private void RemoveParentIfEmpty(TreeNode? parent)
         {
             while (parent != null && parent.Nodes.Count == 0)
             {

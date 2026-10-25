@@ -160,7 +160,9 @@ namespace TestCentric.Gui.Views
         /// </summary>
         private void detailList_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            TestResultItem resultItem = (TestResultItem)detailList.SelectedItem;
+            if (detailList.SelectedItem is not TestResultItem resultItem)
+                return;
+
             errorBrowser.StackTraceSource = resultItem.FilteredStackTrace ?? "";
             detailList.ContextMenuStrip = detailListContextMenuStrip;
         }
@@ -204,8 +206,9 @@ namespace TestCentric.Gui.Views
 
         private void copyDetailMenuItem_Click(object sender, System.EventArgs e)
         {
-            if (detailList.SelectedItem != null)
-                Clipboard.SetDataObject(detailList.SelectedItem.ToString());
+            string? text = detailList.SelectedItem?.ToString();
+            if (text != null)
+                Clipboard.SetDataObject(text);
         }
 
         private void OnMouseHover(object? sender, System.EventArgs e)
@@ -298,7 +301,7 @@ namespace TestCentric.Gui.Views
             panel1.Top = testResultSubView.Bottom + testResultSubView.Margin.Bottom + panel1.Margin.Top;
         }
 
-        private void FlowLayoutPanel_Layout(object sender, LayoutEventArgs e)
+        private void FlowLayoutPanel_Layout(object? sender, LayoutEventArgs e)
         {
             // Adjust width of all controls 
             var subViewWidth = flowLayoutPanel.ClientRectangle.Width - testResultSubView.Margin.Left - testResultSubView.Margin.Right;

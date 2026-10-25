@@ -175,7 +175,7 @@ namespace TestCentric.Gui.Views
                 }
             };
 
-            treeView.ContextMenuStrip.Opening += (s, e) =>
+            testTreeContextMenu.Opening += (s, e) =>
             {
                 bool clickedOnNode = ContextNode != null;
 
@@ -192,9 +192,9 @@ namespace TestCentric.Gui.Views
                     SelectedNode = ContextNode;
             };
 
-            treeView.NodeMouseDoubleClick += (s, e) => TreeNodeDoubleClick?.Invoke(e.Node);
+            treeView.NodeMouseDoubleClick += (s, e) => TreeNodeDoubleClick?.Invoke(e.Node!);
 
-            treeView.AfterSelect += (s, e) => SelectedNodeChanged?.Invoke(e.Node);
+            treeView.AfterSelect += (s, e) => SelectedNodeChanged?.Invoke(e.Node!);
 
             treeView.AfterCheck += (s, e) =>
             {
@@ -206,11 +206,11 @@ namespace TestCentric.Gui.Views
                 if (e.Action == TreeViewAction.ByMouse || e.Action == TreeViewAction.ByKeyboard)
                 {
                     _suppressAfterCheckEvent = true;
-                    SetCheckedStateOfChildNodes(e.Node, e.Node.Checked);
+                    SetCheckedStateOfChildNodes(e.Node!, e.Node!.Checked);
                     _suppressAfterCheckEvent = false;
                 }
 
-                AfterCheck?.Invoke(e.Node);
+                AfterCheck?.Invoke(e.Node!);
             };
         }
 
@@ -270,7 +270,7 @@ namespace TestCentric.Gui.Views
 
         public TreeNode? ContextNode { get; private set; }
 
-        public ContextMenuStrip TreeContextMenu => TreeView.ContextMenuStrip;
+        public ContextMenuStrip TreeContextMenu => testTreeContextMenu;
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public OutcomeImageSet OutcomeImages
@@ -283,7 +283,7 @@ namespace TestCentric.Gui.Views
         public TreeNodeCollection Nodes => treeView.Nodes;
 
         public int VisibleNodeCount => treeView.VisibleCount;
-        public TreeNode TopNode
+        public TreeNode? TopNode
         {
             get { return treeView.TopNode; }
             set { InvokeIfRequired(() => treeView.TopNode = value); }
@@ -332,7 +332,7 @@ namespace TestCentric.Gui.Views
 
             if (applyToParents)
             {
-                TreeNode parent = treeNode.Parent;
+                TreeNode? parent = treeNode.Parent;
                 while (parent is not null)
                 {
                     if (imageIndex > parent.ImageIndex)

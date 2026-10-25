@@ -60,7 +60,7 @@ namespace TestCentric.Gui.SettingsPages
                 TopLevelPackageSettingChanges.Add(SettingDefinitions.MaxAgents.WithValue(numAgents));
 
             string principalPolicy = principalPolicyCheckBox.Checked
-                ? (string)principalPolicyListBox.SelectedItem
+                ? (string)principalPolicyListBox.SelectedItem!
                 : nameof(PrincipalPolicy.UnauthenticatedPrincipal);
             if (principalPolicy != PackageSettings.GetValueOrDefault(SettingDefinitions.PrincipalPolicy))
                 SubPackageSettingChanges.Add(SettingDefinitions.PrincipalPolicy.WithValue(principalPolicy));

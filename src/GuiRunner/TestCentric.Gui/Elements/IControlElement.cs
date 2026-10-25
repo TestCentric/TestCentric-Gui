@@ -18,6 +18,6 @@ namespace TestCentric.Gui.Elements
         Size ClientSize { get; set; }
 
         ContextMenu ContextMenu { get; }
-        ContextMenuStrip ContextMenuStrip { get; }
+        ContextMenuStrip? ContextMenuStrip { get; }
     }
 }

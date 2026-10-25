@@ -42,7 +42,6 @@ namespace TestCentric.Gui.Views
             EditProjectCommand = new CommandMenuElement(editProjectMenuItem);
             ReloadTestsCommand = new CommandMenuElement(reloadTestsMenuItem);
             TestRunSettingsCommand = new CommandMenuElement(testRunSettingsMenuItem);
-            SelectAgentMenu = new PopupMenuElement(selectAgentMenu);
             RunAsX86 = new CheckedMenuElement(runAsX86MenuItem);
             SelectConfigurationMenu = new PopupMenuElement(selectConfigurationMenu);
 
@@ -69,6 +68,7 @@ namespace TestCentric.Gui.Views
             RunSelectedButton = new ToolStripButtonElement(runSelectedButton);
             RerunButton = new ToolStripButtonElement(rerunButton);
             RunFailedButton = new ToolStripButtonElement(runFailedButton);
+            RunOnButton = new DropDownButtonElement(runOnButton);
             RequestStopButton = new ToolStripButtonElement(stopRunButton);
             ForcedStopButton = new ToolStripButtonElement(forceStopButton);
             DisplayFormatButton = new ToolStripButtonElement(displayFormatButton);
@@ -123,8 +123,6 @@ namespace TestCentric.Gui.Views
         public ICommand CloseProjectCommand { get; }
         public ICommand EditProjectCommand { get; }
         public ICommand ReloadTestsCommand { get; }
-        public IPopup SelectAgentMenu { get; }
-
         public IPopup SelectConfigurationMenu { get; }
 
         public IChecked RunAsX86 { get; private set; }
@@ -152,6 +150,7 @@ namespace TestCentric.Gui.Views
         public ICommand RunSelectedButton { get; private set; }
         public ICommand RerunButton { get; private set; }
         public ICommand RunFailedButton { get; private set; }
+        public IDropDownButton RunOnButton { get; private set; }
 
         public ICommand RequestStopButton { get; private set; }
         public ICommand ForcedStopButton { get; private set; }

@@ -175,7 +175,7 @@ namespace TestCentric.Gui.Presenters
                     else if (_view.ContextNode.Tag is TestGroup groupNode)
                         _model.RunTests(groupNode.TestNodes);
                     else
-                        throw new Exception($"Internal Error: TreeNode Tag is of Type {_view.ContextNode.Tag.GetType().Name}");
+                        throw new Exception($"Internal Error: TreeNode Tag is of Type {_view.ContextNode.Tag?.GetType().Name ?? "null"}");
                 }
             };
 
@@ -469,7 +469,7 @@ namespace TestCentric.Gui.Presenters
         {
             if (_xmlDisplay == null)
             {
-                var mainForm = _view.TreeView.FindForm();
+                var mainForm = _view.TreeView.FindForm()!;
 
                 _xmlDisplay = new XmlDisplay(_model)
                 {

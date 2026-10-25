@@ -26,7 +26,7 @@ namespace TestCentric.Gui.Controls
 
         protected override void OnDrawNode(DrawTreeNodeEventArgs e)
         {
-            if (e.Node.IsSelected)
+            if (e.Node!.IsSelected)
             {
                 e.Graphics.FillRectangle(Brushes.LightGray, e.Bounds);
                 TextRenderer.DrawText(e.Graphics, e.Node.Text, e.Node.NodeFont ?? Font,

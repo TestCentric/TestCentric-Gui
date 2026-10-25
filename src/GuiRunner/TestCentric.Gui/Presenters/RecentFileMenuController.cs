@@ -78,7 +78,7 @@ namespace TestCentric.Gui.Presenters
             return menuItem;
         }
 
-        private void OnMenuItemMouseUp(object sender, MouseEventArgs e)
+        private void OnMenuItemMouseUp(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -86,9 +86,8 @@ namespace TestCentric.Gui.Presenters
                 menuItem.Tag = sender;
                 menuItem.Click += RemoveRecentFileEntry;
 
-                if (sender is ToolStripMenuItem toolStripMenuItem)
+                if (sender is ToolStripMenuItem { Owner: Control control })
                 {
-                    Control control = toolStripMenuItem.Owner;
                     ContextMenu contextMenu = new ContextMenu(new[] { menuItem });
                     contextMenu.Show(control, control.PointToClient(Cursor.Position));
                 }
@@ -107,9 +106,8 @@ namespace TestCentric.Gui.Presenters
             // Remove entry from settings
             MenuItem? contextMenuItem = sender as MenuItem;
             ToolStripMenuItem? selectedMenuItem = contextMenuItem?.Tag as ToolStripMenuItem;
-            if (selectedMenuItem == null)
+            if (selectedMenuItem?.Tag is not string fileName)
                 return;
-            string fileName = (string)selectedMenuItem.Tag;
             var entries = Model.Settings.Gui.RecentFiles.Entries;
             entries.Remove(fileName);
 

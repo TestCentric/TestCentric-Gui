@@ -12,6 +12,7 @@ reviews:
   auto_review:
     enabled: true
     drafts: false
+    auto_incremental_review: false
 
   pre_merge_checks:
     # The project does not require XML docs on every member, so this check
