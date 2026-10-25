@@ -103,9 +103,14 @@ namespace TestCentric.Gui.Presenters
                 _view.RunAsX86.CheckedChanged += OnRunAsX86Changed;
 
                 UpdateTitleBar();
+                _agentSelectionController.UpdateMenuItems();
             };
 
-            _model.Events.TestCentricProjectUnloaded += (TestEventArgs e) => UpdateTitleBar();
+            _model.Events.TestCentricProjectUnloaded += (TestEventArgs e) =>
+            {
+                UpdateTitleBar();
+                _agentSelectionController.UpdateMenuItems();
+            };
 
             void UpdateTitleBar()
             {
@@ -131,6 +136,7 @@ namespace TestCentric.Gui.Presenters
                 OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
+                _agentSelectionController.UpdateMenuItems();
 
                 _view.ResultTabs.InvokeIfRequired(() => _view.ResultTabs.SelectedIndex = 0);
             };
@@ -164,6 +170,9 @@ namespace TestCentric.Gui.Presenters
 
                 UpdateViewCommands();
 
+                // A reload triggered by the assembly watcher arrives on a timer thread,
+                // while UpdateMenuItems changes the menu items directly.
+                _view.ResultTabs.InvokeIfRequired(() => _agentSelectionController.UpdateMenuItems());
             };
 
             _model.Events.TestChanged += (e) =>
@@ -293,7 +302,6 @@ namespace TestCentric.Gui.Presenters
                 var configSelectionController = new ConfigurationSelectionController(_model, _view);
                 configSelectionController.PopulateMenu();
 
-                _agentSelectionController.UpdateMenuItems();
                 _recentFileController.PopulateMenu();
                 _recentProjectController.PopulateMenu();
 
@@ -301,6 +309,8 @@ namespace TestCentric.Gui.Presenters
 
                 _view.RecentProjectsMenu.Enabled = _view.RecentFilesMenu.Enabled = !isTestRunning;
             };
+
+            _view.RunOnButton.Popup += () => _agentSelectionController.UpdateMenuItems();
 
             _view.NewProjectCommand.Execute += () => CreateNewProject();
 
@@ -645,6 +655,7 @@ namespace TestCentric.Gui.Presenters
             _view.ForcedStopButton.Enabled = displayForcedStop && !_forcedStopRequested;
             _view.RequestStopButton.Visible = !displayForcedStop;
             _view.RequestStopButton.Enabled = testRunning && !_stopRequested;
+            _agentSelectionController.UpdateButtonState();
 
             _view.OpenProjectCommand.Enabled = _view.OpenProjectCommand.Enabled = _view.OpenTestFileCommand.Enabled = !testLoading && !testRunning;
             _view.SaveProjectCommand.Enabled = testLoaded && !testRunning;
