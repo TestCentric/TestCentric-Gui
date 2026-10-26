@@ -126,9 +126,8 @@ namespace TestCentric.Gui.Presenters
             {
                 int imageIndex = CalcImageIndex(result);
 
-                bool updateParentNodes = this.StrategyID == "TEST_LIST";
                 foreach (TreeNode treeNode in GetTreeNodesForTest(result))
-                    _view.SetImageIndex(treeNode, imageIndex, updateParentNodes);
+                    _view.SetImageIndex(treeNode, imageIndex);
             });
         }
 
@@ -334,6 +333,56 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
+        /// <summary>
+        /// Determine an image index for a tree node based on the results from all child tree nodes
+        /// </summary>
+        protected int CalcImageIndex(TreeNode treeNode)
+        {
+            int treeNodeImageIndex = TestTreeView.SkippedIndex;
+
+            // Filter out child nodes that are not relevant for the calculation of the image index. 
+            // If a mix of previous and latest results is present, the resulting image index should aggregate a result as a latest run
+            List<TreeNode> childNodes = treeNode.Nodes.OfType<TreeNode>().Where(UseTreeNodeImageIndex).ToList();
+            bool hasAnyResultFromLatestRun = childNodes.Any(child => IsResultFromLatestRun(child.ImageIndex));
+            foreach (TreeNode child in childNodes)
+            {
+                int childImageIndex = hasAnyResultFromLatestRun ? MapImageIndexToLatestRun(child) : child.ImageIndex;
+                treeNodeImageIndex = Math.Max(treeNodeImageIndex, childImageIndex);
+            }
+
+            return treeNodeImageIndex;
+        }
+
+        private bool IsResultFromLatestRun(int imageIndex)
+        {
+            return imageIndex >= TestTreeView.InconclusiveIndex && imageIndex <= TestTreeView.FailureIndex;
+        }
+
+        private int MapImageIndexToLatestRun(TreeNode treeNode)
+        {
+            return treeNode.ImageIndex switch
+            {
+                TestTreeView.SuccessIndex or TestTreeView.SuccessIndex_NotLatestRun => TestTreeView.SuccessIndex,
+                TestTreeView.FailureIndex or TestTreeView.FailureIndex_NotLatestRun => TestTreeView.FailureIndex,
+                TestTreeView.WarningIndex or TestTreeView.WarningIndex_NotLatestRun => TestTreeView.WarningIndex,
+                TestTreeView.InconclusiveIndex or TestTreeView.InconclusiveIndex_NotLatestRun => TestTreeView.InconclusiveIndex,
+                TestTreeView.IgnoredIndex or TestTreeView.IgnoredIndex_NotLatestRun => TestTreeView.IgnoredIndex,
+                _ => TestTreeView.SkippedIndex,
+            };
+        }
+
+        private bool UseTreeNodeImageIndex(TreeNode treeNode)
+        {
+            if (treeNode.Tag is TestGroup testGroup)
+                return true;
+
+            // Ignore TreeNodes that have a default image index, but were never executed (for example: ignored tests)
+            if (treeNode.Tag is TestNode testNode)
+                return _model.TestResultManager.GetResultForTest(testNode.Id) != null;
+
+            return false;
+        }
+
         protected void ApplyResultsToTree()
         {
             if (!_model.HasResults || _view.Nodes == null)
@@ -343,25 +392,21 @@ namespace TestCentric.Gui.Presenters
                 ApplyResultsToTree(treeNode);
         }
 
-        private void ApplyResultsToTree(TreeNode treeNode)
+        protected void ApplyResultsToTree(TreeNode treeNode)
         {
-            // Consider only treeNodes representing a test case. Test results from fixtures/assemblies might be inaccurate
+            foreach (TreeNode childNode in treeNode.Nodes)
+                ApplyResultsToTree(childNode);
+
+            // Use test results for treeNodes representing a test case directly. Test results from fixtures/assemblies might be inaccurate
             // if some filters are applied (e.g. outcome filter) and some test case nodes are currently not displayed in the tree.
             if (treeNode.Tag is TestNode testNode && !testNode.IsSuite)
             {
                 ResultNode? resultNode = GetResultForTest(testNode);
                 if (resultNode != null)
-                {
                     treeNode.ImageIndex = treeNode.SelectedImageIndex = CalcImageIndex(resultNode);
-
-                    // Calculate the ImageIndex of the parent hierarchy 
-                    for (var parent = treeNode.Parent; parent?.Tag is ITestItem; parent = parent.Parent)
-                        parent.ImageIndex = parent.SelectedImageIndex = Math.Max(parent.ImageIndex, treeNode.ImageIndex);
-                }
             }
-
-            foreach (TreeNode childNode in treeNode.Nodes)
-                ApplyResultsToTree(childNode);
+            else
+                _view.SetImageIndex(treeNode, CalcImageIndex(treeNode));
         }
 
         private void UpdateTreeIconsOnRunStart(TreeNodeCollection treeNodes)
@@ -523,7 +568,8 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         public void RemoveTreeNode(TreeNode treeNode)
         {
-            if (treeNode.Tag is TestNode testNode && _nodeIndex.TryGetValue(testNode.Id, out List<TreeNode>? treeNodeList))
+            string testId = (treeNode.Tag as TestNode)?.Id ?? (treeNode.Tag as TestGroup)?.RootTestNode?.Id ?? string.Empty;
+            if (!string.IsNullOrEmpty(testId) && _nodeIndex.TryGetValue(testId, out List<TreeNode>? treeNodeList))
                 treeNodeList.Remove(treeNode);
 
             treeNode.Remove();

@@ -68,6 +68,11 @@ namespace TestCentric.Gui.Presenters
 
         public TreeNode? TreeNode { get; set; }
 
+        /// <summary>
+        /// The root test node for this group. This property is used to associate a `TestGroup` with a specific test node in the test hierarchy.
+        /// </summary>
+        public TestNode? RootTestNode { get; set; }
+
         #endregion
 
         public virtual IEnumerator<TestNode> GetEnumerator()
