@@ -18,6 +18,8 @@ namespace TestCentric.Gui.Presenters
         /// <summary>
         /// Determines whether the specified node is considered "folded".
         /// </summary>
+        /// <param name="testNode">The node to check.</param>
+        /// <returns>
         /// <c>true</c> if both the node and its parent are namespaces, and the parent 
         /// has exactly one child (this node); otherwise, <c>false</c>.
         /// </returns>
@@ -32,6 +34,7 @@ namespace TestCentric.Gui.Presenters
         /// <summary>
         /// Gets the display name for a namespace node by combining all subsequent folded namespace child nodes.
         /// </summary>
+        /// <param name="testNode">The node for which to get the display name.</param>
         /// <returns>A dot-separated string representing the combined path of the folded namespace node chain.</returns>
         public static string GetTreeNodeName(TestNode testNode)
         {
