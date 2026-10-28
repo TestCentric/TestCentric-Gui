@@ -95,23 +95,23 @@ namespace TestCentric.Gui.Presenters.TestTree
             view.Received().SetTestFilterVisibility(isVisible);
         }
 
-        // TODO: FIX
-        //[Test]
+        [Test]
         public void OnTestLoaded_Namespaces_AreShown_NamespaceNodes_AreCreated()
         {
             // Arrange
             _model.TreeConfiguration.NUnitTreeShowNamespaces = true;
-            string xml = 
-                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+            string xml =
+                "<test-run id='0'> <test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
                     "<test-suite type='TestSuite' id='1-1031' name='Library'>" +
                     "</test-suite>" +
-                "</test-suite>";
+                "</test-suite>  </test-run>";
 
             // Act
             _strategy.OnTestLoaded(new TestNode(xml), null);
 
             // Assert
-            _view.Received().Add(Arg.Is<TreeNode>(tn => (tn.Tag as TestNode)!.Id == "1-1031"));
+            Assert.That(NodeCollectionContainsTestNode(_view.Nodes, "1-1030"), Is.True);
+            Assert.That(NodeCollectionContainsTestNode(_view.Nodes, "1-1031"), Is.True);
         }
 
         [Test]
@@ -216,78 +216,39 @@ namespace TestCentric.Gui.Presenters.TestTree
 
         }
 
-        private bool NodeCollectionContainsTestNode(TreeNodeCollection nodes, string testNodeId)
-        {
-            foreach (TreeNode treeNode in nodes)
-            {
-                TestNode? testNode = treeNode.Tag as TestNode;
-                if (testNode != null && testNode.Id == testNodeId)
-                    return true;
-
-                if (NodeCollectionContainsTestNode(treeNode.Nodes, testNodeId))
-                    return true;
-            }
-
-            return false;
-        }
-
-        private TreeNode GetTreeNode(TreeNodeCollection nodes, IEnumerable<string> testIds)
-        {
-            TreeNode? treeNode = null;
-            foreach (string testId in testIds)
-            {
-                treeNode = null;
-                foreach (TreeNode node in nodes)
-                {
-                    string id = (node.Tag as TestNode)?.Id ?? (node.Tag as TestGroup)?.RootTestNode?.Id ?? string.Empty;
-                    if (id == testId)
-                    {
-                        treeNode = node;
-                        break;
-                    }
-                }
-
-                Assert.That(treeNode, Is.Not.Null, $"TreeNode with name '{testId}' not found.");
-                nodes = treeNode!.Nodes;
-            }
-
-            return treeNode.ShouldNotBeNull();
-        }
-
-        // TODO: FIX
-        //[Test]
+        [Test]
         public void OnTestLoaded_NamespacesNodes_ContainingOneNamespace_AreFolded()
         {
             // Arrange
             string xml =
-                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                "<test-run id='0'> <test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
                     "<test-suite type='TestSuite' id='1-1031' name='Library'>" +
                         "<test-suite type='TestSuite' id='1-1032' name='Test'>" +
                             "<test-suite type='TestSuite' id='1-1033' name='Folder'>" +
                             "</test-suite>" +
                         "</test-suite>" +
                     "</test-suite>" +
-                "</test-suite>";
-
-            TreeNode treeNode = null!;
-            _view.Add(Arg.Do<TreeNode>(tn => treeNode = tn));
+                "</test-suite> </test-run>";
 
             // Act
             _strategy.OnTestLoaded(new TestNode(xml), null);
 
             // Assert
-            Assert.That((treeNode.Tag as TestNode)!.Id, Is.EqualTo("1-1031"));
-            Assert.That(treeNode.Text, Is.EqualTo("Library.Test.Folder (0)"));
+            TreeNode treeNode = GetTreeNode(_view.Nodes, "1-1030");
+            Assert.That(treeNode.Text, Is.EqualTo("Library.Test.dll (0 tests)"));
+            Assert.That(treeNode.Nodes.Count, Is.EqualTo(1));
+
+            treeNode = GetTreeNode(treeNode.Nodes, "1-1031");
+            Assert.That(treeNode.Text, Is.EqualTo("Library.Test.Folder (0 tests)"));
             Assert.That(treeNode.Nodes.Count, Is.EqualTo(0));
         }
 
-        // TODO: FIX
-        //[Test]
+        [Test]
         public void OnTestLoaded_NamespacesNode_ContainingTwoNamespaces_AreNotFolded()
         {
             // Arrange
             string xml =
-                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                "<test-run id='0'> <test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
                     "<test-suite type='TestSuite' id='1-1031' name='Library'>" +
                         "<test-suite type='TestSuite' id='1-1032' name='Test' >" +
                             "<test-case id='1-1040' name='Test1'/>" +
@@ -296,61 +257,63 @@ namespace TestCentric.Gui.Presenters.TestTree
                             "<test-case id='1-1050' name='Test1'/>" +
                         "</test-suite>" +
                     "</test-suite>" +
-                "</test-suite>";
+                "</test-suite> </test-run>";
 
-            TreeNode treeNode = null!;
-            _view.Add(Arg.Do<TreeNode>(tn => treeNode = tn));
 
             // Act
             _strategy.OnTestLoaded(new TestNode(xml), null);
 
             // Assert
-            Assert.That((treeNode.Tag as TestNode)!.Id, Is.EqualTo("1-1031"));
-            Assert.That(treeNode.Text, Is.EqualTo("Library (2)"));
+            TreeNode treeNode = GetTreeNode(_view.Nodes, "1-1030");
+            Assert.That(treeNode.Text, Is.EqualTo("Library.Test.dll (2 tests)"));
+            Assert.That(treeNode.Nodes.Count, Is.EqualTo(1));
 
-            var child1 = treeNode.Nodes[0];
-            Assert.That((child1.Tag as TestNode)!.Id, Is.EqualTo("1-1032"));
-            Assert.That(child1.Text, Is.EqualTo("Test (1)"));
+            treeNode = GetTreeNode(treeNode.Nodes, "1-1031");
+            Assert.That(treeNode.Text, Is.EqualTo("Library (2 tests)"));
+            Assert.That(treeNode.Nodes.Count, Is.EqualTo(2));
 
-            var child2 = treeNode.Nodes[1];
-            Assert.That((child2.Tag as TestNode)!.Id, Is.EqualTo("1-1033"));
-            Assert.That(child2.Text, Is.EqualTo("Folder (1)"));
+            var treeNode1 = GetTreeNode(treeNode.Nodes, "1-1032");
+            Assert.That(treeNode1.Text, Is.EqualTo("Test (1 test)"));
+            Assert.That(treeNode1.Nodes.Count, Is.EqualTo(1));
+
+            var treeNode2 = GetTreeNode(treeNode.Nodes, "1-1033");
+            Assert.That(treeNode2.Text, Is.EqualTo("Folder (1 test)"));
+            Assert.That(treeNode2.Nodes.Count, Is.EqualTo(1));
         }
 
-        // TODO: FIX
-        //[Test]
+        [Test]
         public void OnTestLoaded_SetupFixtureNode_ContainingOneNamespace_AreFolded()
         {
             // Arrange
             string xml =
-                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                "<test-run id='0'> <test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
                     "<test-suite type='SetUpFixture' id='1-1031' name='Library'>" +
                         "<test-suite type='TestSuite' id='1-1032' name='Test'>" +
                             "<test-suite type='SetUpFixture' id='1-1033' name='Folder'>" +
                             "</test-suite>" +
                         "</test-suite>" +
                     "</test-suite>" +
-                "</test-suite>";
-
-            TreeNode treeNode = null!;
-            _view.Add(Arg.Do<TreeNode>(tn => treeNode = tn));
+                "</test-suite> </test-run>";
 
             // Act
             _strategy.OnTestLoaded(new TestNode(xml), null);
 
             // Assert
-            Assert.That((treeNode.Tag as TestNode)!.Id, Is.EqualTo("1-1031"));
-            Assert.That(treeNode.Text, Is.EqualTo("Library.Test.Folder (0)"));
+            TreeNode treeNode = GetTreeNode(_view.Nodes, "1-1030");
+            Assert.That(treeNode.Text, Is.EqualTo("Library.Test.dll (0 tests)"));
+            Assert.That(treeNode.Nodes.Count, Is.EqualTo(1));
+
+            treeNode = GetTreeNode(treeNode.Nodes, "1-1031");
+            Assert.That(treeNode.Text, Is.EqualTo("Library.Test.Folder (0 tests)"));
             Assert.That(treeNode.Nodes.Count, Is.EqualTo(0));
         }
 
-        // TODO: FIX
-        //[Test]
+        [Test]
         public void OnTestLoaded_SetupFixtureNode_ContainingTwoNamespaces_AreNotFolded()
         {
             // Arrange
             string xml =
-                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                "<test-run id='0'> <test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
                     "<test-suite type='SetUpFixture' id='1-1031' name='Library'>" +
                         "<test-suite type='TestSuite' id='1-1032' name='Test'>" +
                             "<test-case id='1-1040' name='Test1'/>" +
@@ -359,25 +322,27 @@ namespace TestCentric.Gui.Presenters.TestTree
                             "<test-case id='1-1050' name='Test1'/>" +
                         "</test-suite>" +
                     "</test-suite>" +
-                "</test-suite>";
-
-            TreeNode treeNode = null!;
-            _view.Add(Arg.Do<TreeNode>(tn => treeNode = tn));
+                "</test-suite> </test-run>";
 
             // Act
             _strategy.OnTestLoaded(new TestNode(xml), null);
 
             // Assert
-            Assert.That((treeNode.Tag as TestNode)!.Id, Is.EqualTo("1-1031"));
-            Assert.That(treeNode.Text, Is.EqualTo("Library (2)"));
+            TreeNode treeNode = GetTreeNode(_view.Nodes, "1-1030");
+            Assert.That(treeNode.Text, Is.EqualTo("Library.Test.dll (2 tests)"));
+            Assert.That(treeNode.Nodes.Count, Is.EqualTo(1));
 
-            var child1 = treeNode.Nodes[0];
-            Assert.That((child1.Tag as TestNode)!.Id, Is.EqualTo("1-1032"));
-            Assert.That(child1.Text, Is.EqualTo("Test (1)"));
+            treeNode = GetTreeNode(treeNode.Nodes, "1-1031");
+            Assert.That(treeNode.Text, Is.EqualTo("Library (2 tests)"));
+            Assert.That(treeNode.Nodes.Count, Is.EqualTo(2));
 
-            var child2 = treeNode.Nodes[1];
-            Assert.That((child2.Tag as TestNode)!.Id, Is.EqualTo("1-1033"));
-            Assert.That(child2.Text, Is.EqualTo("Folder (1)"));
+            var treeNode1 = GetTreeNode(treeNode.Nodes, "1-1032");
+            Assert.That(treeNode1.Text, Is.EqualTo("Test (1 test)"));
+            Assert.That(treeNode1.Nodes.Count, Is.EqualTo(1));
+
+            var treeNode2 = GetTreeNode(treeNode.Nodes, "1-1033");
+            Assert.That(treeNode2.Text, Is.EqualTo("Folder (1 test)"));
+            Assert.That(treeNode2.Nodes.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -415,7 +380,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             var rootNode = _view.Nodes[0];
             var fixtureNode1 = CreateTreeNode("<test-suite type='TestFixture' id='2' name='FixtureA'/>");
             var fixtureNode2 = CreateTreeNode("<test-suite type='TestFixture' id='3' name='FixtureB'/>");
-            rootNode.Nodes.AddRange(new []{ fixtureNode1, fixtureNode2 });
+            rootNode.Nodes.AddRange(new[] { fixtureNode1, fixtureNode2 });
 
             var testcase1 = CreateTreeNode("<test-case id='10' name='Test1'/>");
             var testcase2 = CreateTreeNode("<test-case id='20' name='Test2'/>");
@@ -440,16 +405,47 @@ namespace TestCentric.Gui.Presenters.TestTree
         {
             var testNode = new TestNode(testNodeXml);
             return new TreeNode() { Tag = testNode };
-
         }
+
+        private bool NodeCollectionContainsTestNode(TreeNodeCollection nodes, string testNodeId)
+        {
+            foreach (TreeNode treeNode in nodes)
+            {
+                TestNode? testNode = treeNode.Tag as TestNode;
+                if (testNode != null && testNode.Id == testNodeId)
+                    return true;
+
+                if (NodeCollectionContainsTestNode(treeNode.Nodes, testNodeId))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private TreeNode GetTreeNode(TreeNodeCollection nodes, string testNodeId)
+        {
+            return GetTreeNode(nodes, new[] { testNodeId });
+        }
+
+        private TreeNode GetTreeNode(TreeNodeCollection nodes, IEnumerable<string> testIds)
+        {
+            TreeNode? treeNode = null;
+            foreach (string testId in testIds)
+            {
+                treeNode = nodes.Cast<TreeNode>().FirstOrDefault(node => HasTestId(node, testId));
+                Assert.That(treeNode, Is.Not.Null, $"TreeNode with name '{testId}' not found.");
+                nodes = treeNode!.Nodes;
+            }
+
+            return treeNode.ShouldNotBeNull();
+        }
+
+        private static bool HasTestId(TreeNode node, string testId) =>
+            node.Tag switch
+            {
+                TestNode testNode => testNode.Id == testId,
+                TestGroup testGroup => testGroup.RootTestNode?.Id == testId,
+                _ => false
+            };
     }
-
-
-    //public class NUnitTestListStrategyTests : DisplayStrategyTests
-    //{
-    //    protected override DisplayStrategy GetDisplayStrategy()
-    //    {
-    //        return new TestListDisplayStrategy(_view, _model);
-    //    }
-    //}
 }
