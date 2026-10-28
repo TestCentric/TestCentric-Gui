@@ -223,6 +223,8 @@ namespace TestCentric.Gui.Presenters
         private string GetTreeNodeDisplayName(TestNode testNode)
         {
             string treeNodeName = testNode.Name;
+            if (testNode.IsNamespace)
+                treeNodeName = NamespaceNodeHelper.GetTreeNodeName(testNode);
             if (testNode.IsSuite)
                 treeNodeName += GetTreeNodeNameCountSuffix(GetTestCount(testNode));
 

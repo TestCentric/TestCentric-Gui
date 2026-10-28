@@ -57,7 +57,7 @@ namespace TestCentric.Gui.Presenters
             if (testNode.IsAssembly)
                 return TreeConfiguration.NUnitTreeShowAssemblies;
             if (testNode.IsNamespace)
-                return TreeConfiguration.NUnitTreeShowNamespaces;
+                return TreeConfiguration.NUnitTreeShowNamespaces && !NamespaceNodeHelper.IsFolded(testNode);
             if (testNode.IsFixture)
                 return TreeConfiguration.NUnitTreeShowFixtures;
 
