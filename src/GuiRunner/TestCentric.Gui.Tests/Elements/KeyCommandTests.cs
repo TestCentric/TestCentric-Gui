@@ -19,7 +19,7 @@ namespace TestCentric.Gui.Elements
         public void SetUp()
         {
             _control = new TestControl();
-            KeyCommand keyCommand = new KeyCommand(_control, new[] { Keys.Enter }, new[] { Keys.Enter });
+            KeyCommand keyCommand = new KeyCommand(_control, new[] { Keys.Enter }, new[] { Keys.Space });
             keyCommand.KeyUp += () => _keyUpRaised = true;
             keyCommand.KeyDown += () => _keyDownRaised = true;
 
@@ -31,17 +31,18 @@ namespace TestCentric.Gui.Elements
         public void KeyDown_ConfiguredKey_RaisesKeyDownEvent()
         {
             // Act
-            _control.RaiseKeyDown(Keys.Enter);
+            _control.RaiseKeyDown(Keys.Space);
 
             // Assert
             Assert.That(_keyDownRaised, Is.True);
         }
 
-        [Test]
-        public void KeyDown_UnconfiguredKey_DoesNotRaiseKeyDownEvent()
+        [TestCase(Keys.Enter)]
+        [TestCase(Keys.Escape)]
+        public void KeyDown_UnconfiguredKey_DoesNotRaiseKeyDownEvent(Keys key)
         {
             // Act
-            _control.RaiseKeyDown(Keys.Escape);
+            _control.RaiseKeyDown(key);
 
             // Assert
             Assert.That(_keyDownRaised, Is.False);
@@ -57,11 +58,12 @@ namespace TestCentric.Gui.Elements
             Assert.That(_keyUpRaised, Is.True);
         }
 
-        [Test]
-        public void KeyUp_UnconfiguredKey_DoesNotRaiseKeyUpEvent()
+        [TestCase(Keys.Escape)]
+        [TestCase(Keys.Space)]
+        public void KeyUp_UnconfiguredKey_DoesNotRaiseKeyUpEvent(Keys key)
         {
             // Act
-            _control.RaiseKeyUp(Keys.Escape);
+            _control.RaiseKeyUp(key);
 
             // Assert
             Assert.That(_keyUpRaised, Is.False);
