@@ -12,9 +12,8 @@ namespace TestCentric.Gui.Elements
     /// <summary>
     /// This class is responsible to handle key events of a control
     /// </summary>
-    internal class KeyCommand : IKeyCommand
+    public class KeyCommand : IKeyCommand
     {
-
         public event CommandHandler? KeyUp;
         public event CommandHandler? KeyDown;
 
@@ -27,7 +26,7 @@ namespace TestCentric.Gui.Elements
             _downKeys = downkeys ?? new List<Keys>();
 
             control.KeyUp += OnKeyUp;
-            control.KeyUp += OnKeyDown;
+            control.KeyDown += OnKeyDown;
         }
 
         private void OnKeyUp(object? sender, KeyEventArgs e)
