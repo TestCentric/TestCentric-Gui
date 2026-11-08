@@ -116,11 +116,10 @@ namespace TestCentric.Gui.Controls
 
         protected override void OnLoad(System.EventArgs e)
         {
-            Guard.OperationValid(_control.Parent != null, "Internal Error: TipWindow control must have a parent.");
-
             // HACK: Needed until we create a hierarchy of TipWindows with implementations for different controls
             if (_control is TreeView)
                 return;
+            Guard.OperationValid(_control.Parent != null, "Internal Error: TipWindow control must have a parent.");
 
             // At this point, further changes to the properties
             // of the label will have no effect on the tip.
