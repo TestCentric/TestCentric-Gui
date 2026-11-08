@@ -116,13 +116,15 @@ namespace TestCentric.Gui.Controls
 
         protected override void OnLoad(System.EventArgs e)
         {
+            Guard.OperationValid(_control.Parent != null, "Internal Error: TipWindow control must have a parent.");
+
             // HACK: Needed until we create a hierarchy of TipWindows with implementations for different controls
             if (_control is TreeView)
                 return;
 
             // At this point, further changes to the properties
             // of the label will have no effect on the tip.
-            Point origin = _control.Parent!.PointToScreen(_control.Location);
+            Point origin = _control.Parent.PointToScreen(_control.Location);
             origin.Offset(ItemBounds.Left, ItemBounds.Top);
             if (!Overlay) origin.Offset(0, ItemBounds.Height);
             Location = origin;
@@ -199,11 +201,12 @@ namespace TestCentric.Gui.Controls
         {
             // HACK: Needed until we create a hierarchy of TipWindows with implementations for different controls
             Guard.OperationValid(_control is TreeView, "Internal Error: 'Display(TreeNode node)' may only be called when control is a TreeView.");
+            Guard.OperationValid(treeNode?.TreeView != null, "Internal Error: 'Display(TreeNode node)' may only be called for nodes attached to a TreeView.");
 
             Hide();
 
             ItemBounds = treeNode.Bounds;
-            Font = treeNode.NodeFont ?? treeNode.TreeView!.Font;
+            Font = treeNode.NodeFont ?? treeNode.TreeView.Font;
             TipText = treeNode.Text;
             if (resultText != null)
                 TipText += " " + resultText;
@@ -346,7 +349,9 @@ namespace TestCentric.Gui.Controls
 
         private void AdjustLocation()
         {
-            Point origin = _control.Parent!.PointToScreen(_control.Location);
+            Guard.OperationValid(_control.Parent != null, "Internal Error: TipWindow control must have a parent.");
+
+            Point origin = _control.Parent.PointToScreen(_control.Location);
             origin.Offset(ItemBounds.Left, ItemBounds.Top);
             if (!Overlay) origin.Offset(0, ItemBounds.Height);
             Location = origin;

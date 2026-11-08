@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using System.Windows.Forms;
+using NUnit;
 
 namespace TestCentric.Gui.Elements
 {
@@ -32,6 +33,8 @@ namespace TestCentric.Gui.Elements
 
         public CheckedToolStripMenuGroup(string name, params ToolStripMenuItem[] menuItems)
         {
+            Guard.ArgumentNotNull(menuItems, nameof(menuItems));
+
             TopMenu = null!;
              foreach (var menuItem in menuItems)
                 MenuItems.Add(menuItem);
@@ -120,7 +123,7 @@ namespace TestCentric.Gui.Elements
 
         public string SelectedItem
         {
-            get { return (string)MenuItems[SelectedIndex].Tag!; }
+            get { return (string)MenuItems[SelectedIndex].Tag.ShouldNotBeNull("MenuItem.Tag should be of type string"); }
             set
             {
                 for (int i = 0; i < MenuItems.Count; i++)
