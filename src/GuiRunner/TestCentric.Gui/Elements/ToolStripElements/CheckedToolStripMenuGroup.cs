@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using System.Windows.Forms;
+using NUnit;
 
 namespace TestCentric.Gui.Elements
 {
@@ -15,13 +16,12 @@ namespace TestCentric.Gui.Elements
     {
         // Fields are public for testing only
         public IList<ToolStripMenuItem> MenuItems = new List<ToolStripMenuItem>();
-        public ToolStripMenuItem TopMenu;
-
         public event CommandHandler? SelectionChanged;
+        private ToolStripMenuItem? _topMenu;
 
         public CheckedToolStripMenuGroup(ToolStripMenuItem topMenu)
         {
-            TopMenu = topMenu;
+            _topMenu = topMenu;
             foreach (ToolStripMenuItem menuItem in topMenu.DropDown.Items)
                 MenuItems.Add(menuItem);
 
@@ -32,8 +32,10 @@ namespace TestCentric.Gui.Elements
 
         public CheckedToolStripMenuGroup(string name, params ToolStripMenuItem[] menuItems)
         {
-            TopMenu = null!;
-             foreach (var menuItem in menuItems)
+            Guard.ArgumentNotNull(menuItems, nameof(menuItems));
+            Guard.ArgumentValid(menuItems.Length > 0, "At least one menu item is required", nameof(menuItems));
+
+            foreach (var menuItem in menuItems)
                 MenuItems.Add(menuItem);
 
             InitializeMenuItems();
@@ -42,10 +44,10 @@ namespace TestCentric.Gui.Elements
 
         public void Refresh()
         {
-            if (TopMenu != null)
+            if (_topMenu != null)
             {
                 MenuItems.Clear();
-                foreach (ToolStripMenuItem menuItem in TopMenu.DropDown.Items)
+                foreach (ToolStripMenuItem menuItem in _topMenu.DropDown.Items)
                     MenuItems.Add(menuItem);
             }
 
@@ -85,14 +87,14 @@ namespace TestCentric.Gui.Elements
 
         // Note that all items must be on the same toolstrip
         private ToolStrip? _toolStrip;
-        public ToolStrip ToolStrip
+        private ToolStrip? ToolStrip
         {
             get
             {
                 if (_toolStrip == null && MenuItems.Count > 0)
                     _toolStrip = MenuItems[0].GetCurrentParent();
 
-                return _toolStrip!;
+                return _toolStrip;
             }
         }
 
@@ -120,7 +122,7 @@ namespace TestCentric.Gui.Elements
 
         public string SelectedItem
         {
-            get { return (string)MenuItems[SelectedIndex].Tag!; }
+            get { return (MenuItems[SelectedIndex].Tag as string).ShouldNotBeNull("MenuItem.Tag should be of type string"); }
             set
             {
                 for (int i = 0; i < MenuItems.Count; i++)
@@ -195,7 +197,7 @@ namespace TestCentric.Gui.Elements
 
         public void InvokeIfRequired(MethodInvoker _delegate)
         {
-            if (ToolStrip.InvokeRequired)
+            if (ToolStrip != null && ToolStrip.InvokeRequired)
                 ToolStrip.BeginInvoke(_delegate);
             else
                 _delegate();

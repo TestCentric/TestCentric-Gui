@@ -119,10 +119,11 @@ namespace TestCentric.Gui.Controls
             // HACK: Needed until we create a hierarchy of TipWindows with implementations for different controls
             if (_control is TreeView)
                 return;
+            Guard.OperationValid(_control.Parent != null, "Internal Error: TipWindow control must have a parent.");
 
             // At this point, further changes to the properties
             // of the label will have no effect on the tip.
-            Point origin = _control.Parent!.PointToScreen(_control.Location);
+            Point origin = _control.Parent.PointToScreen(_control.Location);
             origin.Offset(ItemBounds.Left, ItemBounds.Top);
             if (!Overlay) origin.Offset(0, ItemBounds.Height);
             Location = origin;
@@ -153,7 +154,9 @@ namespace TestCentric.Gui.Controls
                 _control.MouseLeave += (s, e) => Close();
 
             // Catch the form that holds the control closing
-            _control.FindForm()!.Closing += (s, e) => Close();
+            Form? form = _control.FindForm();
+            if (form != null)
+                form.Closing += (s, e) => Close();
 
             if (Right > screen.WorkingArea.Right)
             {
@@ -199,11 +202,13 @@ namespace TestCentric.Gui.Controls
         {
             // HACK: Needed until we create a hierarchy of TipWindows with implementations for different controls
             Guard.OperationValid(_control is TreeView, "Internal Error: 'Display(TreeNode node)' may only be called when control is a TreeView.");
+            Guard.OperationValid(treeNode?.TreeView != null, "Internal Error: 'Display(TreeNode node)' may only be called for nodes attached to a TreeView.");
+            Guard.OperationValid(ReferenceEquals(treeNode.TreeView, _control), "Internal Error: 'Display(TreeNode node)' requires a node from the tip window's tree.");
 
             Hide();
 
             ItemBounds = treeNode.Bounds;
-            Font = treeNode.NodeFont ?? treeNode.TreeView!.Font;
+            Font = treeNode.NodeFont ?? treeNode.TreeView.Font;
             TipText = treeNode.Text;
             if (resultText != null)
                 TipText += " " + resultText;
@@ -346,7 +351,9 @@ namespace TestCentric.Gui.Controls
 
         private void AdjustLocation()
         {
-            Point origin = _control.Parent!.PointToScreen(_control.Location);
+            Guard.OperationValid(_control.Parent != null, "Internal Error: TipWindow control must have a parent.");
+
+            Point origin = _control.Parent.PointToScreen(_control.Location);
             origin.Offset(ItemBounds.Left, ItemBounds.Top);
             if (!Overlay) origin.Offset(0, ItemBounds.Height);
             Location = origin;
