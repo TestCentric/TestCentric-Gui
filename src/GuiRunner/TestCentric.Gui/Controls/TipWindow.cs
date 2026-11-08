@@ -155,7 +155,9 @@ namespace TestCentric.Gui.Controls
                 _control.MouseLeave += (s, e) => Close();
 
             // Catch the form that holds the control closing
-            _control.FindForm()!.Closing += (s, e) => Close();
+            Form? form = _control.FindForm();
+            if (form != null)
+                form.Closing += (s, e) => Close();
 
             if (Right > screen.WorkingArea.Right)
             {
@@ -202,6 +204,7 @@ namespace TestCentric.Gui.Controls
             // HACK: Needed until we create a hierarchy of TipWindows with implementations for different controls
             Guard.OperationValid(_control is TreeView, "Internal Error: 'Display(TreeNode node)' may only be called when control is a TreeView.");
             Guard.OperationValid(treeNode?.TreeView != null, "Internal Error: 'Display(TreeNode node)' may only be called for nodes attached to a TreeView.");
+            Guard.OperationValid(ReferenceEquals(treeNode.TreeView, _control), "Internal Error: 'Display(TreeNode node)' requires a node from the tip window's tree.");
 
             Hide();
 

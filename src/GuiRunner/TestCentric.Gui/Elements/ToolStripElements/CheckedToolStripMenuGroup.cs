@@ -34,6 +34,7 @@ namespace TestCentric.Gui.Elements
         public CheckedToolStripMenuGroup(string name, params ToolStripMenuItem[] menuItems)
         {
             Guard.ArgumentNotNull(menuItems, nameof(menuItems));
+            Guard.ArgumentValid(menuItems.Length > 0, "At least one menu item is required", nameof(menuItems));
 
             TopMenu = null!;
              foreach (var menuItem in menuItems)
@@ -123,7 +124,7 @@ namespace TestCentric.Gui.Elements
 
         public string SelectedItem
         {
-            get { return (string)MenuItems[SelectedIndex].Tag.ShouldNotBeNull("MenuItem.Tag should be of type string"); }
+            get { return (MenuItems[SelectedIndex].Tag as string).ShouldNotBeNull("MenuItem.Tag should be of type string"); }
             set
             {
                 for (int i = 0; i < MenuItems.Count; i++)
