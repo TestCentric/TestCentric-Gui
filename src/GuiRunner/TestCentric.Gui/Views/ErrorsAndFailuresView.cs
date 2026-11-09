@@ -239,7 +239,7 @@ namespace TestCentric.Gui.Views
                         MouseLeaveDelay = 500,
                     };
 
-                    _tipWindow.Closed += tipWindow_Closed;
+                    _tipWindow.FormClosed += tipWindow_Closed;
                     _tipWindow.Show();
                 }
             }

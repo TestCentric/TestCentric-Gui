@@ -156,7 +156,7 @@ namespace TestCentric.Gui.Controls
             // Catch the form that holds the control closing
             Form? form = _control.FindForm();
             if (form != null)
-                form.Closing += (s, e) => Close();
+                form.FormClosing += (s, e) => Close();
 
             if (Right > screen.WorkingArea.Right)
             {

@@ -137,7 +137,7 @@ namespace TestCentric.Gui.Controls
                     WantClicks = CopySupported
                 };
 
-                _tipWindow.Closed += tipWindow_Closed;
+                _tipWindow.FormClosed += tipWindow_Closed;
                 _tipWindow.Show();
             }
         }
@@ -146,7 +146,7 @@ namespace TestCentric.Gui.Controls
         {
             if (IsExpanded)
             {
-                _tipWindow.Closed -= tipWindow_Closed;
+                _tipWindow.FormClosed -= tipWindow_Closed;
                 _tipWindow.Close();
             }
         }
