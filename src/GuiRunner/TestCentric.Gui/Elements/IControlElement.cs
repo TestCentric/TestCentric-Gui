@@ -16,8 +16,6 @@ namespace TestCentric.Gui.Elements
         Point Location { get; set; }
         Size Size { get; set; }
         Size ClientSize { get; set; }
-
-        ContextMenu ContextMenu { get; }
         ContextMenuStrip? ContextMenuStrip { get; }
     }
 }

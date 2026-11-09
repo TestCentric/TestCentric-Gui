@@ -64,11 +64,6 @@ namespace TestCentric.Gui.Elements
                 del();
         }
 
-        public ContextMenu ContextMenu
-        {
-            get { return _control.ContextMenu; }
-        }
-
         public ContextMenuStrip? ContextMenuStrip
         {
             get { return _control.ContextMenuStrip; }
