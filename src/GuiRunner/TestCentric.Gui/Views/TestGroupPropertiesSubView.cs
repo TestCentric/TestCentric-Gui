@@ -25,12 +25,14 @@ namespace TestCentric.Gui.Views
 
         public override int FullHeight => testCaseCount.Top + HeightNeededForControl(testCaseCount) + 8;
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string FullName
         {
             get { return fullName.Text; }
             set { this.InvokeIfRequired(() => { fullName.Text = value; }); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string TestCount
         {
             get { return testCaseCount.Text; }

@@ -36,6 +36,7 @@ namespace TestCentric.Gui.Dialogs
         }
 
         [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string TestName
         {
             get { return testName.Text; }

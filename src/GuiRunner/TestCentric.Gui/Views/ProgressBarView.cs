@@ -38,6 +38,7 @@ namespace TestCentric.Gui.Views
         }
 
         [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int Progress
         {
             get { return _progress; }
@@ -51,6 +52,7 @@ namespace TestCentric.Gui.Views
         }
 
         [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ProgressBarStatus Status
         {
             get { return _status; }

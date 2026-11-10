@@ -38,7 +38,6 @@ namespace TestCentric.Gui.Views
             this.testProgressBar.Name = "testProgressBar";
             this.testProgressBar.ShowPercentComplete = true;
             this.testProgressBar.Size = new System.Drawing.Size(239, 24);
-            this.testProgressBar.Status = TestCentric.Gui.Controls.ProgressBarStatus.Success;
             this.testProgressBar.TabIndex = 0;
             // 
             // ProgressBarView

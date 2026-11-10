@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -190,12 +191,25 @@ namespace TestCentric.Gui.Controls
 
         #region Public Properties and Methods
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool Overlay { get; set; }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ExpansionStyle Expansion { get; set; }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int AutoCloseDelay { get; set; }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int MouseLeaveDelay { get; set; }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string TipText { get; set; }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Rectangle ItemBounds { get; set; }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool WantClicks { get; set; }
 
         public void Display(TreeNode treeNode, string? resultText)

@@ -12,6 +12,7 @@ using NUnit.UiException.Controls;
 
 namespace TestCentric.Gui.Views
 {
+    using System.ComponentModel;
     using Controls;
 
     /// <summary>
@@ -69,14 +70,20 @@ namespace TestCentric.Gui.Views
 
         public ITestOutputSubView TestOutputSubView => testOutputSubView;
 
+        [DefaultValue("Test name")]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public string Header
         {
             get { return header.Text; }
             set { InvokeIfRequired(() => header.Text = value); }
         }
 
+        [DefaultValue(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public bool EnableToolTips { get; set; }
 
+        [DefaultValue(128)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public int SplitterPosition
         {
             get { return tabSplitter.SplitPosition; }
@@ -90,6 +97,8 @@ namespace TestCentric.Gui.Views
             }
         }
 
+        [DefaultValue(0.3f)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public float SourceCodeSplitterDistance
         {
             get { return sourceCode.SplitterDistance; }
@@ -102,6 +111,8 @@ namespace TestCentric.Gui.Views
             }
         }
 
+        [DefaultValue(Orientation.Vertical)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public Orientation SourceCodeSplitOrientation
         {
             get { return sourceCode.SplitOrientation; }
@@ -115,6 +126,8 @@ namespace TestCentric.Gui.Views
 
         }
 
+        [DefaultValue(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public bool SourceCodeDisplay
         {
             get { return errorBrowser.SelectedDisplay == sourceCode; }
