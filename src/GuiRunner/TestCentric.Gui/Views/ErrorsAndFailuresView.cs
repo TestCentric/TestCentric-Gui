@@ -97,7 +97,7 @@ namespace TestCentric.Gui.Views
             }
         }
 
-        [DefaultValue(0.3f)]
+        [DefaultValue(0.5f)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public float SourceCodeSplitterDistance
         {
