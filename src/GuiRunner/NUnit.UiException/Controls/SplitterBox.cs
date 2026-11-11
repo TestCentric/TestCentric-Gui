@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using NUnit.UiException.Properties;
@@ -124,6 +125,8 @@ namespace NUnit.UiException.Controls
         /// <summary>
         /// Gets or sets the orientation of the splitter in the SplitterBox.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Orientation Orientation
         {
             get { return (_orientation); }
@@ -143,6 +146,8 @@ namespace NUnit.UiException.Controls
         /// 
         /// Values that don't fall in [0 - 1] are automatically clipped to this range.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public float SplitterDistance
         {
             get { return (_orientation == Orientation.Vertical ? _x : _y); }
@@ -166,6 +171,8 @@ namespace NUnit.UiException.Controls
         ///   If the value is null, the former control is removed and replaced
         /// by a default and empty area.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Control Control1
         {
             get { return (_control1); }
@@ -194,6 +201,8 @@ namespace NUnit.UiException.Controls
         ///   If the value is null, the former control is removed and replaced
         /// by a default and empty area.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Control Control2
         {
             get { return (_control2); }

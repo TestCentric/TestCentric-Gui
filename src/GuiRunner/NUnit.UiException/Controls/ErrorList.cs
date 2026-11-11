@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -40,6 +41,8 @@ namespace NUnit.UiException.Controls
         /// <summary>
         /// Gives access to the item collection.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ErrorItemCollection Items
         {
             get { return (_items); }
@@ -47,12 +50,16 @@ namespace NUnit.UiException.Controls
 
         #region IStackTraceView Members
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool AutoSelectFirstItem
         {
             get { return (_autoSelectFirstItem); }
             set { _autoSelectFirstItem = value; }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string StackTrace
         {
             get { return (_stackTrace); }
@@ -76,6 +83,8 @@ namespace NUnit.UiException.Controls
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ErrorItem? SelectedItem
         {
             get { return (_selection); }
@@ -97,6 +106,8 @@ namespace NUnit.UiException.Controls
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ErrorListOrderPolicy ListOrderPolicy
         {
             get { return (_listOrder); }

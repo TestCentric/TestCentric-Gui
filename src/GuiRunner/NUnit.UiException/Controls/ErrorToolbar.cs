@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using NUnit.UiException.Properties;
@@ -78,6 +79,8 @@ namespace NUnit.UiException.Controls
         /// <summary>
         /// Gets or sets the IErrorDisplay to be selected.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IErrorDisplay? SelectedDisplay
         {
             get
