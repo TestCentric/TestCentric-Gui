@@ -40,6 +40,7 @@ namespace TestCentric.Gui.Views
 
         public int ClientHeight => ClientRectangle.Height - TestPackageSubView.Top - 40; // Value of 40 allows for non-client areas and spacing
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Header
         {
             get { return header.Text; }
@@ -53,61 +54,71 @@ namespace TestCentric.Gui.Views
         public TestGroupPropertiesSubView TestGroupPropertiesSubView => testGroupPropertiesSubView;
 
 
-        public SubView[] SubViews => new SubView[] { TestPackageSubView, TestPropertiesSubView, TestGroupPropertiesSubView }; 
+        public SubView[] SubViews => new SubView[] { TestPackageSubView, TestPropertiesSubView, TestGroupPropertiesSubView };
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string TestType
         {
             get { return testPropertiesSubView.TestType; }
             set { testPropertiesSubView.TestType = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string FullName
         {
             get { return testPropertiesSubView.FullName; }
             set { testPropertiesSubView.FullName = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Description
         {
             get { return testPropertiesSubView.Description; }
             set { testPropertiesSubView.Description = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Categories
         {
             get { return testPropertiesSubView.Categories; }
             set { testPropertiesSubView.Categories = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string TestCount
         {
             get { return testPropertiesSubView.TestCount; }
             set { testPropertiesSubView.TestCount = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string RunState
         {
             get { return testPropertiesSubView.RunState; }
             set { testPropertiesSubView.RunState = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string SkipReason
         {
             get { return testPropertiesSubView.SkipReason; }
             set { testPropertiesSubView.SkipReason = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool DisplayHiddenProperties
         {
             get { return testPropertiesSubView.DisplayHiddenProperties; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Properties
         {
             get { return testPropertiesSubView.Properties; }
             set { testPropertiesSubView.Properties = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string PackageSettings
         {
             get { return testPackageSubView.PackageSettings; }

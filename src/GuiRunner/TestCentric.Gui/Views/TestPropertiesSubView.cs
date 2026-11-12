@@ -32,53 +32,62 @@ namespace TestCentric.Gui.Views
 
         public override int FullHeight => properties.Top + HeightNeededForControl(properties) + 4;
 
-       public string TestType
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public string TestType
         {
             get { return testType.Text; }
             set { this.InvokeIfRequired(() => { testType.Text = value; }); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string FullName
         {
             get { return fullName.Text; }
             set { this.InvokeIfRequired(() => { fullName.Text = value; }); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Description
         {
             get { return description.Text; }
             set { this.InvokeIfRequired(() => { description.Text = value; }); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Categories
         {
             get { return categories.Text; }
             set { this.InvokeIfRequired(() => { categories.Text = value; }); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string TestCount
         {
             get { return testCaseCount.Text; }
             set { this.InvokeIfRequired(() => { testCaseCount.Text = value; }); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string RunState
         {
             get { return runState.Text; }
             set { this.InvokeIfRequired(() => { runState.Text = value; }); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string SkipReason
         {
             get { return skipReason.Text; }
             set { this.InvokeIfRequired(() => { skipReason.Text = value; }); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool DisplayHiddenProperties
         {
             get { return displayHiddenProperties.Checked; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Properties
         {
             get { return properties.Text; }

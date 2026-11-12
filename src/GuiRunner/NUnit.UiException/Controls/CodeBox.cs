@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
@@ -64,6 +65,8 @@ namespace NUnit.UiException.Controls
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Language
         {
             get { return (_language); }
@@ -79,6 +82,8 @@ namespace NUnit.UiException.Controls
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int CurrentLine
         {
             get { return (_currentLine); }
@@ -96,6 +101,8 @@ namespace NUnit.UiException.Controls
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IFormatterCatalog Formatter
         {
             get { return (_formatter); }
@@ -107,6 +114,8 @@ namespace NUnit.UiException.Controls
         /// Gets or sets a value telling whether or not displaying a special
         /// feature for the current line at drawing time.
         /// </summary>        
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool ShowCurrentLine
         {
             get { return (_showCurrentLine); }
@@ -116,6 +125,8 @@ namespace NUnit.UiException.Controls
         /// <summary>
         /// If ShowCurrentLine is set, this set the current line's background color.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Color CurrentLineBackColor
         {
             get { return (_workingContext.CurrentLineBackColor); }
@@ -129,6 +140,8 @@ namespace NUnit.UiException.Controls
         /// <summary>
         /// If ShowCurrentLine is set, this set current line's foreground color.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Color CurrentLineForeColor
         {
             get { return (_workingContext.CurrentLineForeColor); }

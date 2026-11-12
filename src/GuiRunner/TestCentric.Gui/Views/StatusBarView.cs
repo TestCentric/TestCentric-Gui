@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
@@ -37,36 +38,43 @@ namespace TestCentric.Gui.Views
             set { InvokeIfRequired(() => StatusLabel.Text = value); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int Passed
         {
             set { UpdateCounter(passedPanel, value, $"Passed: {value}"); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int Failed
         {
             set { UpdateCounter(failedPanel, value, $"Failed: {value}"); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int Warnings
         {
             set { UpdateCounter(warningsPanel, value, $"Warnings: {value}"); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int Inconclusive
         {
             set { UpdateCounter(inconclusivePanel, value, $"Inconclusive: {value}"); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int Ignored
         {
             set { UpdateCounter(ignoredPanel, value, $"Ignored: {value}"); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int Skipped
         {
             set { UpdateCounter(skippedPanel, value, $"Skipped: {value}"); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public double Duration
         {
             set 

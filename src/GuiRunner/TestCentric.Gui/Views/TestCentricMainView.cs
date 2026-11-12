@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
+    using System.ComponentModel;
     using Controls;
     using Elements;
     using TestCentric.Gui.Elements.ToolStripElements;
@@ -85,12 +86,14 @@ namespace TestCentric.Gui.Views
 
         public event EventHandler? SplitterPositionChanged;
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Title
         {
             get { return Text; }
             set { Text = value ?? "UNNAMED.tcproj"; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool Maximized
         {
             get { return WindowState == FormWindowState.Maximized; }
@@ -104,6 +107,7 @@ namespace TestCentric.Gui.Views
             }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int SplitterPosition
         {
             get { return treeSplitter.SplitPosition; }

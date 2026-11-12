@@ -550,9 +550,7 @@ namespace TestCentric.Gui.Views
             this.progressBar.ForeColor = System.Drawing.SystemColors.Highlight;
             this.progressBar.Location = new System.Drawing.Point(0, 2);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Progress = 0;
             this.progressBar.Size = new System.Drawing.Size(498, 24);
-            this.progressBar.Status = TestCentric.Gui.Views.ProgressBarStatus.Success;
             this.progressBar.TabIndex = 3;
             // 
             // resultTabs
@@ -583,21 +581,11 @@ namespace TestCentric.Gui.Views
             // 
             this.propertiesView.AutoScroll = true;
             this.propertiesView.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.propertiesView.Categories = "";
-            this.propertiesView.Description = "";
             this.propertiesView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertiesView.FullName = "";
-            this.propertiesView.Header = "";
             this.propertiesView.Location = new System.Drawing.Point(0, 0);
             this.propertiesView.Name = "propertiesView";
-            this.propertiesView.PackageSettings = "";
-            this.propertiesView.Properties = "";
-            this.propertiesView.RunState = "";
             this.propertiesView.Size = new System.Drawing.Size(490, 333);
-            this.propertiesView.SkipReason = "";
             this.propertiesView.TabIndex = 0;
-            this.propertiesView.TestCount = "";
-            this.propertiesView.TestType = "";
             // 
             // errorTab
             // 
@@ -669,10 +657,8 @@ namespace TestCentric.Gui.Views
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            this.treeView.SelectedNode = null;
             this.treeView.Size = new System.Drawing.Size(240, 359);
             this.treeView.TabIndex = 0;
-            this.treeView.TopNode = null;
             // 
             // TestCentricMainView
             // 

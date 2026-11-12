@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Dialogs
@@ -23,12 +24,14 @@ namespace TestCentric.Gui.Dialogs
             ParameterValue = value;
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string ParameterName
         {
             get { return parameterNameTextBox.Text; }
             set { parameterNameTextBox.Text = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string ParameterValue
         {
             get { return parameterValueTextBox.Text; }

@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 using TestCentric.Gui.Model;
 using TestCentric.Gui.Presenters;
@@ -30,42 +31,49 @@ namespace TestCentric.Gui.Dialogs
             WireUpEvents();
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string DisplayFormat
         {
             get => _treeConfig.DisplayFormat;
             set => _treeConfig.DisplayFormat = value;
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool NUnitTreeShowAssemblies
         {
             get => _treeConfig.NUnitTreeShowAssemblies;
             set => _treeConfig.NUnitTreeShowAssemblies = value;
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool NUnitTreeShowNamespaces
         {
             get => _treeConfig.NUnitTreeShowNamespaces;
             set => _treeConfig.NUnitTreeShowNamespaces = value;
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool NUnitTreeShowFixtures
         {
             get => _treeConfig.NUnitTreeShowFixtures;
             set => _treeConfig.NUnitTreeShowFixtures = value;
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string TestListGroupBy
         {
             get => _treeConfig.TestListGroupBy;
             set => _treeConfig.TestListGroupBy = value;
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool TestListShowAssemblies
         {
             get => _treeConfig.TestListShowAssemblies;
             set => _treeConfig.TestListShowAssemblies = value;
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool TestListShowFixtures
         {
             get => _treeConfig.TestListShowFixtures;

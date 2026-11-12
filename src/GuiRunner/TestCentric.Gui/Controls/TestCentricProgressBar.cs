@@ -44,6 +44,7 @@ namespace TestCentric.Gui.Controls
 
         private ProgressBarStatus _status = ProgressBarStatus.Success;
         [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ProgressBarStatus Status
         {
             get { return _status; }
@@ -59,6 +60,8 @@ namespace TestCentric.Gui.Controls
         }
 
         [Browsable(true), Category("Appearance")]
+        [DefaultValue(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public bool ShowPercentComplete { get; set; }
 
         #endregion

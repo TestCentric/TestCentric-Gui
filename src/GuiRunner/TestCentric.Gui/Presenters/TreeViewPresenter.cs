@@ -491,7 +491,7 @@ namespace TestCentric.Gui.Presenters
 
                 _xmlDisplay.Top = mainForm.Top + (mainForm.Height - _xmlDisplay.Height) / 2;
 
-                _xmlDisplay.Closed += (s, e) => _xmlDisplay = null;
+                _xmlDisplay.FormClosed += (s, e) => _xmlDisplay = null;
             }
 
             if (_view.ContextNode != null)

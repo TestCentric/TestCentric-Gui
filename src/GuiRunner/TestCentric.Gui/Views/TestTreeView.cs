@@ -217,6 +217,9 @@ namespace TestCentric.Gui.Views
         #region Properties
 
         private bool _checkBoxes;
+
+        [DefaultValue(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public bool CheckBoxes
         {
             get { return _checkBoxes; }
@@ -283,12 +286,15 @@ namespace TestCentric.Gui.Views
         public TreeNodeCollection Nodes => treeView.Nodes;
 
         public int VisibleNodeCount => treeView.VisibleCount;
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public TreeNode? TopNode
         {
             get { return treeView.TopNode; }
             set { InvokeIfRequired(() => treeView.TopNode = value); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public TreeNode? SelectedNode
         {
             get { return treeView.SelectedNode; }

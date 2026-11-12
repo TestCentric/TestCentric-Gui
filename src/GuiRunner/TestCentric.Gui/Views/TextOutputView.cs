@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System.ComponentModel;
 using System.Drawing;
 using TestCentric.Gui.Elements;
 
@@ -19,12 +20,15 @@ namespace TestCentric.Gui.Views
             Labels = new CheckedToolStripMenuGroup(labelsToolStripMenuItem);
         }
 
+        [DefaultValue(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public bool WordWrap
         {
             get { return richTextBox1.WordWrap; }
             set { richTextBox1.WordWrap = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ISelection Labels { get; set; }
 
         public void Clear()

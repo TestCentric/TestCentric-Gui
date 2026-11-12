@@ -68,7 +68,6 @@ namespace TestCentric.Gui.Views
             this.testPackageSubView.Location = new System.Drawing.Point(3, 21);
             this.testPackageSubView.MinimumSize = new System.Drawing.Size(2, 70);
             this.testPackageSubView.Name = "testPackageSubView";
-            this.testPackageSubView.PackageSettings = "";
             this.testPackageSubView.Size = new System.Drawing.Size(516, 71);
             this.testPackageSubView.TabIndex = 30;
             // 
@@ -76,19 +75,11 @@ namespace TestCentric.Gui.Views
             // 
             this.testPropertiesSubView.BackColor = System.Drawing.SystemColors.Control;
             this.testPropertiesSubView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.testPropertiesSubView.Categories = "";
-            this.testPropertiesSubView.Description = "";
-            this.testPropertiesSubView.FullName = "";
             this.testPropertiesSubView.Location = new System.Drawing.Point(3, 98);
             this.testPropertiesSubView.MinimumSize = new System.Drawing.Size(2, 204);
             this.testPropertiesSubView.Name = "testPropertiesSubView";
-            this.testPropertiesSubView.Properties = "";
-            this.testPropertiesSubView.RunState = "";
             this.testPropertiesSubView.Size = new System.Drawing.Size(516, 209);
-            this.testPropertiesSubView.SkipReason = "";
             this.testPropertiesSubView.TabIndex = 30;
-            this.testPropertiesSubView.TestCount = "";
-            this.testPropertiesSubView.TestType = "";
             // 
             // testGroupPropertiesSubView
             // 
@@ -99,8 +90,6 @@ namespace TestCentric.Gui.Views
             this.testGroupPropertiesSubView.Name = "testGroupPropertiesSubView";
             this.testGroupPropertiesSubView.Size = new System.Drawing.Size(516, 65);
             this.testGroupPropertiesSubView.TabIndex = 31;
-            this.testGroupPropertiesSubView.FullName = "";
-            this.testGroupPropertiesSubView.TestCount = "";
             // 
             // TestPropertiesView
             // 

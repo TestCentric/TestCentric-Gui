@@ -125,8 +125,6 @@ namespace TestCentric.Gui.Views
             this.errorBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorBrowser.Location = new System.Drawing.Point(0, 0);
             this.errorBrowser.Name = "errorBrowser";
-            this.errorBrowser.SelectedDisplay = null;
-            this.errorBrowser.StackTraceSource = null;
             this.errorBrowser.TabIndex = 4;
             // 
             // panel1

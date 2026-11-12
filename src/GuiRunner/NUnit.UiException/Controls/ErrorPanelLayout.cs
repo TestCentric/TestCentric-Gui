@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace NUnit.UiException.Controls
@@ -95,6 +96,8 @@ namespace NUnit.UiException.Controls
         /// passed component. Besides, the passed component is
         /// automatically positionned to the right coordinates.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Control Toolbar
         {
             get { return (_header[PANEL_LEFT]); }
@@ -116,6 +119,8 @@ namespace NUnit.UiException.Controls
         /// passed component. Besides, the passed component is
         /// automatically positionned to the right coordinates.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Control Option
         {
             get { return (_header[PANEL_RIGHT]); }
@@ -137,6 +142,8 @@ namespace NUnit.UiException.Controls
         /// passed component. Besides, the passed component is
         /// automatically positionned to the right coordinates.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Control Content
         {
             get { return (_contentCurrent); }
@@ -200,6 +207,7 @@ namespace NUnit.UiException.Controls
                 return;
             }
 
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public Control this[int index]
             {
                 get { return (_currents[index]); }

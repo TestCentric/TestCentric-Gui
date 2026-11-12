@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace NUnit.UiException.Controls
@@ -73,6 +74,8 @@ namespace NUnit.UiException.Controls
         /// Use this property to get or set the new stack trace details.
         /// The changes are repercuted on the registered displays.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string StackTraceSource
         {
             get { return (_stackStace); }
@@ -96,6 +99,8 @@ namespace NUnit.UiException.Controls
         /// <summary>
         /// Gets the selected display.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IErrorDisplay? SelectedDisplay
         {
             get { return (Toolbar.SelectedDisplay); }
