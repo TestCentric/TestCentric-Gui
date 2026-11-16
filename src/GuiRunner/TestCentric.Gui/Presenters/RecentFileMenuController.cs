@@ -21,6 +21,8 @@ namespace TestCentric.Gui.Presenters
     /// </summary>
     public class RecentFileMenuController
     {
+        private bool _IsKeyEventRegistered;
+
         public RecentFileMenuController(ITestModel model, IPopup menuItem, bool filterProjectFiles)
         {
             Guard.ArgumentNotNull(model, nameof(model));
@@ -56,6 +58,37 @@ namespace TestCentric.Gui.Presenters
                 ToolStripMenuItem menuItem = CreateRecentFileMenuItem(menuItemText, fileName);
                 MenuItems.Add(menuItem);
             }
+
+            if (MenuItems.Count > 0)
+            {
+                MenuItems.Add(new ToolStripSeparator());
+                var menuItem = new ToolStripMenuItem("Clear recent file list");
+                menuItem.ToolTipText = "Remove all entries from the recent file list";
+                menuItem.Click += OnClearRecentFileList;
+                MenuItems.Add(menuItem);
+
+                // Key events must be registered on ToolStripDropDown element
+                if (!_IsKeyEventRegistered)
+                {
+                    menuItem.Owner.KeyDown += OnKeyDown;
+                    _IsKeyEventRegistered = true;
+                }
+            }
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                // Get selected menu item
+                var selectedItem = MenuItems.OfType<ToolStripMenuItem>().FirstOrDefault(item => item.Selected);
+                if (selectedItem != null)
+                {
+                    RemoveRecentFileEntry(selectedItem);
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
+                }
+            }
         }
 
         private bool Filter(string fileName)
@@ -72,26 +105,10 @@ namespace TestCentric.Gui.Presenters
         private ToolStripMenuItem CreateRecentFileMenuItem(string menuText, string tag)
         {
             var menuItem = new ToolStripMenuItem(menuText);
+            menuItem.ToolTipText = $"Open {tag}\r\n[Press Delete to remove]";
             menuItem.Tag = tag;
             menuItem.Click += OnMenuItemClicked;
-            menuItem.MouseUp += OnMenuItemMouseUp;
             return menuItem;
-        }
-
-        private void OnMenuItemMouseUp(object? sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                var menuItem = new MenuItem("Remove item from list");
-                menuItem.Tag = sender;
-                menuItem.Click += RemoveRecentFileEntry;
-
-                if (sender is ToolStripMenuItem { Owner: Control control })
-                {
-                    ContextMenu contextMenu = new ContextMenu(new[] { menuItem });
-                    contextMenu.Show(control, control.PointToClient(Cursor.Position));
-                }
-            }
         }
 
         private void OnMenuItemClicked(object? sender, EventArgs e)
@@ -101,24 +118,45 @@ namespace TestCentric.Gui.Presenters
                 Model.OpenExistingFile(fileName);
         }
 
-        private void RemoveRecentFileEntry(object? sender, EventArgs e)
+        private void OnClearRecentFileList(object? sender, EventArgs e)
+        {
+            var entries = Model.Settings.Gui.RecentFiles.Entries;
+            var fileNames = entries.Cast<string>().Where(Filter).ToList();
+            foreach (string fileName in fileNames)
+                entries.Remove(fileName);
+        }
+
+        private void RemoveRecentFileEntry(ToolStripMenuItem toolStripMenuItem)
         {
             // Remove entry from settings
-            MenuItem? contextMenuItem = sender as MenuItem;
-            ToolStripMenuItem? selectedMenuItem = contextMenuItem?.Tag as ToolStripMenuItem;
-            if (selectedMenuItem?.Tag is not string fileName)
+            if (toolStripMenuItem?.Tag is not string fileName)
                 return;
             var entries = Model.Settings.Gui.RecentFiles.Entries;
             entries.Remove(fileName);
 
             // Remove entry from menu
-            if (MenuItems.Contains(selectedMenuItem))
-                MenuItems.Remove(selectedMenuItem);
+            ToolStripDropDown? dropDown = toolStripMenuItem.Owner as ToolStripDropDown;
+            int currentIndex = MenuItems.IndexOf(toolStripMenuItem);
+            if (currentIndex != -1)
+                MenuItems.Remove(toolStripMenuItem);
+
+            // Close recent file menu if last item was removed
+            var recentFileItems = MenuItems.OfType<ToolStripMenuItem>().Where(t => t.Tag != null);
+            if (!recentFileItems.Any())
+            {
+                MenuItems.Clear();
+                dropDown?.Close();
+                return;
+            }
 
             // Update text of all remaining menu items
             int index = 1;
-            foreach (ToolStripMenuItem menuItem in MenuItems)
+            foreach (ToolStripMenuItem menuItem in recentFileItems)
                 menuItem.Text = $"{index++} {menuItem.Tag}";
+
+            // Select the next item in the menu if possible
+            if (currentIndex >= 0 && currentIndex < MenuItems.Count)
+                (MenuItems[currentIndex] as ToolStripMenuItem)?.Select();
         }
     }
 }
