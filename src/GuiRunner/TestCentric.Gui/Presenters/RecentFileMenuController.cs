@@ -68,7 +68,7 @@ namespace TestCentric.Gui.Presenters
                 MenuItems.Add(menuItem);
 
                 // Key events must be registered on ToolStripDropDown element
-                if (!_IsKeyEventRegistered)
+                if (!_IsKeyEventRegistered && menuItem.Owner != null)
                 {
                     menuItem.Owner.KeyDown += OnKeyDown;
                     _IsKeyEventRegistered = true;
@@ -76,7 +76,7 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        private void OnKeyDown(object sender, KeyEventArgs e)
+        public void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
             {
@@ -156,7 +156,12 @@ namespace TestCentric.Gui.Presenters
 
             // Select the next item in the menu if possible
             if (currentIndex >= 0 && currentIndex < MenuItems.Count)
-                (MenuItems[currentIndex] as ToolStripMenuItem)?.Select();
+            {
+                if (MenuItems[currentIndex] is ToolStripMenuItem menuItem)
+                    menuItem.Select();
+                else if (currentIndex > 0)
+                    (MenuItems[currentIndex - 1] as ToolStripMenuItem)?.Select();
+            }
         }
     }
 }

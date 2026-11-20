@@ -135,6 +135,48 @@ namespace TestCentric.Gui.Presenters
             Assert.That(_recentFiles.Entries, Is.EqualTo(new StringCollection { assemblyFile }));
         }
 
+        [Test]
+        public void OnKeyDown_Delete_RemovesSelectedFileAndSelectsPreviousFile()
+        {
+            string firstFile = CreateFile("first.dll");
+            string secondFile = CreateFile("second.dll");
+            _recentFiles.Entries.Add(firstFile);
+            _recentFiles.Entries.Add(secondFile);
+            var controller = new RecentFileMenuController(_model, _popup, false);
+
+            controller.PopulateMenu();
+            var selectedItem = (ToolStripMenuItem)_menuItem.DropDownItems[1];
+            selectedItem.Select();
+            var keyEventArgs = new KeyEventArgs(Keys.Delete);
+
+            controller.OnKeyDown(null!, keyEventArgs);
+
+            Assert.That(_recentFiles.Entries, Is.EqualTo(new StringCollection { firstFile }));
+            Assert.That(_menuItem.DropDownItems[0].Text, Is.EqualTo($"1 {firstFile}"));
+            Assert.That(((ToolStripMenuItem)_menuItem.DropDownItems[0]).Selected, Is.True);
+            Assert.That(keyEventArgs.Handled, Is.True);
+            Assert.That(keyEventArgs.SuppressKeyPress, Is.True);
+        }
+
+        [Test]
+        public void OnKeyDown_Delete_RemovesLastFileAndClearsMenu()
+        {
+            string fileName = CreateFile("tests.dll");
+            _recentFiles.Entries.Add(fileName);
+            var controller = new RecentFileMenuController(_model, _popup, false);
+
+            controller.PopulateMenu();
+            ((ToolStripMenuItem)_menuItem.DropDownItems[0]).Select();
+            var keyEventArgs = new KeyEventArgs(Keys.Delete);
+
+            controller.OnKeyDown(null!, keyEventArgs);
+
+            Assert.That(_recentFiles.Entries, Is.Empty);
+            Assert.That(_menuItem.DropDownItems, Is.Empty);
+            Assert.That(keyEventArgs.Handled, Is.True);
+            Assert.That(keyEventArgs.SuppressKeyPress, Is.True);
+        }
+
         private string CreateFile(string fileName)
         {
             string path = Path.Combine(_testDirectory, fileName);
