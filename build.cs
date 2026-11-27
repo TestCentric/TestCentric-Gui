@@ -1,13 +1,13 @@
 // Cake.Sdk build of the GUI. Run with: dotnet build.cs -- --target=Package
 
 #:sdk Cake.Sdk@7.0.0
-#:package Cake.Git@5.0.1
-#:package Cake.MinVer@4.0.0
+#:package TestCentric.Cake.Recipe@2.0.0-rc.0.2
 // The GUI uses Central Package Management, which this build script must not.
 #:property ManagePackageVersionsCentrally=false
 #:property Nullable=disable
-// The recipe: for now, the local version2 checkout beside this repo
-#:property IncludeAdditionalFiles=../TestCentric.Cake.Recipe/recipe/*.cs;PackageTests.cs;KnownExtensions.cs
+// The GUI's own build files. To test against a local recipe checkout instead of the
+// package, remove the #:package line above and add ../TestCentric.Cake.Recipe/recipe/*.cs here.
+#:property IncludeAdditionalFiles=PackageTests.cs;KnownExtensions.cs
 
 //////////////////////////////////////////////////////////////////////
 // INITIALIZATION
