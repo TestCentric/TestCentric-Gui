@@ -1,7 +1,7 @@
 // Cake.Sdk build of the GUI. Run with: dotnet build.cs -- --target=Package
 
 #:sdk Cake.Sdk@7.0.0
-#:package TestCentric.Cake.Recipe@2.0.0-rc.0.2
+#:package TestCentric.Cake.Recipe@2.0.0-dev00002.4
 // The GUI uses Central Package Management, which this build script must not.
 #:property ManagePackageVersionsCentrally=false
 #:property Nullable=disable
