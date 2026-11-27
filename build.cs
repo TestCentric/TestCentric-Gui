@@ -1,4 +1,9 @@
-// Cake.Sdk build of the GUI. Run with: dotnet build.cs -- --target=Package
+// ***********************************************************************
+// Copyright (c) Charlie Poole and TestCentric contributors.
+// Licensed under the MIT License. See LICENSE file in root directory.
+// ***********************************************************************
+
+// Cake.Sdk build of the GUI. Run with: dotnet run --file build.cs -- --target=Package
 
 #:sdk Cake.Sdk@7.0.0
 #:package TestCentric.Cake.Recipe@2.0.0-dev00002.4
