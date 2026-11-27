@@ -11,7 +11,9 @@
 #:property ManagePackageVersionsCentrally=false
 #:property Nullable=disable
 // The GUI's own build files. To test against a local recipe checkout instead of the
-// package, remove the #:package line above and add ../TestCentric.Cake.Recipe/recipe/*.cs here.
+// package, replace the recipe's #:package line above with #:package lines for the
+// Cake.Git and Cake.MinVer versions the recipe uses, and add
+// ../TestCentric.Cake.Recipe/recipe/*.cs here.
 #:property IncludeAdditionalFiles=PackageTests.cs;KnownExtensions.cs
 
 //////////////////////////////////////////////////////////////////////
@@ -71,6 +73,7 @@ var NuGetGuiPackage = new NuGetPackage(
 var ChocolateyGuiPackage = new ChocolateyPackage(
 	id: "testcentric-gui",
 	description: GUI_DESCRIPTION,
+	summary: "A GUI runner for NUnit tests on .NET Framework and .NET.",
 	packageContent: new PackageContent()
 		.WithDirectories(
 			new DirectoryContent("tools").WithFiles(
@@ -167,16 +170,27 @@ public static partial class Program
             "Success.png", "Failure.png", "Warning.png", "Ignored.png", "Inconclusive.png", "Success_NotLatestRun.png", "Failure_NotLatestRun.png", "Warning_NotLatestRun.png", "Ignored_NotLatestRun.png", "Inconclusive_NotLatestRun.png", "Skipped.png" };
     static readonly FilePath[] COMMMON_ICONS_PNG = { "Pending.png", "Running.png", "Running_Failure.png", "Running_Success.png", "Running_Warning.png", "Running_Ignored.png" };
 
-    private const string GUI_DESCRIPTION =
-        "The TestCentric Runner for NUnit (**TestCentric**) is a GUI runner aimed at eventually supporting a range of .NET testing frameworks. In the 1.x release series, we are concentrating on support of NUnit tests. The user interface is based on the layout and feature set of the of the original NUnit GUI, with the internals modified so as to run NUnit 3 tests." +
-        "\r\n\nThis package includes the both the standard TestCentric GUI runner (`testcentric.exe`) and an experiental runner (`tc-next.exe`) which is available for... wait for it... experimentation! The package incorporates the TestCentric test engine, a modified version of the NUnit engine." +
-        "\r\n\n### Features" +
-        "\r\n\nMost features of the NUnit V2 Gui runner are supported. See CHANGES.txt for more detailed information." +
-        "\r\n\nNUnit engine extensions are supported but no extensions are bundled with the GUI itself. They must be installed separately **using chocolatey**. In particular, to run NUnit V2 tests, you should install the **NUnit V2 Framework Driver Extension**." + 
-        "\r\n\n**Warning:** When using the GUI chocolatey package, **only** chocolatey-packaged extensions will be available. This is by design." +
-        "\r\n\n### Prerequisites" +
-        "\r\n\n**TestCentric** requires .NET 4.5 or later in order to function, although your tests may run in a separate process under other framework versions." +
-        "\r\n\nProjects with tests to be run under **TestCentric** must already have some version of the NUnit framework installed separtely.";
+    private const string GUI_DESCRIPTION = """
+        The TestCentric Runner for NUnit (**TestCentric**) is a GUI runner aimed at supporting a range of .NET testing frameworks. In the 2.x release series, we are concentrating on support of NUnit tests.
+        
+        ### Features
+
+        The V2 GUI is a completely new design from both V1 and the legacy NUnit GUI.
+
+        The TestCentric engine, which was forked from NUnit, has been retired and we now rely entirely on the NUnit engine.
+
+        In order to run tests, at least one NUnit agent must be available. The initial V2 release will include agents to support the .NET Framework as well as .NET 8.0, 9.0 and 10.0.
+        
+        Beyond agents, other types of NUnit engine extensions are supported, but are not bundled with the GUI itself and must be installed separately. In particular, to run NUnit V2 tests, install the **NUnit V2 Framework Driver Extension**.
+
+        **Warning:** When using the GUI chocolatey package, **only** chocolatey-packaged extensions will be available. This is by design.
+
+        ### Prerequisites
+
+        **TestCentric** requires .NET Framework 4.6.2 or later. Tests targeting .NET Framework 2.0 through 4.8.1 run under the bundled .NET Framework agent, and tests targeting .NET Core or .NET 5 and later run under the bundled .NET agents.
+
+        Test projects must reference the NUnit framework themselves; it is not included with **TestCentric**.
+        """;
 
 
     // Package test runner
