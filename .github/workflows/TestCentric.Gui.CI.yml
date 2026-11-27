@@ -41,7 +41,7 @@ jobs:
         run: dotnet tool restore
 
       - name: 🍰 Build, Test, Package and Publish (Cake script decides)
-        run: dotnet cake --target=ContinuousIntegration --configuration=Release
+        run: dotnet run --file build.cs -- --target=ContinuousIntegration --configuration=Release
 
       # Disabled for now
       #- name: 🧪 Test Report
@@ -61,7 +61,7 @@ jobs:
       #      path: test-results
 
       #- name: 🍰 Build and Test Packages
-      #  run: dotnet cake --target=Package --nobuild --configuration=Release
+      #  run: dotnet run --file build.cs -- --target=Package --nobuild --configuration=Release
 
       # Disabled for now
       #- name: 💾 Upload Packages and Package Test results

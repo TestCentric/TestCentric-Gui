@@ -14,13 +14,13 @@ CodeRabbit reads this file as review guidance.
 - `src/GuiRunner/*.Tests` – unit tests for the projects above.
 - `src/TestData` – assemblies used as test inputs by unit and package tests. They contain
   deliberately failing, ignored or hanging tests; that is intended.
-- `build.cake`, `package-tests.cake`, `KnownExtensions.cake` – the Cake build, which loads
-  the shared `TestCentric.Cake.Recipe` package.
+- `build.cs`, `PackageTests.cs`, `KnownExtensions.cs` – the Cake.Sdk build, which includes
+  the shared `TestCentric.Cake.Recipe` files.
 
 ## Building and testing
 
-- `dotnet tool restore`, then `dotnet cake --target=Build` or `dotnet cake --target=Test`.
-  `build.ps1` / `build.cmd` are wrappers around the same thing.
+- `dotnet tool restore`, then `dotnet run --file build.cs -- --target=Build` or `--target=Test`.
+  `build.ps1` / `build.cmd` are wrappers around the same thing. Requires the .NET 10 SDK or later.
 - The GUI projects target .NET Framework 4.6.2 (`net462`) with C# 12. Code must compile
   against `net462`: APIs that exist only in .NET Core or .NET 5+ are not available.
 - Nullable reference types are enabled and warnings are errors.

@@ -1,10 +1,13 @@
-// Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=2.0.0-dev00002
-// Comment out above line and uncomment below for local tests of recipe changes
-//#load ../TestCentric.Cake.Recipe/recipe/*.cake
+// Cake.Sdk build of the GUI. Run with: dotnet build.cs -- --target=Package
 
-#load package-tests.cake
-#load KnownExtensions.cake
+#:sdk Cake.Sdk@7.0.0
+#:package Cake.Git@5.0.1
+#:package Cake.MinVer@4.0.0
+// The GUI uses Central Package Management, which this build script must not.
+#:property ManagePackageVersionsCentrally=false
+#:property Nullable=disable
+// The recipe: for now, the local version2 checkout beside this repo
+#:property IncludeAdditionalFiles=../TestCentric.Cake.Recipe/recipe/*.cs;PackageTests.cs;KnownExtensions.cs
 
 //////////////////////////////////////////////////////////////////////
 // INITIALIZATION
@@ -17,28 +20,6 @@ BuildSettings.Initialize(
 	githubRepository: "TestCentric-Gui",
 	exemptFiles: ["Resource.cs", "TextCode.cs"]
 );
-
-//////////////////////////////////////////////////////////////////////
-// COMMON DEFINITIONS USED IN BOTH PACKAGES
-//////////////////////////////////////////////////////////////////////
-
-static readonly FilePath[] GUI_FILES = {
-        "testcentric.exe", "testcentric.exe.config", "nunit.uiexception.dll",
-        "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll" };
-static readonly FilePath[] IMG_SET_ICONS_PNG = {
-        "Success.png", "Failure.png", "Warning.png", "Ignored.png", "Inconclusive.png", "Success_NotLatestRun.png", "Failure_NotLatestRun.png", "Warning_NotLatestRun.png", "Ignored_NotLatestRun.png", "Inconclusive_NotLatestRun.png", "Skipped.png" };
-static readonly FilePath[] COMMMON_ICONS_PNG = { "Pending.png", "Running.png", "Running_Failure.png", "Running_Success.png", "Running_Warning.png", "Running_Ignored.png" };
-
-private const string GUI_DESCRIPTION =
-	"The TestCentric Runner for NUnit (**TestCentric**) is a GUI runner aimed at eventually supporting a range of .NET testing frameworks. In the 1.x release series, we are concentrating on support of NUnit tests. The user interface is based on the layout and feature set of the of the original NUnit GUI, with the internals modified so as to run NUnit 3 tests." +
-	"\r\n\nThis package includes the both the standard TestCentric GUI runner (`testcentric.exe`) and an experiental runner (`tc-next.exe`) which is available for... wait for it... experimentation! The package incorporates the TestCentric test engine, a modified version of the NUnit engine." +
-	"\r\n\n### Features" +
-	"\r\n\nMost features of the NUnit V2 Gui runner are supported. See CHANGES.txt for more detailed information." +
-	"\r\n\nNUnit engine extensions are supported but no extensions are bundled with the GUI itself. They must be installed separately **using chocolatey**. In particular, to run NUnit V2 tests, you should install the **NUnit V2 Framework Driver Extension**." + 
-	"\r\n\n**Warning:** When using the GUI chocolatey package, **only** chocolatey-packaged extensions will be available. This is by design." +
-	"\r\n\n### Prerequisites" +
-	"\r\n\n**TestCentric** requires .NET 4.5 or later in order to function, although your tests may run in a separate process under other framework versions." +
-	"\r\n\nProjects with tests to be run under **TestCentric** must already have some version of the NUnit framework installed separtely.";
 
 //////////////////////////////////////////////////////////////////////
 // DEFINE PACKAGES
@@ -125,38 +106,10 @@ BuildSettings.Packages.Add(NuGetGuiPackage);
 //BuildSettings.Packages.Add(ChocolateyGuiPackage);
 
 //////////////////////////////////////////////////////////////////////
-// PACKAGE TEST RUNNER
-//////////////////////////////////////////////////////////////////////
-
-public class GuiSelfTester : TestRunner, IPackageTestRunner
-{
-    private FilePath _executablePath;
-
-    // NOTE: When constructed as an argument to BuildSettings.Initialize(),
-    // the executable path is not yet known and should not be provided.
-    public GuiSelfTester(string executablePath = null)
-    {
-        _executablePath = executablePath;
-    }
-
-    public int RunPackageTest(string arguments)
-    {
-        if (!arguments.Contains(" --run"))
-            arguments += " --run";
-        if (!arguments.Contains(" --unattended"))
-            arguments += " --unattended";
-
-        if (_executablePath == null)
-            _executablePath = BuildSettings.OutputDirectory + "testcentric.exe";
-
-        Console.WriteLine($"Running {_executablePath} with arguments {arguments}");
-        return base.RunTest(_executablePath, arguments);
-    }
-}
-
-//////////////////////////////////////////////////////////////////////
 // ADDITIONAL TARGETS USED IN DEVELOPMENT
 //////////////////////////////////////////////////////////////////////
+
+DefineKnownExtensionTasks();
 
 Task("PackageNuGet")
 	.IsDependentOn("Build")
@@ -194,3 +147,57 @@ Task("InstallNUnitProjectLoader")
 //////////////////////////////////////////////////////////////////////
 
 Build.Run();
+
+//////////////////////////////////////////////////////////////////////
+// DEFINITIONS USED ABOVE
+//////////////////////////////////////////////////////////////////////
+
+public static partial class Program
+{
+    // Common definitions used in both packages
+    static readonly FilePath[] GUI_FILES = {
+            "testcentric.exe", "testcentric.exe.config", "nunit.uiexception.dll",
+            "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll" };
+    static readonly FilePath[] IMG_SET_ICONS_PNG = {
+            "Success.png", "Failure.png", "Warning.png", "Ignored.png", "Inconclusive.png", "Success_NotLatestRun.png", "Failure_NotLatestRun.png", "Warning_NotLatestRun.png", "Ignored_NotLatestRun.png", "Inconclusive_NotLatestRun.png", "Skipped.png" };
+    static readonly FilePath[] COMMMON_ICONS_PNG = { "Pending.png", "Running.png", "Running_Failure.png", "Running_Success.png", "Running_Warning.png", "Running_Ignored.png" };
+
+    private const string GUI_DESCRIPTION =
+        "The TestCentric Runner for NUnit (**TestCentric**) is a GUI runner aimed at eventually supporting a range of .NET testing frameworks. In the 1.x release series, we are concentrating on support of NUnit tests. The user interface is based on the layout and feature set of the of the original NUnit GUI, with the internals modified so as to run NUnit 3 tests." +
+        "\r\n\nThis package includes the both the standard TestCentric GUI runner (`testcentric.exe`) and an experiental runner (`tc-next.exe`) which is available for... wait for it... experimentation! The package incorporates the TestCentric test engine, a modified version of the NUnit engine." +
+        "\r\n\n### Features" +
+        "\r\n\nMost features of the NUnit V2 Gui runner are supported. See CHANGES.txt for more detailed information." +
+        "\r\n\nNUnit engine extensions are supported but no extensions are bundled with the GUI itself. They must be installed separately **using chocolatey**. In particular, to run NUnit V2 tests, you should install the **NUnit V2 Framework Driver Extension**." + 
+        "\r\n\n**Warning:** When using the GUI chocolatey package, **only** chocolatey-packaged extensions will be available. This is by design." +
+        "\r\n\n### Prerequisites" +
+        "\r\n\n**TestCentric** requires .NET 4.5 or later in order to function, although your tests may run in a separate process under other framework versions." +
+        "\r\n\nProjects with tests to be run under **TestCentric** must already have some version of the NUnit framework installed separtely.";
+
+
+    // Package test runner
+    public class GuiSelfTester : TestRunner, IPackageTestRunner
+    {
+        private FilePath _executablePath;
+
+        // NOTE: When constructed as an argument to BuildSettings.Initialize(),
+        // the executable path is not yet known and should not be provided.
+        public GuiSelfTester(string executablePath = null)
+        {
+            _executablePath = executablePath;
+        }
+
+        public int RunPackageTest(string arguments)
+        {
+            if (!arguments.Contains(" --run"))
+                arguments += " --run";
+            if (!arguments.Contains(" --unattended"))
+                arguments += " --unattended";
+
+            if (_executablePath == null)
+                _executablePath = BuildSettings.OutputDirectory + "testcentric.exe";
+
+            Console.WriteLine($"Running {_executablePath} with arguments {arguments}");
+            return base.RunTest(_executablePath, arguments);
+        }
+    }
+}
