@@ -51,12 +51,15 @@ reviews:
       instructions: |
         Test input assemblies for unit and package tests. Failing, ignored,
         inconclusive and hanging tests are deliberate; do not suggest fixing them.
-    - path: "**/*.cake"
+    - path: "{build.cs,PackageTests.cs,KnownExtensions.cs}"
       instructions: |
-        Cake build scripts. build.cake loads the shared TestCentric.Cake.Recipe
-        package, which defines BuildSettings, the standard tasks and the package
-        test types; their source is not in this repository, so do not flag
-        members as undefined only because they are not declared here.
-        package-tests.cake defines the package tests and KnownExtensions.cake the
-        extension packages they install. Check that package contents, expected
-        test results and target runtimes stay consistent with each other.
+        The Cake.Sdk build, which is run with `dotnet run --file build.cs`. build.cs
+        references the shared TestCentric.Cake.Recipe package, whose C# source
+        is compiled into the build as part of `partial class Program`. It defines
+        BuildSettings, the standard tasks, the package types and package test
+        types, and helpers such as DisplayBanner. That source is not in this
+        repository, so do not flag members as undefined only because they are
+        not declared here. PackageTests.cs defines the package tests and
+        KnownExtensions.cs the extension packages they install, each wrapped in
+        `partial class Program`. Check that package contents, expected test
+        results and target runtimes stay consistent with each other.

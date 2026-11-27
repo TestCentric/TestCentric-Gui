@@ -1,8 +1,0 @@
-next-version: 2.0.0
-branches:
-  main:
-    label: dev
-  release:
-    label: pre
-  pull-request:
-    label: pr

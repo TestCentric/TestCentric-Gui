@@ -1,0 +1,156 @@
+// ***********************************************************************
+// Copyright (c) Charlie Poole and TestCentric contributors.
+// Licensed under the MIT License. See LICENSE file in root directory.
+// ***********************************************************************
+
+using System.Reflection;
+
+public static partial class Program
+{
+    // Static class holding information about known extensions.
+    public static class KnownExtensions
+    {
+        // Static Variables representing well-known Extensions with the latest tested version
+        public static ExtensionSpecifier NUnitV2Driver = new ExtensionSpecifier(
+            "NUnit.Extension.NUnitV2Driver", "nunit-extension-nunit-v2-driver", "3.9.0");
+        public static ExtensionSpecifier NUnitProjectLoader = new ExtensionSpecifier(
+            "NUnit.Extension.NUnitProjectLoader", "nunit-extension-nunit-project-loader", "4.0.0-beta.1");
+        public static ExtensionSpecifier VSProjectLoader = new ExtensionSpecifier(
+            "NUnit.Extension.VSProjectLoader", "nunit-extension-vs-project-loader", "3.9.0");
+        public static ExtensionSpecifier NUnitV2ResultWriter = new ExtensionSpecifier(
+            "NUnit.Extension.NUnitV2ResultWriter", "nunit-extension-nunit-v2-result-writer", "4.0.0-beta.2");
+        // Pluggable Agents
+        public static ExtensionSpecifier Net462PluggableAgent = new ExtensionSpecifier(
+            "NUnit.Extension.Net462PluggableAgent", "nunit-extension-net462-pluggable-agent", "4.1.3");
+        public static ExtensionSpecifier Net80PluggableAgent = new ExtensionSpecifier(
+            "NUnit.Extension.Net80PluggableAgent", "nunit-extension-net80-pluggable-agent", "4.1.4");
+        public static ExtensionSpecifier Net90PluggableAgent = new ExtensionSpecifier(
+            "NUnit.Extension.Net90PluggableAgent", "nunit-extension-net90-pluggable-agent", "4.1.3");
+        public static ExtensionSpecifier Net10PluggableAgent = new ExtensionSpecifier(
+            "NUnit.Extension.Net10PluggableAgent", "nunit-extension-net10-pluggable-agent", "4.0.0");
+
+        // TODO: Decide if we want to support any of these older agents.
+        //public static ExtensionSpecifier Net20PluggableAgent = new ExtensionSpecifier(
+        //    "NUnit.Extension.Net20PluggableAgent", "nunit-extension-net20-pluggable-agent", "2.1.1");
+        //public static ExtensionSpecifier NetCore21PluggableAgent = new ExtensionSpecifier(
+        //    "NUnit.Extension.NetCore21PluggableAgent", "nunit-extension-netcore21-pluggable-agent", "2.1.1");
+        //public static ExtensionSpecifier NetCore31PluggableAgent = new ExtensionSpecifier(
+        //    "NUnit.Extension.NetCore31PluggableAgent", "nunit-extension-netcore31-pluggable-agent", "2.1.0");
+        //public static ExtensionSpecifier Net50PluggableAgent = new ExtensionSpecifier(
+        //    "NUnit.Extension.Net50PluggableAgent", "nunit-extension-net50-pluggable-agent", "2.1.0");
+        //public static ExtensionSpecifier Net60PluggableAgent = new ExtensionSpecifier(
+        //    "TestCentric.Extension.Net60PluggableAgent", "testcentric-extension-net60-pluggable-agent", "2.5.3-dev00010");
+        //public static ExtensionSpecifier Net70PluggableAgent = new ExtensionSpecifier(
+        //    "NUnit.Extension.Net70PluggableAgent", "nunit-extension-net70-pluggable-agent", "2.1.0");
+
+        private static FieldInfo[] ExtensionFields =>
+            typeof(KnownExtensions).GetFields(BindingFlags.Static | BindingFlags.Public).ToArray();
+
+        public static ExtensionSpecifier[] BundledAgents =>
+        [
+            Net462PluggableAgent,
+            Net80PluggableAgent,
+            Net90PluggableAgent,
+            Net10PluggableAgent
+        ];
+
+        public static IEnumerable<PackageReference> BundledNuGetAgents =>
+            BundledAgents.Select(a => a.NuGetPackage);
+
+        public static IEnumerable<PackageReference> BundledChocolateyAgents =>
+            BundledAgents.Select(a => a.ChocoPackage);
+
+        public static IEnumerable<ExtensionSpecifier> AllExtensions =>
+            ExtensionFields.Select(f => (ExtensionSpecifier)f.GetValue("Value")).ToArray();
+
+        public static IEnumerable<ExtensionSpecifier> AllAgents =>
+            AllExtensions.Where(ex => ex.NuGetId.EndsWith("PluggableAgent"));
+
+        public static void RestoreBundledAgents()
+        {
+            var context = BuildSettings.Context;
+
+            context.CleanDirectory("bundled-agents");
+
+            var packageRefs = new StringBuilder();
+            foreach (ExtensionSpecifier agent in KnownExtensions.BundledAgents)
+            {
+                packageRefs.AppendLine($"<PackageReference Include=\"{agent.NuGetId}\" />");
+                //packageRefs.AppendLine($"<PackageReference Include=\"{agent.ChocoId}\" />");
+            }
+
+            using (StreamWriter sw = SIO.File.CreateText(SIO.Path.Combine("bundled-agents", "BundledAgents.csproj")))
+            {
+                sw.WriteLine($"""
+                <Project Sdk="Microsoft.NET.Sdk">
+                    <PropertyGroup>
+                        <TargetFramework>net462</TargetFramework>
+                        <Description>Dummy project generated for restoring bundled agents</Description>
+                    </PropertyGroup >
+
+                    <ItemGroup>
+
+                {packageRefs}
+                    </ItemGroup>
+
+                </Project>
+                """);
+            }
+
+            context.NuGetRestore("bundled-agents/BundledAgents.csproj");
+        }
+    }
+
+    /// <summary>
+    /// Defines the GUI's tasks for restoring and installing extensions and agents.
+    /// Called from build.cs after BuildSettings.Initialize.
+    /// </summary>
+    static void DefineKnownExtensionTasks()
+    {
+        TaskSetup(setupContext =>
+        {
+            if (CommandLineOptions.NoBuild && setupContext.Task.Name == "Package")
+            {
+                DisplayBanner("Restoring Agents bundled with the GUI");
+                KnownExtensions.RestoreBundledAgents();
+            }
+        });
+
+        TaskTeardown(teardownContext =>
+        {
+            if (!CommandLineOptions.NoBuild && teardownContext.Task.Name == "Restore" && BuildSettings.TasksToExecute.Contains("Package"))
+            {
+                DisplayBanner("Restoring Agents bundled with the GUI");
+                KnownExtensions.RestoreBundledAgents();
+            }
+        });
+
+        Task("RestoreBundledAgents")
+            .Description("Ensures the agents we bundle are in the cache")
+            .Does(() => KnownExtensions.RestoreBundledAgents());
+
+        Task("InstallBundledAgents")
+            .Description("Installs just the agents we bundle with the GUI runner.")
+            .Does(() =>
+            {
+                foreach (var agent in KnownExtensions.BundledNuGetAgents)
+                    agent.Install(BuildSettings.ProjectDirectory + BIN_DIR);
+            });
+
+        Task("InstallAllAgents")
+            .Description("Installs all known agents.")
+            .Does(() =>
+            {
+                foreach (var agent in KnownExtensions.AllAgents)
+                    agent.NuGetPackage.Install(BuildSettings.ProjectDirectory + BIN_DIR);
+            });
+
+        Task("InstallAllExtensions")
+            .Description("Installs all known extensions, both agents and others.")
+            .Does(() =>
+            {
+                foreach (var extension in KnownExtensions.AllExtensions)
+                    extension.NuGetPackage.Install(BuildSettings.ProjectDirectory + BIN_DIR);
+            });
+    }
+}

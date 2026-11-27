@@ -9,5 +9,5 @@ $env:DOTNET_NOLOGO = '1'
 dotnet tool restore
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-dotnet cake @args
+dotnet run --file build.cs -- @args
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
